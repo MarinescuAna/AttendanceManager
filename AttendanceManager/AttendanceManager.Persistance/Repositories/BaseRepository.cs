@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AttendanceManager.Persistance.Repositories
@@ -15,9 +16,9 @@ namespace AttendanceManager.Persistance.Repositories
         {
             this.dbContext = dbContext;
         }
-        public virtual async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T> GetAsync(Expression<Func<T,bool>> expression)
         {
-            return await dbContext.Set<T>().FindAsync(id);
+            return await dbContext.Set<T>().FirstOrDefaultAsync(expression);
         }
         public virtual async Task<List<T>> ListAllAsync()
         {

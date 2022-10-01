@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AttendanceManager.Domain\AttendanceManager.Domain.csproj" />
+    <ProjectReference Include="..\AttendanceManager.Infrastructure\AttendanceManager.Infrastructure.csproj" />
     <ProjectReference Include="..\AttendanceManager.Persistance\AttendanceManager.Persistance.csproj" />
   </ItemGroup>
 

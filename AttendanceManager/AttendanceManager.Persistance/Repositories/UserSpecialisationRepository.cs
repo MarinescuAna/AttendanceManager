@@ -3,6 +3,7 @@ using AttendanceManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AttendanceManager.Persistance.Repositories
@@ -13,11 +14,11 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
 
-        public override Task<UserSpecialisation> GetByIdAsync(Guid id)
+        public override Task<UserSpecialisation> GetAsync(Expression<Func<UserSpecialisation, bool>> expression)
             => dbContext.UserSpecialisations
                 .Include(us=>us.User)
                 .Include(us=>us.Specialisation)
-                .FirstOrDefaultAsync(us=>us.UserSpecialisationID == id);
+                .FirstOrDefaultAsync(expression);
 
         public override Task<List<UserSpecialisation>> ListAllAsync()
             => dbContext.UserSpecialisations
