@@ -31,11 +31,24 @@ namespace AttendanceManager.Api
             services.AddPersistanceServices(Configuration);
             services.AddAuthenticationServices(Configuration);
             services.AddControllers();
+
+            //add this to offer access to other apps to access the API without any restrictions
+            services.AddCors(o => o.AddPolicy("CORSPolicy", builder =>
+            {
+                builder.WithOrigins(Configuration.GetValue<string>("CORSOrigin"))
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            //add this to can use APIs in any application
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -45,6 +58,7 @@ namespace AttendanceManager.Api
 
             app.UseRouting();
 
+            //seconde step in setting up the JWT authentication: this should always be placed above UseMvc
             app.UseAuthentication();
 
             //add this to configure Swagger

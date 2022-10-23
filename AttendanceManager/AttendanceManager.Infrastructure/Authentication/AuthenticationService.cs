@@ -26,51 +26,56 @@ namespace AttendanceManager.Infrastructure.Authentication
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
+            //return the current user according to the email
             var result = await _mediator.Send(new GetUserByEmailQuery() { Email = request.Email});
             
+            //check if the user was found
             if (result == null)
             {
                 throw new Exception($"User with {request.Email} not found.");
             }
 
+            //check the passwords
             if (result.Password != request.Password)
             {
                 throw new Exception($"Credentials for '{request.Email} aren't valid'.");
             }
 
-            var jwtSecurityToken = await GenerateToken(result);
+            var jwtSecurityToken = GenerateToken(result);
 
             AuthenticationResponse response = new AuthenticationResponse
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                Email = result.Email,
-                Fullname = result.FullName,
-                Code = result.Code
+                Token = jwtSecurityToken
+                //TODO add refresh token
             };
 
             return response;
         }
-        private Task<JwtSecurityToken> GenerateToken(UserVm user)
+        private string GenerateToken(UserVm user)
         {
-
+            // define a bunch of clams
             var claims = new[]
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.Role, user.Role),
-                new Claim("Code", String.IsNullOrEmpty(user.Code)? string.Empty:user.Code )
+                new Claim("email", user.Email),
+                new Claim("name", user.FullName),
+                new Claim("role", user.Role),
+                new Claim("code", string.IsNullOrEmpty(user.Code)? string.Empty:user.Code )
             };
 
+            // grab the security key
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            //define a credential object base on the security key definded above
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
+            //deifine the token object
             var jwtSecurityToken = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
                 signingCredentials: signingCredentials);
-            return Task.FromResult(jwtSecurityToken);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
         }
     }

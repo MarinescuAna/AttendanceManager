@@ -30,40 +30,26 @@ namespace AttendanceManager.Infrastructure
                     o.SaveToken = false;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
+                        // ensure the token was issued by a trusted authorization server
                         ValidateIssuerSigningKey = true,
                         ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero,
                         ValidIssuer = configuration["JwtSettings:Issuer"],
-                        ValidAudience = configuration["JwtSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
-                    };
 
-                    o.Events = new JwtBearerEvents()
-                    {
-                        OnAuthenticationFailed = c =>
-                        {
-                            c.NoResult();
-                            c.Response.StatusCode = 500;
-                            c.Response.ContentType = "text/plain";
-                            return c.Response.WriteAsync(c.Exception.ToString());
-                        },
-                        OnChallenge = context =>
-                        {
-                            context.HandleResponse();
-                            context.Response.StatusCode = 401;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject("401 Not authorized");
-                            return context.Response.WriteAsync(result);
-                        },
-                        OnForbidden = context =>
-                        {
-                            context.Response.StatusCode = 403;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject("403 Not authorized");
-                            return context.Response.WriteAsync(result);
-                        },
+                        // ensure the token hasn't expired
+                        ValidateLifetime = true,
+                        RequireExpirationTime = true,
+
+                        // clock skew compensates for server time drift(should be 5min or less)
+                        // set clock skew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                        ClockSkew = TimeSpan.Zero,
+
+                        // ensure the token audience matches out audience value
+                        ValidateAudience = true,
+                        ValidAudience = configuration["JwtSettings:Audience"],
+
+                        // this key is required because it helps the app and authorization server to recognize the token
+                        // this is called a symmetric key
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"])),
                     };
                 });
         }
