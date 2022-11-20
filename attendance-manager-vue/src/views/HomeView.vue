@@ -1,9 +1,17 @@
-
+<template>
+  <button @click="test">Test</button>
+</template>
 
 <script lang="ts">
-  import Vue from 'vue'
+  import AuthService from '@/services/auth.service'
+import Vue from 'vue'
 
   export default Vue.extend({
 
+    methods:{
+      test():void{
+        AuthService.test();
+      }
+    }
   })
 </script>

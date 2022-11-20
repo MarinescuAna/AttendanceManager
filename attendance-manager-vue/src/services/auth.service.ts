@@ -1,14 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/shared/constants";
 import { ResponseLogin, LoginParameters } from "@/shared/modules";
+import ResponseHandler, { Response } from "@/error-handler/error-handler";
 import axios from "axios";
 
-export default class AuthService{
-    static isLogged(): boolean{
+export default class AuthService {
+    /**
+     * Check if the access token was set
+     * @returns true if the access token exists in the cookies
+     */
+    static isLogged(): boolean {
         return (<any>window).$cookies.isKey(ACCESS_TOKEN);
     }
 
-    static getDataFromToken(): any{
+    /**
+     * Get access token
+     * @returns access token
+     */
+    static getAccessToken(): string {
+        return (<any>window).$cookies.get(ACCESS_TOKEN);
+    }
+
+    /**
+     * Decode the token and get the data
+     * @returns data about the user
+     */
+    static getDataFromToken(): any {
         const base64Url = (<any>window).$cookies.get(ACCESS_TOKEN).split(".")[1];
         const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
         const jsonPayload = decodeURIComponent(
@@ -19,24 +36,48 @@ export default class AuthService{
                 })
                 .join("")
         );
-    
+
         return JSON.parse(jsonPayload);
     }
 
+    /**
+     * Remove the tokens from the cookies
+     */
     static logout(): void {
         (<any>window).$cookies.remove(ACCESS_TOKEN);
         (<any>window).$cookies.remove(REFRESH_TOKEN);
     }
 
+    static async test(): Promise<void> {
+        await axios.get('account/test').then(e => {
+            console.log("merge")
+        }).catch(er => {
+            console.log("nu merge");
+
+        })
+    }
+
+    /**
+     * Do loging
+     * @param user email and password
+     * @returns true if the logging was successfully done, or false if something happen
+     */
     static async login(user: LoginParameters): Promise<boolean> {
-        const response = await axios.post('account/authenticate', {
+        let success = false;
+        await axios.post('account/authenticate', {
             email: user.email,
             password: user.password
-        }) as ResponseLogin;
-        console.log(response);
-        (<any>window).$cookies.set(ACCESS_TOKEN, response.token);
-        (<any>window).$cookies.set(REFRESH_TOKEN, response.refreshToken);
-        return true;
+        }).then(response => {
+            const result = response.data as unknown as ResponseLogin;
+            (<any>window).$cookies.set(ACCESS_TOKEN, result.token);
+            (<any>window).$cookies.set(REFRESH_TOKEN, result.refreshToken);
+            success = true;
+        }).catch(error => {
+            const result = error as unknown as Response;
+            ResponseHandler.errorResponseHandler(result)
+            success = false;
+        });
+        return Promise.resolve(success);
     }
 
 }

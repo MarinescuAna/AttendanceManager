@@ -1,56 +1,47 @@
 <template>
   <div>
     <v-toolbar short flat>
-      <v-app-bar-nav-icon
-        class="grey--text"
-        @click.stop="drawer = !drawer"
-      ></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-uppercase font-weight-black">
+      <v-toolbar-title class="text-uppercase font-weight-black ml-12">
         <span class="font-weight-light">Attendance</span>
         <span>Manager</span>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn text color="font-weight-black" to="/login" v-if="!isLogged">
-        <span>Sign In</span>
-        <v-icon>mdi-login</v-icon>
-      </v-btn>
-      <v-btn text color="font-weight-black" @click="logout" v-if="isLogged">
-        <span>Sign Out</span>
-        <v-icon>mdi-exit-to-app</v-icon>
-      </v-btn>
     </v-toolbar>
     <v-navigation-drawer
-      v-model="drawer"
+      expand-on-hover
       class="blue-grey lighten-4"
       absolute
-      temporary
+      permanent
     >
       <v-list>
-        <v-list-item v-if="isLogged">
-          <v-list-item-avatar>
-            <v-img :src="src"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title class="font-weight-black text-h5">{{ name }}</v-list-item-title>
-            <v-list-item-title class="text-h6">{{ code }}</v-list-item-title> 
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-divider v-if="isLogged"></v-divider>
-        <v-list-item
+        <MenuListItem
+          hasImage="true"
+          :src="src"
+          v-if="!isLogged"
+        />
+        <MenuListItem
+          hasImage="false"
+          icon="mdi-login"
+          goTo="/login"
+          title="Sign In"
+          v-if="!isLogged"
+        />
+        <MenuListItem
+          hasImage="false"
+          icon="mdi-exit-to-app"
+          title="Sign Out"
+          @click="logout"
+          v-if="isLogged"
+        />
+        <v-divider></v-divider>
+        <MenuListItem
           v-for="link in links"
           :key="link.text"
-          router
-          :to="link.route"
-        >
-          <v-list-item-icon>
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ link.text }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+          :hasImage="false"
+          :icon="link.icon"
+          :goTo="link.route"
+          :title="link.text"
+        />
+        </v-list>
     </v-navigation-drawer>
   </div>
 </template>
@@ -59,17 +50,39 @@
 import { Role } from "@/shared/enums";
 import UserService from "@/services/auth.service";
 import Vue from "vue";
+import { EventBus } from "@/main";
+import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
+import MenuListItem from "./MenuListItem.vue";
 
 export default Vue.extend({
+  components: {
+    MenuListItem,
+  },
   data() {
     return {
+      // Username
       name: "",
+      // Role
       role: Role.NoRole,
-      code: '',
-      drawer: false,
+      // Code
+      code: "",
+      // Image
       src: "",
+      // Boolean for indicating is the user is logged or not
       isLogged: false,
+      /**
+       *  This array contains all the routes and buttons available according to the user state (logged or not)
+       *  Item:
+       *  - icon
+       *  - text
+       *  - route
+       */
       links: [
+        {
+          icon: "mdi-home",
+          text: "Home",
+          route: "/",
+        },
         {
           icon: "mdi-information-variant",
           text: "About",
@@ -78,21 +91,47 @@ export default Vue.extend({
       ],
     };
   },
+  /**
+   * Check if the user is logged and display the proper buttons in the navbar
+   */
   created(): void {
     this.isLogged = UserService.isLogged();
-    if(this.isLogged)
-    {
+    if (this.isLogged) {
+      this.setUserData();
+    } else {
+      this.src = "./images/logo.jpg";
+    }
+  },
+  mounted: function () {
+    /**
+     * Emit an event using EventBus every time the user logs in to update the navbar
+     */
+    EventBus.$on(EVENT_BUS_ISLOGGED, () => {
+      this.isLogged = true;
+      this.setUserData();
+      EventBus.$off(EVENT_BUS_ISLOGGED);
+    });
+  },
+  methods: {
+    /**
+     * Use this method to update the user information: name, role, code and image
+     */
+    setUserData(): void {
       const data = UserService.getDataFromToken();
       this.name = data.name;
       this.role = data.role;
       this.code = data.code;
       this.src = `./images/${this.role}-profile.jpg`;
-    }
-  },
-  methods:{
+    },
+
+    /**
+     * Use this method to logout
+     */
     logout(): void {
+      this.isLogged = false;
+      this.src = "./images/logo.jpg";
       UserService.logout();
-    }
-  }
+    },
+  },
 });
 </script>

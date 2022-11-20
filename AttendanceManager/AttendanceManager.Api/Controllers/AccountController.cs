@@ -26,5 +26,12 @@ namespace AttendanceManager.Api.Controllers
         {
             return Ok(await _authenticationService.AuthenticateAsync(request));
         }
+
+        [HttpGet("test")]
+        [Authorize]
+        public ActionResult Test()
+        {
+            return Ok("ok");
+        }
     }
 }

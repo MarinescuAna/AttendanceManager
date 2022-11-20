@@ -1,3 +1,4 @@
+using AttendanceManager.Api.Middleware;
 using AttendanceManager.Api.Utility;
 using AttendanceManager.Application;
 using AttendanceManager.Infrastructure;
@@ -67,6 +68,8 @@ namespace AttendanceManager.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Attendance Manager API");
             });
+
+            //app.UseCustomExceptionHandler();
 
             app.UseAuthorization();
 
