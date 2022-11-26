@@ -2,7 +2,7 @@
 
 namespace AttendanceManager.Application.Contracts.Persistance
 {
-    public interface ISpecialisationRepository: IBaseRepository<Specialisation>
+    public interface ISpecializationRepository: IBaseRepository<Specialization>
     {
     }
 }

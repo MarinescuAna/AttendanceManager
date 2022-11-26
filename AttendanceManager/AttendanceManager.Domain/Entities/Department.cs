@@ -8,7 +8,7 @@ namespace AttendanceManager.Domain.Entities
     {
         public Guid DepartmentID { get; set; }
         public string Name { get; set; }
-        public ICollection<Specialisation> Specialisations { get; set; }
+        public ICollection<Specialization> Specializations { get; set; }
 
     }
 }

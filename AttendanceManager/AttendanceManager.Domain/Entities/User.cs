@@ -14,6 +14,6 @@ namespace AttendanceManager.Domain.Entities
         public string EnroleYear { get; set; }
         // This code represents the unique code that will appear instead of names for students 
         public string Code { get; set; }
-        public ICollection<UserSpecialisation> UserSpecialisations { get; set; }
+        public ICollection<UserSpecialization> UserSpecialisations { get; set; }
     }
 }

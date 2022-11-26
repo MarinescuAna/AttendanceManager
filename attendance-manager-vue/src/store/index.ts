@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import auth, { namespace as authNamespace } from "./modules/auth";
+import organization, { namespace as organizationNamespace} from "./modules/organization";
 import createPersistedState from "vuex-persistedstate";
 
 //Load Vuex
@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 const modules: { [id: string]: any } = {};
 
-modules[authNamespace] = auth;
+modules[organizationNamespace] = organization;
 
 //Create store
 export default new Vuex.Store({

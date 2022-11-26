@@ -48,15 +48,6 @@ export default class AuthService {
         (<any>window).$cookies.remove(REFRESH_TOKEN);
     }
 
-    static async test(): Promise<void> {
-        await axios.get('account/test').then(e => {
-            console.log("merge")
-        }).catch(er => {
-            console.log("nu merge");
-
-        })
-    }
-
     /**
      * Do loging
      * @param user email and password

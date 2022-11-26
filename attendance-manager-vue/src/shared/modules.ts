@@ -1,3 +1,6 @@
+import { Role } from "./enums";
+//TODO refactor
+
 /**
  * Use this module to send the parameters used for login
  */
@@ -12,4 +15,32 @@ export interface LoginParameters {
 export interface ResponseLogin {
     token: string;
     refreshToken: string;
+}
+
+/**
+ * 
+ */
+export interface CreateUserParameters{
+    email: string;
+    code: string;
+    role: Role;
+    fullname: string;
+}
+
+/**
+ * /**
+ * This module is used for selector components to map the departments
+ */
+export interface DepartmentModule{
+    id: string;
+    name: string;
+}
+
+/**
+ * This module is used for selector components to map the specialziations
+ */
+ export interface SpecializationModule{
+    id: string;
+    name: string;
+    departmentId:string;
 }

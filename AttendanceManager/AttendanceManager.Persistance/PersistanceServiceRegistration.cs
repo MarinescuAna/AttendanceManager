@@ -18,8 +18,8 @@ namespace AttendanceManager.Persistance
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<ISpecialisationRepository, SpecialisationRepository>();
-            services.AddScoped<IUserSpecialisationRepository, UserSpecialisationRepository>();
+            services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+            services.AddScoped<IUserSpecializationRepository, UserSpecializationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             return services;

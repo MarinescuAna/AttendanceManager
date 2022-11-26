@@ -1,4 +1,5 @@
 
+//TODO in progress
  export default class ResponseHandler{
   public static errorResponseHandler(error: Response|any):boolean {
     console.log(error);

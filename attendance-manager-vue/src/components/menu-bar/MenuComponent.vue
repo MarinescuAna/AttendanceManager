@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar short flat>
+    <v-toolbar flat>
       <v-toolbar-title class="text-uppercase font-weight-black ml-12">
         <span class="font-weight-light">Attendance</span>
         <span>Manager</span>
@@ -10,38 +10,24 @@
       expand-on-hover
       class="blue-grey lighten-4"
       absolute
+      mini-variant.sync
       permanent
     >
       <v-list>
-        <MenuListItem
-          hasImage="true"
-          :src="src"
-          v-if="!isLogged"
-        />
-        <MenuListItem
-          hasImage="false"
-          icon="mdi-login"
-          goTo="/login"
-          title="Sign In"
-          v-if="!isLogged"
-        />
-        <MenuListItem
-          hasImage="false"
-          icon="mdi-exit-to-app"
-          title="Sign Out"
+        {{ name }}
+        <!-- <MenuItemComponent :item="signInItem" v-if="!isLogged" />
+        <MenuItemComponent
+          :item:="signOutItem"
           @click="logout"
           v-if="isLogged"
-        />
+        /> -->
         <v-divider></v-divider>
-        <MenuListItem
+        <MenuItemListComponent
           v-for="link in links"
-          :key="link.text"
-          :hasImage="false"
-          :icon="link.icon"
-          :goTo="link.route"
-          :title="link.text"
+          :key="link.title"
+          :item="link"
         />
-        </v-list>
+      </v-list>
     </v-navigation-drawer>
   </div>
 </template>
@@ -52,14 +38,31 @@ import UserService from "@/services/auth.service";
 import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
-import MenuListItem from "./MenuListItem.vue";
+import MenuItemListComponent from "./MenuItemListComponent.vue";
+// import MenuItemComponent from "./MenuItemComponent.vue";
+import { links, MenuChildModel } from "./ItemList";
 
 export default Vue.extend({
   components: {
-    MenuListItem,
+    MenuItemListComponent,
+    // MenuItemComponent,
   },
   data() {
     return {
+      // Sign In button details
+      signInItem: {
+        icon: "mdi-login",
+        role: Role.NoRole,
+        route: "/login",
+        title: "Sign In",
+      } as MenuChildModel,
+      // Sign Out button details
+      signOutItem: {
+        icon: "mdi-exit-to-app",
+        role: Role.NoRole,
+        route: "",
+        title: "Sign Out",
+      } as MenuChildModel,
       // Username
       name: "",
       // Role
@@ -70,25 +73,8 @@ export default Vue.extend({
       src: "",
       // Boolean for indicating is the user is logged or not
       isLogged: false,
-      /**
-       *  This array contains all the routes and buttons available according to the user state (logged or not)
-       *  Item:
-       *  - icon
-       *  - text
-       *  - route
-       */
-      links: [
-        {
-          icon: "mdi-home",
-          text: "Home",
-          route: "/",
-        },
-        {
-          icon: "mdi-information-variant",
-          text: "About",
-          route: "/about",
-        },
-      ],
+      // List with all the existent buttons for defined pages 
+      links: links,
     };
   },
   /**

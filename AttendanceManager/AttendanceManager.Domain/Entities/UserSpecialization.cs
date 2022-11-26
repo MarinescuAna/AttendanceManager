@@ -4,12 +4,12 @@ using System.Text;
 
 namespace AttendanceManager.Domain.Entities
 {
-    public class UserSpecialisation
+    public class UserSpecialization
     {
-        public Guid UserSpecialisationID { get; set; }
+        public Guid UserSpecializationID { get; set; }
         public Guid UserID { get; set; }
-        public Guid SpecialisationID { get; set; }
-        public virtual Specialisation Specialisation { get; set; }
+        public Guid SpecializationID { get; set; }
+        public virtual Specialization Specialization { get; set; }
         public virtual User User { get; set; }
     }
 }
