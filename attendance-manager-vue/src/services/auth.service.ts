@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/shared/constants";
-import { ResponseLogin, LoginParameters } from "@/shared/modules";
+import { ResponseLogin, LoginParameters, TokenData } from "@/shared/modules";
 import ResponseHandler, { Response } from "@/error-handler/error-handler";
 import axios from "axios";
 
@@ -25,7 +25,7 @@ export default class AuthService {
      * Decode the token and get the data
      * @returns data about the user
      */
-    static getDataFromToken(): any {
+    static getDataFromToken(): TokenData {
         const base64Url = (<any>window).$cookies.get(ACCESS_TOKEN).split(".")[1];
         const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
         const jsonPayload = decodeURIComponent(

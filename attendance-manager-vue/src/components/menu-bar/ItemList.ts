@@ -39,14 +39,14 @@ export const links: MenuItemListModel[] = [
         icon: "mdi-home",
         title: "Home",
         route: "/",
-        role: Role.NoRole,
+        role: Role.All,
         children: []
     },
     {
         icon: "mdi-information-variant",
         title: "About",
         route: "/about",
-        role: Role.NoRole,
+        role: Role.All,
         children: []
     }
 ];

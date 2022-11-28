@@ -14,13 +14,20 @@
       permanent
     >
       <v-list>
-        {{ name }}
-        <!-- <MenuItemComponent :item="signInItem" v-if="!isLogged" />
-        <MenuItemComponent
-          :item:="signOutItem"
-          @click="logout"
-          v-if="isLogged"
-        /> -->
+        <v-container justify="center" v-if="isLogged">
+          <h3 class="text-uppercase">{{ name }}</h3>
+          <h4>{{ email }}</h4>
+          <h4>{{ code }}</h4>
+        </v-container>
+        <MenuItemComponent :item="signInItem" v-if="!isLogged" />
+        <v-list-item router @click="logout" v-if="isLogged">
+          <v-list-item-icon>
+            <v-icon>mdi-exit-to-app</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-divider></v-divider>
         <MenuItemListComponent
           v-for="link in links"
@@ -34,58 +41,51 @@
 
 <script lang="ts">
 import { Role } from "@/shared/enums";
-import UserService from "@/services/auth.service";
+import AuthService from "@/services/auth.service";
 import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
 import MenuItemListComponent from "./MenuItemListComponent.vue";
-// import MenuItemComponent from "./MenuItemComponent.vue";
-import { links, MenuChildModel } from "./ItemList";
+import MenuItemComponent from "./MenuItemComponent.vue";
+import { links, MenuChildModel, MenuItemListModel } from "./ItemList";
 
 export default Vue.extend({
+  name: "MenuComponent",
   components: {
     MenuItemListComponent,
-    // MenuItemComponent,
+    MenuItemComponent,
   },
   data() {
     return {
       // Sign In button details
       signInItem: {
         icon: "mdi-login",
-        role: Role.NoRole,
         route: "/login",
         title: "Sign In",
       } as MenuChildModel,
-      // Sign Out button details
-      signOutItem: {
-        icon: "mdi-exit-to-app",
-        role: Role.NoRole,
-        route: "",
-        title: "Sign Out",
-      } as MenuChildModel,
       // Username
       name: "",
-      // Role
-      role: Role.NoRole,
       // Code
       code: "",
-      // Image
-      src: "",
+      // Email
+      email: "",
       // Boolean for indicating is the user is logged or not
       isLogged: false,
-      // List with all the existent buttons for defined pages 
-      links: links,
+      // List with all the existent buttons for defined pages
+      links: [] as MenuItemListModel[],
     };
   },
   /**
    * Check if the user is logged and display the proper buttons in the navbar
    */
   created(): void {
-    this.isLogged = UserService.isLogged();
+    this.isLogged = AuthService.isLogged();
     if (this.isLogged) {
-      this.setUserData();
-    } else {
-      this.src = "./images/logo.jpg";
+      const data = AuthService.getDataFromToken();
+      this.name = data.name;
+      this.code = data.code;
+      this.email = data.email;
+      this.filterLinksByRole(data.role);
     }
   },
   mounted: function () {
@@ -94,20 +94,25 @@ export default Vue.extend({
      */
     EventBus.$on(EVENT_BUS_ISLOGGED, () => {
       this.isLogged = true;
-      this.setUserData();
       EventBus.$off(EVENT_BUS_ISLOGGED);
     });
   },
   methods: {
     /**
-     * Use this method to update the user information: name, role, code and image
+     * Use this method to initialize the list of links
      */
-    setUserData(): void {
-      const data = UserService.getDataFromToken();
-      this.name = data.name;
-      this.role = data.role;
-      this.code = data.code;
-      this.src = `./images/${this.role}-profile.jpg`;
+    filterLinksByRole(role: Role): void {
+      links.forEach((cr) => {
+        if (cr.role.toString() == Role[role] || cr.role == Role.All) {
+          let newLink = cr;
+          if (cr.children.length > 0) {
+            newLink.children = cr.children.filter(
+              (child) => child.role.toString() == Role[role]
+            );
+          }
+          this.links.push(newLink);
+        }
+      });
     },
 
     /**
@@ -115,8 +120,7 @@ export default Vue.extend({
      */
     logout(): void {
       this.isLogged = false;
-      this.src = "./images/logo.jpg";
-      UserService.logout();
+      AuthService.logout();
     },
   },
 });

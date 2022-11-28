@@ -44,3 +44,13 @@ export interface DepartmentModule{
     name: string;
     departmentId:string;
 }
+
+/**
+ * 
+ */
+export interface TokenData{
+    email:string;
+    role: Role;
+    name: string;
+    code: string;
+}

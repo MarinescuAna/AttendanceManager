@@ -5,5 +5,6 @@ export enum Role{
     Admin=0,
     Student=1,
     Teacher=2,
-    NoRole=3
+    None=3,
+    All=4
 }
