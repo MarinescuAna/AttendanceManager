@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-card min-width="50%" class="orange lighten-3">
+    <v-card class="orange lighten-2">
       <v-card-title class="pa-7">
         <h2>Create new department</h2>
       </v-card-title>
       <v-card-text>
-        <validation-observer v-slot="{ handleSubmit, invalid }">
+        <validation-observer ref="observer" v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addDepartment)">
             <validation-provider
               name="password"
@@ -28,6 +28,7 @@
                 @click="addDepartment"
                 :disabled="invalid"
                 large
+                class="blue-grey lighten-4"
                 >Submit</v-btn
               >
             </v-row>
@@ -44,6 +45,9 @@ import Vue from "vue";
 import { extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
+import { ResponseModule } from "@/shared/modules";
+import { EventBus } from "@/main";
+import { EVENT_BUS_RELOAD_DEPARTMENTS, EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
 
 /**
  * Validation for requied
@@ -63,14 +67,23 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * Use this method for adding a new department
+     * Add new department in store and db
+     * Success: reset the form and reload the treeview
+     * Error: display error
      */
     async addDepartment() {
-      const response = await StoreHelper.organizationStore.addDepartment(
+      const response = (await StoreHelper.organizationStore.addDepartment(
         this.department
-      );
-      //TODO do something when a error occures
-      //TODO do something when is success
+      )) as ResponseModule;
+
+      if (response.isSuccess) {
+        this.department='';
+        this.$refs.observer.reset(); 
+        EventBus.$emit(EVENT_BUS_RELOAD_ORGANIZATIONS);
+        EventBus.$emit(EVENT_BUS_RELOAD_DEPARTMENTS);
+      } else {
+        window.alert(response.error);
+      }
     },
   },
 });

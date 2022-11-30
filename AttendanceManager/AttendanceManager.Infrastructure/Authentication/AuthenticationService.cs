@@ -38,7 +38,7 @@ namespace AttendanceManager.Infrastructure.Authentication
             //check the passwords
             if (result.Password != request.Password)
             {
-                throw new Exception($"Credentials for '{request.Email} aren't valid'.");
+                throw new Exception($"Credentials for '{request.Email} aren't valid.");
             }
 
             var jwtSecurityToken = GenerateToken(result);

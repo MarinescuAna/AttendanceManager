@@ -1,11 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.Authentication;
 using AttendanceManager.Application.Models.Authentication;
-using AttendanceManager.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AttendanceManager.Api.Controllers

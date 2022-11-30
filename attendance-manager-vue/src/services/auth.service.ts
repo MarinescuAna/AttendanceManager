@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/shared/constants";
-import { ResponseLogin, LoginParameters, TokenData } from "@/shared/modules";
-import ResponseHandler, { Response } from "@/error-handler/error-handler";
-import axios from "axios";
+import { TokenData, ResponseModule } from "@/shared/modules";
+import {LoginModule, LoginResponseModule} from "@/modules/user/auth";
+import ResponseHandler from "@/error-handler/error-handler";
+import axios, { AxiosResponse } from "axios";
 
 export default class AuthService {
     /**
@@ -50,25 +51,29 @@ export default class AuthService {
 
     /**
      * Do loging
-     * @param user email and password
+     * @param playload email and password
      * @returns true if the logging was successfully done, or false if something happen
      */
-    static async login(user: LoginParameters): Promise<boolean> {
-        let success = false;
-        await axios.post('account/authenticate', {
-            email: user.email,
-            password: user.password
-        }).then(response => {
-            const result = response.data as unknown as ResponseLogin;
-            (<any>window).$cookies.set(ACCESS_TOKEN, result.token);
-            (<any>window).$cookies.set(REFRESH_TOKEN, result.refreshToken);
-            success = true;
+    static async login(playload: LoginModule): Promise<ResponseModule> {
+        let response: ResponseModule = {
+            error: '',
+            isSuccess: true
+        };
+
+        const result = await axios.post('account/authenticate', {
+            email: playload.email,
+            password: playload.password
         }).catch(error => {
-            const result = error as unknown as Response;
-            ResponseHandler.errorResponseHandler(result)
-            success = false;
+            response = ResponseHandler.errorResponseHandler(error);
         });
-        return Promise.resolve(success);
+
+        if (response.isSuccess) {
+            const apiResponse = (result as AxiosResponse).data as LoginResponseModule;
+            (<any>window).$cookies.set(ACCESS_TOKEN, apiResponse.token);
+            (<any>window).$cookies.set(REFRESH_TOKEN, apiResponse.refreshToken);
+        }
+
+        return response;
     }
 
 }

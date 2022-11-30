@@ -1,4 +1,4 @@
-import { CreateUserParameters } from "@/shared/modules";
+import { CreateUserParameters } from "@/modules/user/index";
 
 export default class UserService{
     //TODO in progress

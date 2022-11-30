@@ -1,10 +1,15 @@
 <template>
   <div>
     <v-toolbar flat>
-      <v-toolbar-title class="text-uppercase font-weight-black ml-12">
-        <span class="font-weight-light">Attendance</span>
-        <span>Manager</span>
-      </v-toolbar-title>
+      <router-link to="/" v-slot="{ navigate }">
+        <v-toolbar-title
+          class="text-uppercase font-weight-black ml-12"
+          @click="navigate"
+        >
+          <span class="font-weight-light">Attendance</span>
+          <span>Manager</span>
+        </v-toolbar-title>
+      </router-link>
     </v-toolbar>
     <v-navigation-drawer
       expand-on-hover
@@ -12,6 +17,7 @@
       absolute
       mini-variant.sync
       permanent
+      width="auto"
     >
       <v-list>
         <v-container justify="center" v-if="isLogged">
@@ -81,11 +87,7 @@ export default Vue.extend({
   created(): void {
     this.isLogged = AuthService.isLogged();
     if (this.isLogged) {
-      const data = AuthService.getDataFromToken();
-      this.name = data.name;
-      this.code = data.code;
-      this.email = data.email;
-      this.filterLinksByRole(data.role);
+      this.setProperties();
     }
   },
   mounted: function () {
@@ -94,6 +96,7 @@ export default Vue.extend({
      */
     EventBus.$on(EVENT_BUS_ISLOGGED, () => {
       this.isLogged = true;
+      this.setProperties();
       EventBus.$off(EVENT_BUS_ISLOGGED);
     });
   },
@@ -116,11 +119,24 @@ export default Vue.extend({
     },
 
     /**
+     * Use this method in order to set the page properties
+     */
+    setProperties():void{
+      const data = AuthService.getDataFromToken();
+      this.name = data.name;
+      this.code = data.code;
+      this.email = data.email;
+      this.filterLinksByRole(data.role);
+    },
+
+    /**
      * Use this method to logout
      */
     logout(): void {
       this.isLogged = false;
+      this.links=[];
       AuthService.logout();
+      this.$router.push('/');
     },
   },
 });

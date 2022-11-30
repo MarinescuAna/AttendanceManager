@@ -1,56 +1,28 @@
 import { Role } from "./enums";
-//TODO refactor
 
 /**
- * Use this module to send the parameters used for login
+ * Used to filter the response from the API and send the response to components
  */
-export interface LoginParameters {
-    email: string;
-    password: string;
+export interface ResponseModule{
+    error: string;
+    isSuccess: boolean;
 }
-
 /**
- * Use this module to receive the date from the api when the login is done
+ * Token date after decoding
  */
-export interface ResponseLogin {
-    token: string;
-    refreshToken: string;
-}
-
-/**
- * 
- */
-export interface CreateUserParameters{
-    email: string;
-    code: string;
-    role: Role;
-    fullname: string;
-}
-
-/**
- * /**
- * This module is used for selector components to map the departments
- */
-export interface DepartmentModule{
-    id: string;
-    name: string;
-}
-
-/**
- * This module is used for selector components to map the specialziations
- */
- export interface SpecializationModule{
-    id: string;
-    name: string;
-    departmentId:string;
-}
-
-/**
- * 
- */
-export interface TokenData{
+ export interface TokenData{
     email:string;
     role: Role;
     name: string;
     code: string;
 }
+
+
+
+
+
+
+
+
+
+

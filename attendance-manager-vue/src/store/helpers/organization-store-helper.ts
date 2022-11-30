@@ -1,7 +1,10 @@
-import { DepartmentModule } from "@/shared/modules";
+
+import { OrganizationViewModel } from "@/modules/organization";
+import { DepartmentModule } from "@/modules/organization/departments";
+import { SpecializationCreateParamsModule } from "@/modules/organization/specializations";
+import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
-import { namespace as organizationNamespace, SpecializationCreateDTO } from "../modules/organization";
-import { DepartmentViewDTO } from "../modules/organization";
+import { namespace as organizationNamespace } from "../modules/organization";
 
 export class OrganizationStore {
     private store: Store<any>;
@@ -11,38 +14,37 @@ export class OrganizationStore {
     }
 
     /**
-     * Getter for fetching all the departments and specializations
-     * Those departments are the ones that exist into the store
+     * Getter for fetching all the departments and specializations from the store, not from the API
      */
-    public get departments(): DepartmentViewDTO[] {
+    public get organizations(): OrganizationViewModel[] {
+        return this.store.getters[`${organizationNamespace}/organizations`];
+    }
+
+    /**
+     * Getter for fetching only the departments, without no information about the specializations from the store
+     */
+    public get departments(): DepartmentModule[]{
         return this.store.getters[`${organizationNamespace}/departments`];
     }
 
     /**
-     * Getter for fetching only the departments, without no information about the specializations
+     * Load all the departments and specializations from the API
      */
-    public get departmentsOnly(): DepartmentModule[]{
-        return this.store.getters[`${organizationNamespace}/departmentsOnly`];
-    }
-
-    /**
-     * Load all the departments from the API
-     */
-    public loadDepartments(): Promise<DepartmentViewDTO[]>{
-        return this.store.dispatch(`${organizationNamespace}/loadDepartments`);
+    public loadOrganizations(): Promise<OrganizationViewModel[]>{
+        return this.store.dispatch(`${organizationNamespace}/loadOrganizations`);
     }
 
     /**
      * Add a new departments only
      */
-    public addDepartment(name: string): Promise<boolean>{
+    public addDepartment(name: string): Promise<ResponseModule>{
         return this.store.dispatch(`${organizationNamespace}/addDepartment`,name);
     }
 
     /**
      * Add a new specialziation only
      */
-    public addSpecialization(specialization: SpecializationCreateDTO): Promise<boolean>{
+    public addSpecialization(specialization: SpecializationCreateParamsModule): Promise<ResponseModule>{
         return this.store.dispatch(`${organizationNamespace}/addSpecialization`,specialization);
     }
 

@@ -1,16 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DepartmentModule, SpecializationModule } from "@/shared/modules";
-import axios from "axios";
+import ResponseHandler from "@/error-handler/error-handler";
+import { OrganizationViewModel } from "@/modules/organization";
+import { DepartmentModule } from "@/modules/organization/departments";
+import { SpecializationCreateParamsModule, SpecializationModule, SpecializationViewModule } from "@/modules/organization/specializations";
+import { ResponseModule } from "@/shared/modules";
+import axios, { AxiosResponse } from "axios";
 
 //state type
 export interface OrganizationState {
-    departments: DepartmentViewDTO[]
+    organizations: OrganizationViewModel[]
 }
 
 //initialize the state with an empty array
 export function initialize(): OrganizationState {
     return {
-        departments: []
+        organizations: []
     };
 }
 
@@ -20,17 +24,16 @@ const state: OrganizationState = initialize();
 // getters for this store
 const getters = {
     /**
-     * Gets departments froom the store
+     * Gets departments and specializations from the store
      */
-    departments(state): string {
-        return state.departments;
+    organizations(state): string {
+        return state.organizations;
     },
-
     /**
-     * Get the list with all the departments only
+     * Get the list with all the departments without specializations
      */
-    departmentsOnly(state): DepartmentModule[] {
-        return state.departments.map(cr => ({
+    departments(state): DepartmentModule[] {
+        return state.organizations.map(cr => ({
             id: cr.id,
             name: cr.name
         }) as DepartmentModule)
@@ -42,25 +45,25 @@ const mutations = {
     /**
      * Update the entire list of departments and specializations existed into the store
      */
-    _departments(state, departments: DepartmentViewDTO): void {
-        state.departments = departments;
+    _organizations(state, organizations: OrganizationViewModel): void {
+        state.organizations = organizations;
     },
     /**
      * Add a new department into the store 
      */
-    _addDepartment(state, department: DepartmentViewDTO): void {
-        state.departments.add(department);
+    _addDepartment(state, department: OrganizationViewModel): void {
+        state.organizations.push(department);
     },
     /**
- * Add a new specialziation for a specific department into the store 
- */
+     * Add a new specialziation for a specific department into the store 
+     */
     _addSpecialization(state, specialization: SpecializationModule): void {
-        state.departments.forEach(element => {
+        state.organizations.forEach(element => {
             if (element.id == specialization.departmentId) {
-                element.children.add({
+                element.children.push({
                     id: specialization.id,
                     name: specialization.name
-                } as SpecializationViewDTO)
+                } as SpecializationViewModule)
             }
         });
     }
@@ -71,56 +74,49 @@ const actions = {
     /**
      * Load all the departments and the specializations from the API and initialize the store
      */
-    async loadDepartments({ commit }): Promise<DepartmentViewDTO[]> {
-        const departments: DepartmentViewDTO[] = (await axios.get('department/departments')).data;
-        commit("_departments", departments);
-        return departments;
+    async loadOrganizations({ commit }): Promise<OrganizationViewModel[]> {
+        const organizations: OrganizationViewModel[] = (await axios.get('department/departments')).data;
+        commit("_organizations", organizations);
+        return organizations;
     },
     /**
      * Add a new department into the database and initialize the store
      */
-    async addDepartment({ dispatch, commit }, name: string): Promise<boolean> {
-        const result = (await axios.post(`department/create_department?name=${name}`)).data;
+    async addDepartment({ commit }, playload: string): Promise<ResponseModule> {
+        let response: ResponseModule = {
+            error: "",
+            isSuccess: true
+        };
+        const result = await axios.post(`department/create_department?name=${playload}`)
+            .catch(error => {
+                response = ResponseHandler.errorResponseHandler(error);
+            });
 
-        if (result || result == null) {
-            return false;
+        if (response.isSuccess) {
+            commit("_addDepartment", (result as AxiosResponse).data);
         }
-
-        commit("_addDepartment", result);
-        //TODO update the tree
-        await dispatch("_departments");
-        return true;
+        return response;
     },
     /**
      * Add a new specialization into the database and initialize the store
      */
-    async addSpecialization({ dispatch, commit }, specialization: SpecializationCreateDTO): Promise<boolean> {
-        const result = (await axios.post(`specialization/create_specialization`, specialization)).data;
+    async addSpecialization({ commit }, playload: SpecializationCreateParamsModule): Promise<ResponseModule> {
+        let response: ResponseModule = {
+            error: "",
+            isSuccess: true
+        };
 
-        if (result || result == null) {
-            return false;
+        const result = await axios.post(`specialization/create_specialization`, playload)
+            .catch(error => {
+                response = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (response.isSuccess) {
+            commit("_addSpecialization", (result as AxiosResponse).data);
         }
-
-        commit("_addSpecialization", result);
-        await dispatch("_departments");        //TODO update the tree
-        return true;
+        return response;
     }
 };
-
-export interface DepartmentViewDTO {
-    id: string;
-    name: string;
-    children: SpecializationViewDTO[];
-}
-export interface SpecializationViewDTO {
-    id: string;
-    name: string;
-}
-export interface SpecializationCreateDTO {
-    name: string;
-    departmentId: string;
-}
-
 
 // export the namespace
 export const namespace = 'organization';

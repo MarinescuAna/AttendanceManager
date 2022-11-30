@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-card min-width="50%" class="orange lighten-3">
+    <v-card class="orange lighten-2">
       <v-card-title class="pa-7">
-        <h2>Create new department</h2>
+        <h2>Create new specialization</h2>
       </v-card-title>
       <v-card-text>
-        <validation-observer v-slot="{ handleSubmit, invalid }">
+        <validation-observer ref="observer" v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addSpecialization)">
             <validation-provider
               name="name"
@@ -44,6 +44,7 @@
                 @click="addSpecialization"
                 :disabled="invalid"
                 large
+                class="blue-grey lighten-4"
                 >Submit</v-btn
               >
             </v-row>
@@ -60,8 +61,10 @@ import Vue from "vue";
 import { extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
-import { DepartmentModule } from "@/shared/modules";
-import { SpecializationCreateDTO } from "@/store/modules/organization";
+import { SpecializationCreateParamsModule } from "@/modules/organization/specializations";
+import { DepartmentModule } from "@/modules/organization/departments";
+import { EventBus } from "@/main";
+import { EVENT_BUS_RELOAD_DEPARTMENTS, EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
 
 /**
  * Validation for requied
@@ -79,7 +82,7 @@ export default Vue.extend({
       name: "",
       // The department id of the specialization
       department: "",
-      // Departments list
+      // Departments list to load them in the v-selector
       departments: [] as DepartmentModule[],
     };
   },
@@ -87,19 +90,37 @@ export default Vue.extend({
    * Load all the departments
    */
   created() {
-    this.departments = StoreHelper.organizationStore.departmentsOnly;
+    this.departments = StoreHelper.organizationStore.departments;
+  },
+  /**
+   * Update the departments v-selector each time when a new department is added
+   */
+  mounted: function(){
+    EventBus.$on(EVENT_BUS_RELOAD_DEPARTMENTS, () => {
+      this.departments = StoreHelper.organizationStore.departments;
+      EventBus.$off(EVENT_BUS_RELOAD_DEPARTMENTS);
+    });
   },
   methods: {
     /**
      * Use this method for adding a new specialization
+     * Success: reset the form and reload the treeview
+     * Error: display the message
      */
     async addSpecialization() {
       const response = await StoreHelper.organizationStore.addSpecialization({
         name: this.name,
         departmentId: this.department,
-      } as SpecializationCreateDTO);
-      //TODO Handle exceptions
-      //TODO Reload the component when a new Specialization was added
+      } as SpecializationCreateParamsModule);
+
+      if (response.isSuccess) {
+        this.department='';
+        this.name = '';
+        this.$refs.observer.reset(); 
+        EventBus.$emit(EVENT_BUS_RELOAD_ORGANIZATIONS);
+      } else {
+        window.alert(response.error);
+      }
     },
   },
 });
