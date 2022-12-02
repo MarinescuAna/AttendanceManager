@@ -2,13 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AttendanceManager.Persistance.Repositories
 {
-    public class BaseRepository<T>:IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         protected readonly AttendanceManagerDbContext dbContext;
 
@@ -16,7 +18,7 @@ namespace AttendanceManager.Persistance.Repositories
         {
             this.dbContext = dbContext;
         }
-        public virtual async Task<T> GetAsync(Expression<Func<T,bool>> expression)
+        public virtual async Task<T> GetAsync(Expression<Func<T, bool>> expression)
         {
             return await dbContext.Set<T>().FirstOrDefaultAsync(expression);
         }
@@ -24,23 +26,49 @@ namespace AttendanceManager.Persistance.Repositories
         {
             return await dbContext.Set<T>().ToListAsync();
         }
-        public async Task<T> AddAsync(T entity)
+        public async Task<bool> AddAsync(T entity)
         {
-            await dbContext.Set<T>().AddAsync(entity);
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                await dbContext.Set<T>().AddAsync(entity);
+                return await CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                //TODO log when something occures
+                return false;
+            }
+        }
+        public async Task<bool> UpdateAsync(T entity)
+        {
+            try
+            {
+                dbContext.Entry(entity).State = EntityState.Modified;
+                return await CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                //TODO log when something occures
+                return false;
+            }
+        }
 
-            return entity;
-        }
-        public async Task UpdateAsync(T entity)
+        public async Task<bool> DeleteAsync(T entity)
         {
-            dbContext.Entry(entity).State = EntityState.Modified;
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                dbContext.Set<T>().Remove(entity);
+                return await CommitAsync();
+
+            }
+            catch (Exception ex)
+            {
+                //TODO log when something occures
+                return false;
+            }
         }
 
-        public async Task DeleteAsync(T entity)
-        {
-            dbContext.Set<T>().Remove(entity);
-            await dbContext.SaveChangesAsync();
-        }
+        private async Task<bool> CommitAsync() =>
+            (await dbContext.SaveChangesAsync()) > 0;
     }
 }

@@ -10,7 +10,7 @@ namespace AttendanceManager.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<User, UserVm>();
+            CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Department, DepartmentVm>()
                 .ForMember(d=>d.Id,act=>act.MapFrom(d=>d.DepartmentID))
                 .ForMember(d=>d.Children,act=>act.MapFrom(d=>d.Specializations));

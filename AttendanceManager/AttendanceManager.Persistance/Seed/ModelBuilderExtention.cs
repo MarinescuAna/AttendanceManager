@@ -12,10 +12,11 @@ namespace AttendanceManager.Persistance.Seed
                {
                    Email = "admin@admin.ro",
                    Password = "system123",
-                   Code="000000",
+                   Code="-",
                    Role = Domain.Enums.Role.Admin,
                    FullName = "Administrator",
                    UserID = System.Guid.NewGuid(),
+                   AccountConfirmed= false,
                }
            );
         }

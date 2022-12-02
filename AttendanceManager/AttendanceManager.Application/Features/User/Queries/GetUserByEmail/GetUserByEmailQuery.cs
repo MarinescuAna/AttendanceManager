@@ -7,7 +7,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
     /// UserVm = represents the type of the response.
     /// Email = represents "the parameter of the query"
     /// </summary>
-    public class GetUserByEmailQuery : IRequest<UserVm>
+    public class GetUserByEmailQuery : IRequest<UserDto>
     {
         public string Email { get; set; }
     }

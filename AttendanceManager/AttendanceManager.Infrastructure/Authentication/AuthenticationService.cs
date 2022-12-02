@@ -1,25 +1,28 @@
-﻿using AttendanceManager.Application.Contracts.Authentication;
-using AttendanceManager.Application.Models.Authentication;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
-using System;
-using System.Threading.Tasks;
+﻿using AttendanceManager.Application.Features.User.Commands.UpdateUser;
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
+using AttendanceManager.Application.Models.Authentication;
+using AttendanceManager.Domain.Entities;
+using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AttendanceManager.Infrastructure.Authentication
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : Application.Contracts.Authentication.IAuthenticationService
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthenticationService(IOptions<JwtSettings> jwtSettings, IMediator mediator)
+        public AuthenticationService(IOptions<JwtSettings> jwtSettings, IMediator mediator, IMapper mapper)
         {
+            _mapper = mapper;
             _jwtSettings = jwtSettings.Value;
             _mediator = mediator;
         }
@@ -27,8 +30,8 @@ namespace AttendanceManager.Infrastructure.Authentication
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
             //return the current user according to the email
-            var result = await _mediator.Send(new GetUserByEmailQuery() { Email = request.Email});
-            
+            var result = await _mediator.Send(new GetUserByEmailQuery() { Email = request.Email });
+
             //check if the user was found
             if (result == null)
             {
@@ -41,6 +44,11 @@ namespace AttendanceManager.Infrastructure.Authentication
                 throw new Exception($"Credentials for '{request.Email} aren't valid.");
             }
 
+            if (!result.AccountConfirmed)
+            {
+                await _mediator.Send(new UpdateUserCommand() { User = _mapper.Map<User>(result) });
+            }
+
             var jwtSecurityToken = GenerateToken(result);
 
             AuthenticationResponse response = new AuthenticationResponse
@@ -51,7 +59,7 @@ namespace AttendanceManager.Infrastructure.Authentication
 
             return response;
         }
-        private string GenerateToken(UserVm user)
+        private string GenerateToken(UserDto user)
         {
             // define a bunch of clams
             var claims = new[]

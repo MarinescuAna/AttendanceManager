@@ -32,7 +32,7 @@ namespace AttendanceManager.Api
 
             services.AddApplicationServices();
             services.AddPersistanceServices(Configuration);
-            services.AddAuthenticationServices(Configuration);
+            services.AddInfrastructureServices(Configuration);
             services.AddControllers();
 
             //add this to offer access to other apps to access the API without any restrictions

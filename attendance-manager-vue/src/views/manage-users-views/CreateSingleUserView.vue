@@ -7,7 +7,7 @@
           <h2>Create single user</h2>
         </v-card-title>
         <v-card-text>
-          <validation-observer v-slot="{ handleSubmit, invalid }">
+          <validation-observer ref="observer" v-slot="{ handleSubmit, invalid }">
             <v-form @submit.prevent="handleSubmit(onSubmit)">
               <validation-provider
                 rules="required"
@@ -37,26 +37,47 @@
                   required
                 />
               </validation-provider>
-              <validation-provider
-                rules="required"
-                name="GDPR code"
-                v-slot="{ errors }"
-              >
-                <v-text-field
-                  label="GDPR Code"
-                  v-model="code"
-                  prepend-icon="mdi-account"
-                  :error-messages="errors"
-                  class="pa-6"
-                  required
-                />
-              </validation-provider>
+              <v-row justify="center">
+                <v-col cols="6">
+                  <validation-provider
+                    rules="required"
+                    name="GDPR code"
+                    v-slot="{ errors }"
+                  >
+                    <v-text-field
+                      label="GDPR Code"
+                      v-model="code"
+                      prepend-icon="mdi-account"
+                      :error-messages="errors"
+                      class="pa-6"
+                      required
+                    />
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6">
+                  <validation-provider
+                    name="year"
+                    v-slot="{ errors }"
+                    rules="required"
+                  >
+                    <v-select
+                      :items="getYears"
+                      label="Enroll year"
+                      v-model="year"
+                      required
+                      :error-messages="errors"
+                      prepend-icon="mdi-school"
+                      class="pa-6"
+                    ></v-select>
+                  </validation-provider>
+                </v-col>
+              </v-row>
               <v-container class="ml-3">
                 <label class=""><v-icon>mdi-pencil</v-icon> Role</label>
                 <v-radio-group v-model="role" class="ml-4">
-                <v-radio label="Student" :value="1"></v-radio>
-                <v-radio label="Teacher" :value="2"></v-radio>
-              </v-radio-group>
+                  <v-radio label="Student" :value="1"></v-radio>
+                  <v-radio label="Teacher" :value="2"></v-radio>
+                </v-radio-group>
               </v-container>
               <v-row justify="center" class="pa-8">
                 <v-btn width="50%" @click="onSubmit" :disabled="invalid" large
@@ -76,8 +97,7 @@ import Vue from "vue";
 import UserService from "@/services/user.service";
 import { extend } from "vee-validate";
 import { required, email, min } from "vee-validate/dist/rules";
-import { Role } from "@/shared/enums";
-import { CreateUserParameters } from "@/shared/modules";
+import { CreateUserParameters } from "@/modules/user";
 
 /**
  * Validation for requied
@@ -114,24 +134,42 @@ export default Vue.extend({
       code: "",
       //user's role; Default value is 1 => student
       role: 1,
+      // Enroll year
+      year: "",
     };
+  },
+    computed: {
+      /**
+       * Get all the years between the current year and 1950 
+       */
+    getYears(): string[] {
+      return Array.from(Array(new Date().getFullYear() - 1949), (_, i) =>
+        (new Date().getFullYear() - i).toString()
+      );
+    },
   },
   methods: {
     /**
-     * Use this method for login: if the login is done, update the navbar and redirect to home page
+     * Use this method to add a new user then inform the admin about the process
      */
     async onSubmit(): Promise<void> {
       const response = await UserService.CreateUser({
         fullname: this.fullname,
         code: this.code,
         email: this.email,
-        role: this.role == 1 ? Role.Student : Role.Teacher,
+        role: this.role.toString(),
+        year: this.year,
       } as CreateUserParameters);
 
-      //   if (response) {
-      //     EventBus.$emit(EVENT_BUS_ISLOGGED);
-      //     this.$router.push("/");
-      //   }
+         if (response) {
+           this.fullname ='';
+           this.email = '';
+           this.code = '';
+           this.year = '';
+           this.role = 1;
+           this.$refs.observer.reset();
+           window.alert("The user was created and he will be inform via email regarding his credentials.");
+         }
     },
   },
 });

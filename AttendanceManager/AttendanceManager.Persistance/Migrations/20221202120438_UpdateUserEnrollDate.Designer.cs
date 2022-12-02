@@ -4,14 +4,16 @@ using AttendanceManager.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    partial class AttendanceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221202120438_UpdateUserEnrollDate")]
+    partial class UpdateUserEnrollDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,9 +60,6 @@ namespace AttendanceManager.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AccountConfirmed")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
@@ -86,8 +85,7 @@ namespace AttendanceManager.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserID = new Guid("e6910619-dad9-4462-af8b-3b6db9cf1d1c"),
-                            AccountConfirmed = false,
+                            UserID = new Guid("53591271-686f-46ad-8edc-16b06a8ef5fe"),
                             Code = "000000",
                             Email = "admin@admin.ro",
                             EnroleYear = 0,

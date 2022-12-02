@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.CommonVms;
 using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Application.Shared;
 using AutoMapper;
 using MediatR;
 using System;
@@ -30,7 +31,10 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
                 Name = request.Name
             };
 
-            await departmentRepository.AddAsync(newDepartment);
+            if(!await departmentRepository.AddAsync(newDepartment))
+            {
+                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+            }
 
             return mapper.Map<DepartmentDto>(newDepartment);
         }

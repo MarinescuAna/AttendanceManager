@@ -9,8 +9,8 @@ namespace AttendanceManager.Application.Contracts.Persistance
     {
         Task<T> GetAsync(Expression<Func<T,bool>> expression);
         Task<List<T>> ListAllAsync();
-        Task<T> AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<bool> AddAsync(T entity);
+        Task<bool> UpdateAsync(T entity);
+        Task<bool> DeleteAsync(T entity);
     }
 }

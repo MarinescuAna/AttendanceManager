@@ -1,11 +1,10 @@
-import { Role } from "@/shared/enums";
-
 /**
- * 
+ * Use this model in order to create a new user's account
  */
  export interface CreateUserParameters{
     email: string;
-    code: string;
-    role: Role;
+    role: string;
     fullname: string;
+    year: string;
+    code: string;
 }

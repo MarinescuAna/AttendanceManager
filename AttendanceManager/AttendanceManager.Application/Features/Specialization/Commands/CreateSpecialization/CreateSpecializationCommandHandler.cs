@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Application.Shared;
 using AutoMapper;
 using MediatR;
 using System;
@@ -32,7 +33,10 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
                 SpecializationID = Guid.NewGuid()
             };
 
-            await specializationRepository.AddAsync(newSpecialization);
+            if(!await specializationRepository.AddAsync(newSpecialization))
+            {
+                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+            }
 
             return mapper.Map<SpecializationDto>(newSpecialization);
         }

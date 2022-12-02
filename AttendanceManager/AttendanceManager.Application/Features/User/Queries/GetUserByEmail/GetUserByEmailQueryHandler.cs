@@ -14,26 +14,22 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
     /// 
     /// Note: Don't forget to add the new VMs into the MappingProfile class
     /// </summary>
-    public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, UserVm>
+    public class GetUserByEmailQueryHandler :UserFeatureBase, IRequestHandler<GetUserByEmailQuery, UserDto>
     {
-        private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepo;
-        public GetUserByEmailQueryHandler(IMapper mapper, IUserRepository userRepository)
+        public GetUserByEmailQueryHandler(IMapper mapper, IUserRepository userRepository):base(userRepository,mapper)
         {
-            _mapper = mapper;
-            _userRepo = userRepository;
         }
 
-        public async Task<UserVm> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepo.GetAsync(u => u.Email == request.Email);
+            var user = await userRepository.GetAsync(u => u.Email == request.Email);
 
             if (user == null)
             {
                 throw new NotFoundException(nameof(User), request.Email);
             }
 
-            return _mapper.Map<UserVm>(user);
+            return mapper.Map<UserDto>(user);
 
         }
     }
