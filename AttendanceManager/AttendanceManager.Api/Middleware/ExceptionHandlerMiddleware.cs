@@ -26,29 +26,22 @@ namespace AttendanceManager.Api.Middleware
                 await ConvertException(context,ex);
             }
         }
-
+        
         private Task ConvertException(HttpContext context, Exception exception)
         {
             HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
-
             context.Response.ContentType = "application/json";
-
             var result = string.Empty;
 
             switch (exception)
             {
-                case ValidationException validationException:
+                case BadRequestException _:
                     httpStatusCode = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.ValdationErrors);
                     break;
-                case BadRequestException badRequestException:
-                    httpStatusCode = HttpStatusCode.BadRequest;
-                    result = badRequestException.Message;
-                    break;
-                case NotFoundException notFoundException:
+                case NotFoundException _:
                     httpStatusCode = HttpStatusCode.NotFound;
                     break;
-                case Exception ex:
+                case Exception _:
                     httpStatusCode = HttpStatusCode.BadRequest;
                     break;
             }

@@ -25,8 +25,5 @@ namespace AttendanceManager.Persistance.Repositories
                 .Include(u => u.User)
                 .Include(us => us.Specialization)
                 .ToListAsync();
-            
-        
-
     }
 }

@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.CommonVms;
+﻿using AttendanceManager.Application.SharedDtos;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Department.Commands.CreateDepartment

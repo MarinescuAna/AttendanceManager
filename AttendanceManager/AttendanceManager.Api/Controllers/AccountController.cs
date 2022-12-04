@@ -15,13 +15,17 @@ namespace AttendanceManager.Api.Controllers
         {
             _authenticationService = authenticationService;
         }
-
+        /// <summary>
+        /// Login functionality
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Success: token and refresh token</returns>
         [HttpPost("authenticate")]
         [AllowAnonymous]
         public async Task<ActionResult<AuthenticationResponse>> AuthenticateAsync([FromBody] AuthenticationRequest request)
         {
             return Ok(await _authenticationService.AuthenticateAsync(request));
         }
-
+        //TODO refresh token
     }
 }

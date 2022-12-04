@@ -7,20 +7,20 @@ namespace AttendanceManager.Api.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    //[Authorize]
-    public class UserController : ControllerBase
+    //TODO [Authorize]
+    public class UserController : BaseController
     {
-        private readonly IMediator _mediator;
+        public UserController(IMediator mediator):base(mediator) { }
 
-        public UserController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
+        /// <summary>
+        /// Create a user
+        /// </summary>
+        /// <param name="userCommand"></param>
+        /// <returns>Success: ok</returns>
         [HttpPost("create_user")]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserCommand userCommand)
         {
-            return Ok(await _mediator.Send(userCommand));
+            return Ok(await mediator.Send(userCommand));
         }
 
     }

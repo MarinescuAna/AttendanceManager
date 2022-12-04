@@ -7,18 +7,22 @@ namespace AttendanceManager.Api.Controllers
 {
     [Route("api/specialization")]
     [ApiController]
-    public class SpecializationController : ControllerBase
+    //TODO [Authorize]
+    public class SpecializationController : BaseController
     {
-        private readonly IMediator _mediator;
-
-        public SpecializationController(IMediator mediator)
+        public SpecializationController(IMediator mediator):base(mediator)
         {
-            _mediator = mediator;
         }
+
+        /// <summary>
+        /// Create a specialization
+        /// </summary>
+        /// <param name="specialization"></param>
+        /// <returns>Success: return the name, departmentID and specializationID</returns>
         [HttpPost("create_specialization")]
         public async Task<IActionResult> CreateSpecialization([FromBody] CreateSpecializationCommand specialization)
         {
-            return Ok(await _mediator.Send(specialization));
+            return Ok(await mediator.Send(specialization));
         }
     }
 }

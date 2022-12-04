@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 
-namespace AttendanceManager.Application.CommonVms
+namespace AttendanceManager.Application.SharedDtos
 {
-    public class DepartmentVm
+    public class OrganizationDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

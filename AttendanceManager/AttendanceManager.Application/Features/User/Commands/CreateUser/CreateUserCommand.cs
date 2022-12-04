@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Domain.Enums;
-using MediatR;
+﻿using MediatR;
 
 namespace AttendanceManager.Application.Features.User.Commands.CreateUser
 {

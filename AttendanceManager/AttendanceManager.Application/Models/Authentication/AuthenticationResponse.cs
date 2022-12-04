@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AttendanceManager.Application.Models.Authentication
+﻿namespace AttendanceManager.Application.Models.Authentication
 {
     public class AuthenticationResponse
     {

@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.CommonVms;
+﻿using AttendanceManager.Application.SharedDtos;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
 using AttendanceManager.Domain.Entities;
@@ -11,7 +11,7 @@ namespace AttendanceManager.Application.Profiles
         public MappingProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<Department, DepartmentVm>()
+            CreateMap<Department, OrganizationDto>()
                 .ForMember(d=>d.Id,act=>act.MapFrom(d=>d.DepartmentID))
                 .ForMember(d=>d.Children,act=>act.MapFrom(d=>d.Specializations));
             CreateMap<Specialization, SpecializationDto>()

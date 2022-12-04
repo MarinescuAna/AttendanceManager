@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AttendanceManager.Application.CommonVms
+namespace AttendanceManager.Application.SharedDtos
 {
     public class DepartmentDto
     {

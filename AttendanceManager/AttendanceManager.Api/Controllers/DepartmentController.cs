@@ -1,8 +1,7 @@
-﻿using AttendanceManager.Application.CommonVms;
+﻿using AttendanceManager.Application.SharedDtos;
 using AttendanceManager.Application.Features.Department.Commands.CreateDepartment;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,25 +10,31 @@ namespace AttendanceManager.Api.Controllers
 {
     [Route("api/department")]
     [ApiController]
-    //[Authorize]
-    public class DepartmentController : ControllerBase
-    {
-        private readonly IMediator _mediator;
-
-        public DepartmentController(IMediator mediator)
+    //TODO [Authorize]
+    public class DepartmentController : BaseController
+    { 
+        public DepartmentController(IMediator mediator):base(mediator)
         {
-            _mediator = mediator;
         }
 
+        /// <summary>
+        /// Get all departments together with each specialization => departments + specializations = organizations
+        /// </summary>
+        /// <returns>Success: list with all departments and specializations</returns>
         [HttpGet("departments")]
-        public async Task<ActionResult<List<DepartmentVm>>> GetDepartments()
+        public async Task<ActionResult<List<OrganizationDto>>> GetDepartments()
         {
-            return Ok(await _mediator.Send(new GetDepartmentQuery()));
+            return Ok(await mediator.Send(new GetDepartmentQuery()));
         }
 
+        /// <summary>
+        /// Create only a new department, no link to specializations
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Success: return the name and the id of the new department</returns>
         [HttpPost("create_department")]
         public async Task<ActionResult> CreateDepartment(string name) { 
-            return Ok(await _mediator.Send(new CreateDepatmentCommand() { Name = name }));
+            return Ok(await mediator.Send(new CreateDepatmentCommand() { Name = name }));
         }
     }
 }

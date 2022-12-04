@@ -19,12 +19,14 @@ namespace AttendanceManager.Infrastructure.Mail
 
         public async Task<bool> SendEmail(Message message, CancellationToken ct = default)
         {
+            // Create the message that will be sent
             var mailMessage = CreateMessage(message);
 
             using (var smtp = new SmtpClient())
             {
                 try
                 {
+                    // Send email
                     if (_mailSettings.UseSSL)
                     {
                         await smtp.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.SslOnConnect, ct);

@@ -9,7 +9,7 @@ namespace AttendanceManager.Application.Features.User
         protected readonly IUserRepository userRepository;
         public UserFeatureBase(IUserRepository userRepo, IMapper map)
         {
-            this.userRepository = userRepo;
+            userRepository = userRepo;
             mapper = map;
         }
     }

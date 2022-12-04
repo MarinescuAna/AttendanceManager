@@ -1,9 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.Authentication;
 using AttendanceManager.Application.Contracts.Mail;
-using AttendanceManager.Application.Contracts.StringGenerator;
 using AttendanceManager.Infrastructure.Authentication;
 using AttendanceManager.Infrastructure.Mail;
-using AttendanceManager.Infrastructure.StringGenerator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +20,6 @@ namespace AttendanceManager.Infrastructure
 
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IMailService, MailService>();
-            services.AddTransient<IStringGeneratorService, StringGeneratorService>();
 
             AddAuthentication(services, configuration);
             

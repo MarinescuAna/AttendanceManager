@@ -7,13 +7,6 @@ using System.Threading.Tasks;
 
 namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
 {
-    /// <summary>
-    /// This is a handler for take the user by emal.
-    /// GetUserByEmailQuery = the query that will be handled
-    /// UserVm = the type of the response
-    /// 
-    /// Note: Don't forget to add the new VMs into the MappingProfile class
-    /// </summary>
     public class GetUserByEmailQueryHandler :UserFeatureBase, IRequestHandler<GetUserByEmailQuery, UserDto>
     {
         public GetUserByEmailQueryHandler(IMapper mapper, IUserRepository userRepository):base(userRepository,mapper)
@@ -22,8 +15,10 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
 
         public async Task<UserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
+            // Get the user by email
             var user = await userRepository.GetAsync(u => u.Email == request.Email);
 
+            // Throw exception if the user dosen't exists
             if (user == null)
             {
                 throw new NotFoundException(nameof(User), request.Email);

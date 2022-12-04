@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,11 +17,11 @@ namespace AttendanceManager.Persistance.Repositories
         }
         public virtual async Task<T> GetAsync(Expression<Func<T, bool>> expression)
         {
-            return await dbContext.Set<T>().FirstOrDefaultAsync(expression);
+            return await dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(expression);
         }
         public virtual async Task<List<T>> ListAllAsync()
         {
-            return await dbContext.Set<T>().ToListAsync();
+            return await dbContext.Set<T>().AsNoTracking().ToListAsync();
         }
         public async Task<bool> AddAsync(T entity)
         {
@@ -43,7 +40,7 @@ namespace AttendanceManager.Persistance.Repositories
         {
             try
             {
-                dbContext.Entry(entity).State = EntityState.Modified;
+                dbContext.Set<T>().Update(entity);
                 return await CommitAsync();
             }
             catch (Exception ex)

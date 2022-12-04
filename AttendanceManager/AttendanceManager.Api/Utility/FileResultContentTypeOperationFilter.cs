@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace AttendanceManager.Api.Utility
 {
+    //TODO Swagger configuration
     public class FileResultContentTypeOperationFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)

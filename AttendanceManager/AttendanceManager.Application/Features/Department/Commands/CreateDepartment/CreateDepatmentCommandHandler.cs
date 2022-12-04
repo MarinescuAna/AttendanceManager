@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.CommonVms;
+﻿using AttendanceManager.Application.SharedDtos;
 using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Shared;
@@ -18,6 +18,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
 
         public async Task<DepartmentDto> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
         {
+            // Look for other departments with the same name and throw exception if exists
             var department = await departmentRepository.GetAsync(d => d.Name == request.Name);
 
             if (department != null)
@@ -25,17 +26,20 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
                 throw new AlreadyExistsException("Department", request.Name);
             }
 
+            // Create the new department
             var newDepartment = new Domain.Entities.Department
             {
                 DepartmentID = Guid.NewGuid(),
                 Name = request.Name
             };
 
+            // Add new department or throw exception if something happen
             if(!await departmentRepository.AddAsync(newDepartment))
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
 
+            // Return the created department [the department id is mandatory]
             return mapper.Map<DepartmentDto>(newDepartment);
         }
     }

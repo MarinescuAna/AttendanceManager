@@ -1,8 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AttendanceManager.Application.Features.Specialization
 {

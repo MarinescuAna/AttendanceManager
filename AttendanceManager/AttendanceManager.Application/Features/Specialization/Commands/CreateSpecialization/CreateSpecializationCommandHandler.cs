@@ -19,6 +19,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
 
         public async Task<SpecializationDto> Handle(CreateSpecializationCommand request, CancellationToken cancellationToken)
         {
+            // Look for antoher specializations that have the same name and department and throw exception
             var specialization = await specializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID==request.DepartmentId);
 
             if (specialization != null)
@@ -26,6 +27,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
                 throw new AlreadyExistsException("Specialization", request.Name);
             }
 
+            // Create the new specialization
             var newSpecialization = new Domain.Entities.Specialization
             {
                 DepartmentID = request.DepartmentId,
@@ -33,11 +35,13 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
                 SpecializationID = Guid.NewGuid()
             };
 
+            // Save the specialization or throw exception if something happen
             if(!await specializationRepository.AddAsync(newSpecialization))
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
 
+            // The specialziation id is mandatory later
             return mapper.Map<SpecializationDto>(newSpecialization);
         }
     }

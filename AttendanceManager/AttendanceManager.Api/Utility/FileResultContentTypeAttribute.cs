@@ -2,6 +2,7 @@
 
 namespace AttendanceManager.Api.Utility
 {
+    //TODO Swagger configuration
     [AttributeUsage(AttributeTargets.Method)]
     public class FileResultContentTypeAttribute : Attribute
     {
