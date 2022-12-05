@@ -26,7 +26,7 @@ const getters = {
     /**
      * Gets departments and specializations from the store
      */
-    organizations(state): string {
+    organizations(state): OrganizationViewModel[] {
         return state.organizations;
     },
     /**
@@ -37,6 +37,14 @@ const getters = {
             id: cr.id,
             name: cr.name
         }) as DepartmentModule)
+    },
+    /**
+     * Get the list with all the specializations by departmentId
+     */
+    specializations: (state) => {
+        return (departmentId: string): SpecializationModule[] => {
+            return state.organizations.find(cr => cr.id == departmentId).children;
+        }
     }
 };
 
@@ -52,6 +60,7 @@ const mutations = {
      * Add a new department into the store 
      */
     _addDepartment(state, department: OrganizationViewModel): void {
+        department.children = [];
         state.organizations.push(department);
     },
     /**
@@ -82,12 +91,12 @@ const actions = {
     /**
      * Add a new department into the database and initialize the store
      */
-    async addDepartment({ commit }, playload: string): Promise<ResponseModule> {
+    async addDepartment({ commit }, payload: string): Promise<ResponseModule> {
         let response: ResponseModule = {
             error: "",
             isSuccess: true
         };
-        const result = await axios.post(`department/create_department?name=${playload}`)
+        const result = await axios.post(`department/create_department?name=${payload}`)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -100,13 +109,13 @@ const actions = {
     /**
      * Add a new specialization into the database and initialize the store
      */
-    async addSpecialization({ commit }, playload: SpecializationCreateParamsModule): Promise<ResponseModule> {
+    async addSpecialization({ commit }, payload: SpecializationCreateParamsModule): Promise<ResponseModule> {
         let response: ResponseModule = {
             error: "",
             isSuccess: true
         };
 
-        const result = await axios.post(`specialization/create_specialization`, playload)
+        const result = await axios.post(`specialization/create_specialization`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });

@@ -23,7 +23,7 @@ export const links: MenuItemListModel[] = [
             {
                 title: "View users",
                 icon: "mdi-account-group-outline",
-                route: "/",
+                route: "/users",
                 role: Role.Admin,
             }
         ]

@@ -4,14 +4,16 @@ using AttendanceManager.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    partial class AttendanceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221205175345_UserChangeName")]
+    partial class UserChangeName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

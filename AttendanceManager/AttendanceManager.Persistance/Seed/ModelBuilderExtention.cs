@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace AttendanceManager.Persistance.Seed
 {
@@ -13,6 +14,9 @@ namespace AttendanceManager.Persistance.Seed
                    Email = "admin@admin.ro",
                    Password = "system123",
                    Code="-",
+                   Created = DateTime.Now,
+                   EnrollmentYear = DateTime.Now.Year,
+                   Updated= DateTime.Now,   
                    Role = Domain.Enums.Role.Admin,
                    FullName = "Administrator",
                    UserID = System.Guid.NewGuid(),

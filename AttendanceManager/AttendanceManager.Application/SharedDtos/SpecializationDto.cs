@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AttendanceManager.Application.Features.Department.Queries.GetDepartments
+namespace AttendanceManager.Application.SharedDtos
 {
     public class SpecializationDto
     {

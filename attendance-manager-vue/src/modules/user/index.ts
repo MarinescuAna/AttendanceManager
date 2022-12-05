@@ -1,5 +1,7 @@
+import { SpecializationViewModule } from "../organization/specializations";
+
 /**
- * Use this model in order to create a new user's account
+ * Use this module in order to create a new user's account
  */
  export interface CreateUserParameters{
     email: string;
@@ -7,4 +9,22 @@
     fullname: string;
     year: string;
     code: string;
+    specializations: string[];
+}
+/**
+ * Use this module in order to display the users for admin
+ */
+export interface UserViewModule{
+   userId: string;
+   fullname: string;
+   email: string;
+   role:string;
+   enrollmentYear: string;
+   code: string;
+   accountConfirmed: boolean;
+   updated: string;
+   created: string;
+   departmentId: string;
+   departmentName: string;
+   userSpecializations: SpecializationViewModule[];
 }

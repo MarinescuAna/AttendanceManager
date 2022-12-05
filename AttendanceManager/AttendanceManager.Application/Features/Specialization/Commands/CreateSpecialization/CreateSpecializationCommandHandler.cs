@@ -4,14 +4,12 @@ using AttendanceManager.Application.Shared;
 using AutoMapper;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization
 {
-    public class CreateSpecializationCommandHandler : SpecializationFeatureBase, IRequestHandler<CreateSpecializationCommand,SpecializationDto>
+    public class CreateSpecializationCommandHandler : SpecializationFeatureBase, IRequestHandler<CreateSpecializationCommand, SpecializationDto>
     {
         public CreateSpecializationCommandHandler(ISpecializationRepository specializationRepository, IMapper mapper) : base(specializationRepository, mapper)
         {
@@ -20,7 +18,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
         public async Task<SpecializationDto> Handle(CreateSpecializationCommand request, CancellationToken cancellationToken)
         {
             // Look for antoher specializations that have the same name and department and throw exception
-            var specialization = await specializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID==request.DepartmentId);
+            var specialization = await specializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID == request.DepartmentId, false);
 
             if (specialization != null)
             {
@@ -36,7 +34,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             };
 
             // Save the specialization or throw exception if something happen
-            if(!await specializationRepository.AddAsync(newSpecialization))
+            if (!await specializationRepository.AddAsync(newSpecialization))
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }

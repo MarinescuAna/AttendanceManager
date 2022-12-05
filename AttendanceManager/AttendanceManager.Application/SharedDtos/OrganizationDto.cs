@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 
 namespace AttendanceManager.Application.SharedDtos
 {

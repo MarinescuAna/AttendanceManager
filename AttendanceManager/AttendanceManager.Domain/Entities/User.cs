@@ -11,12 +11,12 @@ namespace AttendanceManager.Domain.Entities
         public string Email { get; set; }
         public Role Role { get; set; }
         public string Password { get; set; }
-        public int EnroleYear { get; set; }
+        public int EnrollmentYear { get; set; }
         // This code represents the unique code that will appear instead of names for students 
-        // This code will be created when the user enter for the first time on his account
-        // Else, it will stay null
         public string Code { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Updated { get; set; }
         public bool AccountConfirmed { get; set; }
-        public ICollection<UserSpecialization> UserSpecialisations { get; set; }
+        public ICollection<UserSpecialization> UserSpecializations { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Used for v-selector component to map only the specialziations
+ * Used for v-selector component to map only the specialziations and also for v-selector component
  */
  export interface SpecializationModule{
     id: string;

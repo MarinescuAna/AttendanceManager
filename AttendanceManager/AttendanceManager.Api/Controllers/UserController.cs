@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.User.Commands.CreateUser;
+using AttendanceManager.Application.Features.User.Queries.GetAllUsers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -21,6 +22,16 @@ namespace AttendanceManager.Api.Controllers
         public async Task<ActionResult> CreateUser([FromBody] CreateUserCommand userCommand)
         {
             return Ok(await mediator.Send(userCommand));
+        }
+
+        /// <summary>
+        /// Get all users for admin
+        /// </summary>
+        /// <returns>list with the informations about all users</returns>
+        [HttpGet("users")]
+        public async Task<ActionResult> GetUsers()
+        {
+            return Ok(await mediator.Send(new GetAllUsersQuery()));
         }
 
     }

@@ -9,5 +9,6 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
         public string Fullname { get; set; }
         public string Year { get; set; }
         public string Code { get; set; }
+        public string[] Specializations { get; set; }
     }
 }

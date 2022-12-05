@@ -1,5 +1,4 @@
 ﻿using AttendanceManager.Application.SharedDtos;
-using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
 using AttendanceManager.Domain.Entities;
 using AutoMapper;
@@ -21,6 +20,7 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<Specialization, Features.Specialization.Commands.CreateSpecialization.SpecializationDto>()
                 .ForMember(d => d.Id, act => act.MapFrom(d => d.SpecializationID))
                 .ForMember(s=>s.DepartmentId, act=>act.MapFrom(s=>s.DepartmentID));
+            CreateMap<User, Features.User.Queries.GetAllUsers.UserDto>();
         }
     }
 }

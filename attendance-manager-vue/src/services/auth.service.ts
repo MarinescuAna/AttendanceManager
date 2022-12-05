@@ -51,18 +51,18 @@ export default class AuthService {
 
     /**
      * Do loging
-     * @param playload email and password
+     * @param payload email and password
      * @returns true if the logging was successfully done, or false if something happen
      */
-    static async login(playload: LoginModule): Promise<ResponseModule> {
+    static async login(payload: LoginModule): Promise<ResponseModule> {
         let response: ResponseModule = {
             error: '',
             isSuccess: true
         };
 
         const result = await axios.post('account/authenticate', {
-            email: playload.email,
-            password: playload.password
+            email: payload.email,
+            password: payload.password
         }).catch(error => {
             response = ResponseHandler.errorResponseHandler(error);
         });

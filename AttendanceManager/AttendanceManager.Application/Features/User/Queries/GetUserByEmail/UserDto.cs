@@ -9,7 +9,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
         public string Email { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
-        public string EnroleYear { get; set; }
+        public string EnrollmentYear { get; set; }
         public string Code { get; set; }
         public bool AccountConfirmed { get; set; }  
     }

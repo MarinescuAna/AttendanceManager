@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -15,11 +16,11 @@ namespace AttendanceManager.Persistance.Repositories
         {
             this.dbContext = dbContext;
         }
-        public virtual async Task<T> GetAsync(Expression<Func<T, bool>> expression)
+        public virtual async Task<T> GetAsync(Expression<Func<T, bool>> expression, bool includeNavigationProperty = true)
         {
             return await dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(expression);
         }
-        public virtual async Task<List<T>> ListAllAsync()
+        public virtual async Task<List<T>> ListAllAsync(bool includeNavigationProperty = true)
         {
             return await dbContext.Set<T>().AsNoTracking().ToListAsync();
         }

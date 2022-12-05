@@ -4,14 +4,16 @@ using AttendanceManager.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    partial class AttendanceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221204150938_AddCreateDate")]
+    partial class AddCreateDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +72,7 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EnrollmentYear")
+                    b.Property<int>("EnroleYear")
                         .HasColumnType("int");
 
                     b.Property<string>("FullName")
@@ -92,16 +94,16 @@ namespace AttendanceManager.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserID = new Guid("fd79b82e-328b-4e0d-9744-77080de2e6d4"),
+                            UserID = new Guid("11b79872-c444-475c-93a4-c9eb443a561c"),
                             AccountConfirmed = false,
                             Code = "-",
-                            Created = new DateTime(2022, 12, 5, 19, 53, 45, 16, DateTimeKind.Local).AddTicks(2599),
+                            Created = new DateTime(2022, 12, 4, 17, 9, 38, 212, DateTimeKind.Local).AddTicks(7747),
                             Email = "admin@admin.ro",
-                            EnrollmentYear = 2022,
+                            EnroleYear = 2022,
                             FullName = "Administrator",
                             Password = "system123",
                             Role = 0,
-                            Updated = new DateTime(2022, 12, 5, 19, 53, 45, 18, DateTimeKind.Local).AddTicks(8212)
+                            Updated = new DateTime(2022, 12, 4, 17, 9, 38, 215, DateTimeKind.Local).AddTicks(2228)
                         });
                 });
 

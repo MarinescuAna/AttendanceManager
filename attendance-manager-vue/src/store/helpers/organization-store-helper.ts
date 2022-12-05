@@ -1,7 +1,7 @@
 
 import { OrganizationViewModel } from "@/modules/organization";
 import { DepartmentModule } from "@/modules/organization/departments";
-import { SpecializationCreateParamsModule } from "@/modules/organization/specializations";
+import { SpecializationCreateParamsModule, SpecializationModule } from "@/modules/organization/specializations";
 import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as organizationNamespace } from "../modules/organization";
@@ -25,6 +25,13 @@ export class OrganizationStore {
      */
     public get departments(): DepartmentModule[]{
         return this.store.getters[`${organizationNamespace}/departments`];
+    }
+
+    /**
+     * Getter for fetching the specializations by departmentId
+     */
+    public specializations(departmentId: string): SpecializationModule[]{
+        return this.store.getters[`${organizationNamespace}/specializations`](departmentId);
     }
 
     /**

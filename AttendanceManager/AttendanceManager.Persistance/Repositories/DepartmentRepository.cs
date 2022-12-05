@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 namespace AttendanceManager.Persistance.Repositories
 {
@@ -13,14 +14,13 @@ namespace AttendanceManager.Persistance.Repositories
         public DepartmentRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
         {
         }
-
-        public override Task<Department> GetAsync(Expression<Func<Department, bool>> expression)
-            => dbContext.Departments
-                    .Include(s => s.Specializations)
-                    .FirstOrDefaultAsync(expression);
-        public override Task<List<Department>> ListAllAsync()
-            => dbContext.Departments
-                .Include(s => s.Specializations)
-                .ToListAsync();
+        public override Task<Department> GetAsync(Expression<Func<Department, bool>> expression, bool includeNavigationProperty = true)
+            => includeNavigationProperty? 
+                    dbContext.Departments.Include(s => s.Specializations).AsNoTracking().FirstOrDefaultAsync(expression):
+                    dbContext.Departments.AsNoTracking().FirstOrDefaultAsync(expression);
+        public override Task<List<Department>> ListAllAsync(bool includeNavigationProperty = true)
+            => includeNavigationProperty ?
+                    dbContext.Departments.Include(s => s.Specializations).AsNoTracking().ToListAsync():
+                    dbContext.Departments.AsNoTracking().ToListAsync();
     }
 }

@@ -1,10 +1,5 @@
-import OrganizationView from '@/views/OrganizationView.vue'
-import CreateSingleUserView from '@/views/manage-users-views/CreateSingleUserView.vue'
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import NotFoundView from '../views/NotFoundView.vue'
 
 Vue.use(VueRouter)
 
@@ -13,20 +8,27 @@ const routes: Array<RouteConfig> = [
     // default route
     path: '/',
     name: 'home',
-    component: HomeView
+    component: () => import('../views/HomeView.vue')
+  },
+  {
+    // Route for the list of users
+    path: '/users',
+    name: 'users',
+    component: () => import('../views/manage-users-views/UsersView.vue')
+    // TODO guard -> admin only
   },
   {
     // route for the view that contains the departments and specializations
     path: '/organization',
     name: 'organization',
-    component: OrganizationView
+    component: () => import('../views/OrganizationView.vue')
     //TODO guard -> admin only
   },
   {
     // route for the view that contains the form for adding a new user
     path: '/create-user',
     name: 'create-user',
-    component: CreateSingleUserView
+    component: () => import('../views/manage-users-views/CreateSingleUserView.vue')
     //TODO guard -> admin only
   },
   {
@@ -36,18 +38,19 @@ const routes: Array<RouteConfig> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import('../views/AboutView.vue')
   },
   {
     // route for the login page
     path: "/login",
     name: "login",
-    component: LoginView,
+    component: () => import('../views/LoginView.vue'),
   },
   {
     // NotFound route
+    // WARNING: DO NOT add any new route after this route, because it will never be matched!!!
     path: '/:pathMatch(.*)',
-    component: NotFoundView
+    component: () => import('../views/NotFoundView.vue')
   }
 ]
 
