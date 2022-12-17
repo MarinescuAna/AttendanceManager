@@ -2,12 +2,12 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-card width="50%" class="orange lighten-3">
+      <v-card :width="width" class="orange lighten-3">
         <v-card-title class="pa-7">
           <h2>Sign in</h2>
         </v-card-title>
         <v-card-text>
-          <validation-observer v-slot="{ handleSubmit, invalid }" >
+          <validation-observer v-slot="{ handleSubmit, invalid }">
             <v-form @submit.prevent="handleSubmit(doLogin)">
               <validation-provider
                 rules="required|email"
@@ -19,7 +19,7 @@
                   v-model="email"
                   prepend-icon="mdi-email"
                   :error-messages="errors"
-                  class="pa-6"
+                  :class="padding"
                   required
                 />
               </validation-provider>
@@ -37,16 +37,23 @@
                   @click:append="showPassword = !showPassword"
                   :error-messages="errors"
                   required
-                  class="pa-6"
+                  :class="padding"
                 />
               </validation-provider>
-              <v-row justify="center"  class="pa-8">
-              <v-btn width="50%" @click="doLogin" :disabled="invalid" large>Sign in</v-btn>
-            </v-row>
+              <v-row justify="center" class="pa-8">
+                <v-btn
+                  :width="width"
+                  @click="doLogin"
+                  :disabled="invalid"
+                  large
+                  >Sign in</v-btn
+                >
+              </v-row>
             </v-form>
           </validation-observer>
         </v-card-text>
-      </v-card></v-row>
+      </v-card></v-row
+    >
   </v-container>
 </template>
 
@@ -93,6 +100,28 @@ export default Vue.extend({
       email: "",
     };
   },
+  computed: {
+    /**
+     * Get the width according to the device type
+     */
+    width(): string {
+      switch (this.$vuetify.breakpoint.name) {
+        case "sm":
+        case "md": return "75%";
+        case "xs": return "100%";
+        default: return "50%";
+      }
+    },
+    /**
+     * Get the padding value according to the device type
+     */
+     padding(): string {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs": return "pa-0";
+        default: return "pa-6";
+      }
+    },
+  },
   methods: {
     /**
      * Use this method for login: if the login is done, update the navbar and redirect to home page
@@ -106,7 +135,7 @@ export default Vue.extend({
       if (response.isSuccess) {
         EventBus.$emit(EVENT_BUS_ISLOGGED);
         this.$router.push("/");
-      }else{
+      } else {
         window.alert(response.error);
       }
     },

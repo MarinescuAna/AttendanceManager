@@ -118,7 +118,7 @@
                   >
                     <v-select
                       :items="years"
-                      label="Enroll year"
+                      label="Enrollment year"
                       v-model="year"
                       required
                       :error-messages="errors"
@@ -231,7 +231,7 @@ export default Vue.extend({
         email: this.email,
         role: this.role.toString(),
         year: this.year,
-        specializations: this.selectedSpecializations,
+        specializations: this.selectedSpecializations,//Array.map({)
       } as CreateUserParameters);
 
       if (response.isSuccess) {

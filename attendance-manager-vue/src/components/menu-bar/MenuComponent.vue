@@ -1,9 +1,10 @@
 <template>
   <div>
-    <v-toolbar flat>
+    <v-toolbar flat app>
+      <v-app-bar-nav-icon @click.stop="drawerActivator=!drawerActivator"></v-app-bar-nav-icon>
       <router-link to="/" v-slot="{ navigate }">
         <v-toolbar-title
-          class="text-uppercase font-weight-black ml-12"
+          class="text-uppercase font-weight-black"
           @click="navigate"
         >
           <span class="font-weight-light">Attendance</span>
@@ -12,12 +13,13 @@
       </router-link>
     </v-toolbar>
     <v-navigation-drawer
-      expand-on-hover
+      v-model="drawerActivator"
       class="blue-grey lighten-4"
       absolute
       mini-variant.sync
-      permanent
+      temporary
       width="auto"
+      app
     >
       <v-list>
         <v-container justify="center" v-if="isLogged">
@@ -79,6 +81,8 @@ export default Vue.extend({
       isLogged: false,
       // List with all the existent buttons for defined pages
       links: [] as MenuItemListModel[],
+      // Use this in order to activeate the drawer
+      drawerActivator: false
     };
   },
   /**

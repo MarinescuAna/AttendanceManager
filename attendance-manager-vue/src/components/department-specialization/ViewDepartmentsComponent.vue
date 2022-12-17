@@ -101,7 +101,7 @@ export default Vue.extend({
      * Get selected specialization
      */
     selectedOrganization(): OrganizationViewModel {
-      return this.organizations[this.selectedItem];
+      return this.organizations[this.selectedItem == undefined ? 0 : this.selectedItem];
     },
   },
   mounted: function () {

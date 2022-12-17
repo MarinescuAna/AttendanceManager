@@ -19,7 +19,7 @@
           <v-row>
             <h2>{{ item.fullname }}({{ item.code }})</h2>
           </v-row>
-          <v-row v-if="item.accountConfirmed">
+          <v-row v-if="!item.accountConfirmed">
             <v-alert text type="warning"
               >This user didn't confirmed his account!</v-alert
             >

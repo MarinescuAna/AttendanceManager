@@ -1,12 +1,9 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Application.Shared;
 using AttendanceManager.Application.SharedDtos;
-using AttendanceManager.Domain.Entities;
 using AutoMapper;
 using MediatR;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +13,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
     public class GetAllUsersQueryHandler : UserFeatureBase, IRequestHandler<GetAllUsersQuery, List<UserDto>>
     {
         private readonly ISpecializationRepository _specializationRepository;
-        public GetAllUsersQueryHandler(IUserRepository userRepo, ISpecializationRepository specializationRepository,IMapper map) : base(userRepo, map)
+        public GetAllUsersQueryHandler(IUserRepository userRepo, ISpecializationRepository specializationRepository, IMapper map) : base(userRepo, map)
         {
             _specializationRepository = specializationRepository;
         }
@@ -40,7 +37,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
                     UserSpecializations = user.UserSpecializations.Select(us => new SpecializationDto()
                     {
                         Id = us.SpecializationID,
-                        Name = specializations.FirstOrDefault(s=>s.SpecializationID==us.SpecializationID)?.Name
+                        Name = specializations.FirstOrDefault(s => s.SpecializationID == us.SpecializationID)?.Name
                     }).ToArray(),
                     Code = user.Code,
                     Created = user.Created.ToString(Constants.DateFormat),
@@ -50,9 +47,9 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
                     EnrollmentYear = user.EnrollmentYear,
                     Fullname = user.FullName,
                     Role = user.Role.ToString(),
-                    Updated = user.Updated.ToString(Constants.DateFormat)                    
+                    Updated = user.Updated.ToString(Constants.DateFormat)
                 };
-                
+
             }).ToList();
         }
     }
