@@ -38,7 +38,7 @@ const accessToken = AuthService.getAccessToken();
 if (accessToken) {
   axios.defaults.headers.common['Authorization'] =  `Bearer ${accessToken}`
 }
-axios.defaults.baseURL='https://localhost:44347/api/'
+axios.defaults.baseURL='https://localhost:44325/api/'
 
 /**
  * Store initialization

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar flat app>
+    <v-toolbar flat>
       <v-app-bar-nav-icon @click.stop="drawerActivator=!drawerActivator"></v-app-bar-nav-icon>
       <router-link to="/" v-slot="{ navigate }">
         <v-toolbar-title
@@ -19,7 +19,6 @@
       mini-variant.sync
       temporary
       width="auto"
-      app
     >
       <v-list>
         <v-container justify="center" v-if="isLogged">
