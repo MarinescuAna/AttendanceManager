@@ -7,7 +7,7 @@
          <router-link to="/organization" tag="button"><v-icon>mdi-close</v-icon></router-link> 
       </v-card-title>
       <v-card-text>
-        <validation-observer ref="observer" v-slot="{ handleSubmit, invalid }">
+        <validation-observer v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addDepartment)">
             <validation-provider
               name="password"
@@ -48,8 +48,6 @@ import { extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
 import { ResponseModule } from "@/shared/modules";
-import { EventBus } from "@/main";
-import { EVENT_BUS_RELOAD_DEPARTMENTS, EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
 
 /**
  * Validation for requied
@@ -79,10 +77,7 @@ export default Vue.extend({
       )) as ResponseModule;
 
       if (response.isSuccess) {
-        this.department='';
-        this.$refs.observer.reset(); 
-        EventBus.$emit(EVENT_BUS_RELOAD_ORGANIZATIONS);
-        EventBus.$emit(EVENT_BUS_RELOAD_DEPARTMENTS);
+        this.$router.currentRoute.meta?.onBack();
       } else {
         window.alert(response.error);
       }

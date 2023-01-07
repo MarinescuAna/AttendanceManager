@@ -134,7 +134,7 @@ export default Vue.extend({
 
       if (response.isSuccess) {
         EventBus.$emit(EVENT_BUS_ISLOGGED);
-        this.$router.push("/");
+        this.$router.push({name:'home'});
       } else {
         window.alert(response.error);
       }

@@ -7,7 +7,7 @@
          <router-link to="/organization" tag="button"><v-icon>mdi-close</v-icon></router-link> 
       </v-card-title>
       <v-card-text>
-        <validation-observer ref="observer" v-slot="{ handleSubmit, invalid }">
+        <validation-observer v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addSpecialization)">
             <validation-provider
               name="name"
@@ -65,8 +65,6 @@ import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
 import { SpecializationCreateParamsModule } from "@/modules/organization/specializations";
 import { DepartmentModule } from "@/modules/organization/departments";
-import { EventBus } from "@/main";
-import { EVENT_BUS_RELOAD_DEPARTMENTS, EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
 
 /**
  * Validation for requied
@@ -94,15 +92,6 @@ export default Vue.extend({
   created() {
     this.departments = StoreHelper.organizationStore.departments;
   },
-  /**
-   * Update the departments v-selector each time when a new department is added
-   */
-  mounted: function(){
-    EventBus.$on(EVENT_BUS_RELOAD_DEPARTMENTS, () => {
-      this.departments = StoreHelper.organizationStore.departments;
-      EventBus.$off(EVENT_BUS_RELOAD_DEPARTMENTS);
-    });
-  },
   methods: {
     /**
      * Use this method for adding a new specialization
@@ -116,10 +105,7 @@ export default Vue.extend({
       } as SpecializationCreateParamsModule);
 
       if (response.isSuccess) {
-        this.department='';
-        this.name = '';
-        this.$refs.observer.reset(); 
-        EventBus.$emit(EVENT_BUS_RELOAD_ORGANIZATIONS);
+        this.$router.currentRoute.meta?.onBack();
       } else {
         window.alert(response.error);
       }

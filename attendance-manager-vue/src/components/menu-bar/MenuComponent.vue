@@ -1,8 +1,10 @@
 <template>
   <div>
     <v-toolbar flat>
-      <v-app-bar-nav-icon @click.stop="drawerActivator=!drawerActivator"></v-app-bar-nav-icon>
-      <router-link to="/" v-slot="{ navigate }">
+      <v-app-bar-nav-icon
+        @click.stop="drawerActivator = !drawerActivator"
+      ></v-app-bar-nav-icon>
+      <router-link :to="{ name: 'home' }" v-slot="{ navigate }">
         <v-toolbar-title
           class="text-uppercase font-weight-black"
           @click="navigate"
@@ -67,7 +69,7 @@ export default Vue.extend({
       // Sign In button details
       signInItem: {
         icon: "mdi-login",
-        route: "/login",
+        route: "login",
         title: "Sign In",
       } as MenuChildModel,
       // Username
@@ -81,7 +83,7 @@ export default Vue.extend({
       // List with all the existent buttons for defined pages
       links: [] as MenuItemListModel[],
       // Use this in order to activeate the drawer
-      drawerActivator: false
+      drawerActivator: false,
     };
   },
   /**
@@ -124,7 +126,7 @@ export default Vue.extend({
     /**
      * Use this method in order to set the page properties
      */
-    setProperties():void{
+    setProperties(): void {
       const data = AuthService.getDataFromToken();
       this.name = data.name;
       this.code = data.code;
@@ -137,9 +139,9 @@ export default Vue.extend({
      */
     logout(): void {
       this.isLogged = false;
-      this.links=[];
+      this.links = [];
       AuthService.logout();
-      this.$router.push('/');
+      this.$router.push({ name: "home" });
     },
   },
 });

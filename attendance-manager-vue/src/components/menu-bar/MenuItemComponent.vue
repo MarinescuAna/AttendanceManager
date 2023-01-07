@@ -1,5 +1,5 @@
 <template>
-  <v-list-item router :to="item.route">
+  <v-list-item router :to="{name:item.route}">
     <v-list-item-icon>
       <v-icon>{{ item.icon }}</v-icon>
     </v-list-item-icon>

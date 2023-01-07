@@ -242,8 +242,8 @@ export default Vue.extend({
         this.role = 1;
         this.specializations = [];
         this.selectedSpecializations = [];
-        this.$refs.observer.reset();
-        this.$refs.departmentRef.reset();
+        this.$refs.observer?.reset();
+        this.$refs.departmentRef?.reset();
         window.alert(
           "The user was created and he will be inform via email regarding his credentials."
         );

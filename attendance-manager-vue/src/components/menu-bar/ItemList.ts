@@ -11,7 +11,7 @@ export const links: MenuItemListModel[] = [
             {
                 title: "Create single user",
                 icon: "mdi-account-plus-outline",
-                route: "/create-user",
+                route: "create-user",
                 role: Role.Admin,
             },
             {
@@ -23,7 +23,7 @@ export const links: MenuItemListModel[] = [
             {
                 title: "View users",
                 icon: "mdi-account-group-outline",
-                route: "/users",
+                route: "users",
                 role: Role.Admin,
             }
         ]
@@ -31,21 +31,21 @@ export const links: MenuItemListModel[] = [
     {
         icon: "mdi-folder",
         title: "Manage departments and specialisations",
-        route: "/organization",
+        route: "organization",
         role: Role.Admin,
         children: []
     },
     {
         icon: "mdi-home",
         title: "Home",
-        route: "/",
+        route: "home",
         role: Role.All,
         children: []
     },
     {
         icon: "mdi-information-variant",
         title: "About",
-        route: "/about",
+        route: "about",
         role: Role.All,
         children: []
     }
