@@ -2,7 +2,9 @@
   <v-container>
     <v-card class="orange lighten-2">
       <v-card-title class="pa-7">
-        <h2>Create new specialization</h2>
+         <h2>Create new specialization</h2>
+         <v-spacer></v-spacer>
+         <router-link to="/organization" tag="button"><v-icon>mdi-close</v-icon></router-link> 
       </v-card-title>
       <v-card-text>
         <validation-observer ref="observer" v-slot="{ handleSubmit, invalid }">
