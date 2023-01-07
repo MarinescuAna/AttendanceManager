@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { OrganizationViewModel } from "@/modules/organization";
-import { DepartmentModule } from "@/modules/organization/departments";
+import { DepartmentModule, UpdateDepartmentModule } from "@/modules/organization/departments";
 import { SpecializationCreateParamsModule, SpecializationModule, SpecializationViewModule } from "@/modules/organization/specializations";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
@@ -27,6 +27,11 @@ const getters = {
      * Gets departments and specializations from the store
      */
     organizations(state): OrganizationViewModel[] {
+
+        if (state.organizations.length == 0) {
+            actions.loadOrganizations;
+        }
+
         return state.organizations;
     },
     /**
@@ -75,7 +80,24 @@ const mutations = {
                 } as SpecializationViewModule)
             }
         });
+    },
+    /**
+     * Remove department and the all the specialisations defined under it
+     */
+    _removeDepartment(state, departmentId: string): void {
+        state.organizations = state.organizations.filter(cr => cr.id != departmentId);
+    },
+    /**
+     * Update department name
+     */
+    _updateDepartmentName(state, departmentId: string, name: string): void {
+        state.organizations.foreach(cr =>{
+            if(cr.id == departmentId){
+                cr.name = name;
+            }
+        });
     }
+
 };
 
 // actions for this store
@@ -122,6 +144,44 @@ const actions = {
 
         if (response.isSuccess) {
             commit("_addSpecialization", (result as AxiosResponse).data);
+        }
+        return response;
+    },
+    /**
+     * Remove a department from the db and store
+     */
+    async removeDepartment({ commit }, payload: UpdateDepartmentModule): Promise<ResponseModule> {
+        let response: ResponseModule = {
+            error: "",
+            isSuccess: true
+        };
+
+        await axios.patch(`department/delete_department`, payload)
+            .catch(error => {
+                response = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (response.isSuccess) {
+            commit("_removeDepartment", payload.departmentId);
+        }
+        return response;
+    },
+    /**
+     * Update department name in db and store
+     */
+     async updateDepartmentName({ commit }, payload: UpdateDepartmentModule): Promise<ResponseModule> {
+        let response: ResponseModule = {
+            error: "",
+            isSuccess: true
+        };
+
+        await axios.patch(`department/update_department`, payload)
+            .catch(error => {
+                response = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (response.isSuccess) {
+            commit("_updateDepartmentName", payload.departmentId, payload.name);
         }
         return response;
     }

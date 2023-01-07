@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -7,6 +8,7 @@ namespace AttendanceManager.Domain.Entities
         public required Guid DepartmentID { get; set; }
         [MaxLength(128)]
         public required string Name { get; set; }
+        public required bool IsDeleted { get; set; } = false;
         public ICollection<Specialization>? Specializations { get; set; }
 
     }

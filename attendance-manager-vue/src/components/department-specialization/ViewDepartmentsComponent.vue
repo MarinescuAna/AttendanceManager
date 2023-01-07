@@ -2,6 +2,7 @@
   <v-container v-if="organizations.length > 0">
     <v-card class="orange lighten-3">
       <v-row class="ma-2">
+        <!--Display the departments list into a card-->
         <v-col class="orange lighten-3">
           <v-list flat>
             <h2 class="ma-2">Departments and specializations</h2>
@@ -16,17 +17,55 @@
             </v-container>
           </v-list>
         </v-col>
-        <v-divider vertical></v-divider>
+        <!--Divide the departments and specializations-->
+        <v-divider v-if="selectedItem != ''" vertical></v-divider>
+        <!--Display the specializations list for each selected department-->
         <v-col v-if="selectedItem != ''">
           <v-scroll-y-transition mode="out-in">
-            <v-card :key="selectedItem" flat
-              ><v-card-text>
-                <v-row justify="center">
-                  <h3 class="text-h5 ma-4">
-                    {{ selectedOrganization.name }}
-                  </h3>
-                </v-row>
-                <v-divider></v-divider>
+            <v-card :key="selectedItem" flat>
+              <v-card-title>
+                <span class="text-h5 ma-4">
+                  {{ selectedOrganization.name }}</span
+                >
+                <v-spacer></v-spacer>
+                <!--Menu from the top-right corner-->
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon v-bind="attrs" v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <!--Edit button-->
+                    <v-row justify="center">
+                      <v-dialog v-model="dialog" width="40%">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-list-item v-bind="attrs" v-on="on" link>
+                            <v-list-item-title
+                              ><v-icon>mdi-pencil</v-icon
+                              >Edit</v-list-item-title
+                            >
+                          </v-list-item>
+                        </template>
+                        <ChangeDepartmentDialog
+                          :departmentName="selectedOrganization.name"
+                        />
+                      </v-dialog>
+                    </v-row>
+                    <!--Delete button-->
+                    <v-list-item
+                      @click="onDeleteDepartment(selectedOrganization.id)"
+                      link
+                    >
+                      <v-list-item-title
+                        ><v-icon>mdi-delete</v-icon>Delete</v-list-item-title
+                      >
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-card-text>
                 <v-row justify="center">
                   <v-col>
                     <h4>Specializations:</h4>
@@ -79,14 +118,21 @@ import StoreHelper from "@/store/store-helper";
 import { OrganizationViewModel } from "@/modules/organization";
 import { EventBus } from "@/main";
 import { EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
+import { UpdateDepartmentModule } from "@/modules/organization/departments";
+import ChangeDepartmentDialog from "./ChangeDepartmentDialog.vue";
 
 export default Vue.extend({
+  components: {
+    ChangeDepartmentDialog,
+  },
   data() {
     return {
       // List with all the departments for the v-treeview component
       organizations: [] as OrganizationViewModel[],
       // Selected organization id
       selectedItem: "",
+      // Flag for Change department dialog
+      dialog: false,
     };
   },
   /**
@@ -101,7 +147,9 @@ export default Vue.extend({
      * Get selected specialization
      */
     selectedOrganization(): OrganizationViewModel {
-      return this.organizations[this.selectedItem == undefined ? 0 : this.selectedItem];
+      return this.organizations[
+        this.selectedItem == undefined ? 0 : this.selectedItem
+      ];
     },
   },
   mounted: function () {
@@ -112,6 +160,23 @@ export default Vue.extend({
       this.organizations = StoreHelper.organizationStore.organizations;
       EventBus.$off(EVENT_BUS_RELOAD_ORGANIZATIONS);
     });
+  },
+  methods: {
+    /**
+     * Delete department from db and store
+     * @param departmentId 
+     */
+    async onDeleteDepartment(departmentId: string): Promise<void> {
+      const response = await StoreHelper.organizationStore.removeDepartment({
+        departmentId: departmentId,
+      } as UpdateDepartmentModule);
+
+      if (response.isSuccess) {
+        this.organizations = StoreHelper.organizationStore.organizations;
+      } else {
+        window.alert(response.error);
+      }
+    },
   },
 });
 </script>

@@ -16,8 +16,8 @@
       v-model="drawerActivator"
       class="blue-grey lighten-4"
       absolute
-      mini-variant.sync
       temporary
+      width-max="20%"
       width="auto"
     >
       <v-list>

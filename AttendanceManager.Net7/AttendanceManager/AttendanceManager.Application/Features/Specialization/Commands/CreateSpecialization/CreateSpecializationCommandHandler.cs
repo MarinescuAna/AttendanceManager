@@ -27,6 +27,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             {
                 DepartmentID = request.DepartmentId,
                 Name = request.Name,
+                IsDeleted = false,
                 SpecializationID = Guid.NewGuid()
             };
 

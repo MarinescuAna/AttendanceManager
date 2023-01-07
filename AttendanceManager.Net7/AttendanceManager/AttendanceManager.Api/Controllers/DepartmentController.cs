@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Department.Commands.CreateDepartment;
+using AttendanceManager.Application.Features.Department.Commands.UpdateDepartment;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using AttendanceManager.Application.SharedDtos;
 using MediatR;
@@ -34,6 +35,26 @@ namespace AttendanceManager.Api.Controllers
         public async Task<ActionResult> CreateDepartment(string name)
         {
             return Ok(await mediator.Send(new CreateDepatmentCommand() { Name = name }));
+        }
+
+        /// <summary>
+        /// Soft delete an department
+        /// </summary>
+        /// <param name="name"></param>
+        [HttpPatch("delete_department")]
+        public async Task<ActionResult> DeleteDepartment(UpdateOrDeleteDepartmentCommand command)
+        {
+            return Ok(await mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Update the department name
+        /// </summary>
+        /// <param name="name"></param>
+        [HttpPatch("update_department")]
+        public async Task<ActionResult> UpdateDepartment(UpdateOrDeleteDepartmentCommand command)
+        {
+            return Ok(await mediator.Send(command));
         }
     }
 }

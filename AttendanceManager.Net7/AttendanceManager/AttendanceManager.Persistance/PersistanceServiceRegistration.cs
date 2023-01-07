@@ -1,11 +1,8 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
-using AttendanceManager.Application.Modules.Seed;
 using AttendanceManager.Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System.Text.Json;
 
 namespace AttendanceManager.Persistance
 {
