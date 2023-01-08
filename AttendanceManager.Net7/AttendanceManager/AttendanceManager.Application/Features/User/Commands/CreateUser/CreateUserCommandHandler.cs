@@ -1,5 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Mail;
-using AttendanceManager.Application.Contracts.Persistance;
+using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Models.Mail;
 using AttendanceManager.Application.Shared;
@@ -10,10 +10,10 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.User.Commands.CreateUser
 {
-    public sealed class CreateUserCommandHandler : UserFeatureBase, IRequestHandler<CreateUserCommand>
+    public sealed class CreateUserCommandHandler : BaseFeature, IRequestHandler<CreateUserCommand>
     {
         private readonly IMailService _mailService;
-        public CreateUserCommandHandler(IUserRepository userRepo, IMapper map, IMailService mailService) : base(userRepo, map)
+        public CreateUserCommandHandler(IUnitOfWork unit, IMapper map, IMailService mailService) : base(unit, map)
         {
             _mailService = mailService;
         }
@@ -21,7 +21,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
         public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             // Check if the user dosen't already have an account
-            if (await userRepository.GetAsync(u => u.Email == request.Email, false) != null)
+            if (await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email) != null)
             {
                 throw new AlreadyExistsException("User", request.Email);
             }
@@ -49,7 +49,8 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             };
 
             //save the user into the db or throw exception if something happen
-            if (!await userRepository.AddAsync(newUser))
+            unitOfWork.UserRepository.AddAsync(newUser);
+            if (!await unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
@@ -63,7 +64,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
 
             return Unit.Value;
         }
-        public string GeneratePassword() => new string(Enumerable.Repeat(Constants.CharsString, Constants.PasswordLength).Select(s => s[new Random().Next(s.Length)]).ToArray());
+        private static string GeneratePassword() => new (Enumerable.Repeat(Constants.CharsString, Constants.PasswordLength).Select(s => s[new Random().Next(s.Length)]).ToArray());
 
     }
 }

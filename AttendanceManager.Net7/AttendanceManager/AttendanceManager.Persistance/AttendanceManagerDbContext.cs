@@ -18,6 +18,7 @@ namespace AttendanceManager.Persistance
         public DbSet<UserSpecialization> UserSpecializations { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<Course> Courses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

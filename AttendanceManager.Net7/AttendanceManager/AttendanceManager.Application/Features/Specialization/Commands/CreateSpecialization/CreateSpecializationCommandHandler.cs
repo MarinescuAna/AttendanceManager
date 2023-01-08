@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
+using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Shared;
 using AutoMapper;
@@ -6,16 +7,16 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization
 {
-    public sealed class CreateSpecializationCommandHandler : SpecializationFeatureBase, IRequestHandler<CreateSpecializationCommand, SpecializationDto>
+    public sealed class CreateSpecializationCommandHandler : BaseFeature, IRequestHandler<CreateSpecializationCommand, SpecializationDto>
     {
-        public CreateSpecializationCommandHandler(ISpecializationRepository specializationRepository, IMapper mapper) : base(specializationRepository, mapper)
+        public CreateSpecializationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
         public async Task<SpecializationDto> Handle(CreateSpecializationCommand request, CancellationToken cancellationToken)
         {
             // Look for antoher specializations that have the same name and department and throw exception
-            var specialization = await specializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID == request.DepartmentId, false);
+            var specialization = await unitOfWork.SpecializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID == request.DepartmentId);
 
             if (specialization != null)
             {
@@ -32,7 +33,8 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             };
 
             // Save the specialization or throw exception if something happen
-            if (!await specializationRepository.AddAsync(newSpecialization))
+            unitOfWork.SpecializationRepository.AddAsync(newSpecialization);
+            if (!await unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }

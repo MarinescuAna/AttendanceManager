@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AttendanceManager.Domain.Entities
 {
-    public class User
+    public sealed class User
     {
         public required Guid UserID { get; set; }
         [MaxLength(128)]
@@ -15,7 +15,7 @@ namespace AttendanceManager.Domain.Entities
         public string? Password { get; set; }
         public int? EnrollmentYear { get; set; }
         // This code represents the unique code that will appear instead of names for students 
-        [MaxLength(16)]
+        //[MaxLength(16)]
         public string? Code { get; set; }
         public required DateTime Created { get; set; }
         public required DateTime Updated { get; set; }

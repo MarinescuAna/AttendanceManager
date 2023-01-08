@@ -4,6 +4,7 @@ using AttendanceManager.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    partial class AttendanceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230108100447_AddCourses")]
+    partial class AddCourses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +104,8 @@ namespace AttendanceManager.Persistance.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -136,16 +140,16 @@ namespace AttendanceManager.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserID = new Guid("d217f65c-89af-4637-a1c8-df5cd0e991a6"),
-                            AccountConfirmed = true,
+                            UserID = new Guid("6dba07f3-4364-4c34-989a-e00a0ea6ba87"),
+                            AccountConfirmed = false,
                             Code = "-",
-                            Created = new DateTime(2023, 1, 8, 13, 28, 29, 875, DateTimeKind.Local).AddTicks(6646),
+                            Created = new DateTime(2023, 1, 8, 12, 4, 46, 857, DateTimeKind.Local).AddTicks(5806),
                             Email = "admin@admin.ro",
                             EnrollmentYear = 2023,
                             FullName = "Administrator",
                             Password = "system123",
                             Role = 0,
-                            Updated = new DateTime(2023, 1, 8, 13, 28, 29, 875, DateTimeKind.Local).AddTicks(6707)
+                            Updated = new DateTime(2023, 1, 8, 12, 4, 46, 857, DateTimeKind.Local).AddTicks(5863)
                         });
                 });
 

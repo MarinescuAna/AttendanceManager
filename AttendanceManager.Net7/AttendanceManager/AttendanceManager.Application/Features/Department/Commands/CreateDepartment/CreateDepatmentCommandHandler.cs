@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Persistance;
+﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Shared;
 using AttendanceManager.Application.SharedDtos;
@@ -7,16 +7,16 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.Department.Commands.CreateDepartment
 {
-    public sealed class CreateDepatmentCommandHandler : DepartmentFeatureBase, IRequestHandler<CreateDepatmentCommand, DepartmentDto>
+    public sealed class CreateDepatmentCommandHandler : BaseFeature, IRequestHandler<CreateDepatmentCommand, DepartmentDto>
     {
-        public CreateDepatmentCommandHandler(IDepartmentRepository departmentRepository, IMapper mapper) : base(departmentRepository, mapper)
+        public CreateDepatmentCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
         public async Task<DepartmentDto> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
         {
             // Look for other departments with the same name and throw exception if exists
-            if (await departmentRepository.GetAsync(d => d.Name == request.Name && !d.IsDeleted, false) != null)
+            if (await unitOfWork.DepartmentRepository.GetAsync(d => d.Name == request.Name && !d.IsDeleted) != null)
             {
                 throw new AlreadyExistsException("Department", request.Name);
             }
@@ -26,11 +26,12 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             {
                 DepartmentID = Guid.NewGuid(),
                 Name = request.Name,
-                IsDeleted= false,
+                IsDeleted = false,
             };
 
             // Add new department or throw exception if something happen
-            if (!await departmentRepository.AddAsync(newDepartment))
+            unitOfWork.DepartmentRepository.AddAsync(newDepartment);
+            if (!await unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
