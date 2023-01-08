@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.Mail;
 using AttendanceManager.Application.Models.Mail;
+using AttendanceManager.Infrastructure.Shared.Logger;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -38,8 +39,9 @@ namespace AttendanceManager.Infrastructure.Mail
 
                     return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LoggerSerivce.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
                     return false;
                 }
                 finally

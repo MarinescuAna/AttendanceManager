@@ -2,7 +2,7 @@
 
 namespace AttendanceManager.Application.Contracts.Persistance
 {
-    public interface IDepartmentRepository: IBaseRepository<Department>
+    public interface IDepartmentRepository: IGenericRepository<Department>
     {
     }
 }

@@ -5,10 +5,16 @@ using AttendanceManager.Application.Modules.Seed;
 using AttendanceManager.Infrastructure;
 using AttendanceManager.Persistance;
 using MediatR;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// setup serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+builder.Host.UseSerilog(Log.Logger);
 
 // Settup EF core
 builder.Services.Configure<AdminSeedSetting>(builder.Configuration.GetSection("Admin"));

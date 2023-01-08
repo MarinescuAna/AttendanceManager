@@ -1,31 +1,26 @@
-﻿using AttendanceManager.Application.Contracts.Persistance;
+﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AutoMapper;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
 {
-    public sealed class GetUserByEmailQueryHandler :UserFeatureBase, IRequestHandler<GetUserByEmailQuery, UserDto>
+    public sealed class GetUserByEmailQueryHandler : BaseFeature, IRequestHandler<GetUserByEmailQuery, UserDto>
     {
-        public GetUserByEmailQueryHandler(IMapper mapper, IUserRepository userRepository):base(userRepository,mapper)
+        public GetUserByEmailQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
-
+        /// <summary>
+        ///  Get the user by email
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         public async Task<UserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
-        {
-            // Get the user by email
-            var user = await userRepository.GetAsync(u => u.Email == request.Email);
+            => mapper.Map<UserDto>(await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email) 
+                ?? throw new NotFoundException(nameof(User), request.Email));
 
-            // Throw exception if the user dosen't exists
-            if (user == null)
-            {
-                throw new NotFoundException(nameof(User), request.Email);
-            }
-
-            return mapper.Map<UserDto>(user);
-
-        }
+        
     }
 }

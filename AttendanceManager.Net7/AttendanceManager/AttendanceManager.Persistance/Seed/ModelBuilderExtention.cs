@@ -23,7 +23,7 @@ namespace AttendanceManager.Persistance.Seed
                    Role = Domain.Enums.Role.Admin,
                    FullName = adminConfiguration!.Fullname,
                    UserID = Guid.NewGuid(),
-                   AccountConfirmed = false,
+                   AccountConfirmed = true,
                }
            );
         }
