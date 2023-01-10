@@ -24,11 +24,9 @@ namespace AttendanceManager.Persistance.Migrations
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Course", b =>
                 {
-                    b.Property<int>("CourseID")
+                    b.Property<Guid>("CourseID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -41,9 +39,15 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<Guid>("SpecializationID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(254)");
+
                     b.HasKey("CourseID");
 
                     b.HasIndex("SpecializationID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Courses");
                 });
@@ -93,9 +97,9 @@ namespace AttendanceManager.Persistance.Migrations
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.User", b =>
                 {
-                    b.Property<Guid>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Email")
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
 
                     b.Property<bool>("AccountConfirmed")
                         .HasColumnType("bit");
@@ -105,11 +109,6 @@ namespace AttendanceManager.Persistance.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
 
                     b.Property<int?>("EnrollmentYear")
                         .HasColumnType("int");
@@ -129,23 +128,46 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserID");
+                    b.HasKey("Email");
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            UserID = new Guid("d217f65c-89af-4637-a1c8-df5cd0e991a6"),
+                            Email = "admin@admin.ro",
                             AccountConfirmed = true,
                             Code = "-",
-                            Created = new DateTime(2023, 1, 8, 13, 28, 29, 875, DateTimeKind.Local).AddTicks(6646),
-                            Email = "admin@admin.ro",
+                            Created = new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1331),
                             EnrollmentYear = 2023,
                             FullName = "Administrator",
                             Password = "system123",
                             Role = 0,
-                            Updated = new DateTime(2023, 1, 8, 13, 28, 29, 875, DateTimeKind.Local).AddTicks(6707)
+                            Updated = new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1383)
+                        },
+                        new
+                        {
+                            Email = "teacher@test.ro",
+                            AccountConfirmed = true,
+                            Code = "383gvvv343",
+                            Created = new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1425),
+                            EnrollmentYear = 2023,
+                            FullName = "Keven Dietrich",
+                            Password = "system1234",
+                            Role = 2,
+                            Updated = new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1430)
+                        },
+                        new
+                        {
+                            Email = "student@test.ro",
+                            AccountConfirmed = true,
+                            Code = "232dde3w",
+                            Created = new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1443),
+                            EnrollmentYear = 2023,
+                            FullName = "Elliott Cummerata",
+                            Password = "system1234",
+                            Role = 1,
+                            Updated = new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1446)
                         });
                 });
 
@@ -158,8 +180,9 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<Guid>("SpecializationID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(254)");
 
                     b.HasKey("UserSpecializationID");
 
@@ -178,7 +201,15 @@ namespace AttendanceManager.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AttendanceManager.Domain.Entities.User", "User")
+                        .WithMany("Courses")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Specialization");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Specialization", b =>
@@ -225,6 +256,8 @@ namespace AttendanceManager.Persistance.Migrations
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Courses");
+
                     b.Navigation("UserSpecializations");
                 });
 #pragma warning restore 612, 618

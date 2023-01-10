@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Persistance;
-using AttendanceManager.Application.Contracts.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Shared;
 using AutoMapper;

@@ -5,11 +5,11 @@ namespace AttendanceManager.Domain.Entities
 {
     public sealed class User
     {
-        public required Guid UserID { get; set; }
+        [MaxLength(254)]
+        [Key]
+        public required string Email { get; set; }
         [MaxLength(128)]
         public required string FullName { get; set; }
-        [MaxLength(254)]
-        public required string Email { get; set; }
         public required Role Role { get; set; }
         [MaxLength(64)]
         public string? Password { get; set; }
@@ -21,5 +21,6 @@ namespace AttendanceManager.Domain.Entities
         public required DateTime Updated { get; set; }
         public required bool AccountConfirmed { get; set; }
         public ICollection<UserSpecialization>? UserSpecializations { get; set; }
+        public ICollection<Course>? Courses { get; set; }
     }
 }

@@ -21,6 +21,13 @@ export class OrganizationStore {
     }
 
     /**
+     * Getter for taking the number of organisations
+     */
+    public get organisationsExists(): number {
+        return this.store.getters[`${organizationNamespace}/organisationsExists`];
+    }
+
+    /**
      * Getter for fetching only the departments, without no information about the specializations from the store
      */
     public get departments(): DepartmentModule[] {

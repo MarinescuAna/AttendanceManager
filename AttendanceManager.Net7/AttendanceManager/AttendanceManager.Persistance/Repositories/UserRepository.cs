@@ -15,14 +15,14 @@ namespace AttendanceManager.Persistance.Repositories
         public override Task<User?> GetAsync(Expression<Func<User, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.None => dbContext.Users.FirstOrDefaultAsync(expression),
-                _ => dbContext.Users.Include(s => s.UserSpecializations).FirstOrDefaultAsync(expression)
+                NavigationPropertiesSetting.None => dbContext.Users.AsNoTracking().FirstOrDefaultAsync(expression),
+                _ => dbContext.Users.Include(s => s.UserSpecializations).Include(s => s.Courses).FirstOrDefaultAsync(expression)
             };
         public override Task<List<User>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
                 NavigationPropertiesSetting.None => dbContext.Users.AsNoTracking().ToListAsync(),
-                _ => dbContext.Users.Include(s => s.UserSpecializations).AsNoTracking().ToListAsync()
+                _ => dbContext.Users.Include(s => s.UserSpecializations).Include(s => s.Courses).AsNoTracking().ToListAsync()
             };
     }
 }

@@ -27,7 +27,6 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             }
 
             //create a new user and add the specializations where is part of
-            var userId = Guid.NewGuid();
             var newUser = new Domain.Entities.User
             {
                 Email = request.Email,
@@ -35,7 +34,6 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
                 FullName = request.Fullname,
                 Code = request.Code,
                 Role = Enum.Parse<Role>(request.Role),
-                UserID = userId,
                 Password = GeneratePassword(),
                 AccountConfirmed = false,
                 Created = DateTime.Now,
@@ -43,7 +41,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
                 UserSpecializations = request.Specializations.Select(s => new UserSpecialization()
                 {
                     SpecializationID = Guid.Parse(s),
-                    UserID = userId,
+                    UserID = request.Email,
                     UserSpecializationID = Guid.NewGuid()
                 }).ToList()
             };

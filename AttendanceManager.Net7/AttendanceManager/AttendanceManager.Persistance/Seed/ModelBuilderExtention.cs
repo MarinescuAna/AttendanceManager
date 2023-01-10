@@ -22,10 +22,39 @@ namespace AttendanceManager.Persistance.Seed
                    Updated = DateTime.Now,
                    Role = Domain.Enums.Role.Admin,
                    FullName = adminConfiguration!.Fullname,
-                   UserID = Guid.NewGuid(),
                    AccountConfirmed = true,
                }
            );
+
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Email = "teacher@test.ro",
+                   Password = "system1234",
+                   Code = "383gvvv343",
+                   Created = DateTime.Now,
+                   EnrollmentYear = DateTime.Now.Year,
+                   Updated = DateTime.Now,
+                   Role = Domain.Enums.Role.Teacher,
+                   FullName = "Keven Dietrich",
+                   AccountConfirmed = true,
+               }
+            );
+
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Email = "student@test.ro",
+                   Password = "system1234",
+                   Code = "232dde3w",
+                   Created = DateTime.Now,
+                   EnrollmentYear = DateTime.Now.Year,
+                   Updated = DateTime.Now,
+                   Role = Domain.Enums.Role.Student,
+                   FullName = "Elliott Cummerata",
+                   AccountConfirmed = true,
+               }
+            );
         }
     }
 }

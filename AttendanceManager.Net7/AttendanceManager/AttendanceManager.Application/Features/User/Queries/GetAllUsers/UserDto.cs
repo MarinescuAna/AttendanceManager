@@ -1,11 +1,12 @@
 ﻿using AttendanceManager.Application.SharedDtos;
+using System.Text.Json.Serialization;
 
 namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
 {
     public sealed class UserDto
     {
-        public required string UserId { get; set; }
         public required string Fullname { get; set; }
+        [JsonPropertyName("id")]
         public required string Email { get; set; }
         public required string Role { get; set; }
         public required int EnrollmentYear { get; set; }

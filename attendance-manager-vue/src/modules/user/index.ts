@@ -1,4 +1,5 @@
 import { SpecializationViewModule } from "../organization/specializations";
+import { TableModule } from "../shared";
 
 /**
  * Use this module in order to create a new user's account
@@ -14,8 +15,7 @@ import { SpecializationViewModule } from "../organization/specializations";
 /**
  * Use this module in order to display the users for admin
  */
-export interface UserViewModule{
-   userId: string;
+export interface UserViewModule extends TableModule {
    fullname: string;
    email: string;
    role:string;

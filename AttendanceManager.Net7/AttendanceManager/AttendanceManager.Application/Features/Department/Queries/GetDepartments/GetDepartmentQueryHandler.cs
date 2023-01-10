@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.SharedDtos;
+using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
@@ -17,6 +18,6 @@ namespace AttendanceManager.Application.Features.Department.Queries.GetDepartmen
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<List<OrganizationDto>> Handle(GetDepartmentQuery request, CancellationToken cancellationToken)
-            =>  mapper.Map<List<OrganizationDto>>(await unitOfWork.DepartmentRepository.ListAllAsync());
+            =>  mapper.Map<List<OrganizationDto>>(await unitOfWork.DepartmentRepository.ListAllAsync(NavigationPropertiesSetting.OnlyCollectionNavigationProps));
     }
 }

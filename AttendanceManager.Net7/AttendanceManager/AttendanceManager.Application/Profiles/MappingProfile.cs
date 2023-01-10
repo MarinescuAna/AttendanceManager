@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
 using AttendanceManager.Domain.Entities;
 using AutoMapper;
+using AttendanceManager.Application.Features.Course.Queries.GetCoursesQuery;
 
 namespace AttendanceManager.Application.Profiles
 {
@@ -21,6 +22,10 @@ namespace AttendanceManager.Application.Profiles
                 .ForMember(d => d.Id, act => act.MapFrom(d => d.SpecializationID))
                 .ForMember(s=>s.DepartmentId, act=>act.MapFrom(s=>s.DepartmentID));
             CreateMap<User, Features.User.Queries.GetAllUsers.UserDto>();
+            CreateMap<Course, CoursesDto>();
+            CreateMap<Course, CoursesDto>()
+                .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.Specialization!.Name))
+                .ForMember(s => s.SpecializationId, act => act.MapFrom(s => s.SpecializationID));
         }
     }
 }

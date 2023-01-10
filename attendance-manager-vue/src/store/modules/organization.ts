@@ -27,11 +27,6 @@ const getters = {
      * Gets departments and specializations from the store
      */
     organizations(state): OrganizationViewModel[] {
-
-        if (state.organizations.length == 0) {
-            actions.loadOrganizations;
-        }
-
         return state.organizations;
     },
     /**
@@ -50,6 +45,14 @@ const getters = {
         return (departmentId: string): SpecializationModule[] => {
             return state.organizations.find(cr => cr.id == departmentId).children;
         }
+    },
+    /**
+     * Get the length of the organisations to check if we have to load them
+     * @param state 
+     * @returns 
+     */
+    organisationsExists(state): number {
+        return state.organisations?.length ?? 0;
     }
 };
 
@@ -59,6 +62,7 @@ const mutations = {
      * Update the entire list of departments and specializations existed into the store
      */
     _organizations(state, organizations: OrganizationViewModel): void {
+        console.log("Load the organisations calling the API")
         state.organizations = organizations;
     },
     /**

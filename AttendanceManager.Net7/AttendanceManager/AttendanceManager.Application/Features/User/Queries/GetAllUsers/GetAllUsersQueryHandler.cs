@@ -27,7 +27,6 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
                 // create the userDto
                 return new UserDto
                 {
-                    UserId = user.UserID.ToString(),
                     AccountConfirmed = user.AccountConfirmed,
                     UserSpecializations = user?.UserSpecializations?.Select(us => new SpecializationDto()
                     {

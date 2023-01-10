@@ -36,6 +36,13 @@ export const links: MenuItemListModel[] = [
         children: []
     },
     {
+        icon: "mdi-bookshelf",
+        title: "Manage courses",
+        route: "courses",
+        role: Role.Teacher,
+        children: []
+    },
+    {
         icon: "mdi-home",
         title: "Home",
         route: "home",

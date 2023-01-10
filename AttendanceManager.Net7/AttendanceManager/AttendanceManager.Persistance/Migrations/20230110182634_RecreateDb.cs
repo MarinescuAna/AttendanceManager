@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace AttendanceManager.Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDbForDotNet7 : Migration
+    public partial class RecreateDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +18,8 @@ namespace AttendanceManager.Persistance.Migrations
                 columns: table => new
                 {
                     DepartmentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,20 +30,19 @@ namespace AttendanceManager.Persistance.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
                     EnrollmentYear = table.Column<int>(type: "int", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountConfirmed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserID);
+                    table.PrimaryKey("PK_Users", x => x.Email);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,6 +51,7 @@ namespace AttendanceManager.Persistance.Migrations
                 {
                     SpecializationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DepartmentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -63,11 +66,38 @@ namespace AttendanceManager.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    SpecializationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(254)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.CourseID);
+                    table.ForeignKey(
+                        name: "FK_Courses_Specializations_SpecializationID",
+                        column: x => x.SpecializationID,
+                        principalTable: "Specializations",
+                        principalColumn: "SpecializationID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Courses_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "Email",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserSpecializations",
                 columns: table => new
                 {
                     UserSpecializationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(254)", nullable: false),
                     SpecializationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -83,14 +113,29 @@ namespace AttendanceManager.Persistance.Migrations
                         name: "FK_UserSpecializations_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
+                        principalColumn: "Email",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserID", "AccountConfirmed", "Code", "Created", "Email", "EnrollmentYear", "FullName", "Password", "Role", "Updated" },
-                values: new object[] { new Guid("c7fd9faf-5c33-49f4-b6dd-ba5e3f3708d0"), false, "-", new DateTime(2022, 12, 17, 16, 41, 35, 659, DateTimeKind.Local).AddTicks(1758), "admin@admin.ro", 2022, "Administrator", "system123", 0, new DateTime(2022, 12, 17, 16, 41, 35, 659, DateTimeKind.Local).AddTicks(1824) });
+                columns: new[] { "Email", "AccountConfirmed", "Code", "Created", "EnrollmentYear", "FullName", "Password", "Role", "Updated" },
+                values: new object[,]
+                {
+                    { "admin@admin.ro", true, "-", new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1331), 2023, "Administrator", "system123", 0, new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1383) },
+                    { "student@test.ro", true, "232dde3w", new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1443), 2023, "Elliott Cummerata", "system1234", 1, new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1446) },
+                    { "teacher@test.ro", true, "383gvvv343", new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1425), 2023, "Keven Dietrich", "system1234", 2, new DateTime(2023, 1, 10, 20, 26, 34, 136, DateTimeKind.Local).AddTicks(1430) }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_SpecializationID",
+                table: "Courses",
+                column: "SpecializationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_UserID",
+                table: "Courses",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Specializations_DepartmentID",
@@ -111,6 +156,9 @@ namespace AttendanceManager.Persistance.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Courses");
+
             migrationBuilder.DropTable(
                 name: "UserSpecializations");
 

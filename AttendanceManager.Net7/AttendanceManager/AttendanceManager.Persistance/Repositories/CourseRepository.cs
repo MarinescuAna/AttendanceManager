@@ -16,14 +16,14 @@ namespace AttendanceManager.Persistance.Repositories
             => setting switch
             {
                 NavigationPropertiesSetting.None => dbContext.Courses.FirstOrDefaultAsync(expression),
-                _ => dbContext.Courses.Include(s => s.Specialization).FirstOrDefaultAsync(expression)
+                _ => dbContext.Courses.Include(s => s.Specialization).Include(s => s.User).FirstOrDefaultAsync(expression)
             };
 
         public override Task<List<Course>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
                 NavigationPropertiesSetting.None => dbContext.Courses.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                _ => dbContext.Courses.Include(s => s.Specialization).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                _ => dbContext.Courses.Include(s => s.Specialization).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
             };
     }
 }

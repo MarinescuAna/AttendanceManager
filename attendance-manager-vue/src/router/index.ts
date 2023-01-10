@@ -12,7 +12,6 @@ const routes: Array<RouteConfig> = [
     redirect: "{name:'home'}"
   },
   {
-    // default route
     path: '/home',
     name: 'home',
     component: () => import('../views/HomeView.vue'),
@@ -23,7 +22,28 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    // Route for the list of users
+    path: '/courses',
+    name: 'courses',
+    component: () => import('../views/courses-views/CourseView.vue'),
+    meta: {
+      title: 'Courses',
+      requireAuth: true,
+      role: Role.Teacher
+    },
+    children: [
+      {
+        path: '/create-course',
+        name: 'create-course',
+        component: () => import('../views/courses-views/CreateCourseView.vue'),
+        meta: {
+          title: 'Create course',
+          requireAuth: true,
+          role: Role.Teacher
+        }
+      },
+    ]
+  },
+  {
     path: '/users',
     name: 'users',
     component: () => import('../views/manage-users-views/UsersView.vue'),
@@ -32,13 +52,11 @@ const routes: Array<RouteConfig> = [
       requireAuth: true,
       role: Role.Admin
     },
-    // TODO guard -> admin only
   },
   {
-    // route for the view that contains the departments and specializations
     path: '/organization',
     name: 'organization',
-    component: () => import('../views/departments-specializations/OrganizationView.vue'),
+    component: () => import('../views/departments-specializations-views/OrganizationView.vue'),
     children: [
       {
         meta: {
@@ -49,7 +67,7 @@ const routes: Array<RouteConfig> = [
         },
         path: 'new-department',
         name: 'new-department',
-        component: () => import('../views/departments-specializations/CreateDepartmentView.vue')
+        component: () => import('../views/departments-specializations-views/CreateDepartmentView.vue')
       },
       {
         meta: {
@@ -60,7 +78,7 @@ const routes: Array<RouteConfig> = [
         },
         path: 'new-specialization',
         name: 'new-specialization',
-        component: () => import('../views/departments-specializations/CreateSpecializationView.vue')
+        component: () => import('../views/departments-specializations-views/CreateSpecializationView.vue')
       }
     ],
     meta: {
@@ -68,10 +86,8 @@ const routes: Array<RouteConfig> = [
       requireAuth: true,
       role: Role.Admin
     },
-    //TODO guard -> admin only
   },
   {
-    // route for the view that contains the form for adding a new user
     path: '/create-user',
     name: 'create-user',
     component: () => import('../views/manage-users-views/CreateSingleUserView.vue'),
@@ -80,15 +96,10 @@ const routes: Array<RouteConfig> = [
       requireAuth: true,
       role: Role.Admin
     },
-    //TODO guard -> admin only
   },
   {
-    // route for the about page
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('../views/AboutView.vue'),
     meta: {
       title: 'About',
@@ -97,7 +108,6 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    // route for the login page
     path: "/login",
     name: "login",
     component: () => import('../views/LoginView.vue'),

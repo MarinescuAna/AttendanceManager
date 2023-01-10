@@ -8,3 +8,12 @@ export enum Role{
     None=3,
     All=4
 }
+
+/**
+ * Use this enum for showing the data in the tabel management component
+ */
+export enum ManagementDataType{
+    Users = 0,
+    Department = 1,
+    Course = 2,
+}
