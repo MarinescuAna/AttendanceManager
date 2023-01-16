@@ -15,13 +15,15 @@ namespace AttendanceManager.Application.Features.User.Commands.UpdateUser
         public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             // Look for the user to be sure that he exists or throw exeception if he dosen't exists
-            if (await unitOfWork.UserRepository.GetAsync(u => u.Email == request.User.Email) == null)
+            var user = await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email) ?? throw new NotFoundException("User", request.Email);
+
+            if(request.Confirmed!= null)
             {
-                throw new NotFoundException("User", request.User.Email);
+                user.AccountConfirmed = (bool)request.Confirmed;
             }
 
             // Update the user information or thow exception if something happened
-            unitOfWork.UserRepository.Update(request.User);
+            unitOfWork.UserRepository.Update(user);
             if (!await unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
