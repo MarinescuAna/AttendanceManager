@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    redirect: "{name:'home'}"
+    redirect: "/home"
   },
   {
     path: '/home',
@@ -36,6 +36,7 @@ const routes: Array<RouteConfig> = [
         name: 'create-course',
         component: () => import('../views/courses-views/CreateCourseView.vue'),
         meta: {
+          onBack: () => { router.push({ name: 'courses' }) },
           title: 'Create course',
           requireAuth: true,
           role: Role.Teacher
@@ -54,13 +55,13 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: '/organization',
-    name: 'organization',
-    component: () => import('../views/departments-specializations-views/OrganizationView.vue'),
+    path: '/department',
+    name: 'department',
+    component: () => import('../views/departments-specializations-views/DepartmentView.vue'),
     children: [
       {
         meta: {
-          onBack: () => { router.push({ name: 'organization' }) },
+          onBack: () => { router.push({ name: 'department' }) },
           title: 'Create Department',
           requireAuth: true,
           role: Role.Admin
@@ -71,7 +72,7 @@ const routes: Array<RouteConfig> = [
       },
       {
         meta: {
-          onBack: () => { router.push({ name: 'organization' }) },
+          onBack: () => { router.push({ name: 'department' }) },
           title: 'Create Specialization',
           requireAuth: true,
           role: Role.Admin
@@ -81,10 +82,35 @@ const routes: Array<RouteConfig> = [
         component: () => import('../views/departments-specializations-views/CreateSpecializationView.vue')
       }
     ],
+  },
+  {
+    path: '/create-document',
+    name: 'create-document',
+    component: () => import('../views/documents-views/CreateDocumentView.vue'),
     meta: {
-      title: 'Organization',
+      title: 'Create document',
       requireAuth: true,
-      role: Role.Admin
+      role: Role.Teacher
+    },
+  },
+  {
+    path: '/documents',
+    name: 'created-documents',
+    component: () => import('../views/documents-views/DocumentCardView.vue'),
+    meta: {
+      title: 'Documents',
+      requireAuth: true,
+      role: Role.Teacher
+    },
+  },
+  {
+    path: '/document/id',
+    name: 'document',
+    component: () => import('../views/documents-views/DocumentDetailsView.vue'),
+    meta: {
+      title: 'Document',
+      requireAuth: true,
+      role: Role.Teacher
     },
   },
   {
