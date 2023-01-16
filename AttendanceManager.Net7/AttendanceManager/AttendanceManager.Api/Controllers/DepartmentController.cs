@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Department.Commands.CreateDepartment;
+using AttendanceManager.Application.Features.Department.Commands.DeleteDepartment;
 using AttendanceManager.Application.Features.Department.Commands.UpdateDepartment;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using AttendanceManager.Application.SharedDtos;
@@ -17,20 +18,17 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
-        /// Get all departments together with each specialization => departments + specializations = organizations
+        /// Get all departments 
         /// </summary>
-        /// <returns>Success: list with all departments and specializations</returns>
         [HttpGet("departments")]
-        public async Task<ActionResult<List<OrganizationDto>>> GetDepartments()
+        public async Task<ActionResult<List<DepartmentDto>>> GetDepartments()
         {
             return Ok(await mediator.Send(new GetDepartmentQuery()));
         }
 
         /// <summary>
-        /// Create only a new department, no link to specializations
+        /// Create a new department
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns>Success: return the name and the id of the new department</returns>
         [HttpPost("create_department")]
         public async Task<ActionResult> CreateDepartment(string name)
         {
@@ -38,11 +36,11 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
-        /// Soft delete an department
+        /// Soft or hard delete an department
         /// </summary>
         /// <param name="name"></param>
         [HttpPatch("delete_department")]
-        public async Task<ActionResult> DeleteDepartment(UpdateOrDeleteDepartmentCommand command)
+        public async Task<ActionResult> DeleteDepartment(DeleteDepartmentCommand command)
         {
             return Ok(await mediator.Send(command));
         }
@@ -52,7 +50,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <param name="name"></param>
         [HttpPatch("update_department")]
-        public async Task<ActionResult> UpdateDepartment(UpdateOrDeleteDepartmentCommand command)
+        public async Task<ActionResult> UpdateDepartment(UpdateDepartmentCommand command)
         {
             return Ok(await mediator.Send(command));
         }

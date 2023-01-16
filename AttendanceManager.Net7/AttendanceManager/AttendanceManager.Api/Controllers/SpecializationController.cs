@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization;
+using AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +15,17 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
+        /// Get all specializations 
+        /// </summary>
+        [HttpGet("specializations")]
+        public async Task<ActionResult<List<SpecializationDto>>> GetSpecializations()
+        {
+            return Ok(await mediator.Send(new GetSpecializationsQuery()));
+        }
+
+        /// <summary>
         /// Create a specialization
         /// </summary>
-        /// <param name="specialization"></param>
-        /// <returns>Success: return the name, departmentID and specializationID</returns>
         [HttpPost("create_specialization")]
         public async Task<IActionResult> CreateSpecialization([FromBody] CreateSpecializationCommand specialization)
         {
