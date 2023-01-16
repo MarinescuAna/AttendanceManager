@@ -1,21 +1,29 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import organization, { namespace as organizationNamespace} from "./modules/organization";
+import document, { namespace as documentNamespace} from "./modules/document";
+import department, { namespace as departmentNamespace} from "./modules/department";
 import user, { namespace as userNamespace} from "./modules/user";
 import course, { namespace as courseNamespace} from "./modules/course";
+import specialization, {namespace as specializationNamespace} from "./modules/specialization";
 import createPersistedState from "vuex-persistedstate";
 
 //Load Vuex
 Vue.use(Vuex)
 
+export interface RootState {}
+
 const modules: { [id: string]: any } = {};
 
-modules[organizationNamespace] = organization;
+modules[documentNamespace] = document;
+modules[departmentNamespace] = department;
 modules[userNamespace] = user;
 modules[courseNamespace] = course;
+modules[specializationNamespace] = specialization;
 
 //Create store
-export default new Vuex.Store({
+export default new Vuex.Store<RootState>({
+  state:<RootState>{},
   getters: {
   },
   mutations: {
