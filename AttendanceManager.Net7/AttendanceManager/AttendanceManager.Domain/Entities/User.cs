@@ -24,5 +24,6 @@ namespace AttendanceManager.Domain.Entities
         public ICollection<Course>? Courses { get; set; }
         public ICollection<Document>? Documents { get; set; }
         public ICollection<UserDocument>? UserDocuments { get; set; }
+        public ICollection<Attendance>? Attendances { get; set; }
     }
 }

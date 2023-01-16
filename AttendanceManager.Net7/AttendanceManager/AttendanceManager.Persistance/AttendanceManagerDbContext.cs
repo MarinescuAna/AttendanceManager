@@ -21,6 +21,8 @@ namespace AttendanceManager.Persistance
         public DbSet<Course> Courses { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<UserDocument> UserDocuments { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<DocumentFile> DocumentFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

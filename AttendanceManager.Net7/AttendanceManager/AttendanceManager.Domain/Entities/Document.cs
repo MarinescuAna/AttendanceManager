@@ -19,6 +19,7 @@
         public virtual Course? Course { get; init; }
         public virtual Specialization? Specialization { get; init; }
         public ICollection<UserDocument>? UserDocuments { get; set; }
+        public ICollection<DocumentFile>? DocumentFiles { get; set; }
 
     }
 }

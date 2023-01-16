@@ -25,9 +25,9 @@ namespace AttendanceManager.Persistance.Repositories
             => setting switch
             {
                 NavigationPropertiesSetting.None => dbContext.Documents.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Documents.Include(s => s.Course).Include(s => s.Specialization).Include(s => s.User).ToListAsync(),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Documents.Include(s => s.UserDocuments).ToListAsync(),
-                _ => dbContext.Documents.Include(s => s.Specialization).Include(s => s.Course).Include(s => s.User).Include(s => s.UserDocuments).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Documents.Include(s => s.Course).Include(s => s.Specialization).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Documents.Include(d=>d.DocumentFiles).Include(s => s.UserDocuments).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                _ => dbContext.Documents.Include(d => d.DocumentFiles).Include(s => s.Specialization).Include(s => s.Course).Include(s => s.User).Include(s => s.UserDocuments).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
             };
     }
 }

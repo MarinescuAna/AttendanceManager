@@ -21,7 +21,7 @@ namespace AttendanceManager.Persistance.Repositories
         public override Task<List<UserDocument>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.UserDocuments.Include(s => s.Document).Include(s => s.User).ToListAsync(),
+                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.UserDocuments.Include(s => s.Document).Include(s => s.User).AsNoTracking().ToListAsync(),
                 _ => dbContext.UserDocuments.AsNoTracking().ToListAsync(),
             };
     }

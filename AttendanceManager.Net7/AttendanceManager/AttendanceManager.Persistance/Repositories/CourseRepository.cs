@@ -25,9 +25,9 @@ namespace AttendanceManager.Persistance.Repositories
         public override Task<List<Course>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.None => dbContext.Courses.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Courses.Include(s => s.Specialization).Include(s => s.User).ToListAsync(),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Courses.Include(s => s.Documents).ToListAsync(),
+                NavigationPropertiesSetting.None => dbContext.Courses.AsNoTracking().Where(u => !u.IsDeleted).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Courses.Include(s => s.Specialization).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Courses.Include(s => s.Documents).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
                 _ => dbContext.Courses.Include(s => s.Specialization).Include(s => s.Documents).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
             };
     }
