@@ -13,9 +13,19 @@ namespace AttendanceManager.Persistance.UOW
         private readonly ISpecializationRepository? _specializationRepository;
         private readonly IUserRepository? _userRepository;
         private readonly IUserSpecializationRepository? _userSpecializationRepository;
+        private readonly IUserDocumentRepository? _userDocumentRepository;
+        private readonly IDocumentRepository? _documentRepository;
         public UnitOfWork(AttendanceManagerDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+        public IUserDocumentRepository UserDocumentRepository
+        {
+            get => _userDocumentRepository ?? new UserDocumentRepository(_dbContext);
+        }
+        public IDocumentRepository DocumentRepository
+        {
+            get => _documentRepository ?? new DocumentRepository(_dbContext);
         }
         public ICourseRepository CourseRepository
         {

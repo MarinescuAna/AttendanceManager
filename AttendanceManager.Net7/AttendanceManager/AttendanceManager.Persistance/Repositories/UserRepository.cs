@@ -15,14 +15,14 @@ namespace AttendanceManager.Persistance.Repositories
         public override Task<User?> GetAsync(Expression<Func<User, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.None => dbContext.Users.AsNoTracking().FirstOrDefaultAsync(expression),
-                _ => dbContext.Users.Include(s => s.UserSpecializations).Include(s => s.Courses).FirstOrDefaultAsync(expression)
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Users.Include(s => s.UserSpecializations).Include(s => s.Courses).Include(d => d.Documents).Include(ud => ud.UserDocuments).AsNoTracking().FirstOrDefaultAsync(expression),
+                _ => dbContext.Users.AsNoTracking().FirstOrDefaultAsync(expression)
             };
         public override Task<List<User>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.None => dbContext.Users.AsNoTracking().ToListAsync(),
-                _ => dbContext.Users.Include(s => s.UserSpecializations).Include(s => s.Courses).AsNoTracking().ToListAsync()
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Users.Include(s => s.UserSpecializations).Include(d => d.Documents).Include(ud => ud.UserDocuments).Include(s => s.Courses).AsNoTracking().ToListAsync(),
+                _ => dbContext.Users.AsNoTracking().ToListAsync()
             };
     }
 }

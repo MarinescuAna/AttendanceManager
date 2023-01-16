@@ -14,14 +14,14 @@ namespace AttendanceManager.Persistance.Repositories
         public override Task<Department?> GetAsync(Expression<Func<Department, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.None => dbContext.Departments.FirstOrDefaultAsync(expression),
-                _ => dbContext.Departments.Include(s => s.Specializations).FirstOrDefaultAsync(expression)
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Departments.Include(s => s.Specializations).FirstOrDefaultAsync(expression),
+                _ => dbContext.Departments.FirstOrDefaultAsync(expression)
             };
         public override Task<List<Department>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
-                NavigationPropertiesSetting.None => dbContext.Departments.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                _ => dbContext.Departments.Include(s => s.Specializations).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync()
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Departments.Include(s => s.Specializations).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
+                _ => dbContext.Departments.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync()
             };
     }
 }

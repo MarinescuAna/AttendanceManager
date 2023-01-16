@@ -16,16 +16,16 @@ namespace AttendanceManager.Persistance.Repositories
             {
                 NavigationPropertiesSetting.None => dbContext.Specializations.FirstOrDefaultAsync(expression),
                 NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Specializations.Include(s => s.Department).FirstOrDefaultAsync(expression),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Specializations.Include(s => s.UserSpecializations).Include(c => c.Courses).FirstOrDefaultAsync(expression),
-                _ => dbContext.Specializations.Include(s => s.Department).Include(s => s.UserSpecializations).Include(c => c.Courses).FirstOrDefaultAsync(expression)
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Specializations.Include(d=>d.Documents).Include(s => s.UserSpecializations).Include(c => c.Courses).FirstOrDefaultAsync(expression),
+                _ => dbContext.Specializations.Include(s => s.Department).Include(d => d.Documents).Include(s => s.UserSpecializations).Include(c => c.Courses).FirstOrDefaultAsync(expression)
             };
         public override Task<List<Specialization>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
             => setting switch
             {
                 NavigationPropertiesSetting.None => dbContext.Specializations.AsNoTracking().ToListAsync(),
                 NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Specializations.Include(s => s.Department).AsNoTracking().ToListAsync(),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Specializations.Include(s => s.UserSpecializations).Include(c => c.Courses).AsNoTracking().ToListAsync(),
-                _ => dbContext.Specializations.Include(s => s.Department).Include(s => s.UserSpecializations).Include(c => c.Courses).AsNoTracking().ToListAsync()
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Specializations.Include(d => d.Documents).Include(s => s.UserSpecializations).Include(c => c.Courses).AsNoTracking().ToListAsync(),
+                _ => dbContext.Specializations.Include(s => s.Department).Include(d => d.Documents).Include(s => s.UserSpecializations).Include(c => c.Courses).AsNoTracking().ToListAsync()
             };
     }
 }

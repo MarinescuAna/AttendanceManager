@@ -7,6 +7,7 @@ namespace AttendanceManager.Domain.Entities
     /// </summary>
     public class Course
     {
+        
         public required Guid CourseID { get; set; }
         [MaxLength(128)]
         public required string Name { get; set; }
@@ -15,5 +16,6 @@ namespace AttendanceManager.Domain.Entities
         public required string UserID { get; set; }
         public virtual User? User { get; set; }
         public virtual Specialization? Specialization { get; set; }
+        public ICollection<Document>? Documents { get; set; }
     }
 }
