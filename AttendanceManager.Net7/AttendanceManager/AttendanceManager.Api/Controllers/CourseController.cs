@@ -21,9 +21,9 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: list with all courses</returns>
         [HttpGet("courses")]
-        public async Task<ActionResult<List<CoursesDto>>> GetCourses()
+        public async Task<ActionResult<List<CoursesDto>>> GetCourses(string Email)
         {
-            return Ok(await mediator.Send(new GetCoursesQuery() { Email = GetCurrentUserEmail()! }));
+            return Ok(await mediator.Send(new GetCoursesQuery() { Email = Email} ));
         }
 
         /// <summary>
@@ -34,7 +34,6 @@ namespace AttendanceManager.Api.Controllers
         [HttpPost("create_course")]
         public async Task<ActionResult> CreateCourse(CreateCourseCommand createCourseCommand)
         {
-            createCourseCommand.Email = GetCurrentUserEmail()!;
             return Ok(await mediator.Send(createCourseCommand));
         }
 
