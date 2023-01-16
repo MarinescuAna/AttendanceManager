@@ -1,7 +1,7 @@
 <template>
   <v-container>
         <v-card-title>
-          <span class="text-h5 ma-4"> {{ selectedOrganization.name }}</span>
+          <span class="text-h5 ma-4"> {{ item.name }}</span>
           <v-spacer></v-spacer>
           <!--Menu from the top-right corner-->
           <v-menu bottom left>
@@ -22,13 +22,13 @@
                     </v-list-item>
                   </template>
                   <ChangeDepartmentDialog
-                    :departmentName="selectedOrganization.name"
+                    :departmentName="item.name"
                   />
                 </v-dialog>
               </v-row>
               <!--Delete button-->
               <v-list-item
-                @click="onDeleteDepartment(selectedOrganization.id)"
+                @click="onDeleteDepartment(item.id)"
                 link
               >
                 <v-list-item-title
@@ -46,10 +46,10 @@
             </v-col>
             <v-col>
               <v-list-item-group
-                v-if="selectedOrganization?.children.length > 0"
+                v-if="specializations.length > 0"
               >
                 <v-list-item
-                  v-for="child in selectedOrganization.children"
+                  v-for="child in specializations"
                   :key="child.id"
                 >
                   <v-list-item-content>
@@ -74,24 +74,32 @@
   <script lang="ts">
 import Vue from "vue";
 import StoreHelper from "@/store/store-helper";
-import { OrganizationViewModel } from "@/modules/organization";
 import { EventBus } from "@/main";
 import { EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
-import { UpdateDepartmentModule } from "@/modules/organization/departments";
 import ChangeDepartmentDialog from "./ChangeDepartmentDialog.vue";
+import { DepartmentViewModel } from "@/modules/department";
+import { SpecializationViewModule } from "@/modules/specialization";
+import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
   components: {
     ChangeDepartmentDialog,
   },
   props:{
-    selectedOrganization: Object as () => OrganizationViewModel
+    // The current department
+    item: Object as () => DepartmentViewModel
   },
   data() {
     return {
       // Flag for Change department dialog
       dialog: false,
+      // Specializations list
+      specializations: [] as SpecializationViewModule[]
     };
+  },
+  async created() {
+    console.log(this.item)
+    this.specializations = await storeHelper.specializationStore.loadSpecializationsByDepartmentId(this.item.id);
   },
   mounted: function () {
     /**
@@ -105,15 +113,14 @@ export default Vue.extend({
   methods: {
     /**
      * Delete department from db and store
-     * @param departmentId
      */
     async onDeleteDepartment(departmentId: string): Promise<void> {
-      const response = await StoreHelper.organizationStore.removeDepartment({
-        departmentId: departmentId,
-      } as UpdateDepartmentModule);
+      const response = await StoreHelper.departmentStore.removeDepartment(departmentId);
 
       if (response.isSuccess) {
-        // TO DO
+        /**
+         * @todo implement something
+         */   
       } else {
         window.alert(response.error);
       }

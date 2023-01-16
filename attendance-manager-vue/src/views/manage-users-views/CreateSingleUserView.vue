@@ -157,10 +157,9 @@ import Vue from "vue";
 import { extend } from "vee-validate";
 import { required, email, min } from "vee-validate/dist/rules";
 import { CreateUserParameters } from "@/modules/user";
-import { DepartmentModule } from "@/modules/organization/departments";
 import storeHelper from "@/store/store-helper";
-import { SpecializationModule } from "@/modules/organization/specializations";
-
+import { SpecializationViewModule } from "@/modules/specialization";
+import { DepartmentViewModel } from "@/modules/department";
 /**
  * Validation for requied
  */
@@ -198,11 +197,16 @@ export default Vue.extend({
       role: 1,
       // Enroll year
       year: "",
+      // All departments,
+      departments: [] as DepartmentViewModel[],
       // All the specializations
-      specializations: [] as SpecializationModule[],
+      specializations: [] as SpecializationViewModule[],
       // Selected specializations
       selectedSpecializations: []
     };
+  },
+  async created(){
+    this.departments = await storeHelper.departmentStore.loadDepartments();
   },
   computed: {
     /**
@@ -212,13 +216,7 @@ export default Vue.extend({
       return Array.from(Array(new Date().getFullYear() - 1949), (_, i) =>
         (new Date().getFullYear() - i).toString()
       );
-    },
-    /**
-     * Get departments to fill the v-selector
-     */
-    departments(): DepartmentModule[] {
-      return storeHelper.organizationStore.departments;
-    },
+    }
   },
   methods: {
     /**
@@ -254,8 +252,9 @@ export default Vue.extend({
      * Get the list with all specializations by department id
      * @param selectedDepartment
      */
-    onFillSpecializations(selectedDepartment): void {
-      this.specializations = storeHelper.organizationStore.specializations(selectedDepartment);
+    async onFillSpecializations(selectedDepartment): Promise<void> {
+      console.log(selectedDepartment)
+      this.specializations = await storeHelper.specializationStore.loadSpecializationsByDepartmentId(selectedDepartment);
       this.selectedSpecializations = [];
     },
 

@@ -4,7 +4,7 @@
       <v-card-title class="pa-7">
          <h2>Create new specialization</h2>
          <v-spacer></v-spacer>
-         <router-link to="/organization" tag="button"><v-icon>mdi-close</v-icon></router-link> 
+         <router-link :to="{name:'department'}" tag="button"><v-icon>mdi-close</v-icon></router-link> 
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
@@ -63,8 +63,8 @@ import Vue from "vue";
 import { extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
-import { SpecializationCreateParamsModule } from "@/modules/organization/specializations";
-import { DepartmentModule } from "@/modules/organization/departments";
+import { DepartmentViewModel } from "@/modules/department";
+import { SpecializationInsertModule } from "@/modules/specialization";
 
 /**
  * Validation for requied
@@ -78,31 +78,29 @@ extend("required", {
 export default Vue.extend({
   data() {
     return {
-      // Department name
+      // Specialization name
       name: "",
       // The department id of the specialization
       department: "",
       // Departments list to load them in the v-selector
-      departments: [] as DepartmentModule[],
+      departments: [] as DepartmentViewModel[],
     };
   },
   /**
    * Load all the departments
    */
-  created() {
-    this.departments = StoreHelper.organizationStore.departments;
+  async created() {
+    this.departments = await StoreHelper.departmentStore.loadDepartments();
   },
   methods: {
     /**
      * Use this method for adding a new specialization
-     * Success: reset the form and reload the treeview
-     * Error: display the message
      */
     async addSpecialization() {
-      const response = await StoreHelper.organizationStore.addSpecialization({
+      const response = await StoreHelper.specializationStore.addSpecialization({
         name: this.name,
         departmentId: this.department,
-      } as SpecializationCreateParamsModule);
+      } as SpecializationInsertModule);
 
       if (response.isSuccess) {
         this.$router.currentRoute.meta?.onBack();

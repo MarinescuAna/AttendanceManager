@@ -4,7 +4,7 @@
       <v-card-title class="pa-7">
         <h2>Create new department</h2>
          <v-spacer></v-spacer>
-         <router-link to="/organization" tag="button"><v-icon>mdi-close</v-icon></router-link> 
+         <router-link :to="{name:'department'}" tag="button"><v-icon>mdi-close</v-icon></router-link> 
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
@@ -72,9 +72,7 @@ export default Vue.extend({
      * Error: display error
      */
     async addDepartment() {
-      const response = (await StoreHelper.organizationStore.addDepartment(
-        this.department
-      )) as ResponseModule;
+      const response = (await StoreHelper.departmentStore.addDepartment(this.department)) as ResponseModule;
 
       if (response.isSuccess) {
         this.$router.currentRoute.meta?.onBack();

@@ -29,7 +29,7 @@ export const UserHeader: HeaderModule[] = [
 /**
  * Headers for tabel used to display departments and specializations
  */
-export const OrganizationHeader: HeaderModule[] = [
+export const DepartmentsHeader: HeaderModule[] = [
     {
         text: "Department Name",
         value: "name",

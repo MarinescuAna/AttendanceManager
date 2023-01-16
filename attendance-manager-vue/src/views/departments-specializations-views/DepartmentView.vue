@@ -19,7 +19,7 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12">
-        <ManagementTableComponent :dataSource="organizations" :headers="headers" :title="'Departments'" :type="type" />
+        <ManagementTableComponent :dataSource="departments" :headers="headers" :title="'Departments'" :type="type" />
       </v-col>
     </v-row>
   </v-container>
@@ -28,9 +28,9 @@
 import Vue from "vue";
 import ManagementTableComponent from "@/components/shared-components/ManagementTableComponent.vue";
 import storeHelper from "@/store/store-helper";
-import { OrganizationHeader } from "@/components/shared-components/Headers";
+import { DepartmentsHeader } from "@/components/shared-components/Headers";
 import { ManagementDataType } from "@/shared/enums";
-import { OrganizationViewModel } from "@/modules/organization";
+import { DepartmentViewModel } from "@/modules/department";
 
 export default Vue.extend({
   components: {
@@ -38,13 +38,13 @@ export default Vue.extend({
   },
   data(){
     return {
-      organizations: [] as OrganizationViewModel[],
-      headers: OrganizationHeader,
+      departments: [] as DepartmentViewModel[],
+      headers: DepartmentsHeader,
       type: ManagementDataType.Department
     };
   },
   async created(){
-    this.organizations = await storeHelper.organizationStore.loadOrganizations();
+    this.departments = await storeHelper.departmentStore.loadDepartments();
   }
 });
 </script>
