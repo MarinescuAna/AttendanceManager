@@ -1,19 +1,18 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Shared;
-using AttendanceManager.Application.SharedDtos;
 using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Department.Commands.CreateDepartment
 {
-    public sealed class CreateDepatmentCommandHandler : BaseFeature, IRequestHandler<CreateDepatmentCommand, DepartmentDto>
+    public sealed class CreateDepatmentCommandHandler : BaseFeature, IRequestHandler<CreateDepatmentCommand, Guid>
     {
         public CreateDepatmentCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
-        public async Task<DepartmentDto> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
         {
             // Look for other departments with the same name and throw exception if exists
             if (await unitOfWork.DepartmentRepository.GetAsync(d => d.Name == request.Name && !d.IsDeleted) != null)
@@ -37,7 +36,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             }
 
             // Return the created department [the department id is mandatory]
-            return mapper.Map<DepartmentDto>(newDepartment);
+            return newDepartment.DepartmentID;
         }
     }
 }

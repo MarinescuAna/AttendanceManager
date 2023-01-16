@@ -6,13 +6,13 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization
 {
-    public sealed class CreateSpecializationCommandHandler : BaseFeature, IRequestHandler<CreateSpecializationCommand, SpecializationDto>
+    public sealed class CreateSpecializationCommandHandler : BaseFeature, IRequestHandler<CreateSpecializationCommand, Guid>
     {
         public CreateSpecializationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
-        public async Task<SpecializationDto> Handle(CreateSpecializationCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateSpecializationCommand request, CancellationToken cancellationToken)
         {
             // Look for antoher specializations that have the same name and department and throw exception
             var specialization = await unitOfWork.SpecializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID == request.DepartmentId);
@@ -39,7 +39,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             }
 
             // The specialziation id is mandatory later
-            return mapper.Map<SpecializationDto>(newSpecialization);
+            return newSpecialization.SpecializationID;
         }
     }
 }
