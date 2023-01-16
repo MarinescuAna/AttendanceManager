@@ -28,12 +28,12 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
                 return new UserDto
                 {
                     AccountConfirmed = user.AccountConfirmed,
-                    UserSpecializations = user?.UserSpecializations?.Select(us => new SpecializationDto()
+                    UserSpecializations = user.UserSpecializations?.Select(us => new SpecializationDto()
                     {
-                        Id = us.SpecializationID,
+                        Id = us.SpecializationID.ToString(),
                         Name = specializations.FirstOrDefault(s => s.SpecializationID == us.SpecializationID)?.Name
-                    })?.ToArray(),
-                    Code = user?.Code,
+                    }).ToArray(),
+                    Code = user.Code,
                     Created = user.Created.ToString(Constants.DateFormat),
                     DepartmentId = department?.DepartmentID.ToString(),
                     DepartmentName = department?.Name,
