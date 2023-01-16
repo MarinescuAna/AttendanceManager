@@ -47,7 +47,7 @@ namespace AttendanceManager.Infrastructure.Authentication
             {
                 // Mark the account as confirmed and update the data 
                 result.AccountConfirmed = true;
-                await _mediator.Send(new UpdateUserCommand() { User = _mapper.Map<User>(result) });
+                await _mediator.Send(new UpdateUserCommand() { Email = request.Email, Confirmed = true });
             }
 
             // Get token
