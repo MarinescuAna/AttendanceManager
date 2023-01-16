@@ -21,8 +21,8 @@ export class CourseStore {
     /**
      * Load all the courses from the API
      */
-    public loadCourses(): Promise<CourseViewModule[]> {
-        return this.store.dispatch(`${courseNamespace}/loadCourses`);
+    public loadCourses(payload: string): Promise<CourseViewModule[]> {
+        return this.store.dispatch(`${courseNamespace}/loadCourses`, payload);
     }
 
     /**

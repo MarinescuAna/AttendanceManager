@@ -27,6 +27,7 @@ import storeHelper from "@/store/store-helper";
 import { CoursesHeader } from "@/components/shared-components/Headers";
 import { ManagementDataType } from "@/shared/enums";
 import { CourseViewModule } from "@/modules/course";
+import AuthService from "@/services/auth.service";
 
 export default Vue.extend({
   components: {
@@ -40,7 +41,8 @@ export default Vue.extend({
     };
   },
   async created(){
-    this.courses = await storeHelper.courseStore.loadCourses();
+    var token = AuthService.getDataFromToken();
+    this.courses = await storeHelper.courseStore.loadCourses(token.email);
   }
 });
 </script>

@@ -70,10 +70,14 @@ const mutations = {
 // actions for this store
 const actions = {
     /**
-     * Load all the courses
+     * Load all the courses defined by the current user, not all courses
      */
-    async loadCourses({ commit }): Promise<CourseViewModule[]> {
-        const courses: CourseViewModule[] = (await axios.get('course/courses')).data;
+    async loadCourses({ commit, state }, payload: string): Promise<CourseViewModule[]> {
+        if(state.courses.length !=0){
+            return state.courses;
+        }
+
+        const courses: CourseViewModule[] = (await axios.get('course/courses?Email='+payload)).data;
         commit("_courses", courses);
         return courses;
     },
@@ -87,7 +91,8 @@ const actions = {
         };
         const result = await axios.post(`course/create_course`, {
             name: payload.name,
-            specializationId: payload.specializationId
+            specializationId: payload.specializationId,
+            email: payload.email
         } as CreateCourseDto)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);

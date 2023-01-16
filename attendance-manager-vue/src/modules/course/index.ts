@@ -15,6 +15,7 @@ export interface CreateCourseModule {
     name: string;
     specializationId: string;
     specializationName: string;
+    email: string;
 }
  /**
  * Used for sending the new info about course to server
@@ -22,6 +23,7 @@ export interface CreateCourseModule {
  export interface CreateCourseDto {
     name: string;
     specializationId: string;
+    email: string;
 }
  /**
  * Used for updating the course name
