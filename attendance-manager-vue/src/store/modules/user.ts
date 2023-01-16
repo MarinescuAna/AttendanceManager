@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { CreateUserParameters, UserViewModule } from "@/modules/user";
+import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 
 
 //state type
 export interface UserState {
-    users: UserViewModule[]
+    users: UserViewModule[],
+    currentUser: UserInformationViewModule;
 }
 
 //initialize the state with an empty array
 export function initialize(): UserState {
     return {
-        users: []
+        users: [],
+        currentUser: null!
     };
 }
 
@@ -44,6 +46,12 @@ const mutations = {
     _addUser(state, payload: UserViewModule): void {
         state.users.push(payload);
     },
+    /**
+     * Use this to update the additional information about the current user
+     */
+    _addCurrentUser(state,payload: UserInformationViewModule): void{
+        state.currentUser = payload;
+    }
 };
 
 // actions for this store
@@ -51,10 +59,27 @@ const actions = {
     /**
      * Load all the users from the API and initialize the store
      */
-    async loadUsers({ commit }): Promise<UserViewModule[]> {
+    async loadUsers({ commit, state }): Promise<UserViewModule[]> {
+        if(state.users.length!=0){
+            return state.users;
+        }
+
         const users: UserViewModule[] = (await axios.get('user/users')).data;
         commit("_users", users);
         return users;
+    },
+    /**
+     * Load current user information
+     * @todo remove the id
+     */
+    async loadCurrentUserInfo({commit,state}, payload: string): Promise<UserInformationViewModule>{
+        if(state.currentUser != null){
+            return state.currentUser;
+        }
+
+        const result: UserInformationViewModule = (await axios.get('user/current_user_info?email='+ payload)).data;
+        commit("_addCurrentUser", result);
+        return result;
     },
     /**
      * Add a new user into the database and initialize the store

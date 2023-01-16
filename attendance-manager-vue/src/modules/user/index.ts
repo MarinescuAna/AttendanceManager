@@ -1,10 +1,10 @@
-import { SpecializationViewModule } from "../organization/specializations";
 import { TableModule } from "../shared";
+import { SpecializationViewModule,SpecializationModule } from "../specialization";
 
 /**
  * Use this module in order to create a new user's account
  */
- export interface CreateUserParameters{
+ export interface CreateUserParameters {
     email: string;
     role: string;
     fullname: string;
@@ -17,7 +17,6 @@ import { TableModule } from "../shared";
  */
 export interface UserViewModule extends TableModule {
    fullname: string;
-   email: string;
    role:string;
    enrollmentYear: string;
    code: string;
@@ -27,4 +26,16 @@ export interface UserViewModule extends TableModule {
    departmentId: string;
    departmentName: string;
    userSpecializations: SpecializationViewModule[];
+}
+/**
+ * Use this module to get additional information about the user
+ */
+export interface UserInformationViewModule{
+   departmentId: string;
+   departmentName: string;
+   specializations: SpecializationModule[];
+}
+export interface StudentForCourseViewModule{
+   email: string;
+   fullname: string;
 }

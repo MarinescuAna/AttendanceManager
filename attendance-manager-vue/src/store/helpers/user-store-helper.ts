@@ -1,4 +1,4 @@
-import { CreateUserParameters, UserViewModule } from "@/modules/user";
+import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as userNamespace } from "../modules/user";
@@ -20,15 +20,23 @@ export class UserStore {
     /**
      * Load all the users from the API
      */
-    public loadUsers(): Promise<UserViewModule[]>{
+    public loadUsers(): Promise<UserViewModule[]> {
         return this.store.dispatch(`${userNamespace}/loadUsers`);
+    }
+
+    /**
+     * Load all the users from the API
+     * @todo remove this
+     */
+    public loadCurrentUserInfo(payload: string): Promise<UserInformationViewModule> {
+        return this.store.dispatch(`${userNamespace}/loadCurrentUserInfo`, payload);
     }
 
     /**
      * Add a new user only
      */
-    public addUser(payload: CreateUserParameters): Promise<ResponseModule>{
-        return this.store.dispatch(`${userNamespace}/addUser`,payload);
+    public addUser(payload: CreateUserParameters): Promise<ResponseModule> {
+        return this.store.dispatch(`${userNamespace}/addUser`, payload);
     }
 
 }
