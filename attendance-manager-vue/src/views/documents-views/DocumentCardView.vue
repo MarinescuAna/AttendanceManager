@@ -20,7 +20,10 @@
 
           <v-card-actions>
             <v-row justify="center" class="pa-2">
-              <v-btn icon  :to="{ name: 'document', params: { id: card.documentId } }">
+              <v-btn
+                icon
+                :to="{ name: 'document', params: { id: card.documentId } }"
+              >
                 <v-icon>mdi-login-variant</v-icon>
               </v-btn></v-row
             >
@@ -37,16 +40,14 @@ import AuthService from "@/services/auth.service";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 export default Vue.extend({
-  data() {
-    return {
-      documents: [] as DocumentViewModule[],
-    };
+  computed: {
+    documents(): DocumentViewModule[] {
+      return storeHelper.documentStore.createdDocuments;
+    }
   },
   async created() {
     let token = AuthService.getDataFromToken();
-    this.documents = await storeHelper.documentStore.loadCreatedDocuments(
-      token.email
-    );
+    await storeHelper.documentStore.loadCreatedDocuments(token.email);
   },
 });
 </script>

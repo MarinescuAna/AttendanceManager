@@ -16,11 +16,11 @@
     </v-toolbar>
 
     <v-tabs-items v-model="tabs">
-        <v-tab-item>
-            <AttendanceTimelineComponent :documentId="$route.params.id"/>
-        </v-tab-item>
       <v-tab-item>
-        <AboutDocumentComponent :document="documentInfo"/>
+        <AttendanceTimelineComponent />
+      </v-tab-item>
+      <v-tab-item>
+        <AboutDocumentComponent />
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -29,27 +29,27 @@
 <script lang="ts">
 import Vue from "vue";
 import { DocumentFullViewModule } from "@/modules/document";
-import DocumentService from "@/services/document.service";
 import AboutDocumentComponent from "@/components/document-components/AboutDocumentComponent.vue";
 import AttendanceTimelineComponent from "@/components/document-components/AttendanceTimelineComponent.vue";
+import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
-    components:{
-        AttendanceTimelineComponent,
-        AboutDocumentComponent
-    },
+  components: {
+    AttendanceTimelineComponent,
+    AboutDocumentComponent,
+  },
   data() {
     return {
       tabs: [],
-      documentInfo: null! as DocumentFullViewModule,
     };
   },
+  computed: {
+    documentInfo(): DocumentFullViewModule {
+      return storeHelper.documentStore.documentDetails;
+    },
+  },
   async created() {
-    await DocumentService.getDocumentById(
-      this.$route.params.id
-    ).then(cr=>{
-        this.documentInfo = cr as DocumentFullViewModule
-    });
+    await storeHelper.documentStore.loadCurrentDocument(this.$route.params.id);
   },
 });
 </script>
