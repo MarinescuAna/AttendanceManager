@@ -17,6 +17,7 @@ export interface DocumentViewModule{
     documentId: string;
 }
 export interface DocumentFullViewModule{
+    documentId:string;
     title: string;
     courseId: string;
     courseName: string;

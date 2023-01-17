@@ -6,9 +6,9 @@ using AutoMapper;
 
 namespace AttendanceManager.Application.Profiles
 {
-    public sealed class DocumentProfiler : Profile
+    public sealed class DocumentMappingProfiler : Profile
     {
-        public DocumentProfiler()
+        public DocumentMappingProfiler()
         {
             CreateMap<Document, DocumentDto>()
                 .ForMember(d => d.CourseName, act => act.MapFrom(d => d.Course!.Name))

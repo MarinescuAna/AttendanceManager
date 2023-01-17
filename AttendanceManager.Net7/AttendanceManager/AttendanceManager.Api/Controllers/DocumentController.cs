@@ -18,7 +18,7 @@ namespace AttendanceManager.Api.Controllers
         /// Get all created documents 
         /// </summary>
         [HttpGet("created_documents_by_email")]
-        public async Task<ActionResult<List<DocumentDto>>> GetCreatedDocuemntsByUserEmail(string email)
+        public async Task<IActionResult> GetCreatedDocuemntsByUserEmail(string email)
         {
             return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = email }));
         }
@@ -27,7 +27,7 @@ namespace AttendanceManager.Api.Controllers
         /// Get all created documents 
         /// </summary>
         [HttpGet("document_by_id")]
-        public async Task<ActionResult<List<DocumentDto>>> GetDocumentById(string id)
+        public async Task<IActionResult> GetDocumentById(string id)
         {
             return Ok(await mediator.Send(new GetDocumentByIdQuery() { Id = id }));
         }
@@ -36,7 +36,7 @@ namespace AttendanceManager.Api.Controllers
         /// Create a new document
         /// </summary>
         [HttpPost("create_document")]
-        public async Task<ActionResult> CreateDocument(CreateDocumentCommand command)
+        public async Task<IActionResult> CreateDocument(CreateDocumentCommand command)
         {
             return Ok(await mediator.Send(command));
         }

@@ -1,17 +1,19 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
+using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Application.Shared;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.DocumentFile.Commands.CreateDocumentFile
 {
-    public sealed class CreateDocumentFileCommandHandler :BaseFeature, IRequestHandler<CreateDocumentFileCommand, bool>
+    public sealed class CreateDocumentFileCommandHandler :BaseFeature, IRequestHandler<CreateDocumentFileCommand, Guid>
     {
         public CreateDocumentFileCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
 
-        public async Task<bool> Handle(CreateDocumentFileCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateDocumentFileCommand request, CancellationToken cancellationToken)
         {
             var documentFile = new Domain.Entities.DocumentFile
             {
@@ -23,7 +25,13 @@ namespace AttendanceManager.Application.Features.DocumentFile.Commands.CreateDoc
 
             unitOfWork.DocumentFileRepository.AddAsync(documentFile);
 
-            return await unitOfWork.CommitAsync();
+            if (!await unitOfWork.CommitAsync())
+            {
+                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+            }
+
+            // Return the created department [the department id is mandatory]
+            return documentFile.DocumentFileID;
         }
     }
 }

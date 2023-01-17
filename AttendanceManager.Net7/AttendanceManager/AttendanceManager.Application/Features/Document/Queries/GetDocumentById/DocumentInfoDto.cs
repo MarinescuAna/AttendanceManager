@@ -2,9 +2,9 @@
 {
     public sealed class DocumentInfoDto
     {
+        public required string DocumentId { get; init; }
         public required string Title { get; init; }
         public required string EnrollmentYear { get; init; }
-        public required string Email { get; init; }
         public required string MaxNoSeminaries { get; init; }
         public required string MaxNoLaboratories { get; init; }
         public required string MaxNoLessons { get; init; }

@@ -17,3 +17,9 @@ export enum ManagementDataType{
     Department = 1,
     Course = 2,
 }
+
+export enum CourseType{
+    Lesson = 1,
+    Laboratory = 2,
+    Seminary = 3
+}
