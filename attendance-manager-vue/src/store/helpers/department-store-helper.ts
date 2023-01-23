@@ -45,4 +45,12 @@ export class DepartmentStore {
     public updateDepartmentName(payload: DepartmentUpdateModule): Promise<ResponseModule> {
         return this.store.dispatch(`${departmentNamespace}/updateDepartmentName`, payload);
     }
+
+    /**
+     * Reset the state with the initial values
+     */
+    public reset(): void {
+        this.store.dispatch(`${departmentNamespace}/resetStore`);
+    }
+
 }

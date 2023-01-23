@@ -2,6 +2,7 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import { DocumentFileInsertModule, DocumentFileViewModule } from "@/modules/document/document-file";
+import { Logger } from "@/plugins/custom-plugins/logging";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 
@@ -85,6 +86,13 @@ const mutations = {
     _addDocumentFile(state, payload: DocumentFileViewModule): void {
         state.currentDocument.documentFiles.push(payload);
     },
+    /**
+     * Reset the state with the initial values
+     */
+    _resetStore(state): void{
+        Logger.logInfo('Reset the Document store to the initial state')
+        Object.assign(state, initialize());
+    }
 };
 
 // actions for this store
@@ -93,10 +101,10 @@ const actions = {
      * Load all the documents from the API and initialize the store
      */
     async loadCreatedDocuments({ commit, state }, payload: string): Promise<void> {
-        if (state.createdDocuments.length == 0) {
-            const documents: DocumentViewModule[] = (await axios.get(`document/created_documents_by_email?email=${payload}`)).data;
-            commit("_createdDocuments", documents);
-        }
+        //if (state.createdDocuments.length == 0) {
+        const documents: DocumentViewModule[] = (await axios.get(`document/created_documents_by_email?email=${payload}`)).data;
+        commit("_createdDocuments", documents);
+        //}
     },
     /**
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
@@ -134,7 +142,13 @@ const actions = {
         }
 
         return response;
-    }
+    },
+    /**
+     * Reset the state with the initial values
+     */
+    resetStore({ commit }): void {
+        commit('_resetStore');
+    },
 };
 
 // export the namespace

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
+import { Logger } from "@/plugins/custom-plugins/logging";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
@@ -48,6 +49,13 @@ const mutations: MutationTree<SpecializationState> = {
     _addSpecialization(state, payload: SpecializationViewModule): void {
         state.specializations.push(payload);
     },
+    /**
+     * Reset the state with the initial values
+     */
+    _resetStore(state): void{
+        Logger.logInfo('Reset the Specialization store to the initial state')
+        Object.assign(state, initialize());
+    }
     /**
      * Remove specialisation
      * @todo Implement the delete method for specializations
@@ -159,6 +167,12 @@ const actions: ActionTree<SpecializationState, RootState> = {
         }
         return response;
     }*/
+    /**
+     * Reset the state with the initial values
+     */
+    resetStore({ commit }): void {
+        commit('_resetStore');
+    },
 };
 
 // export the namespace

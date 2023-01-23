@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { DepartmentUpdateModule, DepartmentViewModel } from "@/modules/department";
+import { Logger } from "@/plugins/custom-plugins/logging";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 
@@ -55,13 +56,19 @@ const mutations = {
      * Update department name
      */
     _updateDepartmentName(state, payload: DepartmentUpdateModule): void {
-        state.departments.foreach(cr =>{
-            if(cr.id == payload.id){
+        state.departments.foreach(cr => {
+            if (cr.id == payload.id) {
                 cr.name = payload.name;
             }
         });
+    },
+    /**
+     * Reset the state with the initial values
+     */
+    _resetStore(state): void {
+        Logger.logInfo('Reset the Department store to the initial state')
+        Object.assign(state, initialize());
     }
-
 };
 
 // actions for this store
@@ -70,7 +77,7 @@ const actions = {
      * Load all the departments and the specializations from the API and initialize the store
      */
     async loadDepartments({ commit, state }): Promise<DepartmentViewModel[]> {
-        if(state.departments.length != 0){
+        if (state.departments.length != 0) {
             return state.departments;
         }
 
@@ -121,7 +128,7 @@ const actions = {
     /**
      * Update department name in db and store
      */
-     async updateDepartmentName({ commit }, payload: DepartmentUpdateModule): Promise<ResponseModule> {
+    async updateDepartmentName({ commit }, payload: DepartmentUpdateModule): Promise<ResponseModule> {
         let response: ResponseModule = {
             error: "",
             isSuccess: true
@@ -136,7 +143,13 @@ const actions = {
             commit("_updateDepartmentName", payload);
         }
         return response;
-    }
+    },
+    /**
+     * Reset the state with the initial values
+     */
+    resetStore({ commit }): void {
+        commit('_resetStore');
+    },
 };
 
 // export the namespace

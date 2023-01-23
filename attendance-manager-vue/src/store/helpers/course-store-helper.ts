@@ -19,6 +19,14 @@ export class CourseStore {
     }
 
     /**
+     * Reset the state with the initial values
+     */
+    public reset(): void {
+        this.store.dispatch(`${courseNamespace}/resetStore`);
+    }
+
+
+    /**
      * Load all the courses from the API
      */
     public loadCourses(payload: string): Promise<CourseViewModule[]> {

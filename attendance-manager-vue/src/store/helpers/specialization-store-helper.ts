@@ -31,7 +31,7 @@ export class SpecializationStore {
      * @test
      */
     public loadSpecializationsByDepartmentId(payload: string): Promise<SpecializationViewModule[]> {
-        return this.store.dispatch(`${specializationNamespace}/loadSpecializationsByDepartmentId`,payload);
+        return this.store.dispatch(`${specializationNamespace}/loadSpecializationsByDepartmentId`, payload);
     }
 
     /**
@@ -40,6 +40,13 @@ export class SpecializationStore {
      */
     public addSpecialization(specialization: SpecializationInsertModule): Promise<ResponseModule> {
         return this.store.dispatch(`${specializationNamespace}/addSpecialization`, specialization);
+    }
+
+    /**
+     * Reset the state with the initial values
+     */
+    public reset(): void {
+        this.store.dispatch(`${specializationNamespace}/resetStore`);
     }
 
     /**

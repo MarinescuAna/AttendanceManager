@@ -39,4 +39,11 @@ export class UserStore {
         return this.store.dispatch(`${userNamespace}/addUser`, payload);
     }
 
+    /**
+     * Reset the state with the initial values
+     */
+    public reset(): void {
+        this.store.dispatch(`${userNamespace}/resetStore`);
+    }
+
 }

@@ -3,6 +3,7 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { CourseViewModule, CreateCourseModule, UpdateCourseModule, CreateCourseDto } from "@/modules/course";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
+import {Logger} from "@/plugins/custom-plugins/logging";
 
 //state type
 export interface CourseState {
@@ -10,7 +11,7 @@ export interface CourseState {
 }
 
 //initialize the state with an empty array
-export function initialize(): CourseState {
+function initialize(): CourseState {
     return {
         courses: []
     };
@@ -40,6 +41,7 @@ const mutations = {
      * Update the entire list of courses existed
      */
     _courses(state, courses: CourseViewModule[]): void {
+        Logger.logInfo('Initialize the course store.')
         state.courses = courses;
     },
     /**
@@ -63,12 +65,24 @@ const mutations = {
                 cr.name = name;
             }
         });
+    },
+    /**
+     * Reset the state with the initial values
+     */
+    _resetStore(state): void{
+        Logger.logInfo('Reset the Course store to the initial state')
+        Object.assign(state, initialize());
     }
-
 };
 
 // actions for this store
 const actions = {
+    /**
+     * Reset the state with the initial values
+     */
+    resetStore({commit}):void{
+        commit('_resetStore');
+    },
     /**
      * Load all the courses defined by the current user, not all courses
      */
@@ -76,7 +90,8 @@ const actions = {
         if(state.courses.length !=0){
             return state.courses;
         }
-
+        
+        Logger.logInfo('Call API to load all the courses.')
         const courses: CourseViewModule[] = (await axios.get('course/courses?Email='+payload)).data;
         commit("_courses", courses);
         return courses;

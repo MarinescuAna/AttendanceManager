@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
+import { Logger } from "@/plugins/custom-plugins/logging";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 
@@ -49,8 +50,15 @@ const mutations = {
     /**
      * Use this to update the additional information about the current user
      */
-    _addCurrentUser(state,payload: UserInformationViewModule): void{
+    _addCurrentUser(state, payload: UserInformationViewModule): void {
         state.currentUser = payload;
+    },
+    /**
+     * Reset the state with the initial values
+     */
+    _resetStore(state): void{
+        Logger.logInfo('Reset the User store to the initial state')
+        Object.assign(state, initialize());
     }
 };
 
@@ -60,7 +68,7 @@ const actions = {
      * Load all the users from the API and initialize the store
      */
     async loadUsers({ commit, state }): Promise<UserViewModule[]> {
-        if(state.users.length!=0){
+        if (state.users.length != 0) {
             return state.users;
         }
 
@@ -72,12 +80,12 @@ const actions = {
      * Load current user information
      * @todo remove the id
      */
-    async loadCurrentUserInfo({commit,state}, payload: string): Promise<UserInformationViewModule>{
-        if(state.currentUser != null){
+    async loadCurrentUserInfo({ commit, state }, payload: string): Promise<UserInformationViewModule> {
+        if (state.currentUser != null) {
             return state.currentUser;
         }
 
-        const result: UserInformationViewModule = (await axios.get('user/current_user_info?email='+ payload)).data;
+        const result: UserInformationViewModule = (await axios.get('user/current_user_info?email=' + payload)).data;
         commit("_addCurrentUser", result);
         return result;
     },
@@ -98,7 +106,13 @@ const actions = {
             commit("_addUser", (result as AxiosResponse).data);
         }
         return response;
-    }
+    },
+    /**
+     * Reset the state with the initial values
+     */
+    resetStore({ commit }): void {
+        commit('_resetStore');
+    },
 };
 
 // export the namespace

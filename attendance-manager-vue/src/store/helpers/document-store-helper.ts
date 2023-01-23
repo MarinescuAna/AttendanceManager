@@ -55,4 +55,12 @@ export class DocumentStore {
     public addDocumentFile(payload: DocumentFileInsertModule): Promise<ResponseModule> {
         return this.store.dispatch(`${documentNamespace}/addDocumentFile`, payload);
     }
+
+    /**
+     * Reset the state with the initial values
+     */
+    public reset(): void {
+        this.store.dispatch(`${documentNamespace}/resetStore`);
+    }
+
 }

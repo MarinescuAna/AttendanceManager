@@ -4,6 +4,8 @@ import { TokenData, ResponseModule } from "@/shared/modules";
 import {LoginModule, LoginResponseModule} from "@/modules/user/auth";
 import ResponseHandler from "@/error-handler/error-handler";
 import axios, { AxiosResponse } from "axios";
+import { Role } from "@/shared/enums";
+import storeHelper from "@/store/store-helper";
 
 export default class AuthService {
     /**
@@ -45,6 +47,21 @@ export default class AuthService {
      * Remove the tokens from the cookies
      */
     static logout(): void {
+        
+        const token = this.getDataFromToken();
+        switch (token.role.toString()) {
+            case "Admin":
+                storeHelper.departmentStore.reset();
+                storeHelper.specializationStore.reset();
+                break;
+            case "Teacher":
+                storeHelper.courseStore.reset();
+                storeHelper.documentStore.reset();
+                break;
+            default:
+                break;
+        }
+        storeHelper.userStore.reset();
         (<any>window).$cookies.remove(ACCESS_TOKEN);
         (<any>window).$cookies.remove(REFRESH_TOKEN);
     }
