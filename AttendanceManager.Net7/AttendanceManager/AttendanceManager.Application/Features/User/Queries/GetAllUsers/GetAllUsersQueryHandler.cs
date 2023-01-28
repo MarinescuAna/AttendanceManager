@@ -1,6 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Shared;
-using AttendanceManager.Application.SharedDtos;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
@@ -15,33 +14,34 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
 
         public async Task<List<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            // get all the users and all the specializations
-            var users = await unitOfWork.UserRepository.ListAllAsync(NavigationPropertiesSetting.OnlyCollectionNavigationProps);
-            var specializations = await unitOfWork.SpecializationRepository.ListAllAsync(NavigationPropertiesSetting.OnlyReferenceNavigationProps);
+            var departments = await unitOfWork.DepartmentRepository.ListAllAsync();
+            var userSpecializations = await unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
+                us => us.User!.Role != Role.Admin);
 
-            return users.Where(u => u.Role != Role.Admin).Select(user =>
+            return userSpecializations.GroupBy(us => us.UserID).Select(user =>
             {
                 // get the department
-                var department = specializations.FirstOrDefault(s => s.SpecializationID == user.UserSpecializations?.FirstOrDefault()?.SpecializationID)?.Department;
+                var department = departments.FirstOrDefault(d => d.DepartmentID==user.FirstOrDefault()!.Specialization!.DepartmentID);
+                var userData = user.FirstOrDefault().User;
 
                 // create the userDto
                 return new UserDto
                 {
-                    AccountConfirmed = user.AccountConfirmed,
-                    UserSpecializations = user.UserSpecializations?.Select(us => new SpecializationDto()
+                    AccountConfirmed = userData.AccountConfirmed,
+                    UserSpecializations = user.Select(us => new SpecializationDto()
                     {
-                        Id = us.SpecializationID.ToString(),
-                        Name = specializations.FirstOrDefault(s => s.SpecializationID == us.SpecializationID)?.Name
+                        Id = us.SpecializationID,
+                        Name = us.Specialization!.Name
                     }).ToArray(),
-                    Code = user.Code,
-                    Created = user.Created.ToString(Constants.DateFormat),
-                    DepartmentId = department?.DepartmentID.ToString(),
-                    DepartmentName = department?.Name,
-                    Email = user.Email,
-                    EnrollmentYear = (int)user?.EnrollmentYear,
-                    Fullname = user.FullName,
-                    Role = user.Role.ToString(),
-                    Updated = user.Updated.ToString(Constants.DateFormat)
+                    Code = userData.Code,
+                    Created = userData.CreatedOn.ToString(Constants.DateFormat),
+                    DepartmentId = department!.DepartmentID,
+                    DepartmentName = department!.Name,
+                    Email = userData.Email,
+                    EnrollmentYear = userData.EnrollmentYear,
+                    Fullname = userData.FullName,
+                    Role = userData.Role.ToString(),
+                    Updated = userData.UpdatedOn.ToString(Constants.DateFormat)
                 };
 
             }).ToList();

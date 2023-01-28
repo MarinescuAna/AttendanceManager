@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Application.Features.User.Queries.GetStudentsForCourses;
-using AttendanceManager.Domain.Entities;
+﻿using AttendanceManager.Domain.Entities;
 using AutoMapper;
 
 namespace AttendanceManager.Application.Profiles
@@ -9,7 +8,6 @@ namespace AttendanceManager.Application.Profiles
         public UserMappingProfiler()
         {
             CreateMap<User, Features.User.Queries.GetUserByEmail.UserDto>();
-            CreateMap<User, StudentDto>();
         }
     }
 }

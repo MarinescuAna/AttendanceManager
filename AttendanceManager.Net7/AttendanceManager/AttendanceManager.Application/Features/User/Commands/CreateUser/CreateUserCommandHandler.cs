@@ -21,7 +21,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
         public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             // Check if the user dosen't already have an account
-            if (await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email) != null)
+            if (await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email && !u.IsDeleted) != null)
             {
                 throw new AlreadyExistsException("User", request.Email);
             }
@@ -30,19 +30,18 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             var newUser = new Domain.Entities.User
             {
                 Email = request.Email,
-                EnrollmentYear = int.Parse(request.Year),
+                EnrollmentYear = request.Year,
                 FullName = request.Fullname,
                 Code = request.Code,
                 Role = Enum.Parse<Role>(request.Role),
                 Password = GeneratePassword(),
                 AccountConfirmed = false,
-                Created = DateTime.Now,
-                Updated = DateTime.Now,
-                UserSpecializations = request.Specializations.Select(s => new UserSpecialization()
+                CreatedOn = DateTime.UtcNow,
+                UpdatedOn = DateTime.UtcNow,
+                UserSpecializations = request.SpecializationIds.Select(id => new UserSpecialization()
                 {
-                    SpecializationID = Guid.Parse(s),
-                    UserID = request.Email,
-                    UserSpecializationID = Guid.NewGuid()
+                    SpecializationID = id,
+                    UserID = request.Email
                 }).ToList()
             };
 
@@ -54,7 +53,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             }
 
             //send email
-            var message = new Message(newUser.Email, Constants.Subject, String.Format(Constants.Body, newUser.FullName, newUser.Email, newUser.Password), newUser.FullName);
+            var message = new Message(newUser.Email, Constants.Subject, string.Format(Constants.Body, newUser.FullName, newUser.Email, newUser.Password), newUser.FullName);
             if (!await _mailService.SendEmail(message, new CancellationToken()))
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessageEmailSend);

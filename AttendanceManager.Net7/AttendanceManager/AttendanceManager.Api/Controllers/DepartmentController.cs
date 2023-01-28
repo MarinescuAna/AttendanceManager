@@ -1,5 +1,4 @@
 ﻿using AttendanceManager.Application.Features.Department.Commands.CreateDepartment;
-using AttendanceManager.Application.Features.Department.Commands.DeleteDepartment;
 using AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using MediatR;
@@ -7,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
+    /// <summary>
+    /// NOTE: Don't delete departments because this means that the specializations should also be deleted.
+    /// Also, don't delete specialization because there are users and courses and many more entities that depend on them and they also should be deleted!
+    /// </summary>
     [Route("api/department")]
     [ApiController]
     //TODO [Authorize]
@@ -34,16 +37,6 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> CreateDepartment(string name)
         {
             return Ok(await mediator.Send(new CreateDepatmentCommand() { Name = name }));
-        }
-
-        /// <summary>
-        /// Soft or hard delete an department
-        /// </summary>
-        /// <returns>Success: true/false</returns>
-        [HttpPatch("delete_department")]
-        public async Task<IActionResult> DeleteDepartment(int id)
-        {
-            return Ok(await mediator.Send(new DeleteDepartmentCommand { DepartmentID = id }));
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Application.SharedDtos;
 using AutoMapper;
 using MediatR;
 
@@ -14,32 +13,19 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserInformation
 
         public async Task<UserInfoDto> Handle(GetUserInformationByEmailQuery request, CancellationToken cancellationToken)
         {
-            var user = await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email, Domain.Enums.NavigationPropertiesSetting.OnlyCollectionNavigationProps)
+            var userSpecializations = await unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(u => u.UserID == request.Email)
                 ?? throw new NotFoundException(nameof(User), request.Email);
 
-            if (user.UserSpecializations != null)
+            var specializations = mapper.Map<SpecializationDto[]>(userSpecializations);
+
+            var userDepartment = await unitOfWork.DepartmentRepository.GetAsync(d => userSpecializations.FirstOrDefault()!.Specialization!.DepartmentID == d.DepartmentID);
+
+            return new()
             {
-                var userSpecializationIds = user.UserSpecializations.Select(u=>u.SpecializationID).ToArray();
-                var userSpecializations = (await unitOfWork.SpecializationRepository.ListAllAsync())
-                    .Where(s=>userSpecializationIds.Any(u=>u==s.SpecializationID))
-                    .Select(s=>new SpecializationDto()
-                    {
-                        Id = s.SpecializationID.ToString(),
-                        Name = s.Name
-                    })
-                    .ToArray();
-
-                var userDepartment = await unitOfWork.SpecializationRepository.GetAsync(s => s.SpecializationID == userSpecializationIds.FirstOrDefault() && !s.IsDeleted, Domain.Enums.NavigationPropertiesSetting.OnlyReferenceNavigationProps);
-
-                return new()
-                {
-                    DepartmentID = userDepartment!.DepartmentID.ToString(),
-                    DepartmentName = userDepartment!.Name,
-                    Specializations = userSpecializations
-                };
-            }
-
-            return null;
+                DepartmentID = userDepartment!.DepartmentID,
+                DepartmentName = userDepartment!.Name,
+                Specializations = specializations
+            };
         }
     }
 }

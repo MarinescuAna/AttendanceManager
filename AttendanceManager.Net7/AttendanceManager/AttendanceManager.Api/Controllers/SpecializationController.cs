@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
+    /// <summary>
+    /// NOTE: Don't delete specialization because there are users and courses and many more entities that depend on them and they also should be deleted!
+    /// </summary>
     [Route("api/specialization")]
     [ApiController]
     //TODO [Authorize]

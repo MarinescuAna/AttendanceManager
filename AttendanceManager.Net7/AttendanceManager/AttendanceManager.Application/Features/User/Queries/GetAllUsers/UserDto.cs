@@ -14,7 +14,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
         public required string Updated { get; set; }
         public required string Created { get; set; }
         public required bool AccountConfirmed { get; set; }
-        public required string DepartmentId { get; set; }
+        public required int DepartmentId { get; set; }
         public required string DepartmentName { get; set; }  
         public required SpecializationDto[] UserSpecializations { get; set; }
     }

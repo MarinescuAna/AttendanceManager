@@ -4,7 +4,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserInformation
 {
     public sealed class UserInfoDto
     {
-        public required string DepartmentID { get; init; }
+        public required int DepartmentID { get; init; }
         public required string DepartmentName { get; init; }
         public required SpecializationDto[] Specializations { get; init; }
     }

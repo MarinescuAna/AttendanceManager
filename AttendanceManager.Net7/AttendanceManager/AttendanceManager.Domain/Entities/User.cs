@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AttendanceManager.Domain.Entities
 {
-    public sealed class User
+    public sealed class User: EntityBase
     {
         [MaxLength(254)]
         [Key]
@@ -13,17 +13,14 @@ namespace AttendanceManager.Domain.Entities
         public required Role Role { get; set; }
         [MaxLength(64)]
         public string? Password { get; set; }
-        public int? EnrollmentYear { get; set; }
+        public int EnrollmentYear { get; set; } = 0;
         // This code represents the unique code that will appear instead of names for students 
-        //[MaxLength(16)]
+        [MaxLength(32)]
         public required string Code { get; set; }
-        public required DateTime Created { get; set; }
-        public required DateTime Updated { get; set; }
         public required bool AccountConfirmed { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public ICollection<UserSpecialization>? UserSpecializations { get; set; }
-        public ICollection<Course>? Courses { get; set; }
-        public ICollection<Document>? Documents { get; set; }
-        public ICollection<UserDocument>? UserDocuments { get; set; }
+        public ICollection<DocumentMember>? DocumentMembers { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }
     }
 }

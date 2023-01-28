@@ -15,7 +15,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
         public async Task<int> Handle(CreateSpecializationCommand request, CancellationToken cancellationToken)
         {
             // Look for antoher specializations that have the same name and department and throw exception
-            var specialization = await unitOfWork.SpecializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID == request.DepartmentId && !s.IsDeleted);
+            var specialization = await unitOfWork.SpecializationRepository.GetAsync(s => s.Name == request.Name && s.DepartmentID == request.DepartmentId);
 
             if (specialization != null)
             {
@@ -27,9 +27,8 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             {
                 DepartmentID = request.DepartmentId,
                 Name = request.Name,
-                IsDeleted = false,
                 CreatedOn = DateTime.UtcNow,
-                UpdatedOn= DateTime.UtcNow,
+                UpdatedOn = DateTime.UtcNow,
             };
 
             // Save the specialization or throw exception if something happen
@@ -39,7 +38,6 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
 
-            // The specialziation id is mandatory later
             return newSpecialization.SpecializationID;
         }
     }

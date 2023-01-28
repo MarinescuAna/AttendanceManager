@@ -14,11 +14,11 @@ namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepar
         public async Task<bool> Handle(UpdateDepartmentNameCommand request, CancellationToken cancellationToken)
         {
             //get the department
-            var department = await unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID == request.DepartmentID && !u.IsDeleted)
+            var department = await unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID == request.DepartmentID)
                 ?? throw new NotFoundException("Department", request.DepartmentID);
 
             // check if the name is unique
-            if (await unitOfWork.DepartmentRepository.GetAsync(u => u.Name == request.Name && !u.IsDeleted) != null)
+            if (await unitOfWork.DepartmentRepository.GetAsync(u => u.Name == request.Name) != null)
             {
                 throw new AlreadyExistsException("Department", request.Name);
             }

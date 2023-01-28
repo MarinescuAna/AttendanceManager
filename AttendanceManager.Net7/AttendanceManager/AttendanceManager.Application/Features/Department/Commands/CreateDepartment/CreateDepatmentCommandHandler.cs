@@ -15,7 +15,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
         public async Task<int> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
         {
             // Look for other departments with the same name and throw exception if exists
-            if (await unitOfWork.DepartmentRepository.GetAsync(d => d.Name == request.Name && !d.IsDeleted) != null)
+            if (await unitOfWork.DepartmentRepository.GetAsync(d => d.Name == request.Name) != null)
             {
                 throw new AlreadyExistsException("Department", request.Name);
             }
@@ -25,8 +25,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             {
                 CreatedOn = DateTime.UtcNow,
                 UpdatedOn = DateTime.UtcNow,
-                Name = request.Name,
-                IsDeleted = false,
+                Name = request.Name
             };
 
             // Add new department or throw exception if something happen

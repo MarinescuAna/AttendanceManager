@@ -12,8 +12,10 @@ namespace AttendanceManager.Application.Features.User.Queries.GetStudentsForCour
         }
 
         public async Task<List<StudentDto>> Handle(GetStudentsForCoursesQuery request, CancellationToken cancellationToken)
-            =>mapper.Map<List<StudentDto>>((await unitOfWork.UserRepository.ListAllAsync(NavigationPropertiesSetting.OnlyCollectionNavigationProps))
-                .Where(u => u.EnrollmentYear == int.Parse(request.EnrollmentYear) && u.UserSpecializations!.Any(s => s.SpecializationID.ToString() == request.SpecializationId) && u.Role == Role.Student)
-                .ToList());
+            => mapper.Map<List<StudentDto>>(await unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
+                us => us.User!.EnrollmentYear == request.EnrollmentYear && 
+                    us.SpecializationID == request.SpecializationId &&
+                    us.User!.Role == Role.Student &&
+                    !us.User.IsDeleted));
     }
 }

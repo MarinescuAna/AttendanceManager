@@ -12,6 +12,12 @@ namespace AttendanceManager.Persistance.Repositories
         }
 
         public override Task<List<Specialization>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => dbContext.Specializations.Include(s => s.Department).Include(s => s.UserSpecializations).AsNoTracking().Where(s => !s.IsDeleted).ToListAsync();
+            => setting switch
+            {
+                NavigationPropertiesSetting.None => dbContext.Specializations.AsNoTracking().ToListAsync(),
+                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Specializations.Include(s => s.Department).AsNoTracking().ToListAsync(),
+                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Specializations.Include(s => s.UserSpecializations).AsNoTracking().ToListAsync(),
+                _ => dbContext.Specializations.Include(s => s.Department).Include(s => s.UserSpecializations).AsNoTracking().ToListAsync()
+            };
     }
 }
