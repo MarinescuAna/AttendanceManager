@@ -7,7 +7,8 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetCoursesQuery
         [JsonPropertyName("id")]
         public required string CourseId { get; init; }
         public required string Name { get; init; }
-        public required string SpecializationId { get; init; }
+        //TODO load this only if is needed
+        //public required string SpecializationId { get; init; }
         public required string SpecializationName { get; init; }
     }
 }

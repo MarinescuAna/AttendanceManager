@@ -2,10 +2,19 @@
 
 namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
 {
-    public sealed class CreateCourseCommand : IRequest<Guid>
+    /// <summary>
+    /// A course can be created only by the teacher
+    /// 
+    /// Params:
+    /// course name
+    /// userSpecializationId
+    /// 
+    /// Return:
+    /// The id of the new course
+    /// </summary>
+    public sealed class CreateCourseCommand : IRequest<int>
     {
         public required string Name { get; init; }
-        public required string SpecializationId { get; init; }
-        public string? Email { get; set; }
+        public required int UserSpecializationId { get; init; }
     }
 }

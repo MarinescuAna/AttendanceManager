@@ -13,15 +13,10 @@ namespace AttendanceManager.Application.Features.Course.Commands.DeleteCourse
 
         public async Task<bool> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
         {
-            var course = await unitOfWork.CourseRepository.GetAsync(c => c.CourseID.ToString() == request.Id && !c.IsDeleted);
-
-            if (course == null)
+            if (!await unitOfWork.CourseRepository.SoftOrHardDelete(request.Id))
             {
                 throw new NotFoundException("Course", request.Id);
             }
-
-            course.IsDeleted = true;
-            unitOfWork.CourseRepository.Update(course);
 
             return await unitOfWork.CommitAsync();
         }

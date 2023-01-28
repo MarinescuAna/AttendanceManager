@@ -9,14 +9,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetCoursesQuery
         public GetCoursesQueryHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
-        //TODO change this!!!
         public async Task<List<CoursesDto>> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
-            => string.IsNullOrEmpty(request.Email)? mapper.Map<List<CoursesDto>>(
-                await unitOfWork.CourseRepository.ListAllAsync(Domain.Enums.NavigationPropertiesSetting.OnlyReferenceNavigationProps)
-                ):
-            mapper.Map<List<CoursesDto>>(
-                (await unitOfWork.CourseRepository.ListAllAsync(Domain.Enums.NavigationPropertiesSetting.OnlyReferenceNavigationProps))
-                    .Where(c => c.UserID.ToString() == request.Email)
-                );
+            => mapper.Map<List<CoursesDto>>(await unitOfWork.CourseRepository.GetTeacherCoursesByEmailAsync(request.Email));
     }
 }

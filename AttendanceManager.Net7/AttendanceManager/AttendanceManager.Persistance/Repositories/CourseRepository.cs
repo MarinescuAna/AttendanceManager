@@ -1,9 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Domain.Enums;
+using AttendanceManager.Infrastructure.Shared.Logger;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
@@ -12,23 +10,40 @@ namespace AttendanceManager.Persistance.Repositories
         public CourseRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
         {
         }
-
-        public override Task<Course?> GetAsync(Expression<Func<Course, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => setting switch
+        public async Task<List<Course>> GetTeacherCoursesByEmailAsync(string email)
+            => await dbContext.Courses.Include(s => s.UserSpecialization).Include(s => s.UserSpecialization!.Specialization)
+            .Where(c => c.UserSpecialization!.UserID == email).ToListAsync();
+        public async Task<bool> SoftOrHardDelete(int courseId)
+        {
+            try
             {
-                NavigationPropertiesSetting.None => dbContext.Courses.FirstOrDefaultAsync(expression),
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Courses.Include(s => s.Specialization).Include(s => s.User).FirstOrDefaultAsync(expression),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Courses.Include(s => s.Documents).FirstOrDefaultAsync(expression),
-                _ => dbContext.Courses.Include(s => s.Specialization).Include(s => s.Documents).Include(s => s.User).FirstOrDefaultAsync(expression)
-            };
+                var course = await dbContext.Courses.Include(c => c.Documents).FirstOrDefaultAsync(c => c.CourseID == courseId && !c.IsDeleted);
 
-        public override Task<List<Course>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => setting switch
+                if (course == null)
+                {
+                    return false;
+                }
+
+                if (course.Documents?.Count > 0)
+                {
+                    course.IsDeleted = true;
+                    course.UpdatedOn = DateTime.UtcNow;
+                    dbContext.Courses.Update(course);
+                }
+                else
+                {
+                    course.Documents = null;
+                    dbContext.Courses.Remove(course);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
             {
-                NavigationPropertiesSetting.None => dbContext.Courses.AsNoTracking().Where(u => !u.IsDeleted).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Courses.Include(s => s.Specialization).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Courses.Include(s => s.Documents).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                _ => dbContext.Courses.Include(s => s.Specialization).Include(s => s.Documents).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-            };
+                LoggerSerivce.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+                return false;
+
+            }
+        }
     }
 }

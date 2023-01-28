@@ -9,8 +9,7 @@ namespace AttendanceManager.Application.Profiles
         public CourseMappingProfiler()
         {
             CreateMap<Course, CoursesDto>()
-                .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.Specialization!.Name))
-                .ForMember(s => s.SpecializationId, act => act.MapFrom(s => s.SpecializationID));
+                .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.UserSpecialization!.Specialization!.Name));
         }
     }
 }

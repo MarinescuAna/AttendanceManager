@@ -5,17 +5,15 @@ namespace AttendanceManager.Domain.Entities
     /// <summary>
     /// Those courses are defined per specialization and teacher
     /// </summary>
-    public class Course
+    public class Course : EntityBase
     {
-        
-        public required Guid CourseID { get; set; }
+        [Key]
+        public int CourseID { get; set; }
+        public bool IsDeleted { get; set; } = false;
         [MaxLength(128)]
         public required string Name { get; set; }
-        public required bool IsDeleted { get; set; } = false;
-        public required Guid SpecializationID { get; set; }
-        public required string UserID { get; set; }
-        public virtual User? User { get; set; }
-        public virtual Specialization? Specialization { get; set; }
+        public required int UserSpecializationID { get; set; }
+        public virtual UserSpecialization? UserSpecialization { get; set; }
         public ICollection<Document>? Documents { get; set; }
     }
 }

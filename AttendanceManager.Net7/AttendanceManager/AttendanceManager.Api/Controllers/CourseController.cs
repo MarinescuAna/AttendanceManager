@@ -17,42 +17,43 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
-        /// Get all courses
+        /// Get all courses related to the current user
         /// </summary>
         /// <returns>Success: list with all courses</returns>
         [HttpGet("courses")]
-        public async Task<ActionResult<List<CoursesDto>>> GetCourses(string Email)
+        public async Task<IActionResult> GetCourses(string Email)
         {
-            return Ok(await mediator.Send(new GetCoursesQuery() { Email = Email} ));
+            //TODO change this: remove the params email
+            //return Ok(await mediator.Send(new GetCoursesQuery() { Email = GetCurrentUserEmail()} ));
+            return Ok(await mediator.Send(new GetCoursesQuery() { Email = Email }));
         }
 
         /// <summary>
-        /// Create a new course
+        /// Create a new course. This action can be done only by the teacher
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns>Success: the guid of the new course</returns>
+        /// <returns>Success: the id of the new course</returns>
         [HttpPost("create_course")]
-        public async Task<ActionResult> CreateCourse(CreateCourseCommand createCourseCommand)
+        public async Task<IActionResult> CreateCourse(CreateCourseCommand createCourseCommand)
         {
             return Ok(await mediator.Send(createCourseCommand));
         }
 
         /// <summary>
         /// Soft delete an course
+        /// <returns>Success: boolean value</returns>
         /// </summary>
-        /// <param name="name"></param>
-        [HttpPatch("delete_course")]
-        public async Task<ActionResult> DeleteCourse(DeleteCourseCommand command)
+        [HttpDelete("delete_course")]
+        public async Task<IActionResult> DeleteCourse(int id)
         {
-            return Ok(await mediator.Send(command));
+            return Ok(await mediator.Send(new DeleteCourseCommand { Id = id }));
         }
 
         /// <summary>
         /// Update the course name
-        /// </summary>
-        /// <param name="name"></param>
+        /// <returns>Success: boolean value</returns>
+        /// </summary>        
         [HttpPatch("update_course")]
-        public async Task<ActionResult> UpdateCourse(UpdateCourseNameCommand command)
+        public async Task<IActionResult> UpdateCourse(UpdateCourseNameCommand command)
         {
             return Ok(await mediator.Send(command));
         }

@@ -13,14 +13,12 @@ namespace AttendanceManager.Application.Features.Course.Commands.UpdateCourseNam
 
         public async Task<bool> Handle(UpdateCourseNameCommand request, CancellationToken cancellationToken)
         {
-            var course = await unitOfWork.CourseRepository.GetAsync(c => c.SpecializationID.ToString() == request.CourseId && !c.IsDeleted);
-
-            if (course == null)
-            {
-                throw new NotFoundException("Course", request.CourseId);
-            }
+            var course = await unitOfWork.CourseRepository.GetAsync(c => c.CourseID == request.CourseId && !c.IsDeleted)
+                ?? throw new NotFoundException("Course", request.CourseId);
 
             course.Name = request.Name;
+            course.UpdatedOn = DateTime.UtcNow;
+
             unitOfWork.CourseRepository.Update(course);
 
             return await unitOfWork.CommitAsync();
