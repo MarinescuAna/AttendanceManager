@@ -10,23 +10,13 @@ namespace AttendanceManager.Application.Features.Department.Commands.DeleteDepar
         public DeleteDepartmentCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
-
         public async Task<bool> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
         {
-            //get the department
-            var department = await unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID.ToString() == request.DepartmentID && !u.IsDeleted, Domain.Enums.NavigationPropertiesSetting.OnlyCollectionNavigationProps)
-                ?? throw new NotFoundException("Department", request.DepartmentID);
-
-            if (department.Specializations != null && department.Specializations.Count() > 0)
+            // soft delete if there are specializations under this department
+            // hard delete if there is no specialization under this departmentl
+            if (!await unitOfWork.DepartmentRepository.SoftOrHardDelete(request.DepartmentID))
             {
-                // soft delete if there are specializations under this department
-                department.IsDeleted = true;
-                unitOfWork.DepartmentRepository.Update(department);
-            }
-            else
-            {
-                // hard delete if there is no specialization under this departmentl
-                unitOfWork.DepartmentRepository.Delete(department);
+                throw new NotFoundException("Department", request.DepartmentID);
             }
 
             return await unitOfWork.CommitAsync();

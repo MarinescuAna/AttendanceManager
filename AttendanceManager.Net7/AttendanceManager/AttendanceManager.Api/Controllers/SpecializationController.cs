@@ -16,15 +16,17 @@ namespace AttendanceManager.Api.Controllers
 
         /// <summary>
         /// Get all specializations 
+        /// <returns>Success: list with all the specializations without any filter</returns>
         /// </summary>
         [HttpGet("specializations")]
-        public async Task<ActionResult<List<SpecializationDto>>> GetSpecializations()
+        public async Task<IActionResult> GetSpecializations()
         {
             return Ok(await mediator.Send(new GetSpecializationsQuery()));
         }
 
         /// <summary>
         /// Create a specialization
+        /// <returns>Success: true/false</returns>
         /// </summary>
         [HttpPost("create_specialization")]
         public async Task<IActionResult> CreateSpecialization([FromBody] CreateSpecializationCommand specialization)

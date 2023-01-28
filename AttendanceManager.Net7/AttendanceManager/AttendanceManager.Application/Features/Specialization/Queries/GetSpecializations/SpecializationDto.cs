@@ -4,6 +4,6 @@ namespace AttendanceManager.Application.Features.Specialization.Queries.GetSpeci
 {
     public sealed class SpecializationDto : BaseDto
     {
-        public required Guid DepartmentId { get; init; }
+        public required int DepartmentId { get; init; }
     }
 }

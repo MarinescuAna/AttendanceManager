@@ -1,11 +1,12 @@
 ﻿using MediatR;
-using System.Text.Json.Serialization;
 
 namespace AttendanceManager.Application.Features.Department.Commands.DeleteDepartment
 {
+    /// <summary>
+    /// Hard or soft delete, depending on the Specializations property
+    /// </summary>
     public sealed class DeleteDepartmentCommand : IRequest<bool>
     {
-        [JsonPropertyName("id")]
-        public required string DepartmentID { get; init; }
+        public required int DepartmentID { get; init; }
     }
 }

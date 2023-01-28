@@ -6,13 +6,13 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.Department.Commands.CreateDepartment
 {
-    public sealed class CreateDepatmentCommandHandler : BaseFeature, IRequestHandler<CreateDepatmentCommand, Guid>
+    public sealed class CreateDepatmentCommandHandler : BaseFeature, IRequestHandler<CreateDepatmentCommand, int>
     {
         public CreateDepatmentCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
-        public async Task<Guid> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateDepatmentCommand request, CancellationToken cancellationToken)
         {
             // Look for other departments with the same name and throw exception if exists
             if (await unitOfWork.DepartmentRepository.GetAsync(d => d.Name == request.Name && !d.IsDeleted) != null)
@@ -23,7 +23,8 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             // Create the new department
             var newDepartment = new Domain.Entities.Department
             {
-                DepartmentID = Guid.NewGuid(),
+                CreatedOn = DateTime.UtcNow,
+                UpdatedOn = DateTime.UtcNow,
                 Name = request.Name,
                 IsDeleted = false,
             };
@@ -35,7 +36,6 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
 
-            // Return the created department [the department id is mandatory]
             return newDepartment.DepartmentID;
         }
     }

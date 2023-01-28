@@ -1,8 +1,8 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
+using AttendanceManager.Infrastructure.Shared.Logger;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
@@ -11,17 +11,40 @@ namespace AttendanceManager.Persistance.Repositories
         public DepartmentRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
         {
         }
-        public override Task<Department?> GetAsync(Expression<Func<Department, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => setting switch
-            {
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Departments.Include(s => s.Specializations).FirstOrDefaultAsync(expression),
-                _ => dbContext.Departments.FirstOrDefaultAsync(expression)
-            };
+
         public override Task<List<Department>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => setting switch
+            => dbContext.Departments.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync();
+
+        public async Task<bool> SoftOrHardDelete(int id)
+        {
+            try
             {
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Departments.Include(s => s.Specializations).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                _ => dbContext.Departments.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync()
-            };
+                var department = await dbContext.Departments.Include(d => d.Specializations).AsNoTracking()
+                    .FirstOrDefaultAsync(d => d.DepartmentID == id && !d.IsDeleted);
+
+                if (department == null)
+                {
+                    return false;
+                }
+
+                if (department!.Specializations?.Count() > 0)
+                {
+                    department.IsDeleted = true;
+                    department.UpdatedOn = DateTime.UtcNow;
+                    dbContext.Update(department);
+                }
+                else
+                {
+                    dbContext.Remove(department);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LoggerSerivce.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+                return false;
+            }
+        }
     }
 }

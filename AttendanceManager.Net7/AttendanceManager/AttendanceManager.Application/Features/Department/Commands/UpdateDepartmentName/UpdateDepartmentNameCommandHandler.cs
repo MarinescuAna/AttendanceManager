@@ -3,18 +3,18 @@ using AttendanceManager.Application.Exceptions;
 using AutoMapper;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepartment
+namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName
 {
-    public sealed class UpdateDepartmentCommandHandler : BaseFeature, IRequestHandler<UpdateDepartmentCommand, bool>
+    public sealed class UpdateDepartmentNameCommandHandler : BaseFeature, IRequestHandler<UpdateDepartmentNameCommand, bool>
     {
-        public UpdateDepartmentCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UpdateDepartmentNameCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
-        public async Task<bool> Handle(UpdateDepartmentCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateDepartmentNameCommand request, CancellationToken cancellationToken)
         {
             //get the department
-            var department = await unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID.ToString() == request.DepartmentID && !u.IsDeleted)
+            var department = await unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID == request.DepartmentID && !u.IsDeleted)
                 ?? throw new NotFoundException("Department", request.DepartmentID);
 
             // check if the name is unique
@@ -24,6 +24,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepar
             }
 
             department.Name = request.Name;
+            department.UpdatedOn = DateTime.UtcNow;
             unitOfWork.DepartmentRepository.Update(department);
 
             return await unitOfWork.CommitAsync();
