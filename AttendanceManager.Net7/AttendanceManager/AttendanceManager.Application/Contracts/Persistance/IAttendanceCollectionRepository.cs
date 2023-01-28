@@ -2,7 +2,7 @@
 
 namespace AttendanceManager.Application.Contracts.Persistance
 {
-    public interface IDocumentFileRepository: IGenericRepository<DocumentFile>
+    public interface IAttendanceCollectionRepository: IGenericRepository<AttendanceCollection>
     {
     }
 }

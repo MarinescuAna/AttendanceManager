@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    [Migration("20230115085027_AddDocument")]
-    partial class AddDocument
+    [Migration("20230128140021_CreateDB3")]
+    partial class CreateDB3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,11 +25,64 @@ namespace AttendanceManager.Persistance.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.Attendance", b =>
+                {
+                    b.Property<int>("AttendanceID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceID"));
+
+                    b.Property<int>("AttendanceCollectionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(254)");
+
+                    b.HasKey("AttendanceID");
+
+                    b.HasIndex("AttendanceCollectionID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Attendances");
+                });
+
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.AttendanceCollection", b =>
+                {
+                    b.Property<int>("AttendanceCollectionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceCollectionID"));
+
+                    b.Property<int>("CourseType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DocumentID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HeldOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("AttendanceCollectionID");
+
+                    b.HasIndex("DocumentID");
+
+                    b.ToTable("AttendanceCollections");
+                });
+
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Course", b =>
                 {
-                    b.Property<Guid>("CourseID")
+                    b.Property<int>("CourseID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -39,27 +92,29 @@ namespace AttendanceManager.Persistance.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<Guid>("SpecializationID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(254)");
+                    b.Property<int>("UserSpecializationID")
+                        .HasColumnType("int");
 
                     b.HasKey("CourseID");
 
-                    b.HasIndex("SpecializationID");
-
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserSpecializationID");
 
                     b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Department", b =>
                 {
-                    b.Property<Guid>("DepartmentID")
+                    b.Property<int>("DepartmentID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentID"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -68,6 +123,9 @@ namespace AttendanceManager.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("DepartmentID");
 
@@ -76,14 +134,16 @@ namespace AttendanceManager.Persistance.Migrations
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Document", b =>
                 {
-                    b.Property<Guid>("DocumentId")
+                    b.Property<int>("DocumentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("CourseID")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentId"));
 
-                    b.Property<DateTime>("CreationDate")
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EnrollmentYear")
@@ -101,39 +161,57 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<int>("MaxNoSeminaries")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SpecializationID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate")
+                    b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(254)");
 
                     b.HasKey("DocumentId");
 
                     b.HasIndex("CourseID");
 
-                    b.HasIndex("SpecializationID");
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.DocumentMember", b =>
+                {
+                    b.Property<int>("DocumentMemberID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentMemberID"));
+
+                    b.Property<int>("DocumentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(254)");
+
+                    b.HasKey("DocumentMemberID");
+
+                    b.HasIndex("DocumentID");
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Documents");
+                    b.ToTable("DocumentMember");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Specialization", b =>
                 {
-                    b.Property<Guid>("SpecializationID")
+                    b.Property<int>("SpecializationID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("DepartmentID")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecializationID"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -142,6 +220,9 @@ namespace AttendanceManager.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("SpecializationID");
 
@@ -163,16 +244,19 @@ namespace AttendanceManager.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EnrollmentYear")
+                    b.Property<int>("EnrollmentYear")
                         .HasColumnType("int");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Password")
                         .HasMaxLength(64)
@@ -181,7 +265,7 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Email");
@@ -194,69 +278,26 @@ namespace AttendanceManager.Persistance.Migrations
                             Email = "admin@admin.ro",
                             AccountConfirmed = true,
                             Code = "-",
-                            Created = new DateTime(2023, 1, 15, 10, 50, 27, 181, DateTimeKind.Local).AddTicks(6101),
+                            CreatedOn = new DateTime(2023, 1, 28, 16, 0, 21, 258, DateTimeKind.Local).AddTicks(8866),
                             EnrollmentYear = 2023,
                             FullName = "Administrator",
+                            IsDeleted = false,
                             Password = "system123",
                             Role = 0,
-                            Updated = new DateTime(2023, 1, 15, 10, 50, 27, 181, DateTimeKind.Local).AddTicks(6163)
-                        },
-                        new
-                        {
-                            Email = "teacher@test.ro",
-                            AccountConfirmed = true,
-                            Code = "383gvvv343",
-                            Created = new DateTime(2023, 1, 15, 10, 50, 27, 181, DateTimeKind.Local).AddTicks(6204),
-                            EnrollmentYear = 2023,
-                            FullName = "Keven Dietrich",
-                            Password = "system1234",
-                            Role = 2,
-                            Updated = new DateTime(2023, 1, 15, 10, 50, 27, 181, DateTimeKind.Local).AddTicks(6208)
-                        },
-                        new
-                        {
-                            Email = "student@test.ro",
-                            AccountConfirmed = true,
-                            Code = "232dde3w",
-                            Created = new DateTime(2023, 1, 15, 10, 50, 27, 181, DateTimeKind.Local).AddTicks(6223),
-                            EnrollmentYear = 2023,
-                            FullName = "Elliott Cummerata",
-                            Password = "system1234",
-                            Role = 1,
-                            Updated = new DateTime(2023, 1, 15, 10, 50, 27, 181, DateTimeKind.Local).AddTicks(6227)
+                            UpdatedOn = new DateTime(2023, 1, 28, 16, 0, 21, 258, DateTimeKind.Local).AddTicks(8918)
                         });
-                });
-
-            modelBuilder.Entity("AttendanceManager.Domain.Entities.UserDocument", b =>
-                {
-                    b.Property<Guid>("UserDocumentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DocumentID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(254)");
-
-                    b.HasKey("UserDocumentId");
-
-                    b.HasIndex("DocumentID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("UserDocuments");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.UserSpecialization", b =>
                 {
-                    b.Property<Guid>("UserSpecializationID")
+                    b.Property<int>("UserSpecializationID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("SpecializationID")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSpecializationID"));
+
+                    b.Property<int>("SpecializationID")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserID")
                         .IsRequired()
@@ -271,23 +312,45 @@ namespace AttendanceManager.Persistance.Migrations
                     b.ToTable("UserSpecializations");
                 });
 
-            modelBuilder.Entity("AttendanceManager.Domain.Entities.Course", b =>
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.Attendance", b =>
                 {
-                    b.HasOne("AttendanceManager.Domain.Entities.Specialization", "Specialization")
-                        .WithMany("Courses")
-                        .HasForeignKey("SpecializationID")
+                    b.HasOne("AttendanceManager.Domain.Entities.AttendanceCollection", "AttendanceCollection")
+                        .WithMany("Attendances")
+                        .HasForeignKey("AttendanceCollectionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AttendanceManager.Domain.Entities.User", "User")
-                        .WithMany("Courses")
+                        .WithMany("Attendances")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Specialization");
+                    b.Navigation("AttendanceCollection");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.AttendanceCollection", b =>
+                {
+                    b.HasOne("AttendanceManager.Domain.Entities.Document", "Document")
+                        .WithMany("AttendanceCollections")
+                        .HasForeignKey("DocumentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.Course", b =>
+                {
+                    b.HasOne("AttendanceManager.Domain.Entities.UserSpecialization", "UserSpecialization")
+                        .WithMany("Courses")
+                        .HasForeignKey("UserSpecializationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserSpecialization");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Document", b =>
@@ -298,21 +361,24 @@ namespace AttendanceManager.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AttendanceManager.Domain.Entities.Specialization", "Specialization")
-                        .WithMany("Documents")
-                        .HasForeignKey("SpecializationID")
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.DocumentMember", b =>
+                {
+                    b.HasOne("AttendanceManager.Domain.Entities.Document", "Document")
+                        .WithMany("DocumentMembers")
+                        .HasForeignKey("DocumentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AttendanceManager.Domain.Entities.User", "User")
-                        .WithMany("Documents")
+                        .WithMany("DocumentMembers")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
-
-                    b.Navigation("Specialization");
+                    b.Navigation("Document");
 
                     b.Navigation("User");
                 });
@@ -328,25 +394,6 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("AttendanceManager.Domain.Entities.UserDocument", b =>
-                {
-                    b.HasOne("AttendanceManager.Domain.Entities.Document", "Document")
-                        .WithMany("UserDocuments")
-                        .HasForeignKey("DocumentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AttendanceManager.Domain.Entities.User", "User")
-                        .WithMany("UserDocuments")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Document");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("AttendanceManager.Domain.Entities.UserSpecialization", b =>
                 {
                     b.HasOne("AttendanceManager.Domain.Entities.Specialization", "Specialization")
@@ -366,6 +413,11 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.AttendanceCollection", b =>
+                {
+                    b.Navigation("Attendances");
+                });
+
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Course", b =>
                 {
                     b.Navigation("Documents");
@@ -378,27 +430,28 @@ namespace AttendanceManager.Persistance.Migrations
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Document", b =>
                 {
-                    b.Navigation("UserDocuments");
+                    b.Navigation("AttendanceCollections");
+
+                    b.Navigation("DocumentMembers");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.Specialization", b =>
                 {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Documents");
-
                     b.Navigation("UserSpecializations");
                 });
 
             modelBuilder.Entity("AttendanceManager.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("Attendances");
 
-                    b.Navigation("Documents");
-
-                    b.Navigation("UserDocuments");
+                    b.Navigation("DocumentMembers");
 
                     b.Navigation("UserSpecializations");
+                });
+
+            modelBuilder.Entity("AttendanceManager.Domain.Entities.UserSpecialization", b =>
+                {
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

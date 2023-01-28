@@ -20,9 +20,10 @@ namespace AttendanceManager.Persistance
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Document> Documents { get; set; }
-        public DbSet<UserDocument> UserDocuments { get; set; }
+        public DbSet<DocumentMember> DocumentMembers { get; set; }
+        public DbSet<DocumentMember> UserDocuments { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
-        public DbSet<DocumentFile> DocumentFiles { get; set; }
+        public DbSet<AttendanceCollection> AttendanceCollections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

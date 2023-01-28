@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
-    public class AttendanceRepository : GenericRepository<Attendance>, IAttendanceRepository
+    public class AttendanceCollectionRepository : GenericRepository<AttendanceCollection>, IAttendanceCollectionRepository
     {
-        public AttendanceRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
+        public AttendanceCollectionRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
         {
         }
     }
