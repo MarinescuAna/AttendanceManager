@@ -2,15 +2,15 @@
 {
     public sealed class DocumentInfoDto
     {
-        public required string DocumentId { get; init; }
+        public required int DocumentId { get; init; }
         public required string Title { get; init; }
-        public required string EnrollmentYear { get; init; }
-        public required string MaxNoSeminaries { get; init; }
-        public required string MaxNoLaboratories { get; init; }
-        public required string MaxNoLessons { get; init; }
-        public required string CourseId { get; init; }
+        public required int EnrollmentYear { get; init; }
+        public required int MaxNoSeminaries { get; init; }
+        public required int MaxNoLaboratories { get; init; }
+        public required int MaxNoLessons { get; init; }
+        public required int CourseId { get; init; }
         public required string CourseName { get; init; }
-        public required string SpecializationId { get; set; }
+        public required int SpecializationId { get; set; }
         public required string SpecializationName { get; set; }
         public required string CreationDate { get; init; }
         public required string UpdateDate { get; init; }

@@ -15,39 +15,37 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
         public async Task<bool> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             // Look for other documents with the same name, enrollmentyear, created by the same user for the same specialization
-            if (await unitOfWork.DocumentRepository.GetAsync(d => d.Title == request.Title && d.UserID == request.Email && d.EnrollmentYear == int.Parse(request.EnrollmentYear) && !d.IsDeleted && d.SpecializationID.ToString() == request.SpecializationId) != null)
+            if (await unitOfWork.DocumentRepository.GetAsync(d => d.Title == request.Title && d.CourseID == request.CourseId && d.EnrollmentYear == request.EnrollmentYear && !d.IsDeleted) != null)
             {
-                throw new AlreadyExistsException("Department", request.Title);
+                throw new AlreadyExistsException("Document", request.Title);
             }
 
             var newDocument = new Domain.Entities.Document
             {
-                DocumentId = Guid.NewGuid(),
-                CourseID = Guid.Parse(request.CourseId),
-                CreationDate= DateTime.Now,
-                EnrollmentYear = int.Parse(request.EnrollmentYear),
+                CourseID = request.CourseId,
+                CreatedOn= DateTime.UtcNow,
+                EnrollmentYear = request.EnrollmentYear,
                 IsDeleted = false,
-                MaxNoLaboratories = int.Parse(request.MaxNoLaboratories),
-                MaxNoLessons = int.Parse(request.MaxNoLessons),
-                MaxNoSeminaries = int.Parse(request.MaxNoSeminaries),
-                SpecializationID = Guid.Parse(request.SpecializationId),
+                MaxNoLaboratories = request.MaxNoLaboratories,
+                MaxNoLessons = request.MaxNoLessons,
+                MaxNoSeminaries = request.MaxNoSeminaries,
                 Title= request.Title,
-                UserID = request.Email,
-                UpdateDate= DateTime.Now
+                UpdatedOn= DateTime.UtcNow
             };
-            
-            foreach(var user in request.StudentIds)
+            // Save document first to can get the id
+            unitOfWork.DocumentRepository.AddAsync(newDocument);
+            await unitOfWork.CommitAsync();
+
+            foreach (var user in request.StudentIds)
             {
-                unitOfWork.UserDocumentRepository.AddAsync(new UserDocument
+                unitOfWork.DocumentMemberRepository.AddAsync(new DocumentMember
                 {
-                    UserDocumentId = Guid.NewGuid(),
                     DocumentID=newDocument.DocumentId,
                     UserID = user
                 });
             }
 
-            unitOfWork.DocumentRepository.AddAsync(newDocument);
-
+            // Save the members 
             return await unitOfWork.CommitAsync();
         }
     }

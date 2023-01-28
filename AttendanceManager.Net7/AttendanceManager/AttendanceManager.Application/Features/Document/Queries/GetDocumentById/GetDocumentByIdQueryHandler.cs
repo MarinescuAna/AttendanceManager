@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
+using AttendanceManager.Application.Exceptions;
 using AutoMapper;
 using MediatR;
 
@@ -11,6 +12,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
         }
 
         public async Task<DocumentInfoDto> Handle(GetDocumentByIdQuery request, CancellationToken cancellationToken)
-         => mapper.Map<DocumentInfoDto>(await unitOfWork.DocumentRepository.GetAsync(d => d.DocumentId.ToString() == request.Id && !d.IsDeleted, Domain.Enums.NavigationPropertiesSetting.OnlyReferenceNavigationProps));
+            => mapper.Map< DocumentInfoDto>(await unitOfWork.DocumentRepository.GetDocumentByIdAsync(request.Id)
+                ?? throw new NotFoundException("Document",request.Id));
     }
 }

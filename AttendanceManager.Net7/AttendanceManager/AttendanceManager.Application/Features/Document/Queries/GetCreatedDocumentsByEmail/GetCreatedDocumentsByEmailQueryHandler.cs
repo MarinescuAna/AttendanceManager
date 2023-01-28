@@ -1,5 +1,4 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
-using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
@@ -12,8 +11,8 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocu
         }
 
         public async Task<List<DocumentDto>> Handle(GetCreatedDocumentsByEmailQuery request, CancellationToken cancellationToken)
-         => mapper.Map<List<DocumentDto>>((await unitOfWork.DocumentRepository.ListAllAsync(NavigationPropertiesSetting.OnlyReferenceNavigationProps))
-             .Where(d => d.Course!.UserID == request.Email));
+        => mapper.Map<List<DocumentDto>>(
+            await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u => u.Course!.UserSpecialization!.UserID == request.Email));
 
     }
 }

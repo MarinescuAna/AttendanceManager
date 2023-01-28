@@ -1,6 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -12,22 +11,16 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
 
-        public override Task<Document?> GetAsync(Expression<Func<Document, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => setting switch
-            {
-                NavigationPropertiesSetting.None => dbContext.Documents.FirstOrDefaultAsync(expression),
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Documents.Include(s => s.Course).Include(s => s.Specialization).Include(s => s.User).FirstOrDefaultAsync(expression),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Documents.Include(s => s.UserDocuments).FirstOrDefaultAsync(expression),
-                _ => dbContext.Documents.Include(s => s.Specialization).Include(s => s.Course).Include(s => s.User).Include(s => s.UserDocuments).FirstOrDefaultAsync(expression)
-            };
+        /// <summary>
+        /// The result will contain the Specialization, Course and UserSpecialization
+        /// </summary>
+        public async Task<Document?> GetDocumentByIdAsync(int id)
+            => await dbContext.Documents.Include(d=>d.Course!.UserSpecialization!.Specialization).FirstOrDefaultAsync(u => u.DocumentId == id);
 
-        public override Task<List<Document>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None)
-            => setting switch
-            {
-                NavigationPropertiesSetting.None => dbContext.Documents.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                NavigationPropertiesSetting.OnlyReferenceNavigationProps => dbContext.Documents.Include(s => s.Course).Include(s => s.Specialization).Include(s => s.User).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                NavigationPropertiesSetting.OnlyCollectionNavigationProps => dbContext.Documents.Include(d=>d.DocumentFiles).Include(s => s.UserDocuments).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-                _ => dbContext.Documents.Include(d => d.DocumentFiles).Include(s => s.Specialization).Include(s => s.Course).Include(s => s.User).Include(s => s.UserDocuments).AsNoTracking().Where(u => !u.IsDeleted).ToListAsync(),
-            };
+        /// <summary>
+        /// The list will contain the Specialization, Course and UserSpecialization
+        /// </summary>
+        public async Task<List<Document>> GetUserDocumentsByExpressionAsync(Expression<Func<Document, bool>> expression)
+            => await dbContext.Documents.Include(d => d.Course!.UserSpecialization!.Specialization).AsNoTracking().Where(expression).ToListAsync();
     }
 }

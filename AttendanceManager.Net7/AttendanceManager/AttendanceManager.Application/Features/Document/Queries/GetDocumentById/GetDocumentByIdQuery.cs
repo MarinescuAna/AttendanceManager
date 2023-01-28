@@ -4,6 +4,6 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
 {
     public sealed class GetDocumentByIdQuery : IRequest<DocumentInfoDto>
     {
-        public required string Id { get; init; }
+        public required int Id { get; init; }
     }
 }
