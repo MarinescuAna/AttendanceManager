@@ -24,7 +24,7 @@ namespace AttendanceManager.Infrastructure.Authentication
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
             // Return the current user according to the email
-            var result = await _mediator.Send(new GetUserByEmailQuery() { Email = request.Email, Setting = Domain.Enums.NavigationPropertiesSetting.None })
+            var result = await _mediator.Send(new GetUserByEmailQuery() { Email = request.Email })
                 ?? throw new Exception($"User with {request.Email} not found.");
 
             // Check the passwords

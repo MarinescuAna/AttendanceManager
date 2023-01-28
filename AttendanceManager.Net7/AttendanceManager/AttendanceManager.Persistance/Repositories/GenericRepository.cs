@@ -1,5 +1,4 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
-using AttendanceManager.Domain.Enums;
 using AttendanceManager.Infrastructure.Shared.Logger;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -14,9 +13,9 @@ namespace AttendanceManager.Persistance.Repositories
         {
             this.dbContext = dbContext;
         }
-        public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> expression, NavigationPropertiesSetting setting = NavigationPropertiesSetting.None) =>
+        public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> expression) =>
             await dbContext.Set<T>().FirstOrDefaultAsync(expression);
-        public virtual async Task<List<T>> ListAllAsync(NavigationPropertiesSetting setting = NavigationPropertiesSetting.None) =>
+        public virtual async Task<List<T>> ListAllAsync() =>
             await dbContext.Set<T>().AsNoTracking().ToListAsync();
         public async void AddAsync(T entity)
         {

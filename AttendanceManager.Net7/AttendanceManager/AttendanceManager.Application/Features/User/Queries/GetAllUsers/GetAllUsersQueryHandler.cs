@@ -22,12 +22,12 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
             {
                 // get the department
                 var department = departments.FirstOrDefault(d => d.DepartmentID==user.FirstOrDefault()!.Specialization!.DepartmentID);
-                var userData = user.FirstOrDefault().User;
+                var userData = user.FirstOrDefault()!.User;
 
                 // create the userDto
                 return new UserDto
                 {
-                    AccountConfirmed = userData.AccountConfirmed,
+                    AccountConfirmed = userData!.AccountConfirmed,
                     UserSpecializations = user.Select(us => new SpecializationDto()
                     {
                         Id = us.SpecializationID,
