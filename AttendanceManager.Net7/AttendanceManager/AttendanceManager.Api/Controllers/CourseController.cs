@@ -3,16 +3,15 @@ using AttendanceManager.Application.Features.Course.Commands.DeleteCourse;
 using AttendanceManager.Application.Features.Course.Commands.UpdateCourseName;
 using AttendanceManager.Application.Features.Course.Queries.GetCoursesQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
-    [Route("api/course")]
-    [ApiController]
-    //TODO [Authorize]
+    [Route("api/course"), ApiController, Authorize]
     public class CourseController : BaseController
     {
-        public CourseController(IMediator mediator) : base(mediator)
+        public CourseController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
         }
 
@@ -21,11 +20,9 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: list with all courses</returns>
         [HttpGet("courses")]
-        public async Task<IActionResult> GetCourses(string Email)
+        public async Task<IActionResult> GetCourses()
         {
-            //TODO change this: remove the params email
-            //return Ok(await mediator.Send(new GetCoursesQuery() { Email = GetCurrentUserEmail()} ));
-            return Ok(await mediator.Send(new GetCoursesQuery() { Email = Email }));
+            return Ok(await mediator.Send(new GetCoursesQuery() { Email = GetCurrentUserEmail()} ));
         }
 
         /// <summary>

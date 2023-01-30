@@ -28,8 +28,6 @@ namespace AttendanceManager.Infrastructure
             })
               .AddJwtBearer(o =>
               {
-                  o.RequireHttpsMetadata = false;
-                  o.SaveToken = false;
                   o.TokenValidationParameters = new TokenValidationParameters
                   {
                       // ensure the token was issued by a trusted authorization server
@@ -40,10 +38,6 @@ namespace AttendanceManager.Infrastructure
                       // ensure the token hasn't expired
                       ValidateLifetime = true,
                       RequireExpirationTime = true,
-
-                      // clock skew compensates for server time drift(should be 5min or less)
-                      // set clock skew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                      ClockSkew = TimeSpan.Zero,
 
                       // ensure the token audience matches out audience value
                       ValidateAudience = true,

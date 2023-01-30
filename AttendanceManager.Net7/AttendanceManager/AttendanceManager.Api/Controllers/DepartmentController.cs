@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
@@ -10,12 +11,10 @@ namespace AttendanceManager.Api.Controllers
     /// NOTE: Don't delete departments because this means that the specializations should also be deleted.
     /// Also, don't delete specialization because there are users and courses and many more entities that depend on them and they also should be deleted!
     /// </summary>
-    [Route("api/department")]
-    [ApiController]
-    //TODO [Authorize]
+    [Route("api/department"), ApiController, Authorize]
     public sealed class DepartmentController : BaseController
     {
-        public DepartmentController(IMediator mediator) : base(mediator)
+        public DepartmentController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
         }
 

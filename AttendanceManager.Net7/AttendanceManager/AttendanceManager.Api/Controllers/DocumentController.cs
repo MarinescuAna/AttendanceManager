@@ -2,15 +2,15 @@
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
-    [Route("api/document")]
-    [ApiController]
+    [Route("api/document"), ApiController, Authorize]
     public class DocumentController : BaseController
     {
-        public DocumentController(IMediator mediator) : base(mediator)
+        public DocumentController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
         }
 
@@ -19,11 +19,9 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: the list with all created documents by the current user</returns>
         /// </summary>
         [HttpGet("created_documents_by_email")]
-        public async Task<IActionResult> GetCreatedDocuemntsByUserEmail(string email)
+        public async Task<IActionResult> GetCreatedDocuemntsByUserEmail()
         {
-            //TODO change this and remove the email, or keep it until will implement the collaboration part or student part!!
-            //return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = GetCurrentUserEmail() }));
-            return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = email }));
+            return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = GetCurrentUserEmail() }));
         }
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpPost("create_document")]
         public async Task<IActionResult> CreateDocument([FromBody] CreateDocumentCommand command)
         {
-            //command.Email = GetCurrentUserEmail();
+            command.Email = GetCurrentUserEmail();
             return Ok(await mediator.Send(command));
         }
     }

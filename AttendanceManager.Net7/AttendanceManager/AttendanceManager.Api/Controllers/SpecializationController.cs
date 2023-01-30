@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization;
 using AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
@@ -8,12 +9,10 @@ namespace AttendanceManager.Api.Controllers
     /// <summary>
     /// NOTE: Don't delete specialization because there are users and courses and many more entities that depend on them and they also should be deleted!
     /// </summary>
-    [Route("api/specialization")]
-    [ApiController]
-    //TODO [Authorize]
+    [Route("api/specialization"), ApiController, Authorize]
     public sealed class SpecializationController : BaseController
     {
-        public SpecializationController(IMediator mediator) : base(mediator)
+        public SpecializationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
         }
 

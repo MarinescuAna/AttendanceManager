@@ -64,7 +64,7 @@ namespace AttendanceManager.Infrastructure.Authentication
             // grab the security key
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             //define a credential object base on the security key definded above
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
 
             //deifine the token object
             var jwtSecurityToken = new JwtSecurityToken(

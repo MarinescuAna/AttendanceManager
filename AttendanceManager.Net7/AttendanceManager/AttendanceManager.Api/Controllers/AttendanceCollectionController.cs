@@ -1,16 +1,15 @@
 ﻿using AttendanceManager.Application.Features.AttendanceCollection.Commands.CreateAttendanceCollection;
 using AttendanceManager.Application.Features.AttendanceCollection.Queries.GetAttendanceCollectionByDocumentId;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
-    [Route("api/attendance_collection")]
-    [ApiController]
-    //TODO [Authorize]
+    [Route("api/attendance_collection"), ApiController, Authorize]
     public class AttendanceCollectionController : BaseController
     {
-        public AttendanceCollectionController(IMediator mediator) : base(mediator)
+        public AttendanceCollectionController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
         }
         /// <summary>

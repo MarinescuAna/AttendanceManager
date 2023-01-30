@@ -8,20 +8,21 @@ namespace AttendanceManager.Api.Controllers
     public class BaseController : ControllerBase
     {
         protected readonly IMediator mediator;
-        public BaseController(IMediator mediator)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public BaseController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             this.mediator = mediator;
         }
 
-        protected string? GetCurrentUserEmail()
+        protected string GetCurrentUserEmail()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity != null)
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
             {
-                var userClaims = identity.Claims;
-                return userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue("email")!;
             }
-            return string.Empty;
+            return result;
         }
     }
 }

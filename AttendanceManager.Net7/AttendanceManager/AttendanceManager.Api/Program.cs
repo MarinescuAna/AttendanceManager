@@ -5,7 +5,9 @@ using AttendanceManager.Application.Modules.Seed;
 using AttendanceManager.Infrastructure;
 using AttendanceManager.Persistance;
 using MediatR;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,9 +44,19 @@ builder.Services.AddCors(o => o.AddPolicy("CORSPolicy", b =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-//builder.Seed();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSwaggerGen(
+    option=>
+    {
+        option.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+        option.OperationFilter<SecurityRequirementsOperationFilter>();
+    });
 
 var app = builder.Build();
 

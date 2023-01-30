@@ -3,16 +3,15 @@ using AttendanceManager.Application.Features.User.Queries.GetAllUsers;
 using AttendanceManager.Application.Features.User.Queries.GetStudentsForCourses;
 using AttendanceManager.Application.Features.User.Queries.GetUserInformationByEmail;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
-    [Route("api/user")]
-    [ApiController]
-    //TODO [Authorize]
+    [Route("api/user"), ApiController, Authorize]
     public sealed class UserController : BaseController
     {
-        public UserController(IMediator mediator) : base(mediator) { }
+        public UserController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor) { }
 
         /// <summary>
         /// Create a user
@@ -52,12 +51,10 @@ namespace AttendanceManager.Api.Controllers
         /// Get additional information about current user
         /// <returns>Success: user information</returns>
         /// </summary>
-        // TODO remove this email from here
         [HttpGet("current_user_info")]
-        public async Task<IActionResult> GetCurrentUserInfo(string email)
+        public async Task<IActionResult> GetCurrentUserInfo()
         {
-            //return Ok(await mediator.Send(new GetUserInformationByEmailQuery() { Email = GetCurrentUserEmail() }));
-            return Ok(await mediator.Send(new GetUserInformationByEmailQuery() { Email = email }));
+            return Ok(await mediator.Send(new GetUserInformationByEmailQuery() { Email = GetCurrentUserEmail() }));
         }
     }
 }
