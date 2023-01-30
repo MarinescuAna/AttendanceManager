@@ -65,6 +65,7 @@ import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
 import { DepartmentViewModel } from "@/modules/department";
 import { SpecializationInsertModule } from "@/modules/specialization";
+import storeHelper from "@/store/store-helper";
 
 /**
  * Validation for requied
@@ -81,16 +82,14 @@ export default Vue.extend({
       // Specialization name
       name: "",
       // The department id of the specialization
-      department: "",
-      // Departments list to load them in the v-selector
-      departments: [] as DepartmentViewModel[],
+      department: ""
     };
   },
-  /**
-   * Load all the departments
-   */
-  async created() {
-    this.departments = await StoreHelper.departmentStore.loadDepartments();
+  computed:{
+    // Departments list to load them in the v-selector
+    departments(): DepartmentViewModel[]{
+      return storeHelper.departmentStore.departments;
+    }
   },
   methods: {
     /**
@@ -99,7 +98,7 @@ export default Vue.extend({
     async addSpecialization() {
       const response = await StoreHelper.specializationStore.addSpecialization({
         name: this.name,
-        departmentId: this.department,
+        departmentId: Number.parseInt(this.department),
       } as SpecializationInsertModule);
 
       if (response.isSuccess) {

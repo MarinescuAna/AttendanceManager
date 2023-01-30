@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/shared/constants";
+import { ACCESS_TOKEN, ACCOUNT_CONTROLLER, REFRESH_TOKEN } from "@/shared/constants";
 import { TokenData, ResponseModule } from "@/shared/modules";
 import {LoginModule, LoginResponseModule} from "@/modules/user/auth";
 import ResponseHandler from "@/error-handler/error-handler";
 import axios, { AxiosResponse } from "axios";
-import { Role } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 
 export default class AuthService {
@@ -77,7 +76,7 @@ export default class AuthService {
             isSuccess: true
         };
 
-        const result = await axios.post('account/authenticate', {
+        const result = await axios.post(`${ACCOUNT_CONTROLLER}/authenticate`, {
             email: payload.email,
             password: payload.password
         }).catch(error => {

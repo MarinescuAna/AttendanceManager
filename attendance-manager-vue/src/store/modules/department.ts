@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { DepartmentUpdateModule, DepartmentViewModel } from "@/modules/department";
-import { Logger } from "@/plugins/custom-plugins/logging";
+import { DEPARTMENT_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 
@@ -24,7 +24,6 @@ const state: DepartmentState = initialize();
 const getters = {
     /**
      * Gets departments from the store
-     * @todo delete this if it's not needed anymore
      */
     departments(state): DepartmentViewModel[] {
         return state.departments;
@@ -46,17 +45,10 @@ const mutations = {
         state.departments.push(payload);
     },
     /**
-     * Remove department from the store
-     * @todo reimplemente this
-     */
-    _removeDepartment(state, payload: string): void {
-        state.departments = state.departments.filter(cr => cr.id != payload);
-    },
-    /**
      * Update department name
      */
     _updateDepartmentName(state, payload: DepartmentUpdateModule): void {
-        state.departments.foreach(cr => {
+        state.departments.map(cr => {
             if (cr.id == payload.id) {
                 cr.name = payload.name;
             }
@@ -66,7 +58,6 @@ const mutations = {
      * Reset the state with the initial values
      */
     _resetStore(state): void {
-        Logger.logInfo('Reset the Department store to the initial state')
         Object.assign(state, initialize());
     }
 };
@@ -76,14 +67,11 @@ const actions = {
     /**
      * Load all the departments and the specializations from the API and initialize the store
      */
-    async loadDepartments({ commit, state }): Promise<DepartmentViewModel[]> {
-        if (state.departments.length != 0) {
-            return state.departments;
+    async loadDepartments({ commit, state }): Promise<void> {
+        if (state.departments.length == 0) {
+            const departments: DepartmentViewModel[] = (await axios.get(`${DEPARTMENT_CONTROLLER}/departments`)).data;
+            commit("_departments", departments);
         }
-
-        const departments: DepartmentViewModel[] = (await axios.get('department/departments')).data;
-        commit("_departments", departments);
-        return departments;
     },
     /**
      * Add a new department into the database and initialize the store
@@ -93,7 +81,7 @@ const actions = {
             error: "",
             isSuccess: true
         };
-        const result = await axios.post(`department/create_department?name=${payload}`)
+        const result = await axios.post(`${DEPARTMENT_CONTROLLER}/create_department?name=${payload}`)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -107,25 +95,6 @@ const actions = {
         return response;
     },
     /**
-     * Remove a department from the db and store
-     */
-    async removeDepartment({ commit }, payload: string): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
-
-        await axios.patch(`department/delete_department?id=`, payload)
-            .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
-            });
-
-        if (response.isSuccess) {
-            commit("_removeDepartment", payload);
-        }
-        return response;
-    },
-    /**
      * Update department name in db and store
      */
     async updateDepartmentName({ commit }, payload: DepartmentUpdateModule): Promise<ResponseModule> {
@@ -134,7 +103,7 @@ const actions = {
             isSuccess: true
         };
 
-        await axios.patch(`department/update_department`, payload)
+        await axios.patch(`${DEPARTMENT_CONTROLLER}/update_department_name`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });

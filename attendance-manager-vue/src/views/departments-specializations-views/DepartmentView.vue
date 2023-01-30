@@ -36,15 +36,19 @@ export default Vue.extend({
   components: {
     ManagementTableComponent
   },
+  computed:{
+    departments(): DepartmentViewModel[]{
+      return storeHelper.departmentStore.departments;
+    }
+  },
   data(){
     return {
-      departments: [] as DepartmentViewModel[],
       headers: DepartmentsHeader,
       type: ManagementDataType.Department
     };
   },
   async created(){
-    this.departments = await storeHelper.departmentStore.loadDepartments();
+    await storeHelper.departmentStore.loadDepartments();
   }
 });
 </script>

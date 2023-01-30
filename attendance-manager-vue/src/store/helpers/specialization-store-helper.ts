@@ -19,19 +19,11 @@ export class SpecializationStore {
     }
 
     /**
-     * Load all the specializations from the API(if it's needed) and update the store
-     * @test
-     */
-    public loadSpecializations(): Promise<SpecializationViewModule[]> {
-        return this.store.dispatch(`${specializationNamespace}/loadSpecializations`);
-    }
-
-    /**
      * Load all the specializations by the departmentId from the API(if it's needed) and update the store
      * @test
      */
-    public loadSpecializationsByDepartmentId(payload: string): Promise<SpecializationViewModule[]> {
-        return this.store.dispatch(`${specializationNamespace}/loadSpecializationsByDepartmentId`, payload);
+    public loadSpecializations(): void{
+        this.store.dispatch(`${specializationNamespace}/loadSpecializations`);
     }
 
     /**
@@ -49,13 +41,6 @@ export class SpecializationStore {
         this.store.dispatch(`${specializationNamespace}/resetStore`);
     }
 
-    /**
-     * Remove department
-     * @todo implement the delete entierly
-    public removeDepartment(department: UpdateDepartmentModule): Promise<ResponseModule> {
-        return this.store.dispatch(`${organizationNamespace}/removeDepartment`, department);
-    }
-     */
     /**
     * Change department name
          * @todo implement the update entierly

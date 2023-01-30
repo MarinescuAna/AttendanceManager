@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
-import { Logger } from "@/plugins/custom-plugins/logging";
+import { SPECIALIZATION_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
@@ -23,14 +23,11 @@ function initialize(): SpecializationState {
 const state: SpecializationState = initialize();
 
 // getters for this store
-/**
- * @todo Currently this getter is not used anymore so delete it if it's not needed 
- * */
 const getters: GetterTree<SpecializationState, RootState> = {
     /**
      * Gets specializations from the store
      */
-    specializationsByDepartmentId(state): SpecializationViewModule[] {
+    specializations(state:SpecializationState): SpecializationViewModule[] {
         return state.specializations;
     }
 };
@@ -53,7 +50,6 @@ const mutations: MutationTree<SpecializationState> = {
      * Reset the state with the initial values
      */
     _resetStore(state): void{
-        Logger.logInfo('Reset the Specialization store to the initial state')
         Object.assign(state, initialize());
     }
     /**
@@ -78,34 +74,16 @@ const mutations: MutationTree<SpecializationState> = {
 // actions for this store
 const actions: ActionTree<SpecializationState, RootState> = {
     /**
-     * Load all the specializations from the API and initialize the store
-     * @todo test this 
+     * Load all the specializations
      */
-    async loadSpecializations({ commit, state }): Promise<SpecializationViewModule[]> {
-        if (state.specializations.length != 0) {
-            return state.specializations;
-        }
-
-        const specializations: SpecializationViewModule[] = (await axios.get('specialization/specializations')).data;
-        commit("_specializations", specializations);
-        return specializations;
-    },
-    /**
-     * Load all the specializations by departmentId
-     * @todo test this 
-     */
-    async loadSpecializationsByDepartmentId({ commit, state }, payload: string): Promise<SpecializationViewModule[]> {
+    async loadSpecializations({ commit, state }): Promise<void> {
         if (state.specializations.length == 0) {
-            const specializations: SpecializationViewModule[] = (await axios.get('specialization/specializations')).data;
+            const specializations: SpecializationViewModule[] = (await axios.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
             commit("_specializations", specializations);
         }
-
-        return state.specializations.filter(s => s.departmentId == payload);
     },
     /**
      * Add a new specialization into the database and initialize the store
-     * @test api+vue
-     * @todo change the return type -> return only the id of the specialization not the entire object
      */
     async addSpecialization({ commit }, payload: SpecializationInsertModule): Promise<ResponseModule> {
         let response: ResponseModule = {
@@ -114,7 +92,7 @@ const actions: ActionTree<SpecializationState, RootState> = {
         };
 
         // this result represents the id of the specialization
-        const result = await axios.post(`specialization/create_specialization`, payload)
+        const result = await axios.post(`${SPECIALIZATION_CONTROLLER}/create_specialization`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -128,26 +106,6 @@ const actions: ActionTree<SpecializationState, RootState> = {
         }
         return response;
     },
-    /**
-     * Remove a department from the db and store
-     * @todo implement the delete entierly
-  
-    async removeDepartment({ commit }, payload: UpdateDepartmentModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
-
-        await axios.patch(`department/delete_department`, payload)
-            .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
-            });
-
-        if (response.isSuccess) {
-            commit("_removeDepartment", payload.departmentId);
-        }
-        return response;
-    },   */
     /**
      * Update department name in db and store
      * @todo implement the update entierly

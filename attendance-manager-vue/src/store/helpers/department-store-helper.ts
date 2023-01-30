@@ -21,8 +21,8 @@ export class DepartmentStore {
     /**
      * Load all the departments from the API
      */
-    public loadDepartments(): Promise<DepartmentViewModel[]> {
-        return this.store.dispatch(`${departmentNamespace}/loadDepartments`);
+    public loadDepartments(): void {
+        this.store.dispatch(`${departmentNamespace}/loadDepartments`);
     }
 
     /**
@@ -30,13 +30,6 @@ export class DepartmentStore {
      */
     public addDepartment(payload: string): Promise<ResponseModule> {
         return this.store.dispatch(`${departmentNamespace}/addDepartment`, payload);
-    }
-
-    /**
-     * Remove department from db and store
-     */
-    public removeDepartment(payload: string): Promise<ResponseModule> {
-        return this.store.dispatch(`${departmentNamespace}/removeDepartment`, payload);
     }
 
     /**
