@@ -8,9 +8,9 @@ import { SpecializationViewModule,SpecializationModule } from "../specialization
     email: string;
     role: string;
     fullname: string;
-    year: string;
+    year: number;
     code: string;
-    specializations: string[];
+    specializationIds: number[];
 }
 /**
  * Use this module in order to display the users for admin
@@ -18,12 +18,12 @@ import { SpecializationViewModule,SpecializationModule } from "../specialization
 export interface UserViewModule extends TableModule {
    fullname: string;
    role:string;
-   enrollmentYear: string;
+   enrollmentYear: number;
    code: string;
    accountConfirmed: boolean;
    updated: string;
    created: string;
-   departmentId: string;
+   departmentId: number;
    departmentName: string;
    userSpecializations: SpecializationViewModule[];
 }
@@ -31,7 +31,7 @@ export interface UserViewModule extends TableModule {
  * Use this module to get additional information about the user
  */
 export interface UserInformationViewModule{
-   departmentId: string;
+   departmentId: number;
    departmentName: string;
    specializations: SpecializationModule[];
 }

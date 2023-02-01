@@ -18,13 +18,17 @@ export default Vue.extend({
   },
   data(){
     return {
-      users: [] as UserViewModule[],
       headers: UserHeader,
       type: ManagementDataType.Users
     };
   },
+  computed:{
+    users(): UserViewModule[]{
+      return storeHelper.userStore.users;
+    }
+  },
   async created(){
-    this.users = await storeHelper.userStore.loadUsers();
+    await storeHelper.userStore.loadUsers();
   }
 });
 </script>

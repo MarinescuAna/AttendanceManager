@@ -20,7 +20,7 @@ export class UserStore {
     /**
      * Load all the users from the API
      */
-    public loadUsers(): Promise<UserViewModule[]> {
+    public loadUsers(): Promise<void> {
         return this.store.dispatch(`${userNamespace}/loadUsers`);
     }
 

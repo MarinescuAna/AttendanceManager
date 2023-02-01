@@ -19,7 +19,7 @@ export const UserHeader: HeaderModule[] = [
     },
     {
         text: "Email",
-        value: "email",
+        value: "id",
     },
     {
         text: "Role",

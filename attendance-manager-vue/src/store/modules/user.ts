@@ -2,6 +2,7 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import { Logger } from "@/plugins/custom-plugins/logging";
+import { USER_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
 import axios, { AxiosResponse } from "axios";
 
@@ -67,14 +68,11 @@ const actions = {
     /**
      * Load all the users from the API and initialize the store
      */
-    async loadUsers({ commit, state }): Promise<UserViewModule[]> {
-        if (state.users.length != 0) {
-            return state.users;
+    async loadUsers({ commit, state }): Promise<void> {
+        if (state.users.length == 0) {
+            const users: UserViewModule[] = (await axios.get(`${USER_CONTROLLER}/users`)).data;
+            commit("_users", users);
         }
-
-        const users: UserViewModule[] = (await axios.get('user/users')).data;
-        commit("_users", users);
-        return users;
     },
     /**
      * Load current user information
@@ -98,7 +96,7 @@ const actions = {
             isSuccess: true
         };
 
-        const result = await axios.post('user/create_user', payload).catch(error => {
+        const result = await axios.post(`${USER_CONTROLLER}/create_user`, payload).catch(error => {
             response = ResponseHandler.errorResponseHandler(error);
         });
 

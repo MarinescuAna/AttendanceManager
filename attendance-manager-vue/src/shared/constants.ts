@@ -18,3 +18,4 @@ export const EVENT_BUS_RELOAD_DEPARTMENTS = "reloadDepartments";
 export const ACCOUNT_CONTROLLER = "account";
 export const DEPARTMENT_CONTROLLER = "department";
 export const SPECIALIZATION_CONTROLLER = "specialization";
+export const USER_CONTROLLER = "user";

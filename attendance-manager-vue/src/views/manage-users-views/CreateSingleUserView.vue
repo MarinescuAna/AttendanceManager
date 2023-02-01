@@ -62,6 +62,7 @@
                 rules="required"
                 name="selectedSpecializations"
                 v-slot="{ errors }"
+                  v-if="role == 2"
               >
                 <v-select
                   :items="specializations"
@@ -77,20 +78,25 @@
                   chips
                   multiple
                   required
-                  v-if="role == 2"
                 ></v-select>
+              </validation-provider>
+              <validation-provider
+                rules="required"
+                name="selectedSpecialization"
+                v-slot="{ errors }"
+                v-else
+              >
                 <v-select
                   :items="specializations"
                   label="Specializations"
                   :error-messages="errors"
-                  v-model="selectedSpecializations"
+                  v-model="selectedSpecialization"
                   prepend-icon="mdi-file"
                   class="pa-6"
                   item-text="name"
                   item-value="id"
                   :disabled="specializations.length == 0"
                   required
-                  v-else
                 ></v-select>
               </validation-provider>
               <v-row justify="center">
@@ -160,6 +166,7 @@ import { CreateUserParameters } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
 import { SpecializationViewModule } from "@/modules/specialization";
 import { DepartmentViewModel } from "@/modules/department";
+import { Role } from "@/shared/enums";
 /**
  * Validation for requied
  */
@@ -197,16 +204,16 @@ export default Vue.extend({
       role: 1,
       // Enroll year
       year: "",
-      // All departments,
-      departments: [] as DepartmentViewModel[],
       // All the specializations
       specializations: [] as SpecializationViewModule[],
       // Selected specializations
-      selectedSpecializations: []
+      selectedSpecializations: [] as number[],
+      // Selected specialization if just one specialization can be selected
+      selectedSpecialization: ""
     };
   },
-  async created(){
-    this.departments = await storeHelper.departmentStore.loadDepartments();
+  async created() {
+    await storeHelper.departmentStore.loadDepartments();
   },
   computed: {
     /**
@@ -216,20 +223,34 @@ export default Vue.extend({
       return Array.from(Array(new Date().getFullYear() - 1949), (_, i) =>
         (new Date().getFullYear() - i).toString()
       );
-    }
+    },
+    /**
+     * All departments
+     */
+    departments(): DepartmentViewModel[] {
+      return storeHelper.departmentStore.departments;
+    },
   },
   methods: {
     /**
      * Use this method to add a new user then inform the admin about the process
      */
     async onSubmit(): Promise<void> {
+
+      let specializationIds: number[] = [];
+      if(this.role == Role.Teacher){
+        specializationIds = this.selectedSpecializations;
+      }else{
+        specializationIds.push(Number.parseInt(this.selectedSpecialization));
+      }
+
       const response = await storeHelper.userStore.addUser({
         fullname: this.fullname,
         code: this.code,
         email: this.email,
         role: this.role.toString(),
-        year: this.year,
-        specializations: this.selectedSpecializations,//Array.map({)
+        year: Number.parseInt(this.year),
+        specializationIds: specializationIds, //Array.map({)
       } as CreateUserParameters);
 
       if (response.isSuccess) {
@@ -252,9 +273,10 @@ export default Vue.extend({
      * Get the list with all specializations by department id
      * @param selectedDepartment
      */
-    async onFillSpecializations(selectedDepartment): Promise<void> {
-      console.log(selectedDepartment)
-      this.specializations = await storeHelper.specializationStore.loadSpecializationsByDepartmentId(selectedDepartment);
+    onFillSpecializations(selectedDepartment: number): void {
+      this.specializations = storeHelper.specializationStore.specializations.filter(
+        (specialization) => specialization.departmentId == selectedDepartment
+      );
       this.selectedSpecializations = [];
     },
 
