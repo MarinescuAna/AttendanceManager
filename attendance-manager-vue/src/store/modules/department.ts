@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { DepartmentUpdateModule, DepartmentViewModel } from "@/modules/department";
+import https from "@/plugins/axios";
 import { DEPARTMENT_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 //state type
 export interface DepartmentState {
@@ -69,7 +70,7 @@ const actions = {
      */
     async loadDepartments({ commit, state }): Promise<void> {
         if (state.departments.length == 0) {
-            const departments: DepartmentViewModel[] = (await axios.get(`${DEPARTMENT_CONTROLLER}/departments`)).data;
+            const departments: DepartmentViewModel[] = (await https.get(`${DEPARTMENT_CONTROLLER}/departments`)).data;
             commit("_departments", departments);
         }
     },
@@ -81,7 +82,7 @@ const actions = {
             error: "",
             isSuccess: true
         };
-        const result = await axios.post(`${DEPARTMENT_CONTROLLER}/create_department?name=${payload}`)
+        const result = await https.post(`${DEPARTMENT_CONTROLLER}/create_department?name=${payload}`)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -103,7 +104,7 @@ const actions = {
             isSuccess: true
         };
 
-        await axios.patch(`${DEPARTMENT_CONTROLLER}/update_department_name`, payload)
+        await https.patch(`${DEPARTMENT_CONTROLLER}/update_department_name`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });

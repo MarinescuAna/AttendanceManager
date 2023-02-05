@@ -21,7 +21,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("created_documents_by_email")]
         public async Task<IActionResult> GetCreatedDocuemntsByUserEmail()
         {
-            return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = GetCurrentUserEmail() }));
+            return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = UserEmail }));
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpPost("create_document")]
         public async Task<IActionResult> CreateDocument([FromBody] CreateDocumentCommand command)
         {
-            command.Email = GetCurrentUserEmail();
+            command.Email = UserEmail;
             return Ok(await mediator.Send(command));
         }
     }

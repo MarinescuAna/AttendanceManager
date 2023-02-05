@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AttendanceManager.Core.Shared;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,21 +9,25 @@ namespace AttendanceManager.Api.Controllers
     public class BaseController : ControllerBase
     {
         protected readonly IMediator mediator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public BaseController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
+        protected readonly IHttpContextAccessor httpContextAccessor;
+        protected string UserEmail
         {
-            _httpContextAccessor = httpContextAccessor;
-            this.mediator = mediator;
+            get{
+                var result = string.Empty;
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    result = HttpContext.User.FindFirstValue(ClaimTypes.Email)!;
+                }
+                return result;
+            }
         }
 
-        protected string GetCurrentUserEmail()
+
+        public BaseController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
         {
-            var result = string.Empty;
-            if (_httpContextAccessor.HttpContext != null)
-            {
-                result = _httpContextAccessor.HttpContext.User.FindFirstValue("email")!;
-            }
-            return result;
+            this.httpContextAccessor = httpContextAccessor;
+            this.mediator = mediator;
+
         }
     }
 }

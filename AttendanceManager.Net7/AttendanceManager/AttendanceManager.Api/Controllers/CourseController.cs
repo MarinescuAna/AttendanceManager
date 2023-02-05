@@ -22,7 +22,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("courses")]
         public async Task<IActionResult> GetCourses()
         {
-            return Ok(await mediator.Send(new GetCoursesQuery() { Email = GetCurrentUserEmail()} ));
+            return Ok(await mediator.Send(new GetCoursesQuery() { Email = UserEmail } ));
         }
 
         /// <summary>

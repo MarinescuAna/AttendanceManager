@@ -2,8 +2,9 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { CourseViewModule, CreateCourseModule, UpdateCourseModule, CreateCourseDto } from "@/modules/course";
 import { ResponseModule } from "@/shared/modules";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {Logger} from "@/plugins/custom-plugins/logging";
+import https from "@/plugins/axios";
 
 //state type
 export interface CourseState {
@@ -92,7 +93,7 @@ const actions = {
         }
         
         Logger.logInfo('Call API to load all the courses.')
-        const courses: CourseViewModule[] = (await axios.get('course/courses?Email='+payload)).data;
+        const courses: CourseViewModule[] = (await https.get('course/courses?Email='+payload)).data;
         commit("_courses", courses);
         return courses;
     },
@@ -104,7 +105,7 @@ const actions = {
             error: "",
             isSuccess: true
         };
-        const result = await axios.post(`course/create_course`, {
+        const result = await https.post(`course/create_course`, {
             name: payload.name,
             specializationId: payload.specializationId,
             email: payload.email
@@ -132,7 +133,7 @@ const actions = {
             isSuccess: true
         };
 
-        await axios.patch(`course/delete_course?id=${payload}`)
+        await https.patch(`course/delete_course?id=${payload}`)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -151,7 +152,7 @@ const actions = {
             isSuccess: true
         };
 
-        await axios.patch(`course/update_Course`, payload)
+        await https.patch(`course/update_Course`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });

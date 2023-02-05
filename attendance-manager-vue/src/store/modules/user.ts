@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
+import https from "@/plugins/axios";
 import { Logger } from "@/plugins/custom-plugins/logging";
 import { USER_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 
 //state type
@@ -70,7 +71,7 @@ const actions = {
      */
     async loadUsers({ commit, state }): Promise<void> {
         if (state.users.length == 0) {
-            const users: UserViewModule[] = (await axios.get(`${USER_CONTROLLER}/users`)).data;
+            const users: UserViewModule[] = (await https.get(`${USER_CONTROLLER}/users`)).data;
             commit("_users", users);
         }
     },
@@ -83,7 +84,7 @@ const actions = {
             return state.currentUser;
         }
 
-        const result: UserInformationViewModule = (await axios.get('user/current_user_info?email=' + payload)).data;
+        const result: UserInformationViewModule = (await https.get('user/current_user_info?email=' + payload)).data;
         commit("_addCurrentUser", result);
         return result;
     },
@@ -96,7 +97,7 @@ const actions = {
             isSuccess: true
         };
 
-        const result = await axios.post(`${USER_CONTROLLER}/create_user`, payload).catch(error => {
+        const result = await https.post(`${USER_CONTROLLER}/create_user`, payload).catch(error => {
             response = ResponseHandler.errorResponseHandler(error);
         });
 

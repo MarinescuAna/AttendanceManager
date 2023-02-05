@@ -17,6 +17,9 @@ namespace AttendanceManager.Domain.Entities
         // This code represents the unique code that will appear instead of names for students 
         [MaxLength(32)]
         public required string Code { get; set; }
+        [MaxLength(128)]
+        public string? RefreshToken { get; set; }
+        public DateTime? ExpRefreshToken { get; set; }
         public required bool AccountConfirmed { get; set; }
         public bool IsDeleted { get; set; } = false;
         public ICollection<UserSpecialization>? UserSpecializations { get; set; }

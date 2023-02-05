@@ -15,6 +15,7 @@ namespace AttendanceManager.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IJsonWebTokenService, JsonWebTokenService>();
             services.AddTransient<IMailService, MailService>();
 
             AddAuthentication(services, configuration);

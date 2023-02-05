@@ -4,6 +4,7 @@ using AttendanceManager.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    partial class AttendanceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230205123141_AddRefreshToken")]
+    partial class AddRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,8 +262,7 @@ namespace AttendanceManager.Persistance.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("RefreshToken")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
@@ -278,13 +280,13 @@ namespace AttendanceManager.Persistance.Migrations
                             Email = "admin@admin.ro",
                             AccountConfirmed = true,
                             Code = "-",
-                            CreatedOn = new DateTime(2023, 2, 5, 15, 0, 35, 221, DateTimeKind.Local).AddTicks(3049),
+                            CreatedOn = new DateTime(2023, 2, 5, 14, 31, 40, 786, DateTimeKind.Local).AddTicks(9706),
                             EnrollmentYear = 2023,
                             FullName = "Administrator",
                             IsDeleted = false,
                             Password = "system123",
                             Role = 0,
-                            UpdatedOn = new DateTime(2023, 2, 5, 15, 0, 35, 221, DateTimeKind.Local).AddTicks(3102)
+                            UpdatedOn = new DateTime(2023, 2, 5, 14, 31, 40, 786, DateTimeKind.Local).AddTicks(9763)
                         });
                 });
 

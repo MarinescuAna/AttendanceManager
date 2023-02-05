@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AttendanceManager.Domain\AttendanceManager.Domain.csproj" />
+    <ProjectReference Include="..\AttendanceManager.Infrastructure.Shared\AttendanceManager.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
 </Project>

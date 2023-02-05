@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
+import https from "@/plugins/axios";
 import { SPECIALIZATION_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
 import { RootState } from "..";
 
@@ -78,7 +79,7 @@ const actions: ActionTree<SpecializationState, RootState> = {
      */
     async loadSpecializations({ commit, state }): Promise<void> {
         if (state.specializations.length == 0) {
-            const specializations: SpecializationViewModule[] = (await axios.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
+            const specializations: SpecializationViewModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
             commit("_specializations", specializations);
         }
     },
@@ -92,7 +93,7 @@ const actions: ActionTree<SpecializationState, RootState> = {
         };
 
         // this result represents the id of the specialization
-        const result = await axios.post(`${SPECIALIZATION_CONTROLLER}/create_specialization`, payload)
+        const result = await https.post(`${SPECIALIZATION_CONTROLLER}/create_specialization`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });

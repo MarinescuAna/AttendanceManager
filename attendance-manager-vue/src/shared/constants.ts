@@ -3,7 +3,8 @@
  */
 export const ACCESS_TOKEN = "access_token";
 export const REFRESH_TOKEN = "refresh_token";
-
+export const EXP_ACCESS_TOKEN = "exp_access_token";
+export const EXP_REFRESH_TOKEN = "exp_refresh_token";
 
 /**
  * Event bus constants

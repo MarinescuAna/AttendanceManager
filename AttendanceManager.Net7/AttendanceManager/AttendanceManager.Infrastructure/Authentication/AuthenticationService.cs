@@ -1,23 +1,20 @@
-﻿using AttendanceManager.Application.Features.User.Commands.ConfirmUserAccount;
+﻿using AttendanceManager.Application.Contracts.Authentication;
+using AttendanceManager.Application.Features.User.Commands.ConfirmUserAccount;
+using AttendanceManager.Application.Features.User.Commands.UpdateRefreshToken;
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
 using AttendanceManager.Application.Models.Authentication;
 using MediatR;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace AttendanceManager.Infrastructure.Authentication
 {
-    public sealed class AuthenticationService : Application.Contracts.Authentication.IAuthenticationService
+    public sealed class AuthenticationService : IAuthenticationService
     {
         private readonly IMediator _mediator;
-        private readonly JwtSettings _jwtSettings;
+        private readonly IJsonWebTokenService _jwtService;
 
-        public AuthenticationService(IOptions<JwtSettings> jwtSettings, IMediator mediator)
+        public AuthenticationService(IMediator mediator, IJsonWebTokenService jsonWebTokenService)
         {
-            _jwtSettings = jwtSettings.Value;
+            _jwtService = jsonWebTokenService;
             _mediator = mediator;
         }
 
@@ -42,40 +39,36 @@ namespace AttendanceManager.Infrastructure.Authentication
             }
 
             // Get token
-            var jwtSecurityToken = GenerateToken(result);
+            var accessToken = _jwtService.GenerateAccessToken(result.Email, result.FullName, result.Role, result.Code);
 
-            return new AuthenticationResponse
+            if (string.IsNullOrEmpty(result.RefreshToken) || (result.ExpRefreshToken != null && DateTime.UtcNow.Millisecond >= result.ExpRefreshToken.Value.Millisecond))
             {
-                Token = jwtSecurityToken
-                //TODO add refresh token
-            };
-        }
-        private string GenerateToken(UserDto user)
-        {
-            // define a bunch of clams
-            var claims = new[]
+                // If the user has a refresh token and this refresh token expired or is empty, recreated another one
+                var refreshToken = _jwtService.GenerateRefreshToken();
+                await _mediator.Send(new UpdateRefreshTokenCommand
+                {
+                    Email = request.Email,
+                    ExpRefreshToken = refreshToken.Expiration,
+                    RefreshToken = refreshToken.Token
+                });
+
+                return new()
+                {
+                    ExpirationDateAccessToken = accessToken.Expiration,
+                    AccessToken = accessToken.Token,
+                    RefreshToken = refreshToken.Token,
+                    ExpirationDateRefreshToken = refreshToken.Expiration
+                };
+            }
+
+
+            return new()
             {
-                new Claim("email", user.Email),
-                new Claim("name", user.FullName),
-                new Claim("role", user.Role),
-                new Claim("code", string.IsNullOrEmpty(user.Code)? string.Empty:user.Code )
+                ExpirationDateAccessToken = accessToken.Expiration,
+                AccessToken = accessToken.Token,
+                RefreshToken = result.RefreshToken,
+                ExpirationDateRefreshToken = (DateTime)result.ExpRefreshToken!
             };
-
-            // grab the security key
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-            //define a credential object base on the security key definded above
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
-
-            //deifine the token object
-            var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
-                signingCredentials: signingCredentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-
         }
     }
 }

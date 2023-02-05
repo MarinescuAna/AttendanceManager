@@ -54,7 +54,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("current_user_info")]
         public async Task<IActionResult> GetCurrentUserInfo()
         {
-            return Ok(await mediator.Send(new GetUserInformationByEmailQuery() { Email = GetCurrentUserEmail() }));
+            return Ok(await mediator.Send(new GetUserInformationByEmailQuery() { Email = UserEmail }));
         }
     }
 }

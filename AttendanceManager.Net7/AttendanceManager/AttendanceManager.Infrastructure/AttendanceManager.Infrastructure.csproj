@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Authentication\" />
     <Folder Include="Mail\" />
   </ItemGroup>
 
@@ -21,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AttendanceManager.Application\AttendanceManager.Application.csproj" />
+    <ProjectReference Include="..\AttendanceManager.Core.Shared\AttendanceManager.Core.Shared.csproj" />
     <ProjectReference Include="..\AttendanceManager.Infrastructure.Shared\AttendanceManager.Infrastructure.Shared.csproj" />
   </ItemGroup>
 

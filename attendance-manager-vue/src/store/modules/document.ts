@@ -2,9 +2,10 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import { DocumentFileInsertModule, DocumentFileViewModule } from "@/modules/document/document-file";
+import https from "@/plugins/axios";
 import { Logger } from "@/plugins/custom-plugins/logging";
 import { ResponseModule } from "@/shared/modules";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 //state type
 export interface DocumentState {
@@ -102,7 +103,7 @@ const actions = {
      */
     async loadCreatedDocuments({ commit, state }, payload: string): Promise<void> {
         //if (state.createdDocuments.length == 0) {
-        const documents: DocumentViewModule[] = (await axios.get(`document/created_documents_by_email?email=${payload}`)).data;
+        const documents: DocumentViewModule[] = (await https.get(`document/created_documents_by_email?email=${payload}`)).data;
         commit("_createdDocuments", documents);
         //}
     },
@@ -113,11 +114,11 @@ const actions = {
     async loadCurrentDocument({ commit, state }, payload: string): Promise<void> {
         if (payload && (state.currentDocument == null || state.currentDocument.documentDetails.documentId != payload)) {
             //load the document details and update the store
-            const documentDetails: DocumentFullViewModule = (await axios.get('document/document_by_id?id=' + payload)).data;
+            const documentDetails: DocumentFullViewModule = (await https.get('document/document_by_id?id=' + payload)).data;
             commit("_documentDetails", documentDetails);
 
             // load the document files and update the store
-            const documentFiles: DocumentFileViewModule[] = (await axios.get('document_file/document_files_by_documentId?documentId=' + payload)).data;
+            const documentFiles: DocumentFileViewModule[] = (await https.get('document_file/document_files_by_documentId?documentId=' + payload)).data;
             commit("_documentFiles", documentFiles);
 
         }
@@ -128,7 +129,7 @@ const actions = {
             isSuccess: true
         };
 
-        const result = await axios.post(`document_file/create_document_file`, payload)
+        const result = await https.post(`document_file/create_document_file`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });

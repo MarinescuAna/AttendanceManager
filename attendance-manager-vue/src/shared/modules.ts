@@ -12,7 +12,7 @@ export interface ResponseModule{
  */
  export interface TokenData{
     email:string;
-    role: Role;
+    role: string;
     name: string;
     code: string;
 }

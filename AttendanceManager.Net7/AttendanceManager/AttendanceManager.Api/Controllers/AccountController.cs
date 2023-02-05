@@ -1,17 +1,22 @@
 ﻿using AttendanceManager.Application.Contracts.Authentication;
+using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
 using AttendanceManager.Application.Models.Authentication;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
     [Route("api/account"), ApiController, AllowAnonymous]
-    public sealed class AccountController : ControllerBase
+    public sealed class AccountController : BaseController
     {
         private readonly IAuthenticationService _authenticationService;
-        public AccountController(IAuthenticationService authenticationService)
+        private readonly IJsonWebTokenService _jwtService;
+        public AccountController(IMediator mediator, IAuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, IJsonWebTokenService jwtService)
+            : base(mediator, httpContextAccessor)
         {
             _authenticationService = authenticationService;
+            _jwtService = jwtService;
         }
         /// <summary>
         /// Login functionality
@@ -19,24 +24,35 @@ namespace AttendanceManager.Api.Controllers
         /// <param name="request"></param>
         /// <returns>Success: token and refresh token</returns>
         [HttpPost("authenticate")]
-        public async Task<ActionResult<AuthenticationResponse>> AuthenticateAsync([FromBody] AuthenticationRequest request)
+        public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticationRequest request)
         {
             return Ok(await _authenticationService.AuthenticateAsync(request));
         }
-        //TODO refresh token
-        private void SetJWT(string encrypterToken)
-        {
 
-            HttpContext.Response.Cookies.Append("X-Access-Token", encrypterToken,
-                  new CookieOptions
-                  {
-                      Expires = DateTime.Now.AddMinutes(15),
-                      HttpOnly = true,
-                      Secure = true,
-                      IsEssential = true,
-                      SameSite = SameSiteMode.None
-                  });
+        /// <summary>
+        /// Method used for generating the access token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Success: new access token</returns>
+        [HttpPost("refresh-access-token")]
+        public async Task<IActionResult> RefreshAccessToken(string refreshToken, string email)
+        {
+            var user = await mediator.Send(new GetUserByEmailQuery { Email = email });
+
+            if (user == null || string.IsNullOrEmpty(user.RefreshToken))
+            {
+                return Unauthorized("Refresh token is missing!");
+            }
+
+            if (!user.RefreshToken.Equals(refreshToken))
+            {
+                return Unauthorized("Invalid refresh token!");
+            }
+
+            var accesstoken = _jwtService.GenerateAccessToken(user.Email, user.FullName, user.Role, user.Code);
+
+            return Ok(accesstoken);
         }
     }
-   
+
 }

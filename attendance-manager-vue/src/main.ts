@@ -3,12 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import axios from "axios";
 import storeHelper from './store/store-helper'
 import VueCookies from 'vue-cookies';
 import { ValidationProvider } from 'vee-validate/dist/vee-validate.full.esm';
 import {ValidationObserver} from 'vee-validate'
-import AuthService from './services/auth.service'
 
 /**
  * This is used for validations reasons.
@@ -29,16 +27,6 @@ export const EventBus = new Vue();
  * Allow using cookies for storing the access and refresh tokens
  */
 Vue.use(VueCookies);
-
-/**
- * Attach the access token in the request header when this exists.
- * + other axios setting like base url
- */
-const accessToken = AuthService.getAccessToken();
-if (accessToken) {
-  axios.defaults.headers.common['Authorization'] =  `Bearer ${accessToken}`
-}
-axios.defaults.baseURL='https://localhost:44325/api/'
 
 /**
  * Store initialization

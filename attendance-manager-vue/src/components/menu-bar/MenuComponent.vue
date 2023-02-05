@@ -128,10 +128,15 @@ export default Vue.extend({
      */
     setProperties(): void {
       const data = AuthService.getDataFromToken();
-      this.name = data.name;
-      this.code = data.code;
-      this.email = data.email;
-      this.filterLinksByRole(data.role);
+
+      if (data === null) {
+        this.filterLinksByRole(Role.All);
+      } else {
+        this.name = data.name;
+        this.code = data.code;
+        this.email = data.email;
+        this.filterLinksByRole(data.role);
+      }
     },
 
     /**
