@@ -2,9 +2,11 @@
   <v-container>
     <v-card class="orange lighten-2">
       <v-card-title class="pa-7">
-         <h2>Create new specialization</h2>
-         <v-spacer></v-spacer>
-         <router-link :to="{name:'department'}" tag="button"><v-icon>mdi-close</v-icon></router-link> 
+        <h2>Create new specialization</h2>
+        <v-spacer></v-spacer>
+        <router-link :to="{ name: 'department' }" tag="button"
+          ><v-icon>mdi-close</v-icon></router-link
+        >
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
@@ -18,6 +20,8 @@
                 v-model="name"
                 type="text"
                 label="Specialization name"
+                counter
+                maxlength="128"
                 prepend-icon="mdi-pencil"
                 :error-messages="errors"
                 required
@@ -82,14 +86,14 @@ export default Vue.extend({
       // Specialization name
       name: "",
       // The department id of the specialization
-      department: ""
+      department: "",
     };
   },
-  computed:{
+  computed: {
     // Departments list to load them in the v-selector
-    departments(): DepartmentViewModel[]{
+    departments(): DepartmentViewModel[] {
       return storeHelper.departmentStore.departments;
-    }
+    },
   },
   methods: {
     /**

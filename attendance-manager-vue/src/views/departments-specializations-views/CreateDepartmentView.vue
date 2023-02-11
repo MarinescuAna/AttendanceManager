@@ -21,6 +21,8 @@
                 prepend-icon="mdi-pencil"
                 :error-messages="errors"
                 required
+                counter
+                maxlength="128"
                 class="pa-6"
               />
             </validation-provider>

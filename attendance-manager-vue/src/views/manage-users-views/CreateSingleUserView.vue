@@ -20,6 +20,8 @@
                 <v-text-field
                   label="Fullname"
                   v-model="fullname"
+                  counter
+                  maxlength="128"
                   prepend-icon="mdi-account"
                   :error-messages="errors"
                   class="pa-6"
@@ -34,6 +36,8 @@
                 <v-text-field
                   label="Email"
                   v-model="email"
+                  counter
+                  maxlength="254"
                   prepend-icon="mdi-email"
                   :error-messages="errors"
                   class="pa-6"
@@ -76,6 +80,7 @@
                   :disabled="specializations.length == 0"
                   attach
                   chips
+                  deletable-chips
                   multiple
                   required
                 ></v-select>
@@ -109,6 +114,8 @@
                     <v-text-field
                       label="GDPR Code"
                       v-model="code"
+                      counter
+                      maxlength="32"
                       prepend-icon="mdi-account"
                       :error-messages="errors"
                       class="pa-6"
@@ -214,6 +221,7 @@ export default Vue.extend({
   },
   async created() {
     await storeHelper.departmentStore.loadDepartments();
+    await storeHelper.specializationStore.loadSpecializations();
   },
   computed: {
     /**
