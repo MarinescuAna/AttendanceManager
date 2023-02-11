@@ -13,7 +13,7 @@
           >
             <v-form @submit.prevent="handleSubmit(onSubmit)">
               <validation-provider
-                rules="required"
+                :rules="rules.required"
                 name="fullname"
                 v-slot="{ errors }"
               >
@@ -29,7 +29,7 @@
                 />
               </validation-provider>
               <validation-provider
-                rules="required|email"
+                :rules="rules.email"
                 name="email"
                 v-slot="{ errors }"
               >
@@ -44,70 +44,49 @@
                   required
                 />
               </validation-provider>
-              <validation-provider
-                rules="required"
-                name="selectedDepartment"
-                v-slot="{ errors }"
-              >
-                <v-select
-                  :items="departments"
-                  label="Department"
-                  :error-messages="errors"
-                  prepend-icon="mdi-folder-open"
-                  @change="onFillSpecializations"
-                  class="pa-6"
-                  item-text="name"
-                  item-value="id"
-                  ref="departmentRef"
-                  required
-                ></v-select>
-              </validation-provider>
-              <validation-provider
-                rules="required"
-                name="selectedSpecializations"
-                v-slot="{ errors }"
-                  v-if="role == 2"
-              >
-                <v-select
-                  :items="specializations"
-                  label="Specializations"
-                  :error-messages="errors"
-                  v-model="selectedSpecializations"
-                  prepend-icon="mdi-file"
-                  class="pa-6"
-                  item-text="name"
-                  item-value="id"
-                  :disabled="specializations.length == 0"
-                  attach
-                  chips
-                  deletable-chips
-                  multiple
-                  required
-                ></v-select>
-              </validation-provider>
-              <validation-provider
-                rules="required"
-                name="selectedSpecialization"
-                v-slot="{ errors }"
+              <v-select
+                :items="departments"
+                label="Department"
+                prepend-icon="mdi-folder-open"
+                @change="onFillSpecializations"
+                class="pa-6"
+                item-text="name"
+                item-value="id"
+                ref="departmentRef"
+                required
+              ></v-select>
+              <v-select
+                :items="specializations"
+                label="Specializations"
+                v-model="selectedSpecializations"
+                prepend-icon="mdi-file"
+                class="pa-6"
+                item-text="name"
+                item-value="id"
+                :disabled="specializations.length == 0"
+                attach
+                chips
+                deletable-chips
+                multiple
+                required
+                v-if="role == 2"
+              ></v-select>
+              <v-select
+                :items="specializations"
+                label="Specializations"
+                v-model="selectedSpecialization"
+                prepend-icon="mdi-file"
+                class="pa-6"
+                item-text="name"
+                item-value="id"
+                :disabled="specializations.length == 0"
+                required
                 v-else
-              >
-                <v-select
-                  :items="specializations"
-                  label="Specializations"
-                  :error-messages="errors"
-                  v-model="selectedSpecialization"
-                  prepend-icon="mdi-file"
-                  class="pa-6"
-                  item-text="name"
-                  item-value="id"
-                  :disabled="specializations.length == 0"
-                  required
-                ></v-select>
-              </validation-provider>
+              ></v-select>
               <v-row justify="center">
                 <v-col cols="6">
                   <validation-provider
-                    rules="required"
+                    :rules="rules.required"
                     name="GDPR code"
                     v-slot="{ errors }"
                   >
@@ -124,21 +103,14 @@
                   </validation-provider>
                 </v-col>
                 <v-col cols="6">
-                  <validation-provider
-                    name="year"
-                    v-slot="{ errors }"
-                    rules="required"
-                  >
                     <v-select
                       :items="years"
                       label="Enrollment year"
                       v-model="year"
                       required
-                      :error-messages="errors"
                       prepend-icon="mdi-school"
                       class="pa-6"
                     ></v-select>
-                  </validation-provider>
                 </v-col>
               </v-row>
               <v-container class="ml-3">
@@ -153,7 +125,16 @@
                 </v-radio-group>
               </v-container>
               <v-row justify="center" class="pa-8">
-                <v-btn width="50%" @click="onSubmit" :disabled="invalid" large
+                <v-btn
+                  width="50%"
+                  @click="onSubmit"
+                  :disabled="
+                    invalid ||
+                    (selectedSpecializations.length === 0 && role === 2) ||
+                    (selectedSpecialization === 0 && role === 1) ||
+                    year === 0
+                  "
+                  large
                   >Submit</v-btn
                 >
               </v-row>
@@ -167,40 +148,17 @@
   
   <script lang="ts">
 import Vue from "vue";
-import { extend } from "vee-validate";
-import { required, email, min } from "vee-validate/dist/rules";
+import { rules } from "@/plugins/vee-validate";
 import { CreateUserParameters } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
 import { SpecializationViewModule } from "@/modules/specialization";
 import { DepartmentViewModel } from "@/modules/department";
 import { Role } from "@/shared/enums";
-/**
- * Validation for requied
- */
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
-
-/**
- * Validation for minimum length
- */
-extend("min", {
-  ...min,
-  message: "{_field_} must be greater than {length} characters",
-});
-
-/**
- * Validation for email
- */
-extend("email", {
-  ...email,
-  message: "Email must be valid",
-});
 
 export default Vue.extend({
   data() {
     return {
+      rules,
       // Email
       email: "",
       //Fullname
@@ -210,13 +168,13 @@ export default Vue.extend({
       //user's role; Default value is 1 => student
       role: 1,
       // Enroll year
-      year: "",
+      year: 0,
       // All the specializations
       specializations: [] as SpecializationViewModule[],
       // Selected specializations
       selectedSpecializations: [] as number[],
       // Selected specialization if just one specialization can be selected
-      selectedSpecialization: ""
+      selectedSpecialization: 0,
     };
   },
   async created() {
@@ -244,12 +202,11 @@ export default Vue.extend({
      * Use this method to add a new user then inform the admin about the process
      */
     async onSubmit(): Promise<void> {
-
       let specializationIds: number[] = [];
-      if(this.role == Role.Teacher){
+      if (this.role == Role.Teacher) {
         specializationIds = this.selectedSpecializations;
-      }else{
-        specializationIds.push(Number.parseInt(this.selectedSpecialization));
+      } else {
+        specializationIds.push(this.selectedSpecialization);
       }
 
       const response = await storeHelper.userStore.addUser({
@@ -257,7 +214,7 @@ export default Vue.extend({
         code: this.code,
         email: this.email,
         role: this.role.toString(),
-        year: Number.parseInt(this.year),
+        year: this.year,
         specializationIds: specializationIds, //Array.map({)
       } as CreateUserParameters);
 
@@ -265,7 +222,7 @@ export default Vue.extend({
         this.fullname = "";
         this.email = "";
         this.code = "";
-        this.year = "";
+        this.year = 0;
         this.role = 1;
         this.specializations = [];
         this.selectedSpecializations = [];
@@ -282,9 +239,10 @@ export default Vue.extend({
      * @param selectedDepartment
      */
     onFillSpecializations(selectedDepartment: number): void {
-      this.specializations = storeHelper.specializationStore.specializations.filter(
-        (specialization) => specialization.departmentId == selectedDepartment
-      );
+      this.specializations =
+        storeHelper.specializationStore.specializations.filter(
+          (specialization) => specialization.departmentId == selectedDepartment
+        );
       this.selectedSpecializations = [];
     },
 

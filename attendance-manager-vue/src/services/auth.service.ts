@@ -7,6 +7,7 @@ import { AxiosResponse } from "axios";
 import storeHelper from "@/store/store-helper";
 import https from "@/plugins/axios";
 import jwt_decode from "jwt-decode";
+import Vue from 'vue';
 
 export default class AuthService {
     /**
@@ -14,7 +15,7 @@ export default class AuthService {
      * @returns true if the access token exists in the cookies
      */
     static isLogged(): boolean {
-        return (<any>window).$cookies.isKey(ACCESS_TOKEN);
+        return Vue.$cookies.isKey(ACCESS_TOKEN);
     }
 
     /**
@@ -22,7 +23,7 @@ export default class AuthService {
      * @returns expire date of access token
      */
     static get expAccessToken(): Date {
-        return new Date(Date.parse((<any>window).$cookies.get(EXP_ACCESS_TOKEN)));
+        return new Date(Date.parse(Vue.$cookies.get(EXP_ACCESS_TOKEN)));
     }
 
     /**
@@ -30,7 +31,7 @@ export default class AuthService {
      * @returns expire date of refresh token
      */
     static get expRefreshToken(): Date {
-        return new Date(Date.parse((<any>window).$cookies.get(EXP_REFRESH_TOKEN)));
+        return new Date(Date.parse(Vue.$cookies.get(EXP_REFRESH_TOKEN)));
     }
 
     /**
@@ -38,7 +39,7 @@ export default class AuthService {
      * @returns access token
      */
     static get accessToken(): string {
-        return (<any>window).$cookies.get(ACCESS_TOKEN);
+        return Vue.$cookies.get(ACCESS_TOKEN);
     }
 
     /**
@@ -46,26 +47,26 @@ export default class AuthService {
      * @returns refresh token
      */
     static get refreshToken(): string {
-        return (<any>window).$cookies.get(REFRESH_TOKEN);
+        return Vue.$cookies.get(REFRESH_TOKEN);
     }
 
     /**
      * Set access token and expiration date
      */
     static set setAccessToken(token: TokenModule) {
-        (<any>window).$cookies.set(ACCESS_TOKEN, token.token);
-        (<any>window).$cookies.set(EXP_ACCESS_TOKEN, token.expiration);
+        Vue.$cookies.set(ACCESS_TOKEN, token.token);
+        Vue.$cookies.set(EXP_ACCESS_TOKEN, token.expiration);
     }
 
     /**
      * Decode the token and get the data
      * @returns data about the user
      */
-    static getDataFromToken(): TokenData {
-        const token =  (<any>window).$cookies.get(ACCESS_TOKEN);
+    static getDataFromToken(): TokenData|null {
+        const token =  Vue.$cookies.get(ACCESS_TOKEN);
 
         if(typeof(token) === 'undefined' || token === null){
-            return null!;
+            return null;
         }        
 
         return jwt_decode(token) as TokenData;
@@ -87,15 +88,14 @@ export default class AuthService {
                     storeHelper.courseStore.reset();
                     storeHelper.documentStore.reset();
                     break;
-                default:
-                    break;
             }
             storeHelper.userStore.reset();
         }
-        (<any>window).$cookies.remove(ACCESS_TOKEN);
-        (<any>window).$cookies.remove(REFRESH_TOKEN);
-        (<any>window).$cookies.remove(EXP_ACCESS_TOKEN);
-        (<any>window).$cookies.remove(EXP_REFRESH_TOKEN);
+        
+        Vue.$cookies.remove(ACCESS_TOKEN);
+        Vue.$cookies.remove(REFRESH_TOKEN);
+        Vue.$cookies.remove(EXP_ACCESS_TOKEN);
+        Vue.$cookies.remove(EXP_REFRESH_TOKEN);
     }
 
     /**
@@ -118,10 +118,10 @@ export default class AuthService {
 
         if (response.isSuccess) {
             const apiResponse = (result as AxiosResponse).data as LoginResponseModule;
-            (<any>window).$cookies.set(ACCESS_TOKEN, apiResponse.accessToken);
-            (<any>window).$cookies.set(REFRESH_TOKEN, apiResponse.refreshToken);
-            (<any>window).$cookies.set(EXP_ACCESS_TOKEN, apiResponse.expirationDateAccessToken);
-            (<any>window).$cookies.set(EXP_REFRESH_TOKEN, apiResponse.expirationDateRefreshToken);
+            Vue.$cookies.set(ACCESS_TOKEN, apiResponse.accessToken);
+            Vue.$cookies.set(REFRESH_TOKEN, apiResponse.refreshToken);
+            Vue.$cookies.set(EXP_ACCESS_TOKEN, apiResponse.expirationDateAccessToken);
+            Vue.$cookies.set(EXP_REFRESH_TOKEN, apiResponse.expirationDateRefreshToken);
         }
 
         return response;

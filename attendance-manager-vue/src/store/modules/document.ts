@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
-import { DocumentFileInsertModule, DocumentFileViewModule } from "@/modules/document/document-file";
+import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
-import { Logger } from "@/plugins/custom-plugins/logging";
+import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 
@@ -12,7 +12,7 @@ export interface DocumentState {
     createdDocuments: DocumentViewModule[]
     currentDocument: {
         documentDetails: DocumentFullViewModule,
-        documentFiles: DocumentFileViewModule[]
+        documentFiles: AttendanceCollectionViewModule[]
     }
 }
 
@@ -44,7 +44,7 @@ const getters = {
     /**
      * Gets created documents from the store
     */
-    documentFiles(state): DocumentFileViewModule[] {
+    documentFiles(state): AttendanceCollectionViewModule[] {
         return state.currentDocument.documentFiles;
     }
 };
@@ -72,7 +72,7 @@ const mutations = {
     /**
      * Update the entire list of documents existed into the store
      */
-    _documentFiles(state, payload: DocumentFileViewModule[]): void {
+    _documentCollections(state, payload: AttendanceCollectionViewModule[]): void {
         if (state.currentDocument == null) {
             state.currentDocument = {
                 documentDetails: Object as () => DocumentFullViewModule,
@@ -84,14 +84,13 @@ const mutations = {
     /**
      * Add a documentFile in the current document
     */
-    _addDocumentFile(state, payload: DocumentFileViewModule): void {
+    _addAttendanceCollection(state, payload: AttendanceCollectionViewModule): void {
         state.currentDocument.documentFiles.push(payload);
     },
     /**
      * Reset the state with the initial values
      */
     _resetStore(state): void{
-        Logger.logInfo('Reset the Document store to the initial state')
         Object.assign(state, initialize());
     }
 };
@@ -101,11 +100,11 @@ const actions = {
     /**
      * Load all the documents from the API and initialize the store
      */
-    async loadCreatedDocuments({ commit, state }, payload: string): Promise<void> {
-        //if (state.createdDocuments.length == 0) {
-        const documents: DocumentViewModule[] = (await https.get(`document/created_documents_by_email?email=${payload}`)).data;
-        commit("_createdDocuments", documents);
-        //}
+    async loadCreatedDocuments({ commit }): Promise<void> {
+        if (state.createdDocuments.length == 0) {
+            const documents: DocumentViewModule[] = (await https.get(`${DOCUMENT_CONTROLLER}/created_documents_by_email`)).data;
+            commit("_createdDocuments", documents);
+        }
     },
     /**
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
@@ -114,32 +113,33 @@ const actions = {
     async loadCurrentDocument({ commit, state }, payload: string): Promise<void> {
         if (payload && (state.currentDocument == null || state.currentDocument.documentDetails.documentId != payload)) {
             //load the document details and update the store
-            const documentDetails: DocumentFullViewModule = (await https.get('document/document_by_id?id=' + payload)).data;
+            const documentDetails: DocumentFullViewModule = 
+                (await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)).data;
             commit("_documentDetails", documentDetails);
 
             // load the document files and update the store
-            const documentFiles: DocumentFileViewModule[] = (await https.get('document_file/document_files_by_documentId?documentId=' + payload)).data;
-            commit("_documentFiles", documentFiles);
-
+            const documentCollections: AttendanceCollectionViewModule[] = 
+                (await https.get(`${ATTENDANCE_COLLECTION_CONTROLLER}/attendance_collection_by_documentId?documentId=${payload}`)).data;
+            commit("_documentCollections", documentCollections);
         }
     },
-    async addDocumentFile({ commit }, payload: DocumentFileInsertModule): Promise<ResponseModule> {
+    async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<ResponseModule> {
         let response: ResponseModule = {
             error: "",
             isSuccess: true
         };
 
-        const result = await https.post(`document_file/create_document_file`, payload)
+        const result = await https.post(`${ATTENDANCE_COLLECTION_CONTROLLER}/create_attendance_collection`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
 
         if (response.isSuccess) {
-            commit("_addDocumentFile", {
-                documentFileId: (result as AxiosResponse).data,
+            commit("_addAttendanceCollection", {
+                attendanceCollectionId: (result as AxiosResponse).data,
                 activityTime: payload.activityDateTime,
                 courseType: payload.courseType
-            } as DocumentFileViewModule);
+            } as AttendanceCollectionViewModule);
         }
 
         return response;

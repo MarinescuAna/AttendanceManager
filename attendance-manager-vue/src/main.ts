@@ -26,7 +26,7 @@ export const EventBus = new Vue();
 /**
  * Allow using cookies for storing the access and refresh tokens
  */
-Vue.use(VueCookies);
+Vue.use(VueCookies,{expires:"7d"});
 
 /**
  * Store initialization

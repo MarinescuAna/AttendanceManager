@@ -7,7 +7,7 @@
             <v-timeline width="50%">
               <v-timeline-item
                 v-for="(item, index) in documentFiles"
-                :key="item.documentFileId"
+                :key="item.attendanceCollectionId"
                 :class="index % 2 == 0 ? 'text-right' : ''"
               >
                 <v-btn text>
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { DocumentFileViewModule } from "@/modules/document/document-file";
+import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import AddAttendanceDialog from "../document-components/AddAttendanceDialog.vue";
@@ -54,10 +54,10 @@ export default Vue.extend({
     };
   },
   computed: {
-    documentFiles(): DocumentFileViewModule[] {
+    documentFiles(): AttendanceCollectionViewModule[] {
       return storeHelper.documentStore.documentFiles;
     },
-    documentId(): string{
+    documentId(): number{
       return storeHelper.documentStore.documentDetails.documentId;
     }
   },

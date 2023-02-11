@@ -12,9 +12,9 @@
         <validation-observer v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addSpecialization)">
             <validation-provider
-              name="name"
+              name="specialization name"
               v-slot="{ errors }"
-              rules="required"
+              :rules="rules.required"
             >
               <v-text-field
                 v-model="name"
@@ -28,27 +28,20 @@
                 class="pa-6"
               />
             </validation-provider>
-            <validation-provider
-              name="department"
-              v-slot="{ errors }"
-              rules="required"
-            >
-              <v-select
-                :items="departments"
-                label="Departments"
-                item-text="name"
-                item-value="id"
-                v-model="department"
-                required
-                :error-messages="errors"
-                class="pa-6"
-              ></v-select>
-            </validation-provider>
+            <v-select
+              :items="departments"
+              label="Departments"
+              item-text="name"
+              item-value="id"
+              v-model="department"
+              required
+              class="pa-6"
+            ></v-select>
             <v-row justify="center" class="pa-8">
               <v-btn
                 width="50%"
                 @click="addSpecialization"
-                :disabled="invalid"
+                :disabled="invalid || department === 0"
                 large
                 class="blue-grey lighten-4"
                 >Submit</v-btn
@@ -64,29 +57,20 @@
   
   <script lang="ts">
 import Vue from "vue";
-import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
 import StoreHelper from "@/store/store-helper";
 import { DepartmentViewModel } from "@/modules/department";
 import { SpecializationInsertModule } from "@/modules/specialization";
 import storeHelper from "@/store/store-helper";
-
-/**
- * Validation for requied
- */
-//TODO move this into a shared class
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
+import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
   data() {
     return {
+      rules,
       // Specialization name
       name: "",
       // The department id of the specialization
-      department: "",
+      department: 0,
     };
   },
   computed: {
@@ -102,7 +86,7 @@ export default Vue.extend({
     async addSpecialization() {
       const response = await StoreHelper.specializationStore.addSpecialization({
         name: this.name,
-        departmentId: Number.parseInt(this.department),
+        departmentId: this.department,
       } as SpecializationInsertModule);
 
       if (response.isSuccess) {

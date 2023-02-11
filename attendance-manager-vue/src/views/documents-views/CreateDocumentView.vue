@@ -27,13 +27,15 @@
                   <v-row>
                     <v-col cols="12">
                       <validation-provider
-                        name="documentTitle"
+                        name="document title"
                         v-slot="{ errors }"
-                        rules="required"
+                        :rules="rules.required"
                       >
                         <v-text-field
                           v-model="documentTitle"
                           type="text"
+                          counter
+                          maxlength="128"
                           label="Document title"
                           prepend-icon="mdi-pencil"
                           :error-messages="errors"
@@ -42,28 +44,21 @@
                       </validation-provider>
                     </v-col>
                     <v-col cols="12">
-                      <validation-provider
-                        name="selectedCourse"
-                        v-slot="{ errors }"
-                        rules="required"
-                      >
-                        <v-select
-                          :items="courses"
-                          label="Course"
-                          :error-messages="errors"
-                          v-model="selectedCourse"
-                          required
-                          prepend-icon="mdi-school"
-                          item-text="name"
-                          item-value="id"
-                        ></v-select>
-                      </validation-provider>
+                      <v-select
+                        :items="courses"
+                        label="Course"
+                        v-model="selectedCourse"
+                        required
+                        prepend-icon="mdi-school"
+                        item-text="name"
+                        item-value="id"
+                      ></v-select>
                     </v-col>
                     <v-col cols="4">
                       <validation-provider
-                        name="maxNoLessons"
+                        name="maximum number of lessons"
                         v-slot="{ errors }"
-                        rules="required"
+                        :rules="rules.between_0_30"
                       >
                         <v-text-field
                           v-model="maxNoLessons"
@@ -77,9 +72,9 @@
                     </v-col>
                     <v-col cols="4">
                       <validation-provider
-                        name="maxNoLaboratories"
+                        name="maximum number of laboratories"
                         v-slot="{ errors }"
-                        rules="required"
+                        :rules="rules.between_0_30"
                       >
                         <v-text-field
                           v-model="maxNoLaboratories"
@@ -93,9 +88,9 @@
                     </v-col>
                     <v-col cols="4">
                       <validation-provider
-                        name="maxNoSeminaries"
+                        name="maximum number of seminaries"
                         v-slot="{ errors }"
-                        rules="required"
+                        :rules="rules.between_0_30"
                       >
                         <v-text-field
                           v-model="maxNoSeminaries"
@@ -112,7 +107,7 @@
                   <v-btn
                     color="primary"
                     @click="currentStep = 2"
-                    :disabled="invalid"
+                    :disabled="invalid || selectedCourse === 0"
                   >
                     Continue
                   </v-btn>
@@ -120,53 +115,36 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <validation-observer ref="observer" v-slot="{ invalid }">
-                  <v-row>
-                    <v-col cols="12">
-                      <validation-provider
-                        rules="required"
-                        name="selectedSpecialization"
-                        v-slot="{ errors }"
-                      >
-                        <v-select
-                          :items="specializations"
-                          label="Specialization"
-                          :error-messages="errors"
-                          v-model="selectedSpecialization"
-                          prepend-icon="mdi-file"
-                          item-text="name"
-                          item-value="id"
-                          required
-                        ></v-select>
-                      </validation-provider>
-                    </v-col>
-                    <v-col cols="12">
-                      <validation-provider
-                        name="selectedYear"
-                        v-slot="{ errors }"
-                        rules="required"
-                      >
-                        <v-select
-                          :items="years"
-                          label="Enrollment year"
-                          v-model="selectedYear"
-                          required
-                          :error-messages="errors"
-                          prepend-icon="mdi-school"
-                        ></v-select>
-                      </validation-provider>
-                    </v-col>
-                  </v-row>
-
-                  <v-btn
-                    color="primary"
-                    @click="step3Actions"
-                    :disabled="invalid"
-                  >
-                    Continue
-                  </v-btn>
-                  <v-btn color="primary" @click="currentStep = 1"> Back </v-btn>
-                </validation-observer>
+                <v-row>
+                  <v-col cols="12">
+                    <v-select
+                      :items="specializations"
+                      label="Specialization"
+                      v-model="selectedSpecialization"
+                      prepend-icon="mdi-file"
+                      item-text="name"
+                      item-value="id"
+                      required
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-select
+                      :items="years"
+                      label="Enrollment year"
+                      v-model="selectedYear"
+                      required
+                      prepend-icon="mdi-school"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-btn
+                  color="primary"
+                  @click="step3Actions"
+                  :disabled="selectedSpecialization === 0 || selectedYear === 0"
+                >
+                  Continue
+                </v-btn>
+                <v-btn color="primary" @click="currentStep = 1"> Back </v-btn>
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -185,34 +163,41 @@
                         item-value="email"
                         multiple
                       >
-                          <v-list-item v-for="item in students" :key="item.email">
-                            <template v-slot:default="{ active }">
-                              <v-list-item-content>
-                                <v-list-item-title
-                                  v-text="item.fullname"
-                                ></v-list-item-title>
+                        <v-list-item v-for="item in students" :key="item.email">
+                          <template v-slot:default="{ active }">
+                            <v-list-item-content>
+                              <v-list-item-title
+                                v-text="item.fullname"
+                              ></v-list-item-title>
 
-                                <v-list-item-subtitle
-                                  class="text--primary"
-                                  v-text="item.email"
-                                ></v-list-item-subtitle>
-                              </v-list-item-content>
-                              <v-list-item-action>
-                                <v-icon v-if="!active" color="grey lighten-1">
-                                  mdi-star-outline
-                                </v-icon>
-                                <v-icon v-else color="yellow darken-3">
-                                  mdi-star
-                                </v-icon>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
+                              <v-list-item-subtitle
+                                class="text--primary"
+                                v-text="item.email"
+                              ></v-list-item-subtitle>
+                            </v-list-item-content>
+                            <v-list-item-action>
+                              <v-icon v-if="!active" color="grey lighten-1">
+                                mdi-star-outline
+                              </v-icon>
+                              <v-icon v-else color="yellow darken-3">
+                                mdi-star
+                              </v-icon>
+                            </v-list-item-action>
+                          </template>
+                        </v-list-item>
                       </v-list-item-group>
                     </v-list>
                   </v-container>
                 </v-card>
 
-                <v-btn color="blue darken-1" @click="onSubmit" :disabled="selectedStudents.length==0" text> Create document </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  @click="onSubmit"
+                  :disabled="selectedStudents.length == 0"
+                  text
+                >
+                  Create document
+                </v-btn>
                 <v-btn color="primary" @click="currentStep = 2"> Back </v-btn>
               </v-stepper-content>
             </v-stepper-items>
@@ -230,40 +215,37 @@
 <script lang="ts">
 import { CourseViewModule } from "@/modules/course";
 import { SpecializationModule } from "@/modules/specialization";
-import AuthService from "@/services/auth.service";
-import {DocumentInsertModule} from "@/modules/document";
+import { DocumentInsertModule } from "@/modules/document";
 import { StudentForCourseViewModule } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import UserService from "@/services/user.service";
 import { ResponseModule } from "@/shared/modules";
 import DocumentService from "@/services/document.service";
+import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
   data() {
     return {
+      rules,
       currentStep: 1,
       // Document title
       documentTitle: "",
       // Year when the course is available
-      selectedYear: "",
-      // List of current user courses
-      courses: [] as CourseViewModule[],
+      selectedYear: 0,
       // Selected course
-      selectedCourse: "",
+      selectedCourse: 0,
       // Selected specializations
-      selectedSpecialization: "",
-      // User specializations
-      specializations: [] as SpecializationModule[],
+      selectedSpecialization: 0,
       // Maximum number of lessons that will be held
-      maxNoLessons: "",
+      maxNoLessons: 0,
       // Maximum number of laboratories that will be held
-      maxNoLaboratories: "",
+      maxNoLaboratories: 0,
       // Maximum number of seminaries that will be held
-      maxNoSeminaries: "",
+      maxNoSeminaries: 0,
       generateStudentsList: true,
       students: [] as StudentForCourseViewModule[],
-      selectedStudents: [] as number[]
+      selectedStudents: [] as number[],
     };
   },
   watch: {
@@ -283,13 +265,18 @@ export default Vue.extend({
         (new Date().getFullYear() - i).toString()
       );
     },
+    // User specializations
+    specializations(): SpecializationModule[] {
+      return storeHelper.userStore.currentUser.specializations;
+    },
+    // List of current user courses
+    courses(): CourseViewModule[] {
+      return storeHelper.courseStore.courses;
+    },
   },
   async created() {
-    var token = AuthService.getDataFromToken();
-    this.specializations = (
-      await storeHelper.userStore.loadCurrentUserInfo(token.email)
-    ).specializations;
-    this.courses = await storeHelper.courseStore.loadCourses(token.email);
+    await storeHelper.userStore.loadCurrentUserInfo();
+    await storeHelper.courseStore.loadCourses();
   },
   methods: {
     resetStudentsList(): void {
@@ -306,20 +293,12 @@ export default Vue.extend({
             this.selectedYear,
             this.selectedSpecialization
           );
-          //this.selectedStudents = this.students.map(user=>user.email);
-          this.selectedStudents = Array.from(Array(this.students.length).keys())
+        this.selectedStudents = Array.from(Array(this.students.length).keys());
       }
       this.currentStep = 3;
     },
     async onSubmit(): Promise<void> {
-      var token = AuthService.getDataFromToken();
-      var students: string[] = [];
-      this.selectedStudents.forEach(index =>{
-        students.push(this.students[index].email);
-      })
-      
-      let newDocument = {
-        email: token.email,
+      const response = (await DocumentService.addDocument({
         courseId: this.selectedCourse,
         enrollmentYear: this.selectedYear,
         maxNoLaboratories: this.maxNoLaboratories,
@@ -327,17 +306,15 @@ export default Vue.extend({
         maxNoSeminaries: this.maxNoSeminaries,
         title: this.documentTitle,
         specializationId: this.selectedSpecialization,
-        studentIds: students
-      } as DocumentInsertModule;
-
-      const response = (await DocumentService.addDocument(newDocument)) as ResponseModule;
+        studentIds: this.selectedStudents.map(x=>this.students[x].email)       
+      } as DocumentInsertModule)) as ResponseModule;
 
       if (response.isSuccess) {
-        this.$router.push({name:'documents'});
+        this.$router.push({ name: "documents" });
       } else {
         window.alert(response.error);
       }
-    }
+    },
   },
 });
 </script>

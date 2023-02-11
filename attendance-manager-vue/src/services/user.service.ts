@@ -1,10 +1,10 @@
 import { StudentForCourseViewModule } from "@/modules/user";
-import axios from "axios";
+import https from "@/plugins/axios";
+import { USER_CONTROLLER } from "@/shared/constants";
 
 export default class UserService {
-    private static controllerName = "user";
 
-    static async getStudentsBySpecializationIdEnrollmentYear(year: string, specializationId: string): Promise<StudentForCourseViewModule[]> {
-        return (await axios.get(`${this.controllerName}/students_by_specializationId_enrollmentYear?year=${year}&specializationId=${specializationId}`)).data;
+    static async getStudentsBySpecializationIdEnrollmentYear(year: number, specializationId: number): Promise<StudentForCourseViewModule[]> {
+        return (await https.get(`${USER_CONTROLLER}/students_by_specializationId_enrollmentYear?year=${year}&specializationId=${specializationId}`)).data;
     }
 }

@@ -1,32 +1,31 @@
 export interface DocumentInsertModule{
     title: string;
-    courseId: string;
-    specializationId: string;
-    enrollmentYear: string;
-    maxNoLessons: string;
-    maxNoLaboratories: string;
-    maxNoSeminaries: string;
+    courseId: number;
+    specializationId: number;
+    enrollmentYear: number;
+    maxNoLessons: number;
+    maxNoLaboratories: number;
+    maxNoSeminaries: number;
     studentIds: string[];
-    email: string;
 }
 export interface DocumentViewModule{
     title: string;
     courseName: string;
     specializationName: string;
-    enrollmentYear: string;
-    documentId: string;
+    enrollmentYear: number;
+    documentId: number;
 }
 export interface DocumentFullViewModule{
-    documentId:string;
+    documentId:number;
     title: string;
-    courseId: string;
+    courseId: number;
     courseName: string;
-    specializationId: string;
+    specializationId: number;
     specializationName: string;
-    enrollmentYear: string;
-    maxNoLessons: string;
-    maxNoLaboratories: string;
-    maxNoSeminaries: string;
+    enrollmentYear: number;
+    maxNoLessons: number;
+    maxNoLaboratories: number;
+    maxNoSeminaries: number;
     creationDate: string;
     updateDate: string;
 }

@@ -32,6 +32,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpPost("create_course")]
         public async Task<IActionResult> CreateCourse(CreateCourseCommand createCourseCommand)
         {
+            createCourseCommand.Email = UserEmail;
             return Ok(await mediator.Send(createCourseCommand));
         }
 

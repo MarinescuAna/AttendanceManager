@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import { DocumentViewModule } from "@/modules/document";
-import AuthService from "@/services/auth.service";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 export default Vue.extend({
@@ -46,8 +45,7 @@ export default Vue.extend({
     }
   },
   async created() {
-    let token = AuthService.getDataFromToken();
-    await storeHelper.documentStore.loadCreatedDocuments(token.email);
+    await storeHelper.documentStore.loadCreatedDocuments();
   },
 });
 </script>

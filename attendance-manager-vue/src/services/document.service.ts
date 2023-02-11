@@ -1,17 +1,17 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentFullViewModule, DocumentInsertModule } from "@/modules/document";
+import https from "@/plugins/axios";
+import { DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { ResponseModule } from "@/shared/modules";
-import axios from "axios";
 
 export default class DocumentService {
-    private static controllerName = "document";
 
     static async addDocument(payload: DocumentInsertModule): Promise<ResponseModule> {
         let response: ResponseModule = {
             error: "",
             isSuccess: true
         };
-        await axios.post(`${this.controllerName}/create_document?`,payload)
+        await https.post(`${DOCUMENT_CONTROLLER}/create_document?`,payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -19,6 +19,6 @@ export default class DocumentService {
     }
 
     static async getDocumentById(payload: string): Promise<DocumentFullViewModule>{
-        return (await axios.get(`${this.controllerName}/document_by_id?id=${payload}`)).data;
+        return (await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)).data;
     }
 }

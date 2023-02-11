@@ -102,8 +102,10 @@ export default Vue.extend({
     EventBus.$on(EVENT_BUS_ISLOGGED, () => {
       this.isLogged = true;
       this.setProperties();
-      EventBus.$off(EVENT_BUS_ISLOGGED);
     });
+  },
+  destroyed(): void {
+    EventBus.$off(EVENT_BUS_ISLOGGED);
   },
   methods: {
     /**
@@ -146,6 +148,7 @@ export default Vue.extend({
       this.isLogged = false;
       this.links = [];
       AuthService.logout();
+      if(this.$router.history.current.name !== "home")
       this.$router.push({ name: "home" });
     },
   },

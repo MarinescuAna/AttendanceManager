@@ -19,6 +19,8 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
             {
                 throw new AlreadyExistsException("Course", request.Name);
             }
+            var userSpecialization = await unitOfWork.UserSpecializationRepository.GetAsync(u => u.UserID == request.Email && u.SpecializationID == request.SpecializationId)
+                ?? throw new NotFoundException("UserSpecialization", string.Empty);
 
             var newCourse = new Domain.Entities.Course
             {
@@ -26,7 +28,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
                 UpdatedOn = DateTime.UtcNow,
                 Name = request.Name,
                 IsDeleted = false,
-                UserSpecializationID = request.SpecializationId
+                UserSpecializationID = userSpecialization.UserSpecializationID
             };
 
             unitOfWork.CourseRepository.AddAsync(newCourse);

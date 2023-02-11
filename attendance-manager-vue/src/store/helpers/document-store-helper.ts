@@ -1,6 +1,6 @@
 
 import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
-import { DocumentFileInsertModule, DocumentFileViewModule } from "@/modules/document/document-file";
+import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document";
@@ -22,7 +22,7 @@ export class DocumentStore {
     /**
      * Getter for fetching all the documents from the store, not from the API
     */
-    public get documentFiles(): DocumentFileViewModule[] {
+    public get documentFiles(): AttendanceCollectionViewModule[] {
         return this.store.getters[`${documentNamespace}/documentFiles`];
     }
 
@@ -36,24 +36,24 @@ export class DocumentStore {
     /**
      * Load all the created documents from the API
     */
-    public loadCreatedDocuments(payload: string): Promise<void> {
-        return this.store.dispatch(`${documentNamespace}/loadCreatedDocuments`, payload);
+    public loadCreatedDocuments(): void {
+        this.store.dispatch(`${documentNamespace}/loadCreatedDocuments`);
     }
 
     /**
      * Load the current document from the API and update the store
      * @payload documentId
     */
-    public loadCurrentDocument(payload: string): Promise<void> {
-        return this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
+    public loadCurrentDocument(payload: string): void {
+        this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
     }
 
     /**
    * Add a new specialziation only
    * @test
    */
-    public addDocumentFile(payload: DocumentFileInsertModule): Promise<ResponseModule> {
-        return this.store.dispatch(`${documentNamespace}/addDocumentFile`, payload);
+    public addAttendanceCollection(payload: AttendanceCollectionInsertModule): Promise<ResponseModule> {
+        return this.store.dispatch(`${documentNamespace}/addAttendanceCollection`, payload);
     }
 
     /**

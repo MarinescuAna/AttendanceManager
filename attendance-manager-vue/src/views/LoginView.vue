@@ -10,7 +10,7 @@
           <validation-observer v-slot="{ handleSubmit, invalid }">
             <v-form @submit.prevent="handleSubmit(doLogin)">
               <validation-provider
-                rules="required|email"
+                :rules="rules.email"
                 name="email"
                 v-slot="{ errors }"
               >
@@ -26,7 +26,7 @@
               <validation-provider
                 name="password"
                 v-slot="{ errors }"
-                rules="required|min:4"
+                :rules="rules.password"
               >
                 <v-text-field
                   v-model="password"
@@ -60,38 +60,14 @@
 <script lang="ts">
 import Vue from "vue";
 import AuthService from "@/services/auth.service";
-import { extend } from "vee-validate";
-import { required, email, min } from "vee-validate/dist/rules";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
-
-/**
- * Validation for requied
- */
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
-
-/**
- * Validation for minimum length
- */
-extend("min", {
-  ...min,
-  message: "{_field_} must be greater than {length} characters",
-});
-
-/**
- * Validation for email
- */
-extend("email", {
-  ...email,
-  message: "Email must be valid",
-});
+import {rules} from "@/plugins/vee-validate";
 
 export default Vue.extend({
   data() {
     return {
+      rules,
       // Boolean for hidding or displaying the password
       showPassword: false,
       // Password

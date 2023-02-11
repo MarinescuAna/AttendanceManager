@@ -35,7 +35,7 @@ import { CourseType } from "@/shared/enums";
 import Vue from "vue";
 import DatePickerComponent from "@/components/shared-components/DatePickerComponent.vue";
 import TimePickerComponent from "@/components/shared-components/TimePickerComponent.vue";
-import { DocumentFileInsertModule } from "@/modules/document/document-file";
+import { AttendanceCollectionInsertModule } from "@/modules/document/attendance-collection";
 import storeHelper from "@/store/store-helper";
 export default Vue.extend({
   components: {
@@ -52,7 +52,7 @@ export default Vue.extend({
     };
   },
   computed: {
-    documentId(): string{
+    documentId(): number {
       return storeHelper.documentStore.documentDetails.documentId
     }
   },
@@ -62,11 +62,11 @@ export default Vue.extend({
   },
   methods: {
     async onSubmit(): Promise<void> {
-      let response = await storeHelper.documentStore.addDocumentFile({
+      let response = await storeHelper.documentStore.addAttendanceCollection({
         activityDateTime: `${this.date} ${this.time}`,
         courseType: this.selectedCourseType,
         documentId: this.documentId,
-      } as DocumentFileInsertModule);
+      } as AttendanceCollectionInsertModule);
 
       if (response.isSuccess) {
         this.$emit("save");

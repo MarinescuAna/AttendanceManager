@@ -10,9 +10,9 @@
         <validation-observer v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addDepartment)">
             <validation-provider
-              name="password"
+              name="department name"
               v-slot="{ errors }"
-              rules="required"
+              :rules="rules.required"
             >
               <v-text-field
                 v-model="department"
@@ -46,23 +46,14 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
+import { rules } from "@/plugins/vee-validate";
 import StoreHelper from "@/store/store-helper";
 import { ResponseModule } from "@/shared/modules";
-
-/**
- * Validation for requied
- */
-//TODO move this into a shared class
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
 
 export default Vue.extend({
   data() {
     return {
+      rules,
       // Department name
       department: "",
     };

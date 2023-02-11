@@ -16,5 +16,6 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
     {
         public required string Name { get; init; }
         public required int SpecializationId { get; init; }
+        public string? Email { get; set; }
     }
 }

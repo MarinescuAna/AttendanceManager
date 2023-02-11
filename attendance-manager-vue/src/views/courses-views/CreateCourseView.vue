@@ -14,7 +14,7 @@
             <validation-provider
               name="name"
               v-slot="{ errors }"
-              rules="required"
+              :rules="rules.required"
             >
               <v-text-field
                 v-model="name"
@@ -28,30 +28,22 @@
                 class="pa-6"
               />
             </validation-provider>
-            <validation-provider
-              rules="required"
-              name="selectedSpecializations"
-              v-slot="{ errors }"
-            >
-              <v-select
-                :items="specializations"
-                label="Specializations"
-                :error-messages="errors"
-                v-model="selectedSpecialization"
-                prepend-icon="mdi-file"
-                class="pa-6"
-                item-text="name"
-                item-value="id"
-                :disabled="specializations.length == 0"
-                return-object
-                required
-              ></v-select>
-            </validation-provider>
+            <v-select
+              :items="specializations"
+              label="Specializations"
+              v-model="selectedSpecialization"
+              prepend-icon="mdi-file"
+              class="pa-6"
+              item-text="name"
+              item-value="id"
+              :disabled="specializations.length == 0"
+              required
+            ></v-select>
             <v-row justify="center" class="pa-8">
               <v-btn
                 width="50%"
                 @click="addCourse"
-                :disabled="invalid"
+                :disabled="invalid || selectedSpecialization === 0"
                 large
                 class="blue-grey lighten-4"
                 >Submit</v-btn
@@ -67,37 +59,26 @@
     
     <script lang="ts">
 import Vue from "vue";
-import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
-import StoreHelper from "@/store/store-helper";
+import { rules } from "@/plugins/vee-validate";
 import storeHelper from "@/store/store-helper";
 import { CreateCourseModule } from "@/modules/course";
 import { SpecializationModule } from "@/modules/specialization";
 
-/**
- * Validation for requied
- */
-//TODO move this into a shared class
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
-
 export default Vue.extend({
   data() {
     return {
+      rules,
       // Course name
       name: "",
       // Selected specializations
-      selectedSpecialization: Object as () => SpecializationModule,
+      selectedSpecialization: 0,
     };
   },
-  computed:{
+  computed: {
     // All the specializations
-    specializations(): SpecializationModule[]{
-      console.log(storeHelper.userStore.currentUser.specializations)
+    specializations(): SpecializationModule[] {
       return storeHelper.userStore.currentUser.specializations;
-    }
+    },
   },
   methods: {
     /**
@@ -106,10 +87,12 @@ export default Vue.extend({
      * Error: display the message
      */
     async addCourse() {
-      const response = await StoreHelper.courseStore.addCourse({
+      const response = await storeHelper.courseStore.addCourse({
         name: this.name,
-        specializationId: this.selectedSpecialization.id,
-        specializationName: this.selectedSpecialization.name
+        specializationId: this.selectedSpecialization,
+        specializationName: this.specializations.find(
+          (x) => x.id == this.selectedSpecialization
+        )!.name,
       } as CreateCourseModule);
 
       if (response.isSuccess) {
@@ -123,7 +106,7 @@ export default Vue.extend({
      */
     onResetSpecializations(): void {
       this.specializations = [];
-      this.selectedSpecialization = Object as () => SpecializationModule;
+      this.selectedSpecialization = 0;
     },
   },
 });
