@@ -5,7 +5,7 @@
     :expanded.sync="expanded"
     item-key="id"
     dense
-    show-expand
+    :show-expand="expandDetails"
     class="elevation-1"
   >
     <template v-slot:top>
@@ -38,6 +38,11 @@ import { HeaderModule } from "./Headers";
 
 export default Vue.extend({
   props: {
+    // Use this to expand details for each row
+    expandDetails: {
+      type: Boolean,
+      default: true
+    },
     // The headers list
     headers: Array as () => HeaderModule[],
     // List with all the data

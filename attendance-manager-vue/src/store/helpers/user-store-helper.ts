@@ -18,18 +18,25 @@ export class UserStore {
     }
 
     /**
+     * Getter for current user from the store, not from the API
+     */
+    public get currentUser(): UserInformationViewModule {
+        return this.store.getters[`${userNamespace}/currentUser`];
+    }
+
+    /**
      * Load all the users from the API
      */
-    public loadUsers(): Promise<void> {
-        return this.store.dispatch(`${userNamespace}/loadUsers`);
+    public loadUsers(): void {
+        this.store.dispatch(`${userNamespace}/loadUsers`);
     }
 
     /**
      * Load all the users from the API
      * @todo remove this
      */
-    public loadCurrentUserInfo(payload: string): Promise<UserInformationViewModule> {
-        return this.store.dispatch(`${userNamespace}/loadCurrentUserInfo`, payload);
+    public loadCurrentUserInfo(): void {
+        this.store.dispatch(`${userNamespace}/loadCurrentUserInfo`);
     }
 
     /**

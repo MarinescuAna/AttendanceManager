@@ -20,6 +20,8 @@
                 v-model="name"
                 type="text"
                 label="Course name"
+                counter
+                maxlength="128"
                 prepend-icon="mdi-pencil"
                 :error-messages="errors"
                 required
@@ -71,7 +73,6 @@ import StoreHelper from "@/store/store-helper";
 import storeHelper from "@/store/store-helper";
 import { CreateCourseModule } from "@/modules/course";
 import { SpecializationModule } from "@/modules/specialization";
-import AuthService from "@/services/auth.service";
 
 /**
  * Validation for requied
@@ -87,15 +88,16 @@ export default Vue.extend({
     return {
       // Course name
       name: "",
-      // All the specializations
-      specializations: [] as SpecializationModule[],
       // Selected specializations
-      selectedSpecialization: Object as () => SpecializationModule
+      selectedSpecialization: Object as () => SpecializationModule,
     };
   },
-  async created(){
-    const token = AuthService.getDataFromToken();
-    this.specializations = (await storeHelper.userStore.loadCurrentUserInfo(token.email)).specializations;
+  computed:{
+    // All the specializations
+    specializations(): SpecializationModule[]{
+      console.log(storeHelper.userStore.currentUser.specializations)
+      return storeHelper.userStore.currentUser.specializations;
+    }
   },
   methods: {
     /**
@@ -104,12 +106,10 @@ export default Vue.extend({
      * Error: display the message
      */
     async addCourse() {
-      let token = AuthService.getDataFromToken();
       const response = await StoreHelper.courseStore.addCourse({
         name: this.name,
         specializationId: this.selectedSpecialization.id,
-        specializationName: this.selectedSpecialization.name,
-        email: token.email
+        specializationName: this.selectedSpecialization.name
       } as CreateCourseModule);
 
       if (response.isSuccess) {
@@ -121,10 +121,10 @@ export default Vue.extend({
     /**
      * Call this function whenever you reset the department selector
      */
-    onResetSpecializations(): void{
+    onResetSpecializations(): void {
       this.specializations = [];
-      this.selectedSpecialization = Object as () => SpecializationModule
-    }
+      this.selectedSpecialization = Object as () => SpecializationModule;
+    },
   },
 });
 </script>

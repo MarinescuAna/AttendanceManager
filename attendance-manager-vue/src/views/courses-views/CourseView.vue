@@ -14,7 +14,7 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12">
-        <ManagementTableComponent :dataSource="courses" :headers="headers" :title="'Courses'" :type="type" />
+        <ManagementTableComponent :dataSource="courses" :headers="headers" :title="'Courses'" :type="type" :expandDetails="false"/>
       </v-col>
     </v-row>
   </v-container>
@@ -27,7 +27,6 @@ import storeHelper from "@/store/store-helper";
 import { CoursesHeader } from "@/components/shared-components/Headers";
 import { ManagementDataType } from "@/shared/enums";
 import { CourseViewModule } from "@/modules/course";
-import AuthService from "@/services/auth.service";
 
 export default Vue.extend({
   components: {
@@ -35,14 +34,18 @@ export default Vue.extend({
   },
   data(){
     return {
-      courses: [] as CourseViewModule[],
       headers: CoursesHeader,
       type: ManagementDataType.Course
     };
   },
+  computed:{
+    courses(): CourseViewModule[]{
+      return storeHelper.courseStore.courses;
+    }
+  },
   async created(){
-    var token = AuthService.getDataFromToken();
-    this.courses = await storeHelper.courseStore.loadCourses(token.email);
+    await storeHelper.courseStore.loadCourses();
+    await storeHelper.userStore.loadCurrentUserInfo()
   }
 });
 </script>

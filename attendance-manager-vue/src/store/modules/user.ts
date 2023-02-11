@@ -32,6 +32,12 @@ const getters = {
      */
     users(state): UserViewModule[] {
         return state.users;
+    },
+    /**
+     * Get current user from store
+     */
+    currentUser(state): UserInformationViewModule {
+        return state.currentUser;
     }
 };
 
@@ -58,7 +64,7 @@ const mutations = {
     /**
      * Reset the state with the initial values
      */
-    _resetStore(state): void{
+    _resetStore(state): void {
         Logger.logInfo('Reset the User store to the initial state')
         Object.assign(state, initialize());
     }
@@ -79,14 +85,13 @@ const actions = {
      * Load current user information
      * @todo remove the id
      */
-    async loadCurrentUserInfo({ commit, state }, payload: string): Promise<UserInformationViewModule> {
+    async loadCurrentUserInfo({ commit, state }): Promise<void> {
         if (state.currentUser != null) {
             return state.currentUser;
         }
 
-        const result: UserInformationViewModule = (await https.get('user/current_user_info?email=' + payload)).data;
+        const result: UserInformationViewModule = (await https.get(`${USER_CONTROLLER}/current_user_info`)).data;
         commit("_addCurrentUser", result);
-        return result;
     },
     /**
      * Add a new user into the database and initialize the store

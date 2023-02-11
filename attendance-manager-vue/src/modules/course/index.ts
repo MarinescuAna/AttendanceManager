@@ -5,7 +5,7 @@ import { TableModule } from "../shared";
  */
 export interface CourseViewModule extends TableModule {
     name: string;
-    specializationId:string;
+    specializationId:number;
     specializationName:string;
  }
  /**
@@ -13,17 +13,8 @@ export interface CourseViewModule extends TableModule {
  */
 export interface CreateCourseModule {
     name: string;
-    specializationId: string;
+    specializationId: number;
     specializationName: string;
-    email: string;
-}
- /**
- * Used for sending the new info about course to server
- */
- export interface CreateCourseDto {
-    name: string;
-    specializationId: string;
-    email: string;
 }
  /**
  * Used for updating the course name

@@ -7,7 +7,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
     /// 
     /// Params:
     /// course name
-    /// userSpecializationId
+    /// specializationId
     /// 
     /// Return:
     /// The id of the new course
@@ -15,6 +15,6 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
     public sealed class CreateCourseCommand : IRequest<int>
     {
         public required string Name { get; init; }
-        public required int UserSpecializationId { get; init; }
+        public required int SpecializationId { get; init; }
     }
 }

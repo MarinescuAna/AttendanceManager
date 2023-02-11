@@ -15,7 +15,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
         public async Task<int> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
             // Check if the name is unique
-            if (await unitOfWork.CourseRepository.GetAsync(c => c.UserSpecializationID == request.UserSpecializationId && c.Name == request.Name && !c.IsDeleted) != null)
+            if (await unitOfWork.CourseRepository.GetAsync(c => c.UserSpecializationID == request.SpecializationId && c.Name == request.Name && !c.IsDeleted) != null)
             {
                 throw new AlreadyExistsException("Course", request.Name);
             }
@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
                 UpdatedOn = DateTime.UtcNow,
                 Name = request.Name,
                 IsDeleted = false,
-                UserSpecializationID = request.UserSpecializationId
+                UserSpecializationID = request.SpecializationId
             };
 
             unitOfWork.CourseRepository.AddAsync(newCourse);

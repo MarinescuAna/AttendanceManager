@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { CourseViewModule, CreateCourseModule, UpdateCourseModule, CreateCourseDto } from "@/modules/course";
+import { CourseViewModule, CreateCourseModule, UpdateCourseModule } from "@/modules/course";
 import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 import {Logger} from "@/plugins/custom-plugins/logging";
 import https from "@/plugins/axios";
+import { COURSE_CONTROLLER } from "@/shared/constants";
 
 //state type
 export interface CourseState {
@@ -27,11 +28,6 @@ const getters = {
      * Gets courses from the store
      */
     courses(state): CourseViewModule[] {
-
-        if (state.courses.length == 0) {
-            actions.loadCourses;
-        }
-
         return state.courses;
     }
 };
@@ -42,7 +38,6 @@ const mutations = {
      * Update the entire list of courses existed
      */
     _courses(state, courses: CourseViewModule[]): void {
-        Logger.logInfo('Initialize the course store.')
         state.courses = courses;
     },
     /**
@@ -71,7 +66,6 @@ const mutations = {
      * Reset the state with the initial values
      */
     _resetStore(state): void{
-        Logger.logInfo('Reset the Course store to the initial state')
         Object.assign(state, initialize());
     }
 };
@@ -87,15 +81,13 @@ const actions = {
     /**
      * Load all the courses defined by the current user, not all courses
      */
-    async loadCourses({ commit, state }, payload: string): Promise<CourseViewModule[]> {
+    async loadCourses({ commit, state }): Promise<void> {
         if(state.courses.length !=0){
             return state.courses;
         }
         
-        Logger.logInfo('Call API to load all the courses.')
-        const courses: CourseViewModule[] = (await https.get('course/courses?Email='+payload)).data;
+        const courses: CourseViewModule[] = (await https.get(`${COURSE_CONTROLLER}/courses`)).data;
         commit("_courses", courses);
-        return courses;
     },
     /**
      * Add a new course
@@ -105,11 +97,7 @@ const actions = {
             error: "",
             isSuccess: true
         };
-        const result = await https.post(`course/create_course`, {
-            name: payload.name,
-            specializationId: payload.specializationId,
-            email: payload.email
-        } as CreateCourseDto)
+        const result = await https.post(`${COURSE_CONTROLLER}/create_course`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -133,7 +121,7 @@ const actions = {
             isSuccess: true
         };
 
-        await https.patch(`course/delete_course?id=${payload}`)
+        await https.patch(`${COURSE_CONTROLLER}/delete_course?id=${payload}`)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
@@ -152,7 +140,7 @@ const actions = {
             isSuccess: true
         };
 
-        await https.patch(`course/update_Course`, payload)
+        await https.patch(`${COURSE_CONTROLLER}/update_Course`, payload)
             .catch(error => {
                 response = ResponseHandler.errorResponseHandler(error);
             });
