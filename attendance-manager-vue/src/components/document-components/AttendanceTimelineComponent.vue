@@ -9,61 +9,92 @@
                 v-for="(item, index) in documentFiles"
                 :key="item.attendanceCollectionId"
                 :class="index % 2 == 0 ? 'text-right' : ''"
+                color="black"
               >
-                <v-btn text>
+                <v-btn
+                  text
+                  @click="onOpenAttendanceDialog(item.attendanceCollectionId)"
+                >
                   {{ item.activityTime }} - {{ item.courseType }}
-                </v-btn></v-timeline-item
-              >
+                </v-btn>
+              </v-timeline-item>
             </v-timeline>
+            <v-row justify="center" class="mt-2">
+              <v-btn color="black" dark @click="addAttendanceDateDialog = true">
+                Add attendance
+              </v-btn>
+              <v-dialog
+                v-if="addAttendanceDateDialog"
+                v-model="addAttendanceDateDialog"
+                persistent
+                max-width="50%"
+              >
+                <AddAttendanceDateDialog
+                  @close="oncloseaddAttendanceDateDialog"
+                  @save="oncloseaddAttendanceDateDialog"
+                />
+              </v-dialog>
+            </v-row>
+            <v-dialog
+              v-if="addAttendanceDialog"
+              v-model="addAttendanceDialog"
+              fullscreen
+              hide-overlay
+              scrollable
+            >
+              <AddAttendanceDialog
+                :attendanceCollectionId="collectionId"
+                @close-dialog="addAttendanceDialog = false"
+              />
+            </v-dialog>
           </v-col>
           <div v-else>
             <h3 class="pa-9">There is not file available!</h3>
           </div>
         </v-row>
-        <template>
-          <v-row justify="center">
-            <v-dialog v-model="addAttendanceDialog" persistent max-width="50%">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                  Add attendance
-                </v-btn>
-              </template>
-              <AddAttendanceDialog
-                :documentId="documentId"
-                @close="oncloseAddAttendanceDialog"
-                @save="oncloseAddAttendanceDialog"
-              />
-            </v-dialog>
-          </v-row> </template></v-card-text></v-card
-  ></v-container>
+      </v-card-text>
+    </v-card></v-container
+  >
 </template>
 
 <script lang="ts">
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
+import AddAttendanceDateDialog from "../document-components/AddAttendanceDateDialog.vue";
 import AddAttendanceDialog from "../document-components/AddAttendanceDialog.vue";
 
 export default Vue.extend({
   components: {
     AddAttendanceDialog,
+    AddAttendanceDateDialog,
   },
   data() {
     return {
+      // Display dialog for adding a new timeline
+      addAttendanceDateDialog: false,
+      // Display dialog for adding attendances
       addAttendanceDialog: false,
+      // CollectionId which is passed to the dialog
+      collectionId: 0,
     };
   },
   computed: {
     documentFiles(): AttendanceCollectionViewModule[] {
       return storeHelper.documentStore.documentFiles;
     },
-    documentId(): number{
+    documentId(): number {
       return storeHelper.documentStore.documentDetails.documentId;
-    }
+    },
   },
   methods: {
-    oncloseAddAttendanceDialog(): void {
-      this.addAttendanceDialog = false;
+    oncloseaddAttendanceDateDialog(): void {
+      this.addAttendanceDateDialog = false;
+    },
+
+    onOpenAttendanceDialog(collectionId: number): void {
+      this.addAttendanceDialog = true;
+      this.collectionId = collectionId;
     },
   },
 });

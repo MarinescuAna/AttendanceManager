@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar flat>
+    <v-toolbar flat color="transparent">
       <v-app-bar-nav-icon
         @click.stop="drawerActivator = !drawerActivator"
       ></v-app-bar-nav-icon>
@@ -16,28 +16,46 @@
     </v-toolbar>
     <v-navigation-drawer
       v-model="drawerActivator"
-      class="blue-grey lighten-4"
+      class="blue-grey lighten-4 navigation-drawer-style"
       absolute
       temporary
-      width-max="20%"
       width="auto"
     >
-      <v-list>
-        <v-container justify="center" v-if="isLogged">
+    <v-row>
+      <v-container justify="center">
+        <!--Display title-->
+        <v-container v-if="isLogged">
           <h3 class="text-uppercase">{{ name }}</h3>
           <h4>{{ email }}</h4>
           <h4>{{ code }}</h4>
         </v-container>
-        <MenuItemComponent :item="signInItem" v-if="!isLogged" />
-        <v-list-item router @click="logout" v-if="isLogged">
-          <v-list-item-icon>
-            <v-icon>mdi-exit-to-app</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Sign Out</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
+        <v-container v-else>
+          <h3 class="text-uppercase">
+            <span class="font-weight-light">Attendance</span>
+            <span>Manager</span>
+          </h3>
+        </v-container>
+      </v-container>
+    </v-row>
+      <!--Login or Logout button-->
+      <v-container v-if="!isLogged">
+        <v-btn
+          @click="onRedirectToLogin"
+          title="Login"
+          class="orange lighten-3"
+          block
+        >
+          SIGN IN
+        </v-btn>
+      </v-container>
+      <v-container v-else>
+        <v-btn @click="logout" class="orange lighten-3" block> SIGN OUT </v-btn>
+      </v-container>
+
+      <v-divider></v-divider>
+
+      <!--links-->
+      <v-list>
         <MenuItemListComponent
           v-for="link in links"
           :key="link.title"
@@ -48,6 +66,12 @@
   </div>
 </template>
 
+<style>
+.navigation-drawer-style {
+  min-width: 10%;
+}
+</style>
+
 <script lang="ts">
 import { Role } from "@/shared/enums";
 import AuthService from "@/services/auth.service";
@@ -55,23 +79,15 @@ import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
 import MenuItemListComponent from "./MenuItemListComponent.vue";
-import MenuItemComponent from "./MenuItemComponent.vue";
-import { links, MenuChildModel, MenuItemListModel } from "./ItemList";
+import { MenuItems, MenuItemListModel } from "./ItemList";
 
 export default Vue.extend({
   name: "MenuComponent",
   components: {
     MenuItemListComponent,
-    MenuItemComponent,
   },
   data() {
     return {
-      // Sign In button details
-      signInItem: {
-        icon: "mdi-login",
-        route: "login",
-        title: "Sign In",
-      } as MenuChildModel,
       // Username
       name: "",
       // Code
@@ -86,14 +102,8 @@ export default Vue.extend({
       drawerActivator: false,
     };
   },
-  /**
-   * Check if the user is logged and display the proper buttons in the navbar
-   */
   created(): void {
-    this.isLogged = AuthService.isLogged();
-    if (this.isLogged) {
-      this.setProperties();
-    }
+    this.setProperties();
   },
   mounted: function () {
     /**
@@ -109,35 +119,20 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * Use this method to initialize the list of links
-     */
-    filterLinksByRole(role: Role): void {
-      links.forEach((cr) => {
-        if (cr.role.toString() == Role[role] || cr.role == Role.All) {
-          let newLink = cr;
-          if (cr.children.length > 0) {
-            newLink.children = cr.children.filter(
-              (child) => child.role.toString() == Role[role]
-            );
-          }
-          this.links.push(newLink);
-        }
-      });
-    },
-
-    /**
      * Use this method in order to set the page properties
      */
     setProperties(): void {
       const data = AuthService.getDataFromToken();
 
       if (data === null) {
-        this.filterLinksByRole(Role.All);
+        this.links = MenuItems.getLinkListByRole(Role.All);
+        this.isLogged = false;
       } else {
+        this.isLogged = true;
         this.name = data.name;
         this.code = data.code;
         this.email = data.email;
-        this.filterLinksByRole(data.role);
+        this.links = MenuItems.getLinkListByRole(Role[data.role]);
       }
     },
 
@@ -146,10 +141,18 @@ export default Vue.extend({
      */
     logout(): void {
       this.isLogged = false;
-      this.links = [];
+      this.links = MenuItems.getLinkListByRole(Role.All);
       AuthService.logout();
-      if(this.$router.history.current.name !== "home")
-      this.$router.push({ name: "home" });
+      this.onRedirectToLogin();
+    },
+
+    /**
+     * Use this method to redirect the user to login page
+     */
+    onRedirectToLogin(): void {
+      if (this.$route.name !== "login") {
+        this.$router.push({ name: "login" });
+      }
     },
   },
 });

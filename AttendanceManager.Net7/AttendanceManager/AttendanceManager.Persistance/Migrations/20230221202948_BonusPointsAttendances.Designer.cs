@@ -4,6 +4,7 @@ using AttendanceManager.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttendanceManager.Persistance.Migrations
 {
     [DbContext(typeof(AttendanceManagerDbContext))]
-    partial class AttendanceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230221202948_BonusPointsAttendances")]
+    partial class BonusPointsAttendances
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,14 +39,8 @@ namespace AttendanceManager.Persistance.Migrations
                     b.Property<int>("BonusPoints")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsPresent")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserID")
                         .IsRequired()
@@ -290,13 +287,13 @@ namespace AttendanceManager.Persistance.Migrations
                             Email = "admin@admin.ro",
                             AccountConfirmed = true,
                             Code = "-",
-                            CreatedOn = new DateTime(2023, 2, 21, 22, 38, 11, 115, DateTimeKind.Local).AddTicks(4020),
+                            CreatedOn = new DateTime(2023, 2, 21, 22, 29, 48, 180, DateTimeKind.Local).AddTicks(7934),
                             EnrollmentYear = 2023,
                             FullName = "Administrator",
                             IsDeleted = false,
                             Password = "system123",
                             Role = 0,
-                            UpdatedOn = new DateTime(2023, 2, 21, 22, 38, 11, 115, DateTimeKind.Local).AddTicks(4071)
+                            UpdatedOn = new DateTime(2023, 2, 21, 22, 29, 48, 180, DateTimeKind.Local).AddTicks(8011)
                         });
                 });
 

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-btn-toggle>
-        <v-btn class="blue-grey lighten-4" :to="{ name: 'create-course' }"
+        <v-btn class="orange lighten-3" :to="{ name: 'create-course' }"
           >Add new course</v-btn
         >
       </v-btn-toggle>

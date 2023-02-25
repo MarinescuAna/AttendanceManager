@@ -1,84 +1,153 @@
 <template>
-    <v-card>
-      <v-card-title>
-        <span class="text-h5">Add attendances</span>
-      </v-card-title>
-      <v-card-text>
-          <v-row class="pa-4">
-            <v-col cols="12" sm="6" md="4">
-              <DatePickerComponent @save="getDate" />
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <TimePickerComponent @save="getTime" />
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-select
-                v-model="selectedCourseType"
-                :items="courseType"
-                label="Course type"
-                required
-              ></v-select>
-            </v-col>
-          </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="$emit('close')">
-          Close
-        </v-btn>
-        <v-btn color="blue darken-1" text @click="onSubmit"> Save </v-btn>
-      </v-card-actions>
-    </v-card>
+  <v-card>
+    <v-toolbar class="blue-grey lighten-4" height="100">
+      <v-btn icon @click="onCloseDialog()">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <v-toolbar-title>Attendances</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <DotsMenuComponent />
+    </v-toolbar>
+    <v-card-text>
+      <v-btn
+        class="blue-grey lighten-2 ma-2"
+        @click="dialog2 = !dialog2"
+        disabled
+      >
+        Upload attendance
+      </v-btn>
+      <v-btn class="blue-grey lighten-2 ma-2" @click="dialog3 = !dialog3">
+        Generate code
+      </v-btn>
+      <v-btn
+        class="blue-grey lighten-2 ma-2"
+        title="Reload only the attendances, not the bonus points!"
+        @click="onReloadAttendances"
+      >
+        <v-icon>mdi-cached</v-icon>
+      </v-btn>
+
+      <!--Attendance table-->
+      <v-simple-table style="width: 40%" v-if="students.length !== 0">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Name</th>
+              <th class="text-left">Last modifyed</th>
+              <th class="text-left">Attendance</th>
+              <th class="text-left">Bonus Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in students" :key="item.attendanceID">
+              <td>{{ item.userID }}</td>
+              <td>{{ item.updateOn }}</td>
+              <td>
+                <v-checkbox v-model="item.isPresent"></v-checkbox>
+              </td>
+              <td>
+                <v-text-field
+                  type="number"
+                  style="width: 40px"
+                  v-model="item.bonusPoints"
+                ></v-text-field>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+      <div v-else>
+        <h3>
+          There is no student here. Recreate the document or reload the page.
+        </h3>
+      </div>
+    </v-card-text>
+  </v-card>
 </template>
+
 <script lang="ts">
-import { CourseType } from "@/shared/enums";
+import {
+  StudentAttendanceModule,
+  StudentAttendanceInsertModule,
+} from "@/modules/document/attendance";
+import AttendanceService from "@/services/attendance.service";
 import Vue from "vue";
-import DatePickerComponent from "@/components/shared-components/DatePickerComponent.vue";
-import TimePickerComponent from "@/components/shared-components/TimePickerComponent.vue";
-import { AttendanceCollectionInsertModule } from "@/modules/document/attendance-collection";
-import storeHelper from "@/store/store-helper";
+import DotsMenuComponent from "../shared-components/DotsMenuComponent.vue";
+
 export default Vue.extend({
   components: {
-    DatePickerComponent,
-    TimePickerComponent,
+    DotsMenuComponent,
+  },
+  props: {
+    attendanceCollectionId: Number,
   },
   data() {
     return {
-      date: "",
-      time: null,
-      dialog: false,
-      courseType: [] as string[],
-      selectedCourseType: "",
+      dialog2: false,
+      dialog3: false,
+      initStudents: [] as StudentAttendanceModule[],
+      students: [] as StudentAttendanceModule[],
+      saveChanges: false,
     };
   },
-  computed: {
-    documentId(): number {
-      return storeHelper.documentStore.documentDetails.documentId
-    }
-  },
-  created() {
-    let types = Object.values(CourseType) as string[];
-    this.courseType = types.splice(0, types.length / 2);
+  async created(): Promise<void> {
+    this.students =
+      await AttendanceService.getStudentsAttendancesByCollectionIdAsync(
+        this.attendanceCollectionId
+      );
+    this.students.forEach((x) => this.initStudents.push(Object.assign({}, x)));
   },
   methods: {
-    async onSubmit(): Promise<void> {
-      let response = await storeHelper.documentStore.addAttendanceCollection({
-        activityDateTime: `${this.date} ${this.time}`,
-        courseType: this.selectedCourseType,
-        documentId: this.documentId,
-      } as AttendanceCollectionInsertModule);
+    /**
+     * Reload only the attendances not the bouns points
+     * @test This should be tested with students and generated code
+     */
+    async onReloadAttendances(): Promise<void> {
+      let result =
+        await AttendanceService.getStudentsAttendancesByCollectionIdAsync(
+          this.attendanceCollectionId
+        );
 
-      if (response.isSuccess) {
-        this.$emit("save");
-      } else {
-        window.alert(response.error);
+      result.forEach((element) => {
+        this.students.find(
+          (x) => x.attendanceID == element.attendanceID
+        )!.isPresent = element.isPresent;
+      });
+    },
+    /**
+     * Before closing the dialog, save the changes in case that are
+     */
+    async onCloseDialog(): Promise<void> {
+      let studentsChanged: StudentAttendanceInsertModule[] = [];
+
+      this.students.forEach((student) => {
+        let oldStudent = this.initStudents.find(
+          (x) => x.attendanceID === student.attendanceID
+        );
+
+        if (
+          oldStudent?.bonusPoints !== student.bonusPoints ||
+          oldStudent.isPresent !== student.isPresent
+        ) {
+          studentsChanged.push({
+            attendanceID: student.attendanceID,
+            bonusPoints: student.bonusPoints,
+            isPresent: student.isPresent,
+          } as StudentAttendanceInsertModule);
+        }
+      });
+      console.log(studentsChanged);
+
+      if (studentsChanged.length !== 0) {
+        const response = await AttendanceService.addStudentsAttendances(
+          studentsChanged
+        );
+
+        if (!response.isSuccess) {
+          alert("Something went wrong and not all the attendances was saved");
+        }
       }
-    },
-    getDate(date): void {
-      this.date = date;
-    },
-    getTime(time): void {
-      this.time = time;
+      this.$emit("close-dialog");
     },
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="orange lighten-2">
+    <v-card class="orange lighten-3">
       <v-card-title class="pa-7">
         <h2>Create new course</h2>
         <v-spacer></v-spacer>

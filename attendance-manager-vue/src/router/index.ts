@@ -9,6 +9,7 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
+    name: '/',
     redirect: "/home"
   },
   {

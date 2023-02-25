@@ -23,3 +23,4 @@ export const USER_CONTROLLER = "user";
 export const COURSE_CONTROLLER = "course";
 export const DOCUMENT_CONTROLLER = "document";
 export const ATTENDANCE_COLLECTION_CONTROLLER = "attendance_collection";
+export const ATTENDANCE_CONTROLLER = "attendance";

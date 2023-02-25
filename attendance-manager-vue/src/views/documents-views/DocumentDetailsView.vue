@@ -1,13 +1,13 @@
 <template>
   <v-card>
-    <v-toolbar class="blue-grey lighten-4">
-      <v-toolbar-title>{{ documentInfo.title }}</v-toolbar-title>
+    <v-toolbar class="black">
+      <v-toolbar-title class="white--text">{{ documentInfo.title }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="$router.go(-1)" icon>
-        <v-icon>mdi-exit-run</v-icon>
+      <v-btn @click="$router.go(-1)" dark icon>
+        <v-icon>mdi-close</v-icon>
       </v-btn>
       <template v-slot:extension>
-        <v-tabs v-model="tabs" centered>
+        <v-tabs v-model="tabs" dark centered>
           <v-tab v-for="n in ['Attendances', 'About']" :key="n">
             {{ n }}
           </v-tab>

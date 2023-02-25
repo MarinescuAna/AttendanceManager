@@ -1,8 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
