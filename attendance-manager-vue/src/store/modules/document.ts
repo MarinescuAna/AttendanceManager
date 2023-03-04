@@ -4,6 +4,7 @@ import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
 import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import { CourseType } from "@/shared/enums";
 import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 
@@ -86,6 +87,16 @@ const mutations = {
     */
     _addAttendanceCollection(state, payload: AttendanceCollectionViewModule): void {
         state.currentDocument.documentFiles.push(payload);
+        
+        if(payload.courseType == CourseType[CourseType.Laboratory]){
+            state.currentDocument.documentDetails.noLaboratories++;
+        }else {
+            if(payload.courseType == CourseType[CourseType.Lesson]){
+                state.currentDocument.documentDetails.noLessons++;
+            }else{
+                state.currentDocument.documentDetails.noSeminaries++;
+            }
+        }
     },
     /**
      * Reset the state with the initial values

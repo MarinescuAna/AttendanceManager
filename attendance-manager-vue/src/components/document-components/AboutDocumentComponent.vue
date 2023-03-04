@@ -15,15 +15,15 @@
       </p>
       <p>
         <strong>Maximum number of lessons that will be held:</strong>
-        {{ document.maxNoLessons }}
+        {{ document.maxNoLessons }}({{ document.noLessons }} held by now)
       </p>
       <p>
         <strong>Maximum number of laboratories that will be held:</strong>
-        {{ document.maxNoLaboratories }}
+        {{ document.maxNoLaboratories }}({{ document.noLaboratories }} held by now)
       </p>
       <p>
         <strong>Maximum number of seminaries that will be held:</strong>
-        {{ document.maxNoSeminaries }}
+        {{ document.maxNoSeminaries }}({{ document.noSeminaries }} held by now)
       </p>
     </v-card-text>
   </v-container>

@@ -26,6 +26,9 @@ export interface DocumentFullViewModule{
     maxNoLessons: number;
     maxNoLaboratories: number;
     maxNoSeminaries: number;
+    noLessons: number;
+    noLaboratories: number;
+    noSeminaries: number;
     creationDate: string;
     updateDate: string;
 }

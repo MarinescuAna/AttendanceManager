@@ -8,7 +8,7 @@
       </v-btn>
       <template v-slot:extension>
         <v-tabs v-model="tabs" dark centered>
-          <v-tab v-for="n in ['Attendances', 'About']" :key="n">
+          <v-tab v-for="n in ['Attendances', 'Total Attendances', 'About']" :key="n">
             {{ n }}
           </v-tab>
         </v-tabs>
@@ -18,6 +18,9 @@
     <v-tabs-items v-model="tabs">
       <v-tab-item>
         <AttendanceTimelineComponent />
+      </v-tab-item>
+      <v-tab-item>
+        <TotalAttendancesComponent />
       </v-tab-item>
       <v-tab-item>
         <AboutDocumentComponent />
@@ -31,12 +34,14 @@ import Vue from "vue";
 import { DocumentFullViewModule } from "@/modules/document";
 import AboutDocumentComponent from "@/components/document-components/AboutDocumentComponent.vue";
 import AttendanceTimelineComponent from "@/components/document-components/AttendanceTimelineComponent.vue";
+import TotalAttendancesComponent from "@/components/document-components/TotalAttendancesComponent.vue";
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
   components: {
     AttendanceTimelineComponent,
     AboutDocumentComponent,
+    TotalAttendancesComponent
   },
   data() {
     return {

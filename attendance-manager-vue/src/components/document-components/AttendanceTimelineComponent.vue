@@ -19,22 +19,7 @@
                 </v-btn>
               </v-timeline-item>
             </v-timeline>
-            <v-row justify="center" class="mt-2">
-              <v-btn color="black" dark @click="addAttendanceDateDialog = true">
-                Add attendance
-              </v-btn>
-              <v-dialog
-                v-if="addAttendanceDateDialog"
-                v-model="addAttendanceDateDialog"
-                persistent
-                max-width="50%"
-              >
-                <AddAttendanceDateDialog
-                  @close="oncloseaddAttendanceDateDialog"
-                  @save="oncloseaddAttendanceDateDialog"
-                />
-              </v-dialog>
-            </v-row>
+
             <v-dialog
               v-if="addAttendanceDialog"
               v-model="addAttendanceDialog"
@@ -52,9 +37,24 @@
             <h3 class="pa-9">There is not file available!</h3>
           </div>
         </v-row>
-      </v-card-text>
-    </v-card></v-container
-  >
+        <v-row justify="center" class="mt-2">
+          <v-btn color="black" dark @click="addAttendanceDateDialog = true">
+            Add attendance
+          </v-btn>
+          <v-dialog
+            v-if="addAttendanceDateDialog"
+            v-model="addAttendanceDateDialog"
+            persistent
+            max-width="50%"
+          >
+            <AddAttendanceDateDialog
+              @close="oncloseaddAttendanceDateDialog"
+              @save="oncloseaddAttendanceDateDialog"
+            />
+          </v-dialog>
+        </v-row>
+      </v-card-text> </v-card
+  ></v-container>
 </template>
 
 <script lang="ts">

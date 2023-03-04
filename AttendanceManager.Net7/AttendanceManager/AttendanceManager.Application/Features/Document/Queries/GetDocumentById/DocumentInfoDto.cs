@@ -8,6 +8,9 @@
         public required int MaxNoSeminaries { get; init; }
         public required int MaxNoLaboratories { get; init; }
         public required int MaxNoLessons { get; init; }
+        public required int NoSeminaries { get; init; }
+        public required int NoLaboratories { get; init; }
+        public required int NoLessons { get; init; }
         public required int CourseId { get; init; }
         public required string CourseName { get; init; }
         public required int SpecializationId { get; set; }

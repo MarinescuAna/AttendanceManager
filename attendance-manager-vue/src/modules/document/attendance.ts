@@ -19,3 +19,13 @@ export interface StudentAttendanceInsertModule{
     bonusPoints: number;
     isPresent: boolean;
 }
+
+export interface TotalAttendanceModule{
+    userID: string;
+    userName: string;
+    code: string;
+    bonusPoints: number;
+    courseAttendances: number;
+    laboratoryAttendances: number;
+    seminaryAttendances: number;
+}

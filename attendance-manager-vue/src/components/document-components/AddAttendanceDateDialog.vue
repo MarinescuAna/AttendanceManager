@@ -37,6 +37,7 @@ import DatePickerComponent from "@/components/shared-components/DatePickerCompon
 import TimePickerComponent from "@/components/shared-components/TimePickerComponent.vue";
 import { AttendanceCollectionInsertModule } from "@/modules/document/attendance-collection";
 import storeHelper from "@/store/store-helper";
+
 export default Vue.extend({
   components: {
     DatePickerComponent,
@@ -57,8 +58,15 @@ export default Vue.extend({
     }
   },
   created() {
-    let types = Object.values(CourseType) as string[];
-    this.courseType = types.splice(0, types.length / 2);
+    if(storeHelper.documentStore.documentDetails.noLaboratories<storeHelper.documentStore.documentDetails.maxNoLaboratories){
+      this.courseType.push(CourseType[CourseType.Laboratory]);
+    }
+    if(storeHelper.documentStore.documentDetails.noLessons<storeHelper.documentStore.documentDetails.maxNoLessons){
+      this.courseType.push(CourseType[CourseType.Lesson]);
+    }
+    if(storeHelper.documentStore.documentDetails.noSeminaries<storeHelper.documentStore.documentDetails.maxNoSeminaries){
+      this.courseType.push(CourseType[CourseType.Seminary]);
+    }
   },
   methods: {
     async onSubmit(): Promise<void> {

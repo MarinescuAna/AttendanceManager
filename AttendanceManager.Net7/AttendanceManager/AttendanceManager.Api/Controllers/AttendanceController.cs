@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendances;
 using AttendanceManager.Application.Features.Attendance.Queries.GetAttendanceByAttendanceCollectionID;
+using AttendanceManager.Application.Features.Attendance.Queries.GetTotalAttendancesByDocumentId;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,17 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> UpdateAttendances([FromBody] UpdateAttendancesCommand command)
         {
             return Ok(await mediator.Send(command));
+        }
+
+
+        /// <summary>
+        /// Get all attandances
+        /// </summary>
+        /// <returns>Success: list with all attendances</returns>
+        [HttpGet("total_attendances_by_document_id")]
+        public async Task<IActionResult> GetTotalAttendancesByDocumentId(int documentId)
+        {
+            return Ok(await mediator.Send(new GetTotalAttendancesByDocumentIdQuery() { DocumentId = documentId }));
         }
     }
 }

@@ -1,7 +1,7 @@
 
 import https from "@/plugins/axios";
 import { ATTENDANCE_CONTROLLER } from "@/shared/constants";
-import { StudentAttendanceInsertModule, StudentAttendanceModule } from "@/modules/document/attendance";
+import { StudentAttendanceInsertModule, StudentAttendanceModule, TotalAttendanceModule } from "@/modules/document/attendance";
 import { ResponseModule } from "@/shared/modules";
 import ResponseHandler from "@/error-handler/error-handler";
 
@@ -24,5 +24,10 @@ export default class AttendanceService {
                 response = ResponseHandler.errorResponseHandler(error);
             });
         return response;
+    }
+
+    
+    static async getTotalAttendancesBtDocumentId(payload: number): Promise<TotalAttendanceModule[]> {
+        return (await https.get(`${ATTENDANCE_CONTROLLER}/total_attendances_by_document_id?documentId=${payload}`)).data;
     }
 }

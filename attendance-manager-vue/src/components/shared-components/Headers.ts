@@ -48,3 +48,36 @@ export const CoursesHeader: HeaderModule[] = [
         value: "specializationName",
     }
 ];
+/**
+ * Headers for total attendances tabele
+ */
+export const TotalAttendancesHeader: HeaderModule[] =[
+    {
+        text:"Code",
+        value: "code"
+    },
+    {
+        text: "Fullname",
+        value: "userName",
+    },
+    {
+        text: "Email",
+        value: "userID",
+    },
+    {
+        text: "Course Attendances",
+        value: "courseAttendances",
+    },
+    {
+        text: "Laboratory Attendances",
+        value: "laboratoryAttendances",
+    },
+    {
+        text: "Seminary Attendances",
+        value: "seminaryAttendances",
+    },
+    {
+        text: "Bonus Points",
+        value: "bonusPoints",
+    },
+];

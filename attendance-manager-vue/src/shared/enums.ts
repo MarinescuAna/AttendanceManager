@@ -16,6 +16,7 @@ export enum ManagementDataType{
     Users = 0,
     Department = 1,
     Course = 2,
+    TotalAttendance = 3,
 }
 
 export enum CourseType{
