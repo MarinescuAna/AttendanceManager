@@ -1,24 +1,23 @@
 <template>
-  <v-container fluid>
-    <v-row dense>
-      <v-col v-for="card in documents" :key="card.documentId" cols="4">
+    <v-layout row>
+      <v-flex v-for="card in documents" :key="card.documentId" md4 class="pa-3">
         <v-card>
           <v-img
             :src="require(`@/assets/images/${ImageSelector.selectClockImage(card.documentId)}`)"
-            class="white--text align-end"
+            class="align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
           >
-            <v-card-title>{{ card.title }}</v-card-title>
-            <v-card-subtitle
+            <v-card-title class="text-h5 black--text font-weight-bold">{{ card.title }}</v-card-title>
+            <v-card-subtitle class="black--text"
             >{{ 'Course: ' + card.courseName }}</v-card-subtitle>
-            <v-card-subtitle
+            <v-card-subtitle class="black--text"
             >{{ 'Specialization: ' + card.specializationName }}</v-card-subtitle>
           </v-img>
-
-          <v-card-actions>
+          <v-card-actions class="button-color">
             <v-row justify="center" class="pa-2">
               <v-btn
+                dark
                 icon
                 :to="{ name: 'document', params: { id: card.documentId } }"
               >
@@ -27,10 +26,15 @@
             >
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-flex>
+    </v-layout>
 </template>
+
+<style scoped>
+.button-color{
+  background-color: black;
+}
+</style>
 
 <script lang="ts">
 import { DocumentViewModule } from "@/modules/document";
