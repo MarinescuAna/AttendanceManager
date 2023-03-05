@@ -136,7 +136,6 @@ export default Vue.extend({
           } as StudentAttendanceInsertModule);
         }
       });
-      console.log(studentsChanged);
 
       if (studentsChanged.length !== 0) {
         const response = await AttendanceService.addStudentsAttendances(

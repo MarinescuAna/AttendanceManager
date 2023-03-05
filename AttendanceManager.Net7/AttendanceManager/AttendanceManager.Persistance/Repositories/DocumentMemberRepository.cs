@@ -9,7 +9,12 @@ namespace AttendanceManager.Persistance.Repositories
         public DocumentMemberRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
         {
         }
-
+        public async Task<DocumentMember?> GetMemberByDocumentIdAndUserIdAsync(int documentId, string userId)
+            => await dbContext.DocumentMembers
+            .Include(dm => dm.User!.Attendances)
+            .Include(dm => dm.Document!.AttendanceCollections)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(dm => dm.UserID == userId && dm.DocumentID == documentId);
         public async Task<List<User>> GetStudentsByDocumentIdAsync(int documentId)
             => await dbContext.DocumentMembers
             .Include(u => u.User)

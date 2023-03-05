@@ -29,3 +29,11 @@ export interface TotalAttendanceModule{
     laboratoryAttendances: number;
     seminaryAttendances: number;
 }
+
+export interface StudentAttendanceModule{
+    bonusPoints: number;
+    courseType: string;
+    wasPresent: boolean;
+    attendanceId: number;
+    updatedOn:string;
+}
