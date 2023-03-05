@@ -36,8 +36,8 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
                 Role = Enum.Parse<Role>(request.Role),
                 Password = GeneratePassword(),
                 AccountConfirmed = false,
-                CreatedOn = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.Now,
+                UpdatedOn = DateTime.Now,
                 UserSpecializations = request.SpecializationIds.Select(id => new UserSpecialization()
                 {
                     SpecializationID = id,

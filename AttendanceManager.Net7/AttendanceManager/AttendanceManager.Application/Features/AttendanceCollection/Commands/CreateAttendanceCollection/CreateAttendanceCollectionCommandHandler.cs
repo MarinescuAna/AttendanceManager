@@ -43,8 +43,8 @@ namespace AttendanceManager.Application.Features.AttendanceCollection.Commands.C
             foreach(var student in students)
             {
                 unitOfWork.AttendanceRepository.AddAsync( new Domain.Entities.Attendance { 
-                    UpdatedOn = DateTime.UtcNow,
-                    CreatedOn= DateTime.UtcNow, 
+                    UpdatedOn = DateTime.Now,
+                    CreatedOn= DateTime.Now, 
                     AttendanceCollectionID = attendanceCollection.AttendanceCollectionID,
                     BonusPoints = 0,
                     IsPresent = false,

@@ -40,35 +40,24 @@ namespace AttendanceManager.Infrastructure.Authentication
 
             // Get token
             var accessToken = _jwtService.GenerateAccessToken(result.Email, result.FullName, result.Role, result.Code);
+            var refreshToken = _jwtService.GenerateRefreshToken();
 
-            if (string.IsNullOrEmpty(result.RefreshToken) || (result.ExpRefreshToken != null && DateTime.UtcNow.Millisecond >= result.ExpRefreshToken.Value.Millisecond))
+            // Update refresh token
+            await _mediator.Send(new UpdateRefreshTokenCommand
             {
-                // If the user has a refresh token and this refresh token expired or is empty, recreated another one
-                var refreshToken = _jwtService.GenerateRefreshToken();
-                await _mediator.Send(new UpdateRefreshTokenCommand
-                {
-                    Email = request.Email,
-                    ExpRefreshToken = refreshToken.Expiration,
-                    RefreshToken = refreshToken.Token
-                });
-
-                return new()
-                {
-                    ExpirationDateAccessToken = accessToken.Expiration,
-                    AccessToken = accessToken.Token,
-                    RefreshToken = refreshToken.Token,
-                    ExpirationDateRefreshToken = refreshToken.Expiration
-                };
-            }
-
+                Email = request.Email,
+                ExpRefreshToken = refreshToken.Expiration,
+                RefreshToken = refreshToken.Token
+            });
 
             return new()
             {
                 ExpirationDateAccessToken = accessToken.Expiration,
                 AccessToken = accessToken.Token,
-                RefreshToken = result.RefreshToken,
-                ExpirationDateRefreshToken = (DateTime)result.ExpRefreshToken!
+                RefreshToken = refreshToken.Token,
+                ExpirationDateRefreshToken = refreshToken.Expiration
             };
+
         }
     }
 }

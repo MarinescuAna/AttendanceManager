@@ -27,8 +27,8 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             {
                 DepartmentID = request.DepartmentId,
                 Name = request.Name,
-                CreatedOn = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.Now,
+                UpdatedOn = DateTime.Now,
             };
 
             // Save the specialization or throw exception if something happen

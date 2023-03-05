@@ -17,7 +17,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.UpdateCourseNam
                 ?? throw new NotFoundException("Course", request.CourseId);
 
             course.Name = request.Name;
-            course.UpdatedOn = DateTime.UtcNow;
+            course.UpdatedOn = DateTime.Now;
 
             unitOfWork.CourseRepository.Update(course);
 

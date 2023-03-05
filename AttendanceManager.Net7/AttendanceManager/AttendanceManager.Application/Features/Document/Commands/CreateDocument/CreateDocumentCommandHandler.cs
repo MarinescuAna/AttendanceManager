@@ -23,14 +23,14 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             var newDocument = new Domain.Entities.Document
             {
                 CourseID = request.CourseId,
-                CreatedOn= DateTime.UtcNow,
+                CreatedOn= DateTime.Now,
                 EnrollmentYear = request.EnrollmentYear,
                 IsDeleted = false,
                 MaxNoLaboratories = request.MaxNoLaboratories,
                 MaxNoLessons = request.MaxNoLessons,
                 MaxNoSeminaries = request.MaxNoSeminaries,
                 Title= request.Title,
-                UpdatedOn= DateTime.UtcNow
+                UpdatedOn= DateTime.Now
             };
             // Save document first to can get the id
             unitOfWork.DocumentRepository.AddAsync(newDocument);

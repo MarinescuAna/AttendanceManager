@@ -27,7 +27,7 @@ namespace AttendanceManager.Persistance.Repositories
                 if (course.Documents?.Count > 0)
                 {
                     course.IsDeleted = true;
-                    course.UpdatedOn = DateTime.UtcNow;
+                    course.UpdatedOn = DateTime.Now;
                     dbContext.Courses.Update(course);
                 }
                 else

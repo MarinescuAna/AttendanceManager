@@ -19,7 +19,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateAtten
                 if (oldStudent != null)
                 {
                     oldStudent!.IsPresent = student.IsPresent;
-                    oldStudent!.UpdatedOn = DateTime.UtcNow;
+                    oldStudent!.UpdatedOn = DateTime.Now;
                     oldStudent!.BonusPoints = student.BonusPoints;
 
                     unitOfWork.AttendanceRepository.Update(oldStudent);

@@ -29,7 +29,7 @@ namespace AttendanceManager.Infrastructure.Authentication
                 new Claim(Constants.Claim_Name_Role, role),
                 new Claim(Constants.Claim_Name_Code, string.IsNullOrEmpty(code)? string.Empty:code )
             };
-            var expirationDate = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
+            var expirationDate = DateTime.Now.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
             // grab the security key
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             //define a credential object base on the security key definded above
@@ -57,7 +57,7 @@ namespace AttendanceManager.Infrastructure.Authentication
             rng.GetBytes(randomNumber);
             return new()
             {
-                Expiration = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays),
+                Expiration = DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpirationDays),
                 Token = Convert.ToBase64String(randomNumber)
             };
         }

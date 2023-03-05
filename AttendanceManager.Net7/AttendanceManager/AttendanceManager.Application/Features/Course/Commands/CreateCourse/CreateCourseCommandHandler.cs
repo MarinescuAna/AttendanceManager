@@ -24,8 +24,8 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
 
             var newCourse = new Domain.Entities.Course
             {
-                CreatedOn = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.Now,
+                UpdatedOn = DateTime.Now,
                 Name = request.Name,
                 IsDeleted = false,
                 UserSpecializationID = userSpecialization.UserSpecializationID

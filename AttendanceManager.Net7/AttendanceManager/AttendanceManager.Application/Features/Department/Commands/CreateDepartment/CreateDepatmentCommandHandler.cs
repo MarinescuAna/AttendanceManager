@@ -23,8 +23,8 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             // Create the new department
             var newDepartment = new Domain.Entities.Department
             {
-                CreatedOn = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.Now,
+                UpdatedOn = DateTime.Now,
                 Name = request.Name
             };
 

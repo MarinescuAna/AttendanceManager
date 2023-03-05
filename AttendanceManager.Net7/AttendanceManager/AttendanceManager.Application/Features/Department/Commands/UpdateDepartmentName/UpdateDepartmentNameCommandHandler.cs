@@ -24,7 +24,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepar
             }
 
             department.Name = request.Name;
-            department.UpdatedOn = DateTime.UtcNow;
+            department.UpdatedOn = DateTime.Now;
             unitOfWork.DepartmentRepository.Update(department);
 
             return await unitOfWork.CommitAsync();

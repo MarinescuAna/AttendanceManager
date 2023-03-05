@@ -182,7 +182,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta?.requireAuth) {
     const tokenData = AuthService.getDataFromToken();
 
-    if (tokenData && tokenData == null) {
+    if (tokenData === null) {
       next({ name: 'login' });
     } else {
       if (Role[to.meta?.role] != (tokenData as TokenData).role.toString()) {
