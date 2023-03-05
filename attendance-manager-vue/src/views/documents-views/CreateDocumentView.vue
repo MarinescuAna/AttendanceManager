@@ -1,216 +1,245 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-title>
-        <span class="text-h5"> Add new attendances document</span>
-      </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-stepper v-model="currentStep">
-            <!--Headers-->
-            <v-stepper-header>
-              <v-stepper-step :complete="currentStep > 1" step="1">
-                Document details
-              </v-stepper-step>
-              <v-divider></v-divider>
-              <v-stepper-step :complete="currentStep > 2" step="2">
-                Students
-              </v-stepper-step>
-              <v-divider></v-divider>
-              <v-stepper-step step="3"> Finish </v-stepper-step>
-            </v-stepper-header>
+  <v-layout column>
+    <v-flex class="my-3">
+      <span class="text-h5 black--text font-weight-bold">
+        Add new attendances document</span
+      >
+    </v-flex>
+    <v-flex >
+      <v-stepper v-model="currentStep">
+        <!--Headers-->
+        <v-stepper-header class="header-color">
+          <v-stepper-step color="black" :complete="currentStep > 1" step="1">
+            Document details
+          </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step color="black" :complete="currentStep > 2" step="2">
+            Students
+          </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step color="black" step="3"> Finish </v-stepper-step>
+        </v-stepper-header>
 
-            <!--Stept1: document details-->
-            <v-stepper-items>
-              <v-stepper-content step="1">
-                <validation-observer ref="observer" v-slot="{ invalid }">
-                  <v-row>
-                    <v-col cols="12">
-                      <validation-provider
-                        name="document title"
-                        v-slot="{ errors }"
-                        :rules="rules.required"
-                      >
-                        <v-text-field
-                          v-model="documentTitle"
-                          type="text"
-                          counter
-                          maxlength="128"
-                          label="Document title"
-                          prepend-icon="mdi-pencil"
-                          :error-messages="errors"
-                          required
-                        />
-                      </validation-provider>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-select
-                        :items="courses"
-                        label="Course"
-                        v-model="selectedCourse"
+        <!--Stept1: document details-->
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <validation-observer ref="observer" v-slot="{ invalid }">
+              <v-layout column>
+                <v-flex>
+                  <validation-provider
+                    name="document title"
+                    v-slot="{ errors }"
+                    :rules="rules.required"
+                  >
+                    <v-textarea
+                      v-model="documentTitle"
+                      type="text"
+                      counter
+                      rows="2"
+                      maxlength="128"
+                      label="Document title"
+                      prepend-icon="mdi-pencil"
+                      :error-messages="errors"
+                      required
+                      color="black"
+                    />
+                  </validation-provider>
+                </v-flex>
+                <v-flex>
+                  <v-select
+                    :items="courses"
+                    label="Course"
+                    v-model="selectedCourse"
+                    required
+                    prepend-icon="mdi-school"
+                    item-text="name"
+                    item-value="id"
+                    color="black"
+                  ></v-select>
+                </v-flex>
+                <v-layout row class="pa-3">
+                  <v-flex xs12 md4>
+                    <validation-provider
+                      name="maximum number of lessons"
+                      v-slot="{ errors }"
+                      :rules="rules.between_0_30"
+                    >
+                      <v-text-field
+                        v-model="maxNoLessons"
+                        type="number"
+                        label="Maximum number of lessons that will be held "
+                        prepend-icon="mdi-numeric"
+                        :error-messages="errors"
+                        color="black"
                         required
-                        prepend-icon="mdi-school"
-                        item-text="name"
-                        item-value="id"
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="4">
-                      <validation-provider
-                        name="maximum number of lessons"
-                        v-slot="{ errors }"
-                        :rules="rules.between_0_30"
-                      >
-                        <v-text-field
-                          v-model="maxNoLessons"
-                          type="number"
-                          label="Maximum number of lessons that will be held "
-                          prepend-icon="mdi-pencil"
-                          :error-messages="errors"
-                          required
-                        />
-                      </validation-provider>
-                    </v-col>
-                    <v-col cols="4">
-                      <validation-provider
-                        name="maximum number of laboratories"
-                        v-slot="{ errors }"
-                        :rules="rules.between_0_30"
-                      >
-                        <v-text-field
-                          v-model="maxNoLaboratories"
-                          type="number"
-                          label="Maximum number of laboratories that will be held"
-                          prepend-icon="mdi-pencil"
-                          :error-messages="errors"
-                          required
-                        />
-                      </validation-provider>
-                    </v-col>
-                    <v-col cols="4">
-                      <validation-provider
-                        name="maximum number of seminaries"
-                        v-slot="{ errors }"
-                        :rules="rules.between_0_30"
-                      >
-                        <v-text-field
-                          v-model="maxNoSeminaries"
-                          type="number"
-                          label="Maximum number of seminaries that will be held"
-                          prepend-icon="mdi-pencil"
-                          :error-messages="errors"
-                          required
-                        />
-                      </validation-provider>
-                    </v-col>
-                  </v-row>
-
+                      />
+                    </validation-provider>
+                  </v-flex>
+                  <v-flex xs12 md4>
+                    <validation-provider
+                      name="maximum number of laboratories"
+                      v-slot="{ errors }"
+                      :rules="rules.between_0_30"
+                    >
+                      <v-text-field
+                        v-model="maxNoLaboratories"
+                        type="number"
+                        label="Maximum number of laboratories that will be held"
+                        prepend-icon="mdi-numeric"
+                        :error-messages="errors"
+                        color="black"
+                        required
+                      />
+                    </validation-provider>
+                  </v-flex>
+                  <v-flex xs12 md4>
+                    <validation-provider
+                      name="maximum number of seminaries"
+                      v-slot="{ errors }"
+                      :rules="rules.between_0_30"
+                    >
+                      <v-text-field
+                        v-model="maxNoSeminaries"
+                        type="number"
+                        label="Maximum number of seminaries that will be held"
+                        prepend-icon="mdi-numeric"
+                        :error-messages="errors"
+                        color="black"
+                        required
+                      />
+                    </validation-provider>
+                  </v-flex>
+                </v-layout>
+              </v-layout>
+              <v-layout row align-end column="4">
+                <v-flex class="my-3 mr-4" align-self-end>
                   <v-btn
-                    color="primary"
+                    class="white--text"
+                    color="black"
                     @click="currentStep = 2"
                     :disabled="invalid || selectedCourse === 0"
                   >
-                    Continue
+                    <v-icon>mdi-arrow-right</v-icon>
                   </v-btn>
-                </validation-observer>
-              </v-stepper-content>
+                </v-flex>
+              </v-layout>
+            </validation-observer>
+          </v-stepper-content>
 
-              <v-stepper-content step="2">
-                <v-row>
-                  <v-col cols="12">
-                    <v-select
-                      :items="specializations"
-                      label="Specialization"
-                      v-model="selectedSpecialization"
-                      prepend-icon="mdi-file"
-                      item-text="name"
-                      item-value="id"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-select
-                      :items="years"
-                      label="Enrollment year"
-                      v-model="selectedYear"
-                      required
-                      prepend-icon="mdi-school"
-                    ></v-select>
-                  </v-col>
-                </v-row>
+          <v-stepper-content step="2">
+            <v-layout column>
+              <v-flex>
+                <v-select
+                  :items="specializations"
+                  label="Specialization"
+                  v-model="selectedSpecialization"
+                  prepend-icon="mdi-file"
+                  item-text="name"
+                  item-value="id"
+                  color="black"
+                  required
+                ></v-select>
+              </v-flex>
+              <v-flex>
+                <v-select
+                  :items="years"
+                  label="Enrollment year"
+                  v-model="selectedYear"
+                  required
+                  color="black"
+                  prepend-icon="mdi-school"
+                ></v-select>
+              </v-flex>
+            </v-layout>
+            <v-layout row align-end column="4" class="my-3 mr-4">
+              <v-flex>
                 <v-btn
-                  color="primary"
+                  class="white--text"
+                  color="black"
+                  @click="currentStep = 1"
+                >
+                  <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+                <v-btn
+                  class="white--text"
+                  color="black"
                   @click="step3Actions"
                   :disabled="selectedSpecialization === 0 || selectedYear === 0"
                 >
-                  Continue
+                  <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
-                <v-btn color="primary" @click="currentStep = 1"> Back </v-btn>
-              </v-stepper-content>
+              </v-flex>
+            </v-layout>
+          </v-stepper-content>
 
-              <v-stepper-content step="3">
-                <v-card class="ma-3">
-                  <v-container v-if="students.length == 0">
-                    <p class="pa-6">
-                      There is no student available. Try another year and
-                      specialization.
-                    </p>
-                  </v-container>
-                  <v-container v-else>
-                    <v-list>
-                      <v-list-item-group
-                        v-model="selectedStudents"
-                        active-class="blue--text"
-                        item-value="email"
-                        multiple
-                      >
-                        <v-list-item v-for="item in students" :key="item.email">
-                          <template v-slot:default="{ active }">
-                            <v-list-item-content>
-                              <v-list-item-title
-                                v-text="item.fullname"
-                              ></v-list-item-title>
+          <v-stepper-content step="3">
+            <v-layout v-if="students.length == 0">
+              <p class="pa-6">
+                There is no student available. Try another year and
+                specialization.
+              </p>
+            </v-layout>
+            <v-layout column="12" v-else>
+              <v-flex>
+                <v-list>
+                  <v-list-item-group
+                    v-model="selectedStudents"
+                    active-class="black--text"
+                    item-value="email"
+                    multiple
+                  >
+                    <v-list-item v-for="item in students" :key="item.email">
+                      <template v-slot:default="{ active }">
+                        <v-list-item-content>
+                          <v-list-item-title
+                            class="black--text font-weight-bold"
+                          >{{ item.fullname }}</v-list-item-title>
 
-                              <v-list-item-subtitle
-                                class="text--primary"
-                                v-text="item.email"
-                              ></v-list-item-subtitle>
-                            </v-list-item-content>
-                            <v-list-item-action>
-                              <v-icon v-if="!active" color="grey lighten-1">
-                                mdi-star-outline
-                              </v-icon>
-                              <v-icon v-else color="yellow darken-3">
-                                mdi-star
-                              </v-icon>
-                            </v-list-item-action>
-                          </template>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                  </v-container>
-                </v-card>
-
+                          <v-list-item-subtitle
+                            class="black--text"
+                          >{{ item.email }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-icon v-if="!active" color="grey lighten-1">
+                            mdi-star-outline
+                          </v-icon>
+                          <v-icon v-else color="yellow darken-3">
+                            mdi-star
+                          </v-icon>
+                        </v-list-item-action>
+                      </template>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list></v-flex
+              >
+            </v-layout>
+            <v-layout row align-end column="4" class="my-3 mr-4">
+              <v-flex>
+                <v-btn dark @click="currentStep = 2">
+                  <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
                 <v-btn
-                  color="blue darken-1"
+                  color="black"
+                  class="white--text"
                   @click="onSubmit"
                   :disabled="selectedStudents.length == 0"
-                  text
                 >
                   Create document
                 </v-btn>
-                <v-btn color="primary" @click="currentStep = 2"> Back </v-btn>
-              </v-stepper-content>
-            </v-stepper-items>
-          </v-stepper>
-        </v-container>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text> Close </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+              </v-flex>
+            </v-layout>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
+    </v-flex>
+  </v-layout>
 </template>
+
+<style scoped>
+.header-color{
+  background-color: #FFB74D;
+}
+</style>
 
 <script lang="ts">
 import { CourseViewModule } from "@/modules/course";
@@ -306,11 +335,11 @@ export default Vue.extend({
         maxNoSeminaries: this.maxNoSeminaries,
         title: this.documentTitle,
         specializationId: this.selectedSpecialization,
-        studentIds: this.selectedStudents.map(x=>this.students[x].email)       
+        studentIds: this.selectedStudents.map((x) => this.students[x].email),
       } as DocumentInsertModule)) as ResponseModule;
 
       if (response.isSuccess) {
-        this.$router.push({ name: "documents" });
+        this.$router.push({ name: "created-documents" });
       } else {
         window.alert(response.error);
       }
