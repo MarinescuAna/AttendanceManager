@@ -32,9 +32,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { DocumentFullViewModule } from "@/modules/document";
-import AboutDocumentComponent from "@/components/document-components/AboutDocumentComponent.vue";
-import AttendanceTimelineComponent from "@/components/document-components/AttendanceTimelineComponent.vue";
-import TotalAttendancesComponent from "@/components/document-components/TotalAttendancesComponent.vue";
+import AboutDocumentComponent from "@/components/document-components/tabs/AboutDocumentComponent.vue";
+import AttendanceTimelineComponent from "@/components/document-components/tabs/AttendanceTimelineComponent.vue";
+import TotalAttendancesComponent from "@/components/document-components/tabs/TotalAttendancesComponent.vue";
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
@@ -49,11 +49,11 @@ export default Vue.extend({
     };
   },
   computed: {
-    documentInfo(): DocumentFullViewModule {
+    documentInfo: function(): DocumentFullViewModule {
       return storeHelper.documentStore.documentDetails;
     },
   },
-  async created() {
+  created: async function(){
     await storeHelper.documentStore.loadCurrentDocument(this.$route.params.id);
   },
 });
