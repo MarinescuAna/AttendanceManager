@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -12,6 +13,7 @@ namespace AttendanceManager.Domain.Entities
         public required int MaxNoSeminaries { get; set; }
         public required int MaxNoLaboratories { get; set; }
         public required int MaxNoLessons { get; set; }
+        [ForeignKey("Course")]
         public required int CourseID { get; set; }
         public bool IsDeleted { get; set; } = false;
         public virtual Course? Course { get; set; }

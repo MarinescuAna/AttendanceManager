@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -10,7 +11,9 @@ namespace AttendanceManager.Domain.Entities
     {
         [Key]
         public int AttendanceID { get; set; }
+        [ForeignKey("AttendanceCollection")]
         public required int AttendanceCollectionID { get; set; }
+        [ForeignKey("User")]
         public required string UserID { get; set; }
         public required int BonusPoints { get; set; }
         public required bool IsPresent { get; set; }

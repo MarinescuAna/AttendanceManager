@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -6,7 +7,9 @@ namespace AttendanceManager.Domain.Entities
     {
         [Key]
         public int UserSpecializationID { get; set; }
+        [ForeignKey("User")]
         public required string UserID { get; set; }
+        [ForeignKey("Specialization")]
         public required int SpecializationID { get; set; }
         public virtual Specialization? Specialization { get; set; }
         public virtual User? User { get; set; }

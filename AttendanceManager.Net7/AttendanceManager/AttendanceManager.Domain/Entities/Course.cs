@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -12,6 +13,7 @@ namespace AttendanceManager.Domain.Entities
         public bool IsDeleted { get; set; } = false;
         [MaxLength(128)]
         public required string Name { get; set; }
+        [ForeignKey("UserSpecialization")]
         public required int UserSpecializationID { get; set; }
         public virtual UserSpecialization? UserSpecialization { get; set; }
         public ICollection<Document>? Documents { get; set; }
