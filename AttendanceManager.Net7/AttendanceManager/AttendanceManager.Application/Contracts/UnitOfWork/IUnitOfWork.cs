@@ -13,6 +13,7 @@ namespace AttendanceManager.Application.Contracts.UnitOfWork
         IUserSpecializationRepository UserSpecializationRepository { get; }
         IDocumentMemberRepository DocumentMemberRepository { get; }
         IDocumentRepository DocumentRepository { get; }
+        IAttendanceCodeRepository AttendanceCodeRepository { get; }
         Task<bool> CommitAsync();
     }
 }

@@ -9,6 +9,7 @@
         public static readonly string SomethingWentWrongMessageEmailSend = "Something went wrong and the user will not receive any email, but the account was created. Please contact him and give him the credentials.";
         public static readonly string CharsString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         public static readonly int PasswordLength = 8;
+        public static readonly int AttendanceCodeLength = 6;
         public static readonly string DateFormat = "dddd, dd MMMM yyyy HH:mm";
     }
 }

@@ -22,5 +22,9 @@ export const rules = {
     password:{
         required:true,
         min: [6]
+    },
+    between_1_240:{
+        required:true,
+        between: [1,240]
     }
 };

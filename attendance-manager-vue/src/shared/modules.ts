@@ -1,4 +1,3 @@
-import { Role } from "./enums";
 
 /**
  * Used to filter the response from the API and send the response to components

@@ -17,9 +17,14 @@ namespace AttendanceManager.Persistance.UOW
         private readonly IDocumentRepository? _documentRepository;
         private readonly IAttendanceCollectionRepository? _attendanceCollectionRepository;
         private readonly IAttendanceRepository? _attendanceRepository;
+        private readonly IAttendanceCodeRepository? _attendanceCodeRepository;
         public UnitOfWork(AttendanceManagerDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+        public IAttendanceCodeRepository AttendanceCodeRepository
+        {
+            get => _attendanceCodeRepository ?? new AttendanceCodeRepository(_dbContext);
         }
         public IAttendanceRepository AttendanceRepository
         {
