@@ -33,13 +33,11 @@ namespace AttendanceManager.Api.Middleware
 
             switch (exception)
             {
-                case BadRequestException _:
-                    httpStatusCode = HttpStatusCode.BadRequest;
-                    break;
-                case NotFoundException _:
+                case NotFoundException:
                     httpStatusCode = HttpStatusCode.NotFound;
                     break;
-                case Exception _:
+                case BadRequestException:
+                case Exception:
                     httpStatusCode = HttpStatusCode.BadRequest;
                     break;
             }

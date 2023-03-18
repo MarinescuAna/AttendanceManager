@@ -1,19 +1,30 @@
 import { ERR_BAD_RESPONSE, ERR_NOT_FOUND } from "./constants";
 import { ResponseModule } from "@/shared/modules";
+import { Toastification } from "@/plugins/vue-toastification";
 
-//TODO in progress
+interface Response{
+    status: number;
+    error: string;
+}
+
 export default class ResponseHandler {
     public static errorResponseHandler(error): ResponseModule {
-        const errorData = error.response.data;
-        if (errorData.status == ERR_BAD_RESPONSE || errorData.status == ERR_NOT_FOUND) {
-            return {
-                error: errorData.error,
-                isSuccess: false
-            } as ResponseModule;
+        const response = error.response.data as Response;
+        switch (response.status) {
+            case ERR_NOT_FOUND:
+                Toastification.error(response.error, `${response.status} Not found:`);
+                break;
+            case ERR_BAD_RESPONSE:
+                Toastification.error(response.error, `${response.status} Bad request:`)
+                break;
+            default:
+                Toastification.simpleError("API doesn't respond!");
         }
+
+        // TODO this should be removed
         return {
-            error: "API doesn't respond!",
-            isSuccess: false
+            isSuccess:false,
+            error:''
         };
     }
 }
