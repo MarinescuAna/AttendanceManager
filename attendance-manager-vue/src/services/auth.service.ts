@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ACCESS_TOKEN, ACCOUNT_CONTROLLER, EXP_ACCESS_TOKEN, EXP_REFRESH_TOKEN, REFRESH_TOKEN } from "@/shared/constants";
-import { TokenData, ResponseModule } from "@/shared/modules";
+import { TokenData } from "@/shared/modules";
 import { LoginModule, LoginResponseModule, TokenModule } from "@/modules/user/auth";
 import ResponseHandler from "@/error-handler/error-handler";
 import { AxiosResponse } from "axios";
@@ -99,24 +99,21 @@ export default class AuthService {
     }
 
     /**
-     * Do loging
+     * Do loging - update the local storage after receive the tokens
      * @param payload email and password
      * @returns true if the logging was successfully done, or false if something happen
      */
-    static async login(payload: LoginModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: '',
-            isSuccess: true
-        };
+    static async login(payload: LoginModule): Promise<boolean> {
+        let isSuccess = true;
 
         const result = await https.post(`${ACCOUNT_CONTROLLER}/authenticate`, {
             email: payload.email,
             password: payload.password
         }).catch(error => {
-            response = ResponseHandler.errorResponseHandler(error);
+            isSuccess = ResponseHandler.errorResponseHandler(error);
         });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             const apiResponse = (result as AxiosResponse).data as LoginResponseModule;
             Vue.$cookies.set(ACCESS_TOKEN, apiResponse.accessToken);
             Vue.$cookies.set(REFRESH_TOKEN, apiResponse.refreshToken);
@@ -124,7 +121,7 @@ export default class AuthService {
             Vue.$cookies.set(EXP_REFRESH_TOKEN, apiResponse.expirationDateRefreshToken);
         }
 
-        return response;
+        return isSuccess;
     }
 
 }

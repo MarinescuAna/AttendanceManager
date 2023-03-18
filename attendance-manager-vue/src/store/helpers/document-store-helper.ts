@@ -1,7 +1,6 @@
 
 import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
-import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document";
 
@@ -52,7 +51,7 @@ export class DocumentStore {
    * Add a new specialziation only
    * @test
    */
-    public addAttendanceCollection(payload: AttendanceCollectionInsertModule): Promise<ResponseModule> {
+    public addAttendanceCollection(payload: AttendanceCollectionInsertModule): Promise<boolean> {
         return this.store.dispatch(`${documentNamespace}/addAttendanceCollection`, payload);
     }
 

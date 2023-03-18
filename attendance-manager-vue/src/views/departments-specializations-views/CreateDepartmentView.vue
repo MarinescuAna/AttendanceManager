@@ -48,7 +48,6 @@
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import StoreHelper from "@/store/store-helper";
-import { ResponseModule } from "@/shared/modules";
 
 export default Vue.extend({
   data() {
@@ -62,15 +61,12 @@ export default Vue.extend({
     /**
      * Add new department in store and db
      * Success: reset the form and reload the treeview
-     * Error: display error
      */
     async addDepartment() {
-      const response = (await StoreHelper.departmentStore.addDepartment(this.department)) as ResponseModule;
+      const response = await StoreHelper.departmentStore.addDepartment(this.department);
 
-      if (response.isSuccess) {
+      if (response) {
         this.$router.currentRoute.meta?.onBack();
-      } else {
-        window.alert(response.error);
       }
     },
   },

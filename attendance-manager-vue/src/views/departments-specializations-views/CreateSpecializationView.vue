@@ -89,10 +89,8 @@ export default Vue.extend({
         departmentId: this.department,
       } as SpecializationInsertModule);
 
-      if (response.isSuccess) {
+      if (response) {
         this.$router.currentRoute.meta?.onBack();
-      } else {
-        window.alert(response.error);
       }
     },
   },

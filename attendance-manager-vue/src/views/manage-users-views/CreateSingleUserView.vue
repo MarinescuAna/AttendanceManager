@@ -154,6 +154,7 @@ import storeHelper from "@/store/store-helper";
 import { SpecializationViewModule } from "@/modules/specialization";
 import { DepartmentViewModel } from "@/modules/department";
 import { Role } from "@/shared/enums";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
   data() {
@@ -215,10 +216,10 @@ export default Vue.extend({
         email: this.email,
         role: this.role.toString(),
         year: this.year,
-        specializationIds: specializationIds, //Array.map({)
+        specializationIds: specializationIds,
       } as CreateUserParameters);
 
-      if (response.isSuccess) {
+      if (response) {
         this.fullname = "";
         this.email = "";
         this.code = "";
@@ -228,7 +229,7 @@ export default Vue.extend({
         this.selectedSpecializations = [];
         this.$refs.observer?.reset();
         this.$refs.departmentRef?.reset();
-        window.alert(
+        Toastification.info(
           "The user was created and he will be inform via email regarding his credentials."
         );
       }

@@ -3,7 +3,6 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { DepartmentUpdateModule, DepartmentViewModel } from "@/modules/department";
 import https from "@/plugins/axios";
 import { DEPARTMENT_CONTROLLER } from "@/shared/constants";
-import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 
 //state type
@@ -77,42 +76,37 @@ const actions = {
     /**
      * Add a new department into the database and initialize the store
      */
-    async addDepartment({ commit }, payload: string): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+    async addDepartment({ commit }, payload: string): Promise<boolean> {
+        let isSuccess = true;
         const result = await https.post(`${DEPARTMENT_CONTROLLER}/create_department?name=${payload}`)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_addDepartment", {
                 id: (result as AxiosResponse).data,
                 name: payload
             } as DepartmentViewModel);
         }
-        return response;
+        return isSuccess;
     },
     /**
      * Update department name in db and store
      */
-    async updateDepartmentName({ commit }, payload: DepartmentUpdateModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+    async updateDepartmentName({ commit }, payload: DepartmentUpdateModule): Promise<boolean> {
+        let isSuccess = true;
 
         await https.patch(`${DEPARTMENT_CONTROLLER}/update_department_name`, payload)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_updateDepartmentName", payload);
         }
-        return response;
+
+        return isSuccess;
     },
     /**
      * Reset the state with the initial values

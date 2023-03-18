@@ -5,7 +5,6 @@ import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from
 import https from "@/plugins/axios";
 import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { CourseType } from "@/shared/enums";
-import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 
 //state type
@@ -134,18 +133,15 @@ const actions = {
             commit("_documentCollections", documentCollections);
         }
     },
-    async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+    async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<boolean> {
+        let isSuccess = true;
 
         const result = await https.post(`${ATTENDANCE_COLLECTION_CONTROLLER}/create_attendance_collection`, payload)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_addAttendanceCollection", {
                 attendanceCollectionId: (result as AxiosResponse).data,
                 activityTime: payload.activityDateTime,
@@ -153,7 +149,7 @@ const actions = {
             } as AttendanceCollectionViewModule);
         }
 
-        return response;
+        return isSuccess;
     },
     /**
      * Reset the state with the initial values

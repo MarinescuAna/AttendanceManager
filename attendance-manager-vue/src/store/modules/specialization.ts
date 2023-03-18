@@ -3,7 +3,6 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
 import https from "@/plugins/axios";
 import { SPECIALIZATION_CONTROLLER } from "@/shared/constants";
-import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
 import { RootState } from "..";
@@ -86,26 +85,23 @@ const actions: ActionTree<SpecializationState, RootState> = {
     /**
      * Add a new specialization into the database and initialize the store
      */
-    async addSpecialization({ commit }, payload: SpecializationInsertModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+    async addSpecialization({ commit }, payload: SpecializationInsertModule): Promise<boolean> {
+        let isSuccess = true;
 
         // this result represents the id of the specialization
         const result = await https.post(`${SPECIALIZATION_CONTROLLER}/create_specialization`, payload)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_addSpecialization", {
                 id: (result as AxiosResponse).data,
                 name: payload.name,
                 departmentId: payload.departmentId
             } as SpecializationViewModule);
         }
-        return response;
+        return isSuccess;
     },
     /**
      * Update department name in db and store

@@ -58,10 +58,8 @@ export default {
         name: this.name,
       } as DepartmentUpdateModule);
 
-      if (result.isSuccess) {
+      if (result) {
         this.$emit("save", this.name);
-      } else {
-        window.alert(result.error);
       }
     },
   },

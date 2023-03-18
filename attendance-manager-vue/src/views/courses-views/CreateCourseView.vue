@@ -84,7 +84,6 @@ export default Vue.extend({
     /**
      * Use this method for adding a new specialization
      * Success: reset the form and reload the treeview
-     * Error: display the message
      */
     async addCourse() {
       const response = await storeHelper.courseStore.addCourse({
@@ -95,10 +94,8 @@ export default Vue.extend({
         )!.name,
       } as CreateCourseModule);
 
-      if (response.isSuccess) {
+      if (response) {
         this.$router.currentRoute.meta?.onBack();
-      } else {
-        window.alert(response.error);
       }
     },
     /**

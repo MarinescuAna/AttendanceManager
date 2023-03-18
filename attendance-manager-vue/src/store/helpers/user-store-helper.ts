@@ -1,5 +1,4 @@
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
-import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as userNamespace } from "../modules/user";
 
@@ -42,7 +41,7 @@ export class UserStore {
     /**
      * Add a new user only
      */
-    public addUser(payload: CreateUserParameters): Promise<ResponseModule> {
+    public addUser(payload: CreateUserParameters): Promise<boolean> {
         return this.store.dispatch(`${userNamespace}/addUser`, payload);
     }
 

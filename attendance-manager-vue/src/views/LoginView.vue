@@ -108,11 +108,9 @@ export default Vue.extend({
         password: this.password,
       });
 
-      if (response.isSuccess) {
+      if (response) {
         EventBus.$emit(EVENT_BUS_ISLOGGED);
         this.$router.push({name:'home'});
-      } else {
-        window.alert(response.error);
       }
     },
   },

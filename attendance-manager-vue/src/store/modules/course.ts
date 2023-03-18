@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
 import { CourseViewModule, CreateCourseModule, UpdateCourseModule } from "@/modules/course";
-import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
-import {Logger} from "@/plugins/custom-plugins/logging";
 import https from "@/plugins/axios";
 import { COURSE_CONTROLLER } from "@/shared/constants";
 
@@ -92,17 +90,15 @@ const actions = {
     /**
      * Add a new course
      */
-    async addCourse({ commit }, payload: CreateCourseModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+    async addCourse({ commit }, payload: CreateCourseModule): Promise<boolean> {
+        let isSuccess = true;
+
         const result = await https.post(`${COURSE_CONTROLLER}/create_course`, payload)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_addCourse", {
                 id: (result as AxiosResponse).data,
                 name: payload.name,
@@ -110,45 +106,40 @@ const actions = {
                 specializationName: payload.specializationName
             } as CourseViewModule);
         }
-        return response;
+
+        return isSuccess;
     },
     /**
      * Remove a course
      */
-    async removeCourse({ commit }, payload: number): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+    async removeCourse({ commit }, payload: number): Promise<boolean> {
+        let isSuccess = true;
 
         await https.patch(`${COURSE_CONTROLLER}/delete_course?id=${payload}`)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_removeCourse", payload);
         }
-        return response;
+        return isSuccess;
     },
     /**
      * Update course
      */
-     async updateCourse({ commit }, payload: UpdateCourseModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
+     async updateCourse({ commit }, payload: UpdateCourseModule): Promise<boolean> {
+        let isSuccess = true;
 
         await https.patch(`${COURSE_CONTROLLER}/update_Course`, payload)
             .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
+                isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_updateCourse", payload.courseId, payload.name);
         }
-        return response;
+        return isSuccess;
     }
 };
 

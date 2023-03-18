@@ -2,9 +2,7 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import https from "@/plugins/axios";
-import { Logger } from "@/plugins/custom-plugins/logging";
 import { USER_CONTROLLER } from "@/shared/constants";
-import { ResponseModule } from "@/shared/modules";
 import { AxiosResponse } from "axios";
 
 
@@ -65,7 +63,6 @@ const mutations = {
      * Reset the state with the initial values
      */
     _resetStore(state): void {
-        Logger.logInfo('Reset the User store to the initial state')
         Object.assign(state, initialize());
     }
 };
@@ -96,20 +93,17 @@ const actions = {
     /**
      * Add a new user into the database and initialize the store
      */
-    async addUser({ commit }, payload: CreateUserParameters): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: '',
-            isSuccess: true
-        };
+    async addUser({ commit }, payload: CreateUserParameters): Promise<boolean> {
+        let isSuccess = true;
 
         const result = await https.post(`${USER_CONTROLLER}/create_user`, payload).catch(error => {
-            response = ResponseHandler.errorResponseHandler(error);
+            isSuccess = ResponseHandler.errorResponseHandler(error);
         });
 
-        if (response.isSuccess) {
+        if (isSuccess) {
             commit("_addUser", (result as AxiosResponse).data);
         }
-        return response;
+        return isSuccess;
     },
     /**
      * Reset the state with the initial values

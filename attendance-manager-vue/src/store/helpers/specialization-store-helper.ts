@@ -1,6 +1,5 @@
 
 import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
-import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as specializationNamespace } from "../modules/specialization";
 
@@ -30,7 +29,7 @@ export class SpecializationStore {
      * Add a new specialziation only
      * @test
      */
-    public addSpecialization(specialization: SpecializationInsertModule): Promise<ResponseModule> {
+    public addSpecialization(specialization: SpecializationInsertModule): Promise<boolean> {
         return this.store.dispatch(`${specializationNamespace}/addSpecialization`, specialization);
     }
 

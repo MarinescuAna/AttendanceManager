@@ -69,6 +69,7 @@ import { studentAttendancesHeader } from "./TotalAttendancesHeader";
 import AttendanceService from "@/services/attendance.service";
 import storeHelper from "@/store/store-helper";
 import { CourseType } from "@/shared/enums";
+import { Toastification } from "@/plugins/vue-toastification";
 
 interface ResultsOverview {
   courseType: string;
@@ -169,15 +170,14 @@ export default Vue.extend({
           } as StudentAttendanceInsertModule);
         }
       });
-      console.log(studentsChanged);
 
       if (studentsChanged.length !== 0) {
         const response = await AttendanceService.addStudentsAttendances(
           studentsChanged
         );
 
-        if (!response.isSuccess) {
-          alert("Something went wrong and not all the attendances was saved");
+        if (!response) {
+          Toastification.simpleError("Something went wrong and not all the attendances was saved!");
         }
       }
     },

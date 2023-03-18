@@ -1,5 +1,4 @@
 import { ERR_BAD_RESPONSE, ERR_NOT_FOUND } from "./constants";
-import { ResponseModule } from "@/shared/modules";
 import { Toastification } from "@/plugins/vue-toastification";
 
 interface Response{
@@ -8,7 +7,7 @@ interface Response{
 }
 
 export default class ResponseHandler {
-    public static errorResponseHandler(error): ResponseModule {
+    public static errorResponseHandler(error): boolean {
         const response = error.response.data as Response;
         switch (response.status) {
             case ERR_NOT_FOUND:
@@ -21,11 +20,7 @@ export default class ResponseHandler {
                 Toastification.simpleError("API doesn't respond!");
         }
 
-        // TODO this should be removed
-        return {
-            isSuccess:false,
-            error:''
-        };
+        return false;
     }
 }
 

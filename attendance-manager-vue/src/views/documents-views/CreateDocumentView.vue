@@ -249,7 +249,6 @@ import { StudentForCourseViewModule } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import UserService from "@/services/user.service";
-import { ResponseModule } from "@/shared/modules";
 import DocumentService from "@/services/document.service";
 import { rules } from "@/plugins/vee-validate";
 
@@ -327,7 +326,7 @@ export default Vue.extend({
       this.currentStep = 3;
     },
     async onSubmit(): Promise<void> {
-      const response = (await DocumentService.addDocument({
+      const response = await DocumentService.addDocument({
         courseId: this.selectedCourse,
         enrollmentYear: this.selectedYear,
         maxNoLaboratories: this.maxNoLaboratories,
@@ -336,12 +335,10 @@ export default Vue.extend({
         title: this.documentTitle,
         specializationId: this.selectedSpecialization,
         studentIds: this.selectedStudents.map((x) => this.students[x].email),
-      } as DocumentInsertModule)) as ResponseModule;
+      } as DocumentInsertModule);
 
-      if (response.isSuccess) {
+      if (response) {
         this.$router.push({ name: "created-documents" });
-      } else {
-        window.alert(response.error);
       }
     },
   },

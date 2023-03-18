@@ -1,6 +1,5 @@
 
 import { CourseViewModule, CreateCourseModule, UpdateCourseModule } from "@/modules/course";
-import { ResponseModule } from "@/shared/modules";
 import { Store } from "vuex";
 import { namespace as courseNamespace } from "../modules/course";
 
@@ -36,21 +35,21 @@ export class CourseStore {
     /**
      * Add a new course
      */
-    public addCourse(payload: CreateCourseModule): Promise<ResponseModule> {
+    public addCourse(payload: CreateCourseModule): Promise<boolean> {
         return this.store.dispatch(`${courseNamespace}/addCourse`, payload);
     }
 
     /**
      * Remove course
      */
-    public removeCourse(courseId: number): Promise<ResponseModule> {
+    public removeCourse(courseId: number): Promise<boolean> {
         return this.store.dispatch(`${courseNamespace}/removeCourse`, courseId);
     }
 
     /**
     * Change course name
     */
-    public updateCourse(payload: UpdateCourseModule): Promise<ResponseModule> {
+    public updateCourse(payload: UpdateCourseModule): Promise<boolean> {
         return this.store.dispatch(`${courseNamespace}/updateCourse`, payload);
     }
 }

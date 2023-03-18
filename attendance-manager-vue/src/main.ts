@@ -7,6 +7,7 @@ import storeHelper from './store/store-helper'
 import VueCookies from 'vue-cookies';
 import { ValidationProvider } from 'vee-validate/dist/vee-validate.full.esm';
 import {ValidationObserver} from 'vee-validate'
+import "@/plugins/vue-toastification";
 
 /**
  * This is used for validations reasons.
