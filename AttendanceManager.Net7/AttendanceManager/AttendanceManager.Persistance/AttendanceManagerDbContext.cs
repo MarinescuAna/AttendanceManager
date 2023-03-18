@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Modules.Seed;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Persistance.Seed;
+using AttendanceManager.Persistance.ModelBuilderExtention;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -24,10 +24,12 @@ namespace AttendanceManager.Persistance
         public DbSet<DocumentMember> UserDocuments { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<AttendanceCollection> AttendanceCollections { get; set; }
+        public DbSet<AttendanceCode> AttendanceCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed(_adminSettings);
+            modelBuilder.SetRelationships();
         }
     }
 }

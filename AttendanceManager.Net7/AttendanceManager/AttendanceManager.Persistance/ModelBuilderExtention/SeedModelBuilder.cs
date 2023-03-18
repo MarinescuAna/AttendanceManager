@@ -3,9 +3,9 @@ using AttendanceManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace AttendanceManager.Persistance.Seed
+namespace AttendanceManager.Persistance.ModelBuilderExtention
 {
-    public static class ModelBuilderExtention
+    public static class SeedModelBuilder
     {
         public static void Seed(this ModelBuilder modelBuilder, IOptions<AdminSeedSetting> options)
         {
