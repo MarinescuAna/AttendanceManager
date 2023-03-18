@@ -37,3 +37,9 @@ export interface StudentAttendanceModule{
     attendanceId: number;
     updatedOn:string;
 }
+
+export interface UseAttendanceCodeUpdateModule{
+    attendanceCode: string;
+    attendanceId: number;
+    attendanceCollectionId: number;
+}

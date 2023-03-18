@@ -54,6 +54,9 @@ import { rules } from "@/plugins/vee-validate";
 import Vue from "vue";
 
 export default Vue.extend({
+  props:{
+    attendanceCollectionId: Number
+  },
   data() {
     return {
       rules,
@@ -67,7 +70,8 @@ export default Vue.extend({
     },
     onSubmit: async function (): Promise<void> {
       const result = await AttendanceCodeService.createAttendanceCode(
-        this.time
+        this.time,
+        this.attendanceCollectionId
       );
 
       if (typeof result !== "undefined") {

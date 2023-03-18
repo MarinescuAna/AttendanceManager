@@ -11,7 +11,20 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetAttendanc
         }
 
         public async Task<List<StudentsAttendanceDTO>> Handle(GetAttendanceByAttendanceCollectionIdQuery request, CancellationToken cancellationToken)
-          => mapper.Map<List<StudentsAttendanceDTO>>((await unitOfWork.AttendanceRepository.ListAllAsync())
-              .Where(df => df.AttendanceCollectionID == request.AttendanceCollectionId));
+        {
+            var attendances = (await unitOfWork.AttendanceCollectionRepository.GetAttendanceCollectionByIdAsync(request.AttendanceCollectionId)).Attendances!;
+
+            if(request.Role == Domain.Enums.Role.Student && attendances.Count>0)
+            {
+                var users = (await unitOfWork.UserRepository.ListAllAsync()).Where(u => attendances.Any(a => a.UserID.Equals(u.Email)))
+                        .ToDictionary(k => k.Email, v => v.Code);
+                foreach (var attendance in attendances)
+                {
+                    attendance.UserID = users[attendance.UserID];
+                }
+            }
+
+            return mapper.Map<List<StudentsAttendanceDTO>>(attendances);
+        } 
     }
 }

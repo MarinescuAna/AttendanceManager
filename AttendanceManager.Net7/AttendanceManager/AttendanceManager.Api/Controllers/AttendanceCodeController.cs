@@ -17,11 +17,12 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>return the code</returns>
         /// </summary>
         [HttpPost("create_attendance_code")]
-        public async Task<IActionResult> CreateAttendanceCode(int minutes)
+        public async Task<IActionResult> CreateAttendanceCode(int minutes, int attendanceCollectionId)
         {
             return Ok(await mediator.Send(new CreateAttendanceCodeCommand()
             {
-                Minutes = minutes
+                Minutes = minutes,
+                AttendanceCollectionId = attendanceCollectionId
             }));
         }
     }

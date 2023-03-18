@@ -11,10 +11,10 @@ export default class AttendanceCodeService {
      * @param payload number of minutes
      * @returns undefinde if some errors occured or the new generated code and its expiration date
      */
-    static async createAttendanceCode(payload: number): Promise<undefined | AttendanceCodeInsertModule> {
+    static async createAttendanceCode(minutes: number, attendanceCollectionId: number): Promise<undefined | AttendanceCodeInsertModule> {
         let isSuccess = true;
 
-        const result = await https.post(`${ATTENDANCE_CODE}/create_attendance_code?minutes=${payload}`)
+        const result = await https.post(`${ATTENDANCE_CODE}/create_attendance_code?minutes=${minutes}&attendanceCollectionId=${attendanceCollectionId}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

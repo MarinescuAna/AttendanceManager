@@ -88,6 +88,9 @@ export default class AuthService {
                     storeHelper.courseStore.reset();
                     storeHelper.documentStore.resetEntireStore();
                     break;
+                case "Student":
+                    storeHelper.documentStore.resetEntireStore();
+                    break;
             }
             storeHelper.userStore.reset();
         }

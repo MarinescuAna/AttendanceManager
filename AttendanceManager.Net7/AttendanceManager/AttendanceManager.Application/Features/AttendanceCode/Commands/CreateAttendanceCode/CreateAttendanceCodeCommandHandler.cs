@@ -29,6 +29,7 @@ namespace AttendanceManager.Application.Features.AttendanceCode.Commands.CreateA
             {
                 Code = code,
                 ExpirationDate = DateTime.Now.AddMinutes(request.Minutes),
+                AttendanceCollectionId= request.AttendanceCollectionId
             };
             unitOfWork.AttendanceCodeRepository.AddAsync(newCode);
 

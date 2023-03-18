@@ -26,5 +26,9 @@ export const rules = {
     between_1_240:{
         required:true,
         between: [1,240]
+    },
+    min_6:{
+        required: true,
+        min: [6]
     }
 };

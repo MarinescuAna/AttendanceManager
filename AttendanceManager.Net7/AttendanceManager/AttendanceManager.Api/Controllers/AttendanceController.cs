@@ -1,4 +1,5 @@
-﻿using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendances;
+﻿using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendanceByCodeAndAttendanceId;
+using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendances;
 using AttendanceManager.Application.Features.Attendance.Queries.GetAttendanceByAttendanceCollectionID;
 using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
 using AttendanceManager.Application.Features.Attendance.Queries.GetTotalAttendancesByDocumentId;
@@ -22,7 +23,10 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("attendances_by_attendance_collection_id")]
         public async Task<IActionResult> GetAttendancesByAttendanceCollectionId(int attendanceCollectionId)
         {
-            return Ok(await mediator.Send(new GetAttendanceByAttendanceCollectionIdQuery() { AttendanceCollectionId = attendanceCollectionId }));
+            return Ok(await mediator.Send(new GetAttendanceByAttendanceCollectionIdQuery() { 
+                AttendanceCollectionId = attendanceCollectionId,
+                Role = UserRole
+            }));
         }
 
         /// <summary>
@@ -31,6 +35,16 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: true/false</returns>
         [HttpPatch("update_attendances")]
         public async Task<IActionResult> UpdateAttendances([FromBody] UpdateAttendancesCommand command)
+        {
+            return Ok(await mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Update the attendances
+        /// </summary>
+        /// <returns>Success: true/false</returns>
+        [HttpPatch("update_attendance_by_code_and_attendance_id")]
+        public async Task<IActionResult> UpdateAttendanceByCodeAndAttendanceId([FromBody] UpdateAttendanceByCodeAndAttendanceIdCommand command)
         {
             return Ok(await mediator.Send(command));
         }

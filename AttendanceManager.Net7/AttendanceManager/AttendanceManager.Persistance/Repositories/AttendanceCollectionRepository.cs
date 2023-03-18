@@ -1,8 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
@@ -14,5 +12,10 @@ namespace AttendanceManager.Persistance.Repositories
 
         public async Task<List<AttendanceCollection>> GetAttendanceCollectionsByDocumentIdAsync(int documentId)
             => await dbContext.AttendanceCollections.AsNoTracking().Where(ac => ac.DocumentID == documentId).ToListAsync();
+
+        public async Task<AttendanceCollection> GetAttendanceCollectionByIdAsync(int id)
+            => await dbContext.AttendanceCollections
+            .Include(ac => ac.Attendances!).AsNoTracking()
+            .FirstOrDefaultAsync(a => a.AttendanceCollectionID == id);
     }
 }

@@ -5,5 +5,6 @@ namespace AttendanceManager.Application.Features.AttendanceCode.Commands.CreateA
     public sealed class CreateAttendanceCodeCommand : IRequest<AttendanceCodeDTO>
     {
         public required int Minutes { get; init; }
+        public required int AttendanceCollectionId { get; init;}
     }
 }

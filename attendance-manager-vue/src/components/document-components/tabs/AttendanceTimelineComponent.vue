@@ -67,6 +67,7 @@
       v-model="addAttendanceDateDialog"
       persistent
       max-width="50%"
+      :fullscreen="isMobile"
     >
       <AddAttendanceDateDialog
         @close="oncloseaddAttendanceDateDialog"

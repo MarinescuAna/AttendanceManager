@@ -18,7 +18,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocu
         {
             var documents = 
                 await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
-                    (request.Role == Domain.Enums.Role.Admin && u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Document!.Course!.UserSpecialization!.UserID.Equals(request.Email))) ||
+                    (request.Role == Domain.Enums.Role.Teacher && u.Course!.UserSpecialization!.UserID.Equals(request.Email)) ||
                     (request.Role == Domain.Enums.Role.Student && u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Member))
                 );
 
