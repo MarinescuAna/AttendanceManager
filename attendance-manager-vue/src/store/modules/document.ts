@@ -12,19 +12,14 @@ export interface DocumentState {
     // array with all the documents created by the teacher
     createdDocuments: DocumentViewModule[];
     // current document
-    currentDocument: {
-        // detail about this document: title, number of laboratories etc
-        documentDetails: DocumentFullViewModule,
-        // first tab: all the day when the cources was helded
-        documentFiles: AttendanceCollectionViewModule[],
-    };
+    currentDocument:  DocumentFullViewModule;
 }
 
 //initialize the state with an empty state
 function initialize(): DocumentState {
     return {
         createdDocuments: [],
-        currentDocument: null!
+        currentDocument: {} as DocumentFullViewModule
     };
 }
 
@@ -43,13 +38,14 @@ const getters = {
      * Gets created documents from the store
     */
     documentDetails(state): DocumentFullViewModule {
-        return state.currentDocument.documentDetails;
+        return state.currentDocument;
     },
     /**
      * Gets created documents from the store
     */
     documentFiles(state): AttendanceCollectionViewModule[] {
-        return state.currentDocument.documentFiles;
+        return typeof(state.currentDocument?.attendanceCollections) === "undefined"? [] 
+            : state.currentDocument?.attendanceCollections;
     }
 };
 
@@ -65,47 +61,36 @@ const mutations = {
      * Update the entire list of documents existed into the store
      */
     _documentDetails(state, payload: DocumentFullViewModule): void {
-        if (state.currentDocument == null) {
-            state.currentDocument = {
-                documentDetails: Object as () => DocumentFullViewModule,
-                documentFiles: []
-            }
-        }
-        state.currentDocument.documentDetails = payload;
-    },
-    /**
-     * Update the entire list of documents existed into the store
-     */
-    _documentCollections(state, payload: AttendanceCollectionViewModule[]): void {
-        if (state.currentDocument == null) {
-            state.currentDocument = {
-                documentDetails: Object as () => DocumentFullViewModule,
-                documentFiles: []
-            }
-        }
-        state.currentDocument.documentFiles = payload;
+        state.currentDocument = payload;
     },
     /**
      * Add a documentFile in the current document
     */
     _addAttendanceCollection(state, payload: AttendanceCollectionViewModule): void {
-        state.currentDocument.documentFiles.push(payload);
-        
-        if(payload.courseType == CourseType[CourseType.Laboratory]){
-            state.currentDocument.documentDetails.noLaboratories++;
-        }else {
-            if(payload.courseType == CourseType[CourseType.Lesson]){
-                state.currentDocument.documentDetails.noLessons++;
-            }else{
-                state.currentDocument.documentDetails.noSeminaries++;
+        state.currentDocument.attendanceCollections.push(payload);
+
+        if (payload.courseType == CourseType[CourseType.Laboratory]) {
+            state.currentDocument.noLaboratories++;
+        } else {
+            if (payload.courseType == CourseType[CourseType.Lesson]) {
+                state.currentDocument.noLessons++;
+            } else {
+                state.currentDocument.noSeminaries++;
             }
         }
     },
     /**
      * Reset the state with the initial values
      */
-    _resetStore(state): void{
+    _resetStore(state): void {
         Object.assign(state, initialize());
+    },
+
+    /**
+     * Reset current document state with the initial values
+     */
+    _resetCurrentDocumentStore(state): void {
+        state.currentDocument = {};
     }
 };
 
@@ -115,7 +100,7 @@ const actions = {
      * Load all the documents from the API and initialize the store
      */
     async loadCreatedDocuments({ commit, state }): Promise<void> {
-            if (state.createdDocuments.length == 0) {
+        if (state.createdDocuments.length == 0) {
             const documents: DocumentViewModule[] = (await https.get(`${DOCUMENT_CONTROLLER}/documents`)).data;
             commit("_createdDocuments", documents);
         }
@@ -125,16 +110,10 @@ const actions = {
      * @param payload documentId
      */
     async loadCurrentDocument({ commit, state }, payload: string): Promise<void> {
-        if (payload && (state.currentDocument == null || state.currentDocument.documentDetails.documentId != payload)) {
+        
+        if (typeof(payload) != "undefined" && Object.keys(state.currentDocument).length == 0) {
             //load the document details and update the store
-            const documentDetails: DocumentFullViewModule = 
-                (await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)).data;
-            commit("_documentDetails", documentDetails);
-
-            // load the document files and update the store
-            const documentCollections: AttendanceCollectionViewModule[] = 
-                (await https.get(`${ATTENDANCE_COLLECTION_CONTROLLER}/attendance_collection_by_documentId?documentId=${payload}`)).data;
-            commit("_documentCollections", documentCollections);
+            commit("_documentDetails", (await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)).data);
         }
     },
     async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<boolean> {
@@ -160,6 +139,13 @@ const actions = {
      */
     resetStore({ commit }): void {
         commit('_resetStore');
+    },
+
+    /**
+     * Reset current document state with the initial values
+     */
+    resetCurrentDocumentStore({ commit }): void {
+        commit('_resetCurrentDocumentStore');
     },
 };
 

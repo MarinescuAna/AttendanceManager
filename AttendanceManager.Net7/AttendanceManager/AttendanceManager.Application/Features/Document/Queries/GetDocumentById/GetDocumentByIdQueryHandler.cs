@@ -32,10 +32,11 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 SpecializationName = currentDocument.Course!.UserSpecialization!.Specialization!.Name,
                 Title = currentDocument.Title,
                 UpdateDate = currentDocument.UpdatedOn.ToString(Constants.DateFormat),
-                NoLaboratories = collectionAttendances.Count()==0? 0: collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Laboratory).Count(),
-                NoLessons = collectionAttendances.Count() == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Lesson).Count(),
-                NoSeminaries = collectionAttendances.Count() == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Seminary).Count(),
-                CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName
+                NoLaboratories = collectionAttendances.Count == 0? 0: collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Laboratory).Count(),
+                NoLessons = collectionAttendances.Count == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Lesson).Count(),
+                NoSeminaries = collectionAttendances.Count == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Seminary).Count(),
+                CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
+                AttendanceCollections = mapper.Map < AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderByDescending(d => d.HeldOn))
             };
          }
     }

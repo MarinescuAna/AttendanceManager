@@ -16,6 +16,7 @@ namespace AttendanceManager.Persistance.Repositories
         /// </summary>
         public async Task<Document?> GetDocumentByIdAsync(int id)
             => await dbContext.Documents
+            .Include(d=>d.AttendanceCollections)
             .Include(d=>d.Course!.UserSpecialization!.Specialization)
             .Include(d=>d.Course!.UserSpecialization!.User)
             .FirstOrDefaultAsync(u => u.DocumentId == id);

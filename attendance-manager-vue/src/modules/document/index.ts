@@ -1,3 +1,6 @@
+
+import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
+
 export interface DocumentInsertModule{
     title: string;
     courseId: number;
@@ -32,4 +35,5 @@ export interface DocumentFullViewModule{
     creationDate: string;
     updateDate: string;
     createdBy: string;
+    attendanceCollections: AttendanceCollectionViewModule[]
 }

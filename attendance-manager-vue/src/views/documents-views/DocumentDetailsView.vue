@@ -1,14 +1,19 @@
 <template>
   <v-card>
     <v-toolbar class="black">
-      <v-toolbar-title class="white--text">{{ documentInfo.title }}</v-toolbar-title>
+      <v-toolbar-title class="white--text">{{
+        documentInfo?.title
+      }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn @click="$router.go(-1)" dark icon>
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <template v-slot:extension>
         <v-tabs v-model="tabs" dark centered>
-          <v-tab v-for="n in ['Attendances', 'Total Attendances', 'About']" :key="n">
+          <v-tab
+            v-for="n in ['Attendances', 'Total Attendances', 'About']"
+            :key="n"
+          >
             {{ n }}
           </v-tab>
         </v-tabs>
@@ -41,7 +46,7 @@ export default Vue.extend({
   components: {
     AttendanceTimelineComponent,
     AboutDocumentComponent,
-    TotalAttendancesComponent
+    TotalAttendancesComponent,
   },
   data() {
     return {
@@ -49,12 +54,15 @@ export default Vue.extend({
     };
   },
   computed: {
-    documentInfo: function(): DocumentFullViewModule {
+    documentInfo: function (): DocumentFullViewModule {
       return storeHelper.documentStore.documentDetails;
     },
   },
-  created: async function(){
+  created: async function () {
     await storeHelper.documentStore.loadCurrentDocument(this.$route.params.id);
+  },
+  destroyed: function (): void {
+    storeHelper.documentStore.resetCurrentDocumentStore();
   },
 });
 </script>

@@ -1,4 +1,5 @@
-﻿namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
+﻿
+namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {
     public sealed class DocumentInfoDto
     {
@@ -18,5 +19,6 @@
         public required string CreationDate { get; init; }
         public required string UpdateDate { get; init; }
         public required string CreatedBy { get; init; }
+        public required AttendanceCollectionDto[] AttendanceCollections {get;init; }
     }
 }

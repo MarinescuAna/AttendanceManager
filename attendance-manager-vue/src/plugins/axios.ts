@@ -1,4 +1,3 @@
-import { TokenModule } from "@/modules/user/auth";
 import router from "@/router";
 import AuthService from "@/services/auth.service";
 import { ACCOUNT_CONTROLLER } from "@/shared/constants";
@@ -47,8 +46,6 @@ async function checkAccessToken(): Promise<void> {
 
     // check if the access token has expired
     if ((new Date()).getTime() >= AuthService.expAccessToken.getTime()) {
-        console.log("Access token is expired " + AuthService.expAccessToken);
-        console.log("Check refresh token")
         // check refresh token
         await checkRefreshToken();
 
@@ -57,11 +54,9 @@ async function checkAccessToken(): Promise<void> {
 
         // update the new access token
         if (typeof (response.data) !== 'undefined') {
-            console.log("New access token " + (response.data as TokenModule).token + " " + (response.data as TokenModule).expiration);
             AuthService.setAccessToken = response.data;
         }
     } else {
-        console.log("Check refresh token")
         // check refresh token
         await checkRefreshToken();
     }
@@ -73,7 +68,6 @@ async function checkAccessToken(): Promise<void> {
 async function checkRefreshToken(): Promise<void> {
     // The refresh has expired
     if ((new Date()).getTime() >= AuthService.expRefreshToken.getTime()) {
-        console.log("Refresh token has expiered, the access token cannot be regenerated without login: " + AuthService.expRefreshToken);
         AuthService.logout();
         router.push({ name: 'login' });
     }

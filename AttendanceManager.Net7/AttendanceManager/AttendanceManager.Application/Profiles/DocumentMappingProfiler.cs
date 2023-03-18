@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
+using AttendanceManager.Application.Shared;
 using AttendanceManager.Domain.Entities;
 using AutoMapper;
 
@@ -12,6 +13,8 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<Document, DocumentDto>()
                 .ForMember(d => d.CourseName, act => act.MapFrom(d => d.Course!.Name))
                 .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.Course!.UserSpecialization!.Specialization!.Name));
+            CreateMap<AttendanceCollection, AttendanceCollectionDto>()
+                .ForMember(a => a.ActivityTime, act => act.MapFrom(ac => ac.HeldOn.ToString(Constants.ShortDateFormat)));
         }
     }
 }

@@ -11,5 +11,6 @@
         public static readonly int PasswordLength = 8;
         public static readonly int AttendanceCodeLength = 6;
         public static readonly string DateFormat = "dddd, dd MMMM yyyy HH:mm";
+        public static readonly string ShortDateFormat = "dd.MM.yyyy HH:mm";
     }
 }

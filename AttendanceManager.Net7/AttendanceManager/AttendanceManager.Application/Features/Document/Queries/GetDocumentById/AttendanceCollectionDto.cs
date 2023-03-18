@@ -1,4 +1,4 @@
-﻿namespace AttendanceManager.Application.Features.AttendanceCollection.Queries.GetAttendanceCollectionByDocumentId
+﻿namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {
     public class AttendanceCollectionDto
     {

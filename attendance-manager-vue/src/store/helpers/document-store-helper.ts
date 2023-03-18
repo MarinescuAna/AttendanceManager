@@ -35,16 +35,16 @@ export class DocumentStore {
     /**
      * Load all the created documents from the API
     */
-    public loadCreatedDocuments(): void {
-        this.store.dispatch(`${documentNamespace}/loadCreatedDocuments`);
+    public async loadCreatedDocuments(): Promise<void> {
+        await this.store.dispatch(`${documentNamespace}/loadCreatedDocuments`);
     }
 
     /**
      * Load the current document from the API and update the store
      * @payload documentId
     */
-    public loadCurrentDocument(payload: string): void {
-        this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
+    public async loadCurrentDocument(payload: string): Promise<void> {
+        await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
     }
 
     /**
@@ -58,8 +58,14 @@ export class DocumentStore {
     /**
      * Reset the state with the initial values
      */
-    public reset(): void {
+    public resetEntireStore(): void {
         this.store.dispatch(`${documentNamespace}/resetStore`);
     }
 
+    /**
+     * Reset current document state with the initial values
+     */
+    public resetCurrentDocumentStore(): void {
+        this.store.dispatch(`${documentNamespace}/resetCurrentDocumentStore`);
+    }
 }
