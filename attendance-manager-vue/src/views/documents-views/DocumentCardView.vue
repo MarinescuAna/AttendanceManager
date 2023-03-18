@@ -48,11 +48,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    documents(): DocumentViewModule[] {
+    documents: function(): DocumentViewModule[] {
       return storeHelper.documentStore.createdDocuments;
     },
   },
-  async created() {
+  created: async function() {
     await storeHelper.documentStore.loadCreatedDocuments();
   },
 });

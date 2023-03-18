@@ -19,7 +19,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Home',
       requireAuth: false,
-      role: Role.All
+      role: [Role.All]
     },
   },
   {
@@ -29,7 +29,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Courses',
       requireAuth: true,
-      role: Role.Teacher
+      role: [Role.Teacher]
     },
     children: [
       {
@@ -40,7 +40,7 @@ const routes: Array<RouteConfig> = [
           onBack: () => { router.push({ name: 'courses' }) },
           title: 'Create course',
           requireAuth: true,
-          role: Role.Teacher
+          role: [Role.Teacher]
         }
       },
     ]
@@ -52,7 +52,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Users',
       requireAuth: true,
-      role: Role.Admin
+      role: [Role.Admin]
     },
   },
   {
@@ -65,7 +65,7 @@ const routes: Array<RouteConfig> = [
           onBack: () => { router.push({ name: 'department' }) },
           title: 'Create Department',
           requireAuth: true,
-          role: Role.Admin
+          role: [Role.Admin]
         },
         path: 'new-department',
         name: 'new-department',
@@ -76,7 +76,7 @@ const routes: Array<RouteConfig> = [
           onBack: () => { router.push({ name: 'department' }) },
           title: 'Create Specialization',
           requireAuth: true,
-          role: Role.Admin
+          role: [Role.Admin]
         },
         path: 'new-specialization',
         name: 'new-specialization',
@@ -91,7 +91,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Create document',
       requireAuth: true,
-      role: Role.Teacher
+      role: [Role.Teacher]
     },
   },
   {
@@ -101,7 +101,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Documents',
       requireAuth: true,
-      role: Role.Teacher
+      role: [Role.Teacher, Role.Student]
     },
   },
   {
@@ -111,7 +111,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Document',
       requireAuth: true,
-      role: Role.Teacher
+      role: [Role.Teacher, Role.Student]
     },
   },
   {
@@ -121,7 +121,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Create User',
       requireAuth: true,
-      role: Role.Admin
+      role: [Role.Admin]
     },
   },
   {
@@ -131,7 +131,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'About',
       requireAuth: false,
-      role: Role.All
+      role: [Role.All]
     },
   },
   {
@@ -141,7 +141,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Login',
       requireAuth: false,
-      role: Role.All
+      role: [Role.All]
     },
   },
   {
@@ -152,7 +152,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Unauthorized',
       requireAuth: false,
-      role: Role.All
+      role: [Role.All]
     },
   },
   {
@@ -163,7 +163,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Page Not Found',
       requireAuth: false,
-      role: Role.All
+      role: [Role.All]
     },
   }
 ]
@@ -185,10 +185,10 @@ router.beforeEach(async (to, from, next) => {
     if (tokenData === null) {
       next({ name: 'login' });
     } else {
-      if (Role[to.meta?.role] != (tokenData as TokenData).role.toString()) {
-        next({ name: 'unauthorized' });
-      } else {
+      if (to.meta?.role.filter(role=> Role[role] == (tokenData as TokenData).role.toString()).length>0) {
         next();
+      } else {
+        next({ name: 'unauthorized' });
       }
     }
   } else {

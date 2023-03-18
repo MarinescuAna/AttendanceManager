@@ -15,13 +15,16 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
-        /// Get all created documents 
+        /// Get all documents according to the user email and role
         /// <returns>Success: the list with all created documents by the current user</returns>
         /// </summary>
-        [HttpGet("created_documents_by_email")]
-        public async Task<IActionResult> GetCreatedDocuemntsByUserEmail()
+        [HttpGet("documents")]
+        public async Task<IActionResult> GetDocuments()
         {
-            return Ok(await mediator.Send(new GetCreatedDocumentsByEmailQuery() { Email = UserEmail }));
+            return Ok(await mediator.Send(new GetDocumentsQuery() { 
+                Email = UserEmail,
+                Role = UserRole
+            }));
         }
 
         /// <summary>

@@ -9,14 +9,18 @@ import { AxiosResponse } from "axios";
 
 //state type
 export interface DocumentState {
-    createdDocuments: DocumentViewModule[]
+    // array with all the documents created by the teacher
+    createdDocuments: DocumentViewModule[];
+    // current document
     currentDocument: {
+        // detail about this document: title, number of laboratories etc
         documentDetails: DocumentFullViewModule,
-        documentFiles: AttendanceCollectionViewModule[]
-    }
+        // first tab: all the day when the cources was helded
+        documentFiles: AttendanceCollectionViewModule[],
+    };
 }
 
-//initialize the state with an empty array
+//initialize the state with an empty state
 function initialize(): DocumentState {
     return {
         createdDocuments: [],
@@ -110,9 +114,9 @@ const actions = {
     /**
      * Load all the documents from the API and initialize the store
      */
-    async loadCreatedDocuments({ commit }): Promise<void> {
-        if (state.createdDocuments.length == 0) {
-            const documents: DocumentViewModule[] = (await https.get(`${DOCUMENT_CONTROLLER}/created_documents_by_email`)).data;
+    async loadCreatedDocuments({ commit, state }): Promise<void> {
+            if (state.createdDocuments.length == 0) {
+            const documents: DocumentViewModule[] = (await https.get(`${DOCUMENT_CONTROLLER}/documents`)).data;
             commit("_createdDocuments", documents);
         }
     },

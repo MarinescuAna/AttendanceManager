@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AttendanceManager.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
@@ -14,6 +15,7 @@ namespace AttendanceManager.Domain.Entities
         public required string UserID { get; set; }
         [ForeignKey("Document")]
         public required int DocumentID { get; set; }
+        public required DocumentRole Role { get; set; } = DocumentRole.Member; 
         public virtual User? User { get; set; }
         public virtual Document? Document { get; set; }
     }

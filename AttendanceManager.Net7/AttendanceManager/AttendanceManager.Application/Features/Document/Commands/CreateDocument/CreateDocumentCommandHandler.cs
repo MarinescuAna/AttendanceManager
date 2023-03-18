@@ -15,7 +15,11 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
         public async Task<bool> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             // Look for other documents with the same name, enrollmentyear, created by the same user for the same specialization
-            if (await unitOfWork.DocumentRepository.GetAsync(d => d.Title == request.Title && d.CourseID == request.CourseId && d.EnrollmentYear == request.EnrollmentYear && !d.IsDeleted) != null)
+            if (await unitOfWork.DocumentRepository.GetAsync(d => 
+                d.Title == request.Title && 
+                d.CourseID == request.CourseId && 
+                d.EnrollmentYear == request.EnrollmentYear && 
+                !d.IsDeleted) != null)
             {
                 throw new AlreadyExistsException("Document", request.Title);
             }
@@ -36,12 +40,16 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             unitOfWork.DocumentRepository.AddAsync(newDocument);
             await unitOfWork.CommitAsync();
 
+            // REMEMBER: the teacher that create the document can be access form course, so there is no reason to store it in the DocumentMember table
+
+            // insert all the sudents into the document
             foreach (var user in request.StudentIds)
             {
                 unitOfWork.DocumentMemberRepository.AddAsync(new DocumentMember
                 {
                     DocumentID=newDocument.DocumentId,
-                    UserID = user
+                    UserID = user,
+                    Role= Domain.Enums.DocumentRole.Member
                 });
             }
 

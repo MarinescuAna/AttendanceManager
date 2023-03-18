@@ -31,4 +31,5 @@ export interface DocumentFullViewModule{
     noSeminaries: number;
     creationDate: string;
     updateDate: string;
+    createdBy: string;
 }

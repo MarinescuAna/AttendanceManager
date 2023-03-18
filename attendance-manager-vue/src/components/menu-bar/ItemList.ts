@@ -64,6 +64,14 @@ export class MenuItems{
             ]
         },
         {
+            title: "Subscribed activity",
+            icon: "mdi-file-multiple",
+            route: "created-documents",
+            role: Role.Student,
+            children: [],
+            description: "View all the document where you are member."
+        },
+        {
             icon: "mdi-folder",
             title: "Manage departments and specialisations",
             route: "department",

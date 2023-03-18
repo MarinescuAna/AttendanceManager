@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -21,7 +22,18 @@ namespace AttendanceManager.Api.Controllers
                 return result;
             }
         }
-
+        protected Role UserRole
+        {
+            get
+            {
+                var result = string.Empty;
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    result = HttpContext.User.FindFirstValue(ClaimTypes.Role)!;
+                }
+                return Enum.Parse<Role>(result);
+            }
+        }
 
         public BaseController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
         {

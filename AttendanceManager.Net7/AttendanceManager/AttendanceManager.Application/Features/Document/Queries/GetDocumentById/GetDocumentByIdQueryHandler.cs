@@ -35,6 +35,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 NoLaboratories = collectionAttendances.Count()==0? 0: collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Laboratory).Count(),
                 NoLessons = collectionAttendances.Count() == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Lesson).Count(),
                 NoSeminaries = collectionAttendances.Count() == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Seminary).Count(),
+                CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName
             };
          }
     }
