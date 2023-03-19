@@ -40,7 +40,7 @@
           <thead>
             <tr>
               <th class="text-left">Name</th>
-              <th class="text-left">Last modifyed</th>
+              <th class="text-left">Last modified</th>
               <th class="text-left">Attendance</th>
               <th class="text-left">Bonus Points</th>
             </tr>
@@ -48,7 +48,7 @@
           <tbody>
             <tr v-for="item in students" :key="item.attendanceID">
               <td>{{ item.userID }}</td>
-              <td>{{ item.updateOn }}</td>
+              <td>{{ item.updatedOn }}</td>
               <td>
                 <v-checkbox
                   v-model="item.isPresent"

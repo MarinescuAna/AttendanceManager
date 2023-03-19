@@ -1,5 +1,6 @@
 
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
+import { StudentAttendanceModule, TotalAttendanceModule } from "./attendance";
 
 export interface DocumentInsertModule{
     title: string;
@@ -44,4 +45,8 @@ export interface DocumentFullViewModule{
     createdBy: string;
     attendanceCollections: AttendanceCollectionViewModule[];
     documentMembers: DocumentMembersViewModule[];
+    // currentStudentAttendances for current user, but only if the user is teacher
+    currentStudentAttendances: StudentAttendanceModule[];
+    // this contains the total attendance for each student (be aware of user's role)
+    totalAttendances: TotalAttendanceModule[];
 }

@@ -1,4 +1,4 @@
-﻿namespace AttendanceManager.Application.Features.Attendance.Queries.GetTotalAttendancesByDocumentId
+﻿namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {
     public sealed class TotalAttendanceDTO
     {

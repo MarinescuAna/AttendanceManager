@@ -1,9 +1,16 @@
 <template>
-  <v-layout row wrap class="ma-3">
-    <v-flex md12 xs12 lg12>
-      <v-btn color="black" class="white--text" :disabled="!saveChanges" @click="onSave"> Save Changes </v-btn>
+  <v-layout column class="ma-3">
+    <v-flex v-if="isTeacher">
+      <v-btn
+        color="black"
+        class="white--text"
+        :disabled="!saveChanges"
+        @click="onSave"
+      >
+        Save Changes
+      </v-btn>
     </v-flex>
-    <v-flex md6 lg6 xs12>
+    <v-layout wrap>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -21,6 +28,7 @@
                 <v-simple-checkbox
                   v-model="item.wasPresent"
                   @click="saveChanges = true"
+                  :disabled="!isTeacher"
                 ></v-simple-checkbox>
               </td>
               <td>
@@ -28,6 +36,7 @@
                   type="number"
                   v-model="item.bonusPoints"
                   @click="saveChanges = true"
+                  :disabled="!isTeacher"
                 ></v-text-field>
               </td>
               <td>{{ item.courseType }}</td>
@@ -35,8 +44,6 @@
           </tbody>
         </template>
       </v-simple-table>
-    </v-flex>
-    <v-flex md6 lg6 xs12>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -55,7 +62,7 @@
           </tbody>
         </template>
       </v-simple-table>
-    </v-flex>
+    </v-layout>
   </v-layout>
 </template>
 
@@ -68,8 +75,9 @@ import {
 import { studentAttendancesHeader } from "./TotalAttendancesHeader";
 import AttendanceService from "@/services/attendance.service";
 import storeHelper from "@/store/store-helper";
-import { CourseType } from "@/shared/enums";
+import { CourseType, Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
+import AuthService from "@/services/auth.service";
 
 interface ResultsOverview {
   courseType: string;
@@ -91,13 +99,21 @@ export default Vue.extend({
       saveChanges: false,
     };
   },
+  computed: {
+    isTeacher: function (): boolean {
+      return AuthService.getDataFromToken()?.role == Role[2];
+    },
+  },
   created: async function () {
-    // load user attendances
-    this.userAttendances =
-      await AttendanceService.getStudentAttendancesByDocumentIdAndUserId(
-        storeHelper.documentStore.documentDetails.documentId,
-        this.userId
-      );
+    // load user attendances for the selected user in case that the current user's role is teacher,
+    // or get from the store the attendances report for the current user
+    this.userAttendances = this.isTeacher
+      ? await AttendanceService.getStudentAttendancesByDocumentIdAndUserId(
+          storeHelper.documentStore.documentDetails.documentId,
+          this.userId
+        )
+      : await storeHelper.documentStore.documentDetails
+          .currentStudentAttendances;
 
     // make a copy of the results
     this.userAttendances.forEach((x) =>
@@ -151,7 +167,7 @@ export default Vue.extend({
         } as ResultsOverview);
       }
     },
-    onSave: async function(): Promise<void> {
+    onSave: async function (): Promise<void> {
       let studentsChanged: StudentAttendanceInsertModule[] = [];
 
       this.userAttendances.forEach((student) => {
@@ -177,7 +193,9 @@ export default Vue.extend({
         );
 
         if (!response) {
-          Toastification.simpleError("Something went wrong and not all the attendances was saved!");
+          Toastification.simpleError(
+            "Something went wrong and not all the attendances was saved!"
+          );
         }
       }
     },

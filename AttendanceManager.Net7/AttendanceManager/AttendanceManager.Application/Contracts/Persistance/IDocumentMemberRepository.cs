@@ -4,8 +4,7 @@ namespace AttendanceManager.Application.Contracts.Persistance
 {
     public interface IDocumentMemberRepository : IGenericRepository<DocumentMember>
     {
-        Task<List<User>> GetStudentsByDocumentIdAsync(int documentId);
+        Task<List<DocumentMember>> GetStudentsByDocumentIdAsync(int documentId);
         Task<DocumentMember?> GetMemberByDocumentIdAndUserIdAsync(int documentId, string userId);
-        Task<List<DocumentMember>> GetDocumentMembersBtDocumentIdAsync(int documentId);
     }
 }

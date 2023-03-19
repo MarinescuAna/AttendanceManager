@@ -1,4 +1,6 @@
 ﻿
+using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
+
 namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {
     public sealed class DocumentInfoDto
@@ -21,5 +23,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
         public required string CreatedBy { get; init; }
         public required AttendanceCollectionDto[] AttendanceCollections { get; init; }
         public required DocumentMembersDto[] DocumentMembers { get; init; }
+        public StudentAttendancesDTO[]? CurrentStudentAttendances { get; set; }
+        public required TotalAttendanceDTO[] TotalAttendances { get; init; }
     }
 }

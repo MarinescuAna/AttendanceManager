@@ -1,9 +1,12 @@
-﻿using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
+﻿using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
+using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
+using AttendanceManager.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace AttendanceManager.Api.Controllers
 {
@@ -34,7 +37,21 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("document_by_id")]
         public async Task<IActionResult> GetDocumentById(int id)
         {
-            return Ok(await mediator.Send(new GetDocumentByIdQuery() { Id = id }));
+            var document = await mediator.Send(new GetDocumentByIdQuery(){ 
+                Id = id,
+                Role = UserRole
+            });
+
+            // load current student attendances instead of all members attendances in case that the user is student
+            if (UserRole == Domain.Enums.Role.Student)
+            {
+                document.CurrentStudentAttendances = await mediator.Send(new GetStudentAttendanceByDocIdAndUserIdQuery()
+                {
+                    DocumentId = id,
+                    UserId = UserEmail
+                });
+            }
+            return Ok(document);
         }
 
         /// <summary>

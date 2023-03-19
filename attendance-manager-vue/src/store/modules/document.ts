@@ -12,7 +12,7 @@ export interface DocumentState {
     // array with all the documents created by the teacher
     createdDocuments: DocumentViewModule[];
     // current document
-    currentDocument:  DocumentFullViewModule;
+    currentDocument: DocumentFullViewModule;
 }
 
 //initialize the state with an empty state
@@ -44,7 +44,7 @@ const getters = {
      * Gets created documents from the store
     */
     documentFiles(state): AttendanceCollectionViewModule[] {
-        return typeof(state.currentDocument?.attendanceCollections) === "undefined"? [] 
+        return typeof (state.currentDocument?.attendanceCollections) === "undefined" ? []
             : state.currentDocument?.attendanceCollections;
     }
 };
@@ -110,10 +110,17 @@ const actions = {
      * @param payload documentId
      */
     async loadCurrentDocument({ commit, state }, payload: string): Promise<void> {
-        
-        if (typeof(payload) != "undefined" && Object.keys(state.currentDocument).length == 0) {
+
+        if (typeof (payload) != "undefined" && Object.keys(state.currentDocument).length === 0) {
+            let isFail = false;
+            
             //load the document details and update the store
-            commit("_documentDetails", (await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)).data);
+            const response = await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)
+                .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
+
+            if (!isFail) {
+                commit("_documentDetails", (response as AxiosResponse).data);
+            }
         }
     },
     async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<boolean> {
