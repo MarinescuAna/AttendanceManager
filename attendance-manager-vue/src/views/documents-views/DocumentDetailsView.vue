@@ -11,7 +11,7 @@
       <template v-slot:extension>
         <v-tabs v-model="tabs" dark centered>
           <v-tab
-            v-for="n in ['Attendances', 'Total Attendances', 'About']"
+            v-for="n in ['Attendances', 'Total Attendances', 'Members','Settings','About']"
             :key="n"
           >
             {{ n }}
@@ -28,6 +28,12 @@
         <TotalAttendancesComponent />
       </v-tab-item>
       <v-tab-item>
+        <DocumentMembersComponent />
+      </v-tab-item>
+      <v-tab-item>
+        <AboutDocumentComponent />
+      </v-tab-item>
+      <v-tab-item>
         <AboutDocumentComponent />
       </v-tab-item>
     </v-tabs-items>
@@ -40,6 +46,7 @@ import { DocumentFullViewModule } from "@/modules/document";
 import AboutDocumentComponent from "@/components/document-components/tabs/AboutDocumentComponent.vue";
 import AttendanceTimelineComponent from "@/components/document-components/tabs/AttendanceTimelineComponent.vue";
 import TotalAttendancesComponent from "@/components/document-components/tabs/TotalAttendancesComponent.vue";
+import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
@@ -47,6 +54,7 @@ export default Vue.extend({
     AttendanceTimelineComponent,
     AboutDocumentComponent,
     TotalAttendancesComponent,
+    DocumentMembersComponent
   },
   data() {
     return {

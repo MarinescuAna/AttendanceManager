@@ -23,5 +23,12 @@ namespace AttendanceManager.Persistance.Repositories
             .Where(dm => dm.User!.Role == Domain.Enums.Role.Student && dm.DocumentID == documentId)
             .Select(dm => dm.User!)
             .ToListAsync();
+
+        public async Task<List<DocumentMember>> GetDocumentMembersBtDocumentIdAsync(int documentId)
+            => await dbContext.DocumentMembers
+            .Include(u => u.User)
+            .AsNoTracking()
+            .Where(dm => dm.DocumentID == documentId)
+            .ToListAsync();
     }
 }

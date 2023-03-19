@@ -19,6 +19,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
         public required string CreationDate { get; init; }
         public required string UpdateDate { get; init; }
         public required string CreatedBy { get; init; }
-        public required AttendanceCollectionDto[] AttendanceCollections {get;init; }
+        public required AttendanceCollectionDto[] AttendanceCollections { get; init; }
+        public required DocumentMembersDto[] DocumentMembers { get; init; }
     }
 }

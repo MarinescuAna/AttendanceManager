@@ -18,6 +18,13 @@ export interface DocumentViewModule{
     enrollmentYear: number;
     documentId: number;
 }
+
+export interface DocumentMembersViewModule{
+    email: string;
+    role: string;
+    name: string;
+}
+
 export interface DocumentFullViewModule{
     documentId:number;
     title: string;
@@ -35,5 +42,6 @@ export interface DocumentFullViewModule{
     creationDate: string;
     updateDate: string;
     createdBy: string;
-    attendanceCollections: AttendanceCollectionViewModule[]
+    attendanceCollections: AttendanceCollectionViewModule[];
+    documentMembers: DocumentMembersViewModule[];
 }

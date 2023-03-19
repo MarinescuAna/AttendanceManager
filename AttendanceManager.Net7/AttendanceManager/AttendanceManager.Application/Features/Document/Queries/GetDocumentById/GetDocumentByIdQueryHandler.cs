@@ -17,6 +17,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
             var currentDocument = await unitOfWork.DocumentRepository.GetDocumentByIdAsync(request.Id)
                 ?? throw new NotFoundException("Document", request.Id);
             var collectionAttendances = await unitOfWork.AttendanceCollectionRepository.GetAttendanceCollectionsByDocumentIdAsync(request.Id);
+            var documentMembers = await unitOfWork.DocumentMemberRepository.GetDocumentMembersBtDocumentIdAsync(request.Id);
 
             return new DocumentInfoDto
             {
@@ -36,7 +37,8 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 NoLessons = collectionAttendances.Count == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Lesson).Count(),
                 NoSeminaries = collectionAttendances.Count == 0 ? 0 : collectionAttendances.Where(ca=>ca.CourseType == Domain.Enums.CourseType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
-                AttendanceCollections = mapper.Map < AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderByDescending(d => d.HeldOn))
+                AttendanceCollections = mapper.Map < AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderByDescending(d => d.HeldOn)),
+                DocumentMembers = mapper.Map<DocumentMembersDto[]>(documentMembers)
             };
          }
     }

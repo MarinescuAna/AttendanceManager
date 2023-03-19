@@ -15,6 +15,9 @@ namespace AttendanceManager.Application.Profiles
                 .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.Course!.UserSpecialization!.Specialization!.Name));
             CreateMap<AttendanceCollection, AttendanceCollectionDto>()
                 .ForMember(a => a.ActivityTime, act => act.MapFrom(ac => ac.HeldOn.ToString(Constants.ShortDateFormat)));
+            CreateMap<DocumentMember, DocumentMembersDto>()
+                .ForMember(u => u.Name, act => act.MapFrom(d => d.User!.FullName))
+                .ForMember(u => u.Email, act => act.MapFrom(d => d.User!.Email));
         }
     }
 }
