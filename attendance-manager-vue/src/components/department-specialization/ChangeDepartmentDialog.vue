@@ -27,9 +27,12 @@ import {
 import storeHelper from "@/store/store-helper";
 
 export default {
+  name:"ChangeDepartmentDialog",
   props: {
     // Department
-    department: Object as () => DepartmentViewModel,
+      department: {
+          type: Object as () => DepartmentViewModel
+      }
   },
   data() {
     return {
@@ -38,11 +41,11 @@ export default {
     };
   },
   computed: {
-    isValid(): boolean {
+    isValid: function(): boolean {
       return this.name == "" || this.name == this.department!.name;
     },
   },
-  created(): void {
+  created: function(): void {
     // Initialize the field
     if (this.department) {
       this.name = this.department.name;
@@ -52,7 +55,7 @@ export default {
     /*
      * Save the new name
      */
-    async onSaveName(): Promise<void> {
+    onSaveName: async function(): Promise<void> {
       const result = await storeHelper.departmentStore.updateDepartmentName({
         id: this.department!.id,
         name: this.name,
