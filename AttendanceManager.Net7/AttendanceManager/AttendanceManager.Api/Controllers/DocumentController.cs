@@ -2,11 +2,10 @@
 using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
-using AttendanceManager.Domain.Entities;
+using AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaboratorByDocumentId;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata;
 
 namespace AttendanceManager.Api.Controllers
 {
@@ -24,7 +23,8 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("documents")]
         public async Task<IActionResult> GetDocuments()
         {
-            return Ok(await mediator.Send(new GetDocumentsQuery() { 
+            return Ok(await mediator.Send(new GetDocumentsQuery()
+            {
                 Email = UserEmail,
                 Role = UserRole
             }));
@@ -37,7 +37,8 @@ namespace AttendanceManager.Api.Controllers
         [HttpGet("document_by_id")]
         public async Task<IActionResult> GetDocumentById(int id)
         {
-            var document = await mediator.Send(new GetDocumentByIdQuery(){ 
+            var document = await mediator.Send(new GetDocumentByIdQuery()
+            {
                 Id = id,
                 Role = UserRole
             });
@@ -62,6 +63,16 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> CreateDocument([FromBody] CreateDocumentCommand command)
         {
             command.Email = UserEmail;
+            return Ok(await mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Add a user as collaborator to the document
+        /// <returns>Success: true/false</returns>
+        /// </summary>
+        [HttpPost("add_collaborator")]
+        public async Task<IActionResult> AddCollaborator([FromBody] InsertCollaboratorByDocumentIdCommand command)
+        {
             return Ok(await mediator.Send(command));
         }
     }

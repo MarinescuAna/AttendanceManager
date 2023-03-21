@@ -6,5 +6,9 @@
             : base($"{name} with {value} already exists!")
         {
         }
+        public AlreadyExistsException(string name)
+            : base(name)
+        {
+        }
     }
 }

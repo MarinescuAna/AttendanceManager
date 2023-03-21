@@ -11,7 +11,7 @@
       <template v-slot:extension>
         <v-tabs v-model="tabs" dark centered>
           <v-tab
-            v-for="n in ['Attendances', 'Total Attendances', 'Members','Settings','About']"
+            v-for="n in isTeacher? teacherTabs: studentTabs"
             :key="n"
           >
             {{ n }}
@@ -30,8 +30,8 @@
       <v-tab-item>
         <DocumentMembersComponent />
       </v-tab-item>
-      <v-tab-item>
-        <AboutDocumentComponent />
+      <v-tab-item v-if="isTeacher">
+        <SettingsDocumentComponent />
       </v-tab-item>
       <v-tab-item>
         <AboutDocumentComponent />
@@ -47,24 +47,33 @@ import AboutDocumentComponent from "@/components/document-components/tabs/AboutD
 import AttendanceTimelineComponent from "@/components/document-components/tabs/AttendanceTimelineComponent.vue";
 import TotalAttendancesComponent from "@/components/document-components/tabs/TotalAttendancesComponent.vue";
 import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
+import SettingsDocumentComponent from "@/components/document-components/tabs/SettingsDocumentComponent.vue";
 import storeHelper from "@/store/store-helper";
+import AuthService from "@/services/auth.service";
+import { Role } from "@/shared/enums";
 
 export default Vue.extend({
   components: {
     AttendanceTimelineComponent,
     AboutDocumentComponent,
     TotalAttendancesComponent,
-    DocumentMembersComponent
+    DocumentMembersComponent,
+    SettingsDocumentComponent
   },
   data() {
     return {
       tabs: [],
+      teacherTabs: ['Attendances', 'Total Attendances', 'Members','Settings','About'],
+      studentTabs: ['Attendances', 'Total Attendances', 'Members','About']
     };
   },
   computed: {
     documentInfo: function (): DocumentFullViewModule {
       return storeHelper.documentStore.documentDetails;
     },
+    isTeacher: function(): boolean{
+      return AuthService.getDataFromToken()?.role == Role[2];
+    }
   },
   created: async function () {
     await storeHelper.documentStore.loadCurrentDocument(this.$route.params.id);

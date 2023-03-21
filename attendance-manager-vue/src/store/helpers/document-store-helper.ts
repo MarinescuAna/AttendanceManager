@@ -48,6 +48,14 @@ export class DocumentStore {
     }
 
     /**
+     * Add new teacher as collaborator to a document
+     * @payload teacher email
+    */
+    public async addCollaborator(payload: string): Promise<boolean> {
+       return await this.store.dispatch(`${documentNamespace}/addCollaborator`, payload);
+    }
+
+    /**
    * Add a new specialziation only
    * @test
    */

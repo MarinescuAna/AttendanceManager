@@ -1,4 +1,4 @@
-﻿namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
+﻿namespace AttendanceManager.Application.SharedDtos
 {
     public sealed class DocumentMembersDto
     {

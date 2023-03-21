@@ -1,6 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Domain.Entities;
 using AutoMapper;
 using MediatR;
 
@@ -15,10 +14,10 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
         public async Task<bool> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             // Look for other documents with the same name, enrollmentyear, created by the same user for the same specialization
-            if (await unitOfWork.DocumentRepository.GetAsync(d => 
-                d.Title == request.Title && 
-                d.CourseID == request.CourseId && 
-                d.EnrollmentYear == request.EnrollmentYear && 
+            if (await unitOfWork.DocumentRepository.GetAsync(d =>
+                d.Title == request.Title &&
+                d.CourseID == request.CourseId &&
+                d.EnrollmentYear == request.EnrollmentYear &&
                 !d.IsDeleted) != null)
             {
                 throw new AlreadyExistsException("Document", request.Title);
@@ -27,14 +26,14 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             var newDocument = new Domain.Entities.Document
             {
                 CourseID = request.CourseId,
-                CreatedOn= DateTime.Now,
+                CreatedOn = DateTime.Now,
                 EnrollmentYear = request.EnrollmentYear,
                 IsDeleted = false,
                 MaxNoLaboratories = request.MaxNoLaboratories,
                 MaxNoLessons = request.MaxNoLessons,
                 MaxNoSeminaries = request.MaxNoSeminaries,
-                Title= request.Title,
-                UpdatedOn= DateTime.Now
+                Title = request.Title,
+                UpdatedOn = DateTime.Now
             };
             // Save document first to can get the id
             unitOfWork.DocumentRepository.AddAsync(newDocument);
@@ -45,11 +44,11 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             // insert all the sudents into the document
             foreach (var user in request.StudentIds)
             {
-                unitOfWork.DocumentMemberRepository.AddAsync(new DocumentMember
+                unitOfWork.DocumentMemberRepository.AddAsync(new Domain.Entities.DocumentMember
                 {
-                    DocumentID=newDocument.DocumentId,
+                    DocumentID = newDocument.DocumentId,
                     UserID = user,
-                    Role= Domain.Enums.DocumentRole.Member
+                    Role = Domain.Enums.DocumentRole.Member
                 });
             }
 

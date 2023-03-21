@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentMembersViewModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
 import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
@@ -79,6 +79,9 @@ const mutations = {
             }
         }
     },
+    _addCollaborator(state, payload: DocumentMembersViewModule): void{
+        state.currentDocument.documentMembers.push(payload);
+    },
     /**
      * Reset the state with the initial values
      */
@@ -122,6 +125,23 @@ const actions = {
                 commit("_documentDetails", (response as AxiosResponse).data);
             }
         }
+    },
+    async addCollaborator({commit, state}, payload:string): Promise<boolean> {
+        let isSuccess = true;
+
+        const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator`, {
+            email: payload,
+            documentId: state.currentDocument.documentId
+        })
+        .catch(error => {
+            isSuccess = ResponseHandler.errorResponseHandler(error);
+        });
+
+        if (isSuccess) {
+            commit("_addCollaborator", (result as AxiosResponse).data);
+        }
+
+        return isSuccess;
     },
     async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<boolean> {
         let isSuccess = true;

@@ -1,7 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Shared;
-using AttendanceManager.Domain.Entities;
+using AttendanceManager.Application.SharedDtos;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
@@ -10,7 +10,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
 {
     public sealed class GetDocumentByIdQueryHandler : BaseFeature, IRequestHandler<GetDocumentByIdQuery, DocumentInfoDto>
     {
-        private List<DocumentMember> _docMemberStudents = new();
+        private List<Domain.Entities.DocumentMember> _docMemberStudents = new();
         private Dictionary<int, CourseType> _collectionAttendances = new();
         public GetDocumentByIdQueryHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
@@ -21,7 +21,12 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
             //get current document
             var currentDocument = await unitOfWork.DocumentRepository.GetDocumentByIdAsync(request.Id)
                 ?? throw new NotFoundException("Document", request.Id);
-            await InitializeLists(request.Id);
+            // get a dictionary of attendance collections: key: attendance collection Id, value: course type 
+            _collectionAttendances = (await unitOfWork.AttendanceCollectionRepository.GetAttendanceCollectionsByDocumentIdAsync(request.Id))
+                .ToDictionary(ca => ca.AttendanceCollectionID, ca => ca.CourseType);
+
+            // get all the students that are members of this document
+            _docMemberStudents = await unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(request.Id, null);
 
             return new DocumentInfoDto
             {
@@ -47,31 +52,22 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
             };
         }
 
-        private async Task InitializeLists(int documentId)
-        {
-            // get a dictionary of attendance collections: key: attendance collection Id, value: course type 
-            _collectionAttendances = (await unitOfWork.AttendanceCollectionRepository.GetAttendanceCollectionsByDocumentIdAsync(documentId))
-                .ToDictionary(ca => ca.AttendanceCollectionID, ca => ca.CourseType);
-
-            // get all the students that are members of this document
-            _docMemberStudents = await unitOfWork.DocumentMemberRepository.GetStudentsByDocumentIdAsync(documentId);
-        }
-
         private TotalAttendanceDTO[] ComputeTotalAttendances(Role userRole)
         {
-            TotalAttendanceDTO[] attendances = new TotalAttendanceDTO[_docMemberStudents.Count];
+            var students = _docMemberStudents.Where(s => s!.User!.Role == Role.Student).ToList();
+            TotalAttendanceDTO[] attendances = new TotalAttendanceDTO[students.Count];
 
             // the user contains the attendances, but those are also from other document, so we will get only the attendances related to the collections from dictionary
-            for (var i = 0; i < _docMemberStudents.Count; i++)
+            for (var i = 0; i < students.Count; i++)
             {
                 // for each student, get the attendances needed
-                var userAttendances = _docMemberStudents[i].User!.Attendances!.Where(a => _collectionAttendances.ContainsKey(a.AttendanceCollectionID));
+                var userAttendances = students[i].User!.Attendances!.Where(a => _collectionAttendances.ContainsKey(a.AttendanceCollectionID));
 
                 attendances[i] = new()
                 {
-                    UserID = userRole == Role.Teacher ? _docMemberStudents[i].UserID : string.Empty,
-                    UserName = userRole == Role.Teacher ? _docMemberStudents[i].User!.FullName : string.Empty,
-                    Code = _docMemberStudents[i].User!.Code,
+                    UserID = userRole == Role.Teacher ? students[i].UserID : string.Empty,
+                    UserName = userRole == Role.Teacher ? students[i].User!.FullName : string.Empty,
+                    Code = students[i].User!.Code,
                     BonusPoints = userAttendances.Sum(a => a.BonusPoints),
                     CourseAttendances = userAttendances.Where(a => a.IsPresent && _collectionAttendances[a.AttendanceCollectionID] == CourseType.Lesson).Count(),
                     LaboratoryAttendances = userAttendances.Where(a => a.IsPresent && _collectionAttendances[a.AttendanceCollectionID] == CourseType.Laboratory).Count(),
