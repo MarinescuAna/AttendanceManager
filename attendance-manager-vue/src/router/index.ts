@@ -96,6 +96,16 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/documents',
+    name: 'collaborator-documents',
+    component: () => import('../views/documents-views/DocumentCardView.vue'),
+    meta: {
+      title: 'Documents',
+      requireAuth: true,
+      role: [Role.Teacher]
+    },
+  },
+  {
+    path: '/documents',
     name: 'created-documents',
     component: () => import('../views/documents-views/DocumentCardView.vue'),
     meta: {

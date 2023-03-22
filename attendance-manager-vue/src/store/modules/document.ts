@@ -11,6 +11,8 @@ import { AxiosResponse } from "axios";
 export interface DocumentState {
     // array with all the documents created by the teacher
     createdDocuments: DocumentViewModule[];
+    // array with all the documents where the teacher is just collaborator
+    collaboratorDocuments: DocumentViewModule[];
     // current document
     currentDocument: DocumentFullViewModule;
 }
@@ -19,6 +21,7 @@ export interface DocumentState {
 function initialize(): DocumentState {
     return {
         createdDocuments: [],
+        collaboratorDocuments: [],
         currentDocument: {} as DocumentFullViewModule
     };
 }
@@ -33,6 +36,12 @@ const getters = {
     */
     createdDocuments(state): DocumentViewModule[] {
         return state.createdDocuments;
+    },
+    /**
+    * Gets documents the teacher is collaborator from the store
+    */
+    collaboratorDocuments(state): DocumentViewModule[] {
+        return state.collaboratorDocuments;
     },
     /**
      * Gets created documents from the store
@@ -60,6 +69,12 @@ const mutations = {
     /**
      * Update the entire list of documents existed into the store
      */
+    _collaboratorDocuments(state, payload: DocumentViewModule[]): void {
+        state.collaboratorDocuments = payload;
+    },
+    /**
+     * Update the entire list of documents existed into the store
+     */
     _documentDetails(state, payload: DocumentFullViewModule): void {
         state.currentDocument = payload;
     },
@@ -79,7 +94,7 @@ const mutations = {
             }
         }
     },
-    _addCollaborator(state, payload: DocumentMembersViewModule): void{
+    _addCollaborator(state, payload: DocumentMembersViewModule): void {
         state.currentDocument.documentMembers.push(payload);
     },
     /**
@@ -100,12 +115,22 @@ const mutations = {
 // actions for this store
 const actions = {
     /**
-     * Load all the documents from the API and initialize the store
+     * Load the documents where the user is collaborator or the created documents
+     * @param payload true for created documents, false for documents where the user is collaborator
      */
-    async loadCreatedDocuments({ commit, state }): Promise<void> {
+    async loadDocuments({ commit, state }, payload: boolean): Promise<void> {
         if (state.createdDocuments.length == 0) {
-            const documents: DocumentViewModule[] = (await https.get(`${DOCUMENT_CONTROLLER}/documents`)).data;
-            commit("_createdDocuments", documents);
+            let isSuccess = true;
+
+            const result = await https.get(`${DOCUMENT_CONTROLLER}/documents?loadCreatedDocuments=${payload}`)
+                        .catch(error => {
+                            isSuccess = ResponseHandler.errorResponseHandler(error);
+                        });
+            
+            if(isSuccess){
+                const documents: DocumentViewModule[] = (result as AxiosResponse).data as DocumentViewModule[];
+                commit(payload ? "_createdDocuments" : "_collaboratorDocuments", documents);
+            }
         }
     },
     /**
@@ -116,7 +141,7 @@ const actions = {
 
         if (typeof (payload) != "undefined" && Object.keys(state.currentDocument).length === 0) {
             let isFail = false;
-            
+
             //load the document details and update the store
             const response = await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)
                 .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
@@ -126,16 +151,16 @@ const actions = {
             }
         }
     },
-    async addCollaborator({commit, state}, payload:string): Promise<boolean> {
+    async addCollaborator({ commit, state }, payload: string): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator`, {
             email: payload,
             documentId: state.currentDocument.documentId
         })
-        .catch(error => {
-            isSuccess = ResponseHandler.errorResponseHandler(error);
-        });
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
 
         if (isSuccess) {
             commit("_addCollaborator", (result as AxiosResponse).data);

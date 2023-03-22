@@ -11,14 +11,15 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocu
         }
         /*
          * Get documents according to the user email and role:
-         * - Admin: get all the documents where the user has the role Creator
+         * - Admin: get all the documents where the user has the role Creator or collaborator
          * - Student: get all the documents where the student has the role Member
          */
         public async Task<List<DocumentDto>> Handle(GetDocumentsQuery request, CancellationToken cancellationToken)
         {
-            var documents = 
+            var documents =
                 await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
-                    (request.Role == Domain.Enums.Role.Teacher && u.Course!.UserSpecialization!.UserID.Equals(request.Email)) ||
+                    (request.LoadCreatedDocuments && request.Role == Domain.Enums.Role.Teacher && u.Course!.UserSpecialization!.UserID.Equals(request.Email)) ||
+                    (!request.LoadCreatedDocuments && request.Role == Domain.Enums.Role.Teacher && u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Collaborator)) ||
                     (request.Role == Domain.Enums.Role.Student && u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Member))
                 );
 

@@ -21,6 +21,13 @@ export class DocumentStore {
     /**
      * Getter for fetching all the documents from the store, not from the API
     */
+    public get collaboratorDocuments(): DocumentViewModule[] {
+        return this.store.getters[`${documentNamespace}/collaboratorDocuments`];
+    }
+
+    /**
+     * Getter for fetching all the documents from the store, not from the API
+    */
     public get documentFiles(): AttendanceCollectionViewModule[] {
         return this.store.getters[`${documentNamespace}/documentFiles`];
     }
@@ -33,10 +40,11 @@ export class DocumentStore {
     }
 
     /**
-     * Load all the created documents from the API
-    */
-    public async loadCreatedDocuments(): Promise<void> {
-        await this.store.dispatch(`${documentNamespace}/loadCreatedDocuments`);
+     * Load the documents where the user is collaborator or the created documents
+     * @param loadCreatedDocuments true for created documents, false for documents where the user is collaborator
+     */
+    public async loadDocuments(loadCreatedDocuments: boolean): Promise<void> {
+        await this.store.dispatch(`${documentNamespace}/loadDocuments`, loadCreatedDocuments);
     }
 
     /**

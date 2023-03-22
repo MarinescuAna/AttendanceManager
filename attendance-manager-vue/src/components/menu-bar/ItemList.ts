@@ -30,6 +30,13 @@ export class MenuItems{
                     route: "created-documents",
                     role: Role.Teacher,
                     description: "View all the documents that you created."
+                },
+                {
+                    title: "View documents as collaborator",
+                    icon: "mdi-file-multiple",
+                    route: "collaborator-documents",
+                    role: Role.Teacher,
+                    description: "View all the documents where you was added as collaborator."
                 }
             ]
         },

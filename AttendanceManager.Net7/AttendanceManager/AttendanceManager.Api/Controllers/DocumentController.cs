@@ -21,12 +21,13 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: the list with all created documents by the current user</returns>
         /// </summary>
         [HttpGet("documents")]
-        public async Task<IActionResult> GetDocuments()
+        public async Task<IActionResult> GetDocuments(bool loadCreatedDocuments)
         {
             return Ok(await mediator.Send(new GetDocumentsQuery()
             {
                 Email = UserEmail,
-                Role = UserRole
+                Role = UserRole,
+                LoadCreatedDocuments = loadCreatedDocuments
             }));
         }
 
