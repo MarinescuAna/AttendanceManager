@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Application.Shared;
+using AttendanceManager.Core.Shared;
 using AutoMapper;
 using MediatR;
 
@@ -29,16 +29,17 @@ namespace AttendanceManager.Application.Features.AttendanceCode.Commands.CreateA
             {
                 Code = code,
                 ExpirationDate = DateTime.Now.AddMinutes(request.Minutes),
-                AttendanceCollectionId= request.AttendanceCollectionId
+                AttendanceCollectionId = request.AttendanceCollectionId
             };
             unitOfWork.AttendanceCodeRepository.AddAsync(newCode);
 
-            if(!await unitOfWork.CommitAsync())
+            if (!await unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
             }
 
-            return new() {
+            return new()
+            {
                 Code = newCode.Code,
                 ExpirationDate = newCode.ExpirationDate.ToShortTimeString()
             };

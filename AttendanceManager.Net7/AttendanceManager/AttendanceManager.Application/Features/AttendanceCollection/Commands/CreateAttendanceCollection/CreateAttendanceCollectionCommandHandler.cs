@@ -1,13 +1,13 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Application.Shared;
+using AttendanceManager.Core.Shared;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.AttendanceCollection.Commands.CreateAttendanceCollection
 {
-    public sealed class CreateAttendanceCollectionCommandHandler :BaseFeature, IRequestHandler<CreateAttendanceCollectionCommand, int>
+    public sealed class CreateAttendanceCollectionCommandHandler : BaseFeature, IRequestHandler<CreateAttendanceCollectionCommand, int>
     {
         public CreateAttendanceCollectionCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
@@ -40,11 +40,12 @@ namespace AttendanceManager.Application.Features.AttendanceCollection.Commands.C
                     !us.User.IsDeleted);
 
             // add each student as not present and with 0 bonus points
-            foreach(var student in students)
+            foreach (var student in students)
             {
-                unitOfWork.AttendanceRepository.AddAsync( new Domain.Entities.Attendance { 
+                unitOfWork.AttendanceRepository.AddAsync(new Domain.Entities.Attendance
+                {
                     UpdatedOn = DateTime.Now,
-                    CreatedOn= DateTime.Now, 
+                    CreatedOn = DateTime.Now,
                     AttendanceCollectionID = attendanceCollection.AttendanceCollectionID,
                     BonusPoints = 0,
                     IsPresent = false,

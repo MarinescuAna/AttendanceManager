@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Features.Attendance.Queries.GetAttendanceByAttendanceCollectionID;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Application.Shared;
+using AttendanceManager.Core.Shared;
 using AutoMapper;
 
 namespace AttendanceManager.Application.Profiles
