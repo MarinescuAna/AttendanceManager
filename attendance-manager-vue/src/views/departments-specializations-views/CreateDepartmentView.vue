@@ -50,6 +50,7 @@ import { rules } from "@/plugins/vee-validate";
 import StoreHelper from "@/store/store-helper";
 
 export default Vue.extend({
+  name: "CreateDepartmentView",
   data() {
     return {
       rules,

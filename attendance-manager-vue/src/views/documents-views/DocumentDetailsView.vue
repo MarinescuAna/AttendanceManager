@@ -53,6 +53,7 @@ import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 
 export default Vue.extend({
+  name: "DocumentDetailsView",
   components: {
     AttendanceTimelineComponent,
     AboutDocumentComponent,

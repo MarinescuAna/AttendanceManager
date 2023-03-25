@@ -32,14 +32,15 @@
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
-  data() {
+  name: "TimePickerComponent",
+  data: function () {
     return {
       time: null,
       menu2: false,
     };
   },
   methods: {
-    onSubmit(): void {
+    onSubmit: function (): void {
       this.$refs.menu.save(this.time);
       this.$emit("save", this.time);
     },

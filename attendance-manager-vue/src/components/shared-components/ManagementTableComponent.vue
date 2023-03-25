@@ -37,8 +37,9 @@ import { TableModule } from "@/modules/shared";
 import { HeaderModule } from "./Headers";
 
 export default Vue.extend({
+  name: "ManagementTableComponent",
   props: {
-    // Use this to expand details for each row
+    /** Use this to expand details for each row */ 
     expandDetails: {
       type: Boolean,
       default: true

@@ -65,6 +65,7 @@ import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
 import {rules} from "@/plugins/vee-validate";
 
 export default Vue.extend({
+  name: "LoginView",
   data() {
     return {
       rules,

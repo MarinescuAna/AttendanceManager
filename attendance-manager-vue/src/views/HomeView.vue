@@ -51,6 +51,7 @@ interface ItemModel {
 }
 
 export default Vue.extend({
+  name: "HomeView",
   data() {
     return {
       links: [] as ItemModel[],

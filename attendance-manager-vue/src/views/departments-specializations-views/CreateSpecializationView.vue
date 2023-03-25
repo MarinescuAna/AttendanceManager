@@ -64,6 +64,7 @@ import storeHelper from "@/store/store-helper";
 import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
+  name: "CreateSpecializationView",
   data() {
     return {
       rules,

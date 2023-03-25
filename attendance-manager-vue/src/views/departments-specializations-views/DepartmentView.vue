@@ -2,12 +2,10 @@
   <v-container>
     <v-row justify="center">
       <v-btn-toggle>
-        <v-btn class="blue-grey lighten-4" :to="{name:'new-department'}" 
+        <v-btn class="blue-grey lighten-4" :to="{ name: 'new-department' }"
           >Add new department</v-btn
         >
-        <v-btn
-          class="blue-grey lighten-4"
-          :to="{name:'new-specialization'}" 
+        <v-btn class="blue-grey lighten-4" :to="{ name: 'new-specialization' }"
           >Add new specialization</v-btn
         >
       </v-btn-toggle>
@@ -19,7 +17,12 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12">
-        <ManagementTableComponent :dataSource="departments" :headers="headers" :title="'Departments'" :type="type" />
+        <ManagementTableComponent
+          :dataSource="departments"
+          :headers="headers"
+          :title="'Departments'"
+          :type="type"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -33,22 +36,23 @@ import { ManagementDataType } from "@/shared/enums";
 import { DepartmentViewModel } from "@/modules/department";
 
 export default Vue.extend({
+  name: "DepartmentView",
   components: {
-    ManagementTableComponent
+    ManagementTableComponent,
   },
-  computed:{
-    departments(): DepartmentViewModel[]{
+  computed: {
+    departments: function (): DepartmentViewModel[] {
       return storeHelper.departmentStore.departments;
-    }
+    },
   },
-  data(){
+  data: function () {
     return {
       headers: DepartmentsHeader,
-      type: ManagementDataType.Department
+      type: ManagementDataType.Department,
     };
   },
-  async created(){
+  created: async function () {
     await storeHelper.departmentStore.loadDepartments();
-  }
+  },
 });
 </script>

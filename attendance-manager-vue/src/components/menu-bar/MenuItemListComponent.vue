@@ -27,12 +27,15 @@ import { MenuItemListModel } from "../menu-bar/ItemList";
 import MenuItemComponent from "./MenuItemComponent.vue";
 
 export default Vue.extend({
+  name: "MenuItemListComponent",
   components: {
     MenuItemComponent,
   },
   props: {
-    // Root details
-    item: Object as () => MenuItemListModel,
+    /** Root details */ 
+    item:{
+      type: Object as () => MenuItemListModel,
+    }
   },
 });
 </script>

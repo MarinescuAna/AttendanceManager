@@ -32,8 +32,11 @@
 import { DocumentFullViewModule } from "@/modules/document";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
+
 export default Vue.extend({
+  name: "AboutDocumentComponent",
   computed: {
+    /** Get document details from the store */
     document: function (): DocumentFullViewModule {
       return storeHelper.documentStore.documentDetails;
     },

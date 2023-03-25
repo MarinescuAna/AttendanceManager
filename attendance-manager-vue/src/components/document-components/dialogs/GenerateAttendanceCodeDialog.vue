@@ -54,6 +54,7 @@ import { rules } from "@/plugins/vee-validate";
 import Vue from "vue";
 
 export default Vue.extend({
+  name: "GenerateAttendanceCodeDialog",
   props:{
     attendanceCollectionId: Number
   },

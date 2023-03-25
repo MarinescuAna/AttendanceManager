@@ -157,6 +157,7 @@ import { Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
+  name: "CreateSingleUserView",
   data() {
     return {
       rules,

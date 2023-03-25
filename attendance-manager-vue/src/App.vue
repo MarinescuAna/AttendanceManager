@@ -19,6 +19,7 @@ import Vue from "vue";
 import MenuComponent from "./components/menu-bar/MenuComponent.vue";
 
 export default Vue.extend({
+  name: "App",
   components: {
     MenuComponent,
   },

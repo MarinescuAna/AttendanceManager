@@ -21,6 +21,7 @@ import storeHelper from "@/store/store-helper";
 import { DocumentMembersViewModule } from "@/modules/document";
 
 export default Vue.extend({
+  name: "DocumentMembersComponent",
   data() {
     return {
       header: [

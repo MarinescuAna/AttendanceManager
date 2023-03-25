@@ -86,6 +86,7 @@ interface ResultsOverview {
 }
 
 export default Vue.extend({
+  name: "StudentAttendanceExpandedComponent",
   props: {
     userId: String,
   },

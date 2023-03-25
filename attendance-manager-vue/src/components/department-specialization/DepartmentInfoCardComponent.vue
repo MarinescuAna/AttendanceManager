@@ -23,7 +23,7 @@
           <v-list-item-group v-if="specializations.length > 0">
             <v-list-item v-for="child in specializations" :key="child.id">
               <v-list-item-content>
-                <v-list-item-title v-text="child.name"></v-list-item-title>
+                <v-list-item-title>{{ child.name }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -33,13 +33,6 @@
     </v-card-text>
   </v-container>
 </template>
-  
-  <style lang="css" scoped>
-.v-list-scroll {
-  height: 200px;
-  overflow-y: auto;
-}
-</style>
   
   <script lang="ts">
 import Vue from "vue";
@@ -51,34 +44,36 @@ import { SpecializationViewModule } from "@/modules/specialization";
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
+  name: "DepartmentInfoCardComponent",
   components: {
     ChangeDepartmentDialog,
   },
   props: {
-    // The current department
-    item: Object as () => DepartmentViewModel,
+    /** The current department */
+    item: {
+      type: Object as () => DepartmentViewModel,
+    },
   },
-  data() {
+  data: function () {
     return {
-      // Flag for Change department dialog
+      /** Flag for Change department dialog */
       dialog: false,
     };
   },
   computed: {
-    // Specializations list
-    specializations(): SpecializationViewModule[] {
+    /** Filter the specializations and display only the once related to a specific department */
+    specializations: function (): SpecializationViewModule[] {
       return storeHelper.specializationStore.specializations.filter(
         (specialization) => specialization.departmentId == this.item.id
       );
     },
   },
-  async created() {
+  /** Load the specializations form the API */
+  created: async function () {
     await storeHelper.specializationStore.loadSpecializations();
   },
+  /** Emit an event using EventBus in order to update the treeview whenever the user add a new department or specialization */
   mounted: function () {
-    /**
-     * Emit an event using EventBus in order to update the treeview whenever the user add a new department or specialization
-     */
     EventBus.$on(EVENT_BUS_RELOAD_ORGANIZATIONS, () => {
       EventBus.$off(EVENT_BUS_RELOAD_ORGANIZATIONS);
     });

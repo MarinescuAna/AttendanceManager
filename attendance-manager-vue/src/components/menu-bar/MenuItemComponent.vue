@@ -15,9 +15,13 @@ import Vue from "vue";
 import { MenuChildModel } from "../menu-bar/ItemList";
 
 export default Vue.extend({
+  name: "MenuItemComponent",
   props: {
-    // Child details
-    item: Object as () => MenuChildModel
+    /** Child details */ 
+    item: {
+      type: Object as () => MenuChildModel,
+      required: true
+    }
   }
 });
 </script>

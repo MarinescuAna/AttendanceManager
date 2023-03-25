@@ -14,7 +14,13 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12">
-        <ManagementTableComponent :dataSource="courses" :headers="headers" :title="'Courses'" :type="type" :expandDetails="false"/>
+        <ManagementTableComponent
+          :dataSource="courses"
+          :headers="headers"
+          :title="'Courses'"
+          :type="type"
+          :expandDetails="false"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -29,23 +35,24 @@ import { ManagementDataType } from "@/shared/enums";
 import { CourseViewModule } from "@/modules/course";
 
 export default Vue.extend({
+  name: "CourseView",
   components: {
-    ManagementTableComponent
+    ManagementTableComponent,
   },
-  data(){
+  data: function () {
     return {
       headers: CoursesHeader,
-      type: ManagementDataType.Course
+      type: ManagementDataType.Course,
     };
   },
-  computed:{
-    courses(): CourseViewModule[]{
+  computed: {
+    courses: function (): CourseViewModule[] {
       return storeHelper.courseStore.courses;
-    }
+    },
   },
-  async created(){
+  created: async function () {
     await storeHelper.courseStore.loadCourses();
-    await storeHelper.userStore.loadCurrentUserInfo()
-  }
+    await storeHelper.userStore.loadCurrentUserInfo();
+  },
 });
 </script>

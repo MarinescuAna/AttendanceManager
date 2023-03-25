@@ -1,6 +1,11 @@
 <template>
   <v-card>
-    <ManagementTableComponent :dataSource="users" :headers="headers" :title="'Users'" :type="type" />
+    <ManagementTableComponent
+      :dataSource="users"
+      :headers="headers"
+      :title="'Users'"
+      :type="type"
+    />
   </v-card>
 </template>
 
@@ -13,22 +18,23 @@ import { ManagementDataType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
+  name: "UsersView",
   components: {
-    ManagementTableComponent
+    ManagementTableComponent,
   },
-  data(){
+  data: function () {
     return {
       headers: UserHeader,
-      type: ManagementDataType.Users
+      type: ManagementDataType.Users,
     };
   },
-  computed:{
-    users(): UserViewModule[]{
+  computed: {
+    users: function (): UserViewModule[] {
       return storeHelper.userStore.users;
-    }
+    },
   },
-  async created(){
+  created: async function () {
     await storeHelper.userStore.loadUsers();
-  }
+  },
 });
 </script>

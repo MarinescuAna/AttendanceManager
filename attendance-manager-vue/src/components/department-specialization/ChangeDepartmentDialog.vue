@@ -29,35 +29,34 @@ import storeHelper from "@/store/store-helper";
 export default {
   name:"ChangeDepartmentDialog",
   props: {
-    // Department
+      /** Department object */
       department: {
-          type: Object as () => DepartmentViewModel
+          type: Object as () => DepartmentViewModel,
+          required: true
       }
   },
-  data() {
+  data: function() {
     return {
-      // New name
+      /** The new name of the department */ 
       name: "",
     };
   },
   computed: {
     isValid: function(): boolean {
-      return this.name == "" || this.name == this.department!.name;
+      return this.name == "" || this.name == this.department.name;
     },
   },
+  /** Initialize the department name */
   created: function(): void {
-    // Initialize the field
     if (this.department) {
       this.name = this.department.name;
     }
   },
   methods: {
-    /*
-     * Save the new name
-     */
+    /** Save the new name and emit a save event to the parent */
     onSaveName: async function(): Promise<void> {
       const result = await storeHelper.departmentStore.updateDepartmentName({
-        id: this.department!.id,
+        id: this.department.id,
         name: this.name,
       } as DepartmentUpdateModule);
 

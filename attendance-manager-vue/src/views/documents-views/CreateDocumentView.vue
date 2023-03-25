@@ -253,6 +253,7 @@ import DocumentService from "@/services/document.service";
 import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
+  name: "CreateDocumentView",
   data() {
     return {
       rules,

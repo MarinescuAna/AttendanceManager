@@ -27,8 +27,12 @@
   import Vue from "vue";
   
   export default Vue.extend({
+    name: "UserInfoCardComponent",
     props: {
-        item: Object as () =>  UserViewModule
+        item: {
+          type: Object as () =>  UserViewModule,
+          required: true
+        }
     }
   });
   </script>

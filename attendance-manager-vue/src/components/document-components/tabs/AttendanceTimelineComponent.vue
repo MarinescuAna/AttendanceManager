@@ -85,6 +85,7 @@ import AddAttendanceDateDialog from "@/components/document-components/dialogs/Ad
 import AddAttendanceDialog from "@/components/document-components/dialogs/AddAttendanceDialog.vue";
 
 export default Vue.extend({
+  name: "AttendanceTimelineComponent",
   components: {
     AddAttendanceDialog,
     AddAttendanceDateDialog,

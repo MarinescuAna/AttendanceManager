@@ -116,6 +116,7 @@ import { Role } from "@/shared/enums";
 import UseGeneratedAttendanceCodeDialog from "./UseGeneratedAttendanceCodeDialog.vue";
 
 export default Vue.extend({
+  name: "AddAttendanceDialog",
   components: {
     DotsMenuComponent,
     GenerateAttendanceCodeDialog,

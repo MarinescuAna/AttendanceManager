@@ -65,6 +65,7 @@ import { CreateCourseModule } from "@/modules/course";
 import { SpecializationModule } from "@/modules/specialization";
 
 export default Vue.extend({
+  name: "CreateCourseView",
   data() {
     return {
       rules,

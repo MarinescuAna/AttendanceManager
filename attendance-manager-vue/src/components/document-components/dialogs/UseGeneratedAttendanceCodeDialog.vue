@@ -49,6 +49,7 @@ import AttendanceService from "@/services/attendance.service";
 import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
+  name: "UseGeneratedAttendanceCodeDialog",
   props: {
     attendanceId: Number,
     attendanceCollectionId: Number

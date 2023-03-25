@@ -52,7 +52,9 @@ import { DocumentViewModule } from "@/modules/document";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import { ImageSelector } from "@/shared/image";
+
 export default Vue.extend({
+  name: "DocumentCardView",
   data() {
     return {
       ImageSelector,

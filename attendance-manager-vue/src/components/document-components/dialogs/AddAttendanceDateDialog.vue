@@ -39,6 +39,7 @@ import { AttendanceCollectionInsertModule } from "@/modules/document/attendance-
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
+  name: "AddAttendanceDateDialog",
   components: {
     DatePickerComponent,
     TimePickerComponent,

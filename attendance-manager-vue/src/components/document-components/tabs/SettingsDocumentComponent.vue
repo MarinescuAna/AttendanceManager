@@ -8,6 +8,7 @@
 <script lang="ts">
 import CollaboratorPanelComponent from "@/components/document-components/extention-panels/CollaboratorPanelComponent.vue"
 import Vue from "vue";
+
 export default Vue.extend({
   name: "SettingsDocumentComponent",
   components:{

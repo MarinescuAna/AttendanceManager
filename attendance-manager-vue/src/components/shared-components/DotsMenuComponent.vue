@@ -19,7 +19,8 @@
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
-  data() {
+  name: "DotsMenuComponent",
+  data: function () {
     return {
       itemsMenu: [
         { name: "Change details", event: "onChange" },
@@ -28,7 +29,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    onEvent(event: string): void {
+    onEvent: function (event: string): void {
       this.$emit(event);
     },
   },
