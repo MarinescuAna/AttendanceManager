@@ -1,7 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Core.Shared;
-using AttendanceManager.Application.SharedDtos;
+using AttendanceManager.Application.Dtos;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;

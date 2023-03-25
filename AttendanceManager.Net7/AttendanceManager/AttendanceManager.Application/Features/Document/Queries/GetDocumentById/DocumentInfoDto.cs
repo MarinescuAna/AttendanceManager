@@ -1,6 +1,6 @@
 ﻿
 using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
-using AttendanceManager.Application.SharedDtos;
+using AttendanceManager.Application.Dtos;
 
 namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {

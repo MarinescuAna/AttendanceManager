@@ -1,4 +1,4 @@
-﻿namespace AttendanceManager.Application.SharedDtos
+﻿namespace AttendanceManager.Application.Dtos
 {
     public class BaseDto
     {

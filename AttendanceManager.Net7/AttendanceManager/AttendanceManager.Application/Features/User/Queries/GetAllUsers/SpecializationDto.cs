@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.SharedDtos;
+﻿using AttendanceManager.Application.Dtos;
 
 namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
 {

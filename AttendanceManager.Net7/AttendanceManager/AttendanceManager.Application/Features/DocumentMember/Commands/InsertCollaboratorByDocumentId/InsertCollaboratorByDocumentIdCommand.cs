@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.SharedDtos;
+﻿using AttendanceManager.Application.Dtos;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaboratorByDocumentId

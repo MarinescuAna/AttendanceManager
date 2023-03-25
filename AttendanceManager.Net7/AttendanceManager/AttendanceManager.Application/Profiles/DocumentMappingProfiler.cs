@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
-using AttendanceManager.Application.SharedDtos;
+using AttendanceManager.Application.Dtos;
 using AttendanceManager.Core.Shared;
 using AttendanceManager.Domain.Entities;
 using AutoMapper;

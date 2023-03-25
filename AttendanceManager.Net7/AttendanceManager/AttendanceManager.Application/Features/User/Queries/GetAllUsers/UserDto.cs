@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.SharedDtos;
+﻿using AttendanceManager.Application.Dtos;
 using System.Text.Json.Serialization;
 
 namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
