@@ -18,13 +18,6 @@ export class MenuItems{
                     description: "Create a new document for logging the attendances for a specific course."
                 },
                 {
-                    title: "Upload users",
-                    icon: "mdi-account-arrow-up",
-                    route: "/",
-                    role: Role.Teacher,
-                    description: ""
-                },
-                {
                     title: "View created documents",
                     icon: "mdi-file-multiple",
                     route: "created-documents",
