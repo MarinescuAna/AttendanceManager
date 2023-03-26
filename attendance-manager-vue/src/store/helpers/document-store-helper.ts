@@ -1,5 +1,5 @@
 
-import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document";
@@ -45,6 +45,11 @@ export class DocumentStore {
     */
     public async loadCurrentDocument(payload: string): Promise<void> {
         await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
+    }
+
+    /** Use this method to update the document information */
+    public async updateDocument(payload: { module: DocumentUpdateModule, newCourseName: string }): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/updateDocument`,payload);
     }
 
     /**

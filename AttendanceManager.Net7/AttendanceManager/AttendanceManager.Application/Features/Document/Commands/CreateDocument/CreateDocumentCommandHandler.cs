@@ -1,5 +1,4 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
-using AttendanceManager.Application.Exceptions;
 using AutoMapper;
 using MediatR;
 
@@ -13,16 +12,6 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
 
         public async Task<bool> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
-            // Look for other documents with the same name, enrollmentyear, created by the same user for the same specialization
-            if (await unitOfWork.DocumentRepository.GetAsync(d =>
-                d.Title == request.Title &&
-                d.CourseID == request.CourseId &&
-                d.EnrollmentYear == request.EnrollmentYear &&
-                !d.IsDeleted) != null)
-            {
-                throw new AlreadyExistsException("Document", request.Title);
-            }
-
             var newDocument = new Domain.Entities.Document
             {
                 CourseID = request.CourseId,

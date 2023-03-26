@@ -17,7 +17,7 @@
       </template>
     </v-toolbar>
 
-    <v-tabs-items v-model="tabs">
+    <v-tabs-items v-model="tabs" class="blue-grey lighten-5">
       <v-tab-item>
         <AttendanceTimelineComponent />
       </v-tab-item>

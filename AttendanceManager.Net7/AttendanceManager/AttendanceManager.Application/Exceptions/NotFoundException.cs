@@ -6,5 +6,9 @@
             : base($"{name} ({key}) is not found")
         {
         }
+        public NotFoundException(string message)
+            : base(message)
+            {
+            }
     }
 }

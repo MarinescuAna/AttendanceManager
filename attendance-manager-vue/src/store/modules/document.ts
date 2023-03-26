@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentFullViewModule, DocumentMembersViewModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentMembersViewModule, DocumentViewModule, DocumentUpdateModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
 import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
@@ -64,6 +64,19 @@ const mutations = {
         state.currentDocument = payload;
     },
     /**
+ * Update some information related to the current document
+ */
+    _partialCurrentDocumentUpdate(state, payload: { module: DocumentUpdateModule, newCourseName: string }): void {
+        state.currentDocument.title = payload.module.title;
+        state.currentDocument.courseId = payload.module.courseId;
+        state.currentDocument.maxNoLaboratories = payload.module.noLaboratories;
+        state.currentDocument.maxNoLessons = payload.module.noLessons;
+        state.currentDocument.maxNoSeminaries = payload.module.noSeminaries;
+        state.currentDocument.attendanceImportance = payload.module.attendanceImportance;
+        state.currentDocument.bonusPointsImportance = payload.module.bonusPointsImportance;
+        state.currentDocument.courseName = payload.newCourseName;
+    },
+    /**
      * Add a documentFile in the current document
     */
     _addAttendanceCollection(state, payload: AttendanceCollectionViewModule): void {
@@ -107,12 +120,12 @@ const actions = {
             let isSuccess = true;
 
             const result = await https.get(`${DOCUMENT_CONTROLLER}/documents`)
-                        .catch(error => {
-                            isSuccess = ResponseHandler.errorResponseHandler(error);
-                        });
-            
-            if(isSuccess){
-                commit( "_documents", (result as AxiosResponse).data as DocumentViewModule[]);
+                .catch(error => {
+                    isSuccess = ResponseHandler.errorResponseHandler(error);
+                });
+
+            if (isSuccess) {
+                commit("_documents", (result as AxiosResponse).data as DocumentViewModule[]);
             }
         }
     },
@@ -134,6 +147,7 @@ const actions = {
             }
         }
     },
+    /** Add new collaborator teacher */
     async addCollaborator({ commit, state }, payload: string): Promise<boolean> {
         let isSuccess = true;
 
@@ -151,6 +165,22 @@ const actions = {
 
         return isSuccess;
     },
+    /** Update some information related to the document */
+    async updateDocument({ commit }, payload: { module: DocumentUpdateModule, newCourseName: string }): Promise<boolean> {
+        let isSuccess = true;
+
+        await https.patch(`${DOCUMENT_CONTROLLER}/update_document`, payload.module)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (isSuccess) {
+            commit("_partialCurrentDocumentUpdate", payload);
+        }
+
+        return isSuccess;
+    },
+    /** Add new attendance collection */
     async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<boolean> {
         let isSuccess = true;
 

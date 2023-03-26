@@ -16,6 +16,19 @@ export interface DocumentInsertModule{
     bonusPointsImportance: number;
 }
 
+/** Use this view only for sending the collected data from the form used for updating a document, to the API */
+export interface DocumentUpdateModule{
+    title: string;
+    courseId: number;
+    noLessons: number;
+    noLaboratories: number;
+    noSeminaries: number;
+    attendanceImportance: number;
+    bonusPointsImportance: number;
+    documentId: number;
+}
+
+
 /** Use this view in order to get the documents for the cards */
 export interface DocumentViewModule{
     title: string;

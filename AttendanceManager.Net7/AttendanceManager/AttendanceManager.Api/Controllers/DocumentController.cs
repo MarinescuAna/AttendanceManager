@@ -1,5 +1,7 @@
 ﻿using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
+using AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName;
 using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
+using AttendanceManager.Application.Features.Document.Commands.UpdateDocumentById;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
 using AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaboratorByDocumentId;
@@ -72,6 +74,16 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         [HttpPost("add_collaborator")]
         public async Task<IActionResult> AddCollaborator([FromBody] InsertCollaboratorByDocumentIdCommand command)
+        {
+            return Ok(await mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Update the document information
+        /// </summary>
+        /// <returns>Success: true/false</returns>
+        [HttpPatch("update_document")]
+        public async Task<IActionResult> UpdateDocument([FromBody] UpdateDocumentByIdCommand command)
         {
             return Ok(await mediator.Send(command));
         }
