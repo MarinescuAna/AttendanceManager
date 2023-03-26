@@ -18,18 +18,11 @@ export class MenuItems{
                     description: "Create a new document for logging the attendances for a specific course."
                 },
                 {
-                    title: "View created documents",
+                    title: "View documents",
                     icon: "mdi-file-multiple",
                     route: "created-documents",
                     role: Role.Teacher,
-                    description: "View all the documents that you created."
-                },
-                {
-                    title: "View documents as collaborator",
-                    icon: "mdi-file-multiple",
-                    route: "collaborator-documents",
-                    role: Role.Teacher,
-                    description: "View all the documents where you was added as collaborator."
+                    description: "View all the documents that you created or the documents where you was added as collaborator."
                 }
             ]
         },

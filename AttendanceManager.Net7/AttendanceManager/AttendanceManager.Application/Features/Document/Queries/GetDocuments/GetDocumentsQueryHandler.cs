@@ -1,10 +1,11 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
+using AttendanceManager.Domain.Entities;
 using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail
 {
-    public sealed class GetDocumentsQueryHandler : BaseFeature, IRequestHandler<GetDocumentsQuery, List<DocumentDto>>
+    public sealed class GetDocumentsQueryHandler : BaseFeature, IRequestHandler<GetDocumentsQuery, IEnumerable<DocumentDto>>
     {
         public GetDocumentsQueryHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
@@ -14,16 +15,33 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocu
          * - Admin: get all the documents where the user has the role Creator or collaborator
          * - Student: get all the documents where the student has the role Member
          */
-        public async Task<List<DocumentDto>> Handle(GetDocumentsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<DocumentDto>> Handle(GetDocumentsQuery request, CancellationToken cancellationToken)
         {
-            var documents =
-                await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
-                    (request.LoadCreatedDocuments && request.Role == Domain.Enums.Role.Teacher && u.Course!.UserSpecialization!.UserID.Equals(request.Email)) ||
-                    (!request.LoadCreatedDocuments && request.Role == Domain.Enums.Role.Teacher && u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Collaborator)) ||
-                    (request.Role == Domain.Enums.Role.Student && u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Member))
+            if(request.Role == Domain.Enums.Role.Student)
+            {
+                return mapper.Map<IEnumerable<DocumentDto>>((await GetDocumentsForStudent(request.Email)).OrderByDescending(d => d.UpdatedOn));
+            }
+            
+            var allDocuments = new List<DocumentDto>();            
+            // get documents created by the user
+            var documents = await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
+                    request.Role == Domain.Enums.Role.Teacher && u.Course!.UserSpecialization!.UserID.Equals(request.Email)
                 );
 
-            return mapper.Map<List<DocumentDto>>(documents.OrderByDescending(d => d.UpdatedOn));
+            allDocuments.AddRange(mapper.Map<IEnumerable<DocumentDto>>(documents));
+            allDocuments.ForEach(d => d.IsCreator = true);
+
+            //get documents where the user is collaborator
+            allDocuments.AddRange(mapper.Map<IEnumerable<DocumentDto>>(await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
+                    request.Role == Domain.Enums.Role.Teacher &&
+                    u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Collaborator))
+                ));
+
+            return allDocuments.OrderByDescending(d => d.UpdatedOn);
         }
+        
+        private async Task<IEnumerable<Domain.Entities.Document>> GetDocumentsForStudent(string email)
+            => await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
+                u.DocumentMembers!.Any(m => m.UserID == email && m.Role == Domain.Enums.DocumentRole.Member));
     }
 }

@@ -7,7 +7,7 @@
     </v-app>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .background-image {
   background: url('@/assets/images/background.jpg') no-repeat center center fixed !important;
   background-size: cover;

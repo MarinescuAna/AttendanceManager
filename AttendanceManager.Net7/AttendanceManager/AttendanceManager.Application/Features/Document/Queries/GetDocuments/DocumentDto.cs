@@ -7,5 +7,7 @@
         public required int EnrollmentYear { get; init; }
         public required string CourseName { get; init; }
         public required string SpecializationName { get; set; }
+        public required string UpdatedOn { get; set; }
+        public bool IsCreator { get; set; } = false;
     }
 }

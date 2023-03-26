@@ -10,10 +10,7 @@
       </v-btn>
       <template v-slot:extension>
         <v-tabs v-model="tabs" dark centered>
-          <v-tab
-            v-for="n in isTeacher? teacherTabs: studentTabs"
-            :key="n"
-          >
+          <v-tab v-for="n in isTeacher ? teacherTabs : studentTabs" :key="n">
             {{ n }}
           </v-tab>
         </v-tabs>
@@ -29,6 +26,9 @@
       </v-tab-item>
       <v-tab-item>
         <DocumentMembersComponent />
+      </v-tab-item>
+      <v-tab-item>
+        <DocumentDashboardComponent />
       </v-tab-item>
       <v-tab-item v-if="isTeacher">
         <SettingsDocumentComponent />
@@ -48,6 +48,7 @@ import AttendanceTimelineComponent from "@/components/document-components/tabs/A
 import TotalAttendancesComponent from "@/components/document-components/tabs/TotalAttendancesComponent.vue";
 import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
 import SettingsDocumentComponent from "@/components/document-components/tabs/SettingsDocumentComponent.vue";
+import DocumentDashboardComponent from "@/components/document-components/tabs/DocumentDashboardComponent.vue";
 import storeHelper from "@/store/store-helper";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
@@ -59,26 +60,48 @@ export default Vue.extend({
     AboutDocumentComponent,
     TotalAttendancesComponent,
     DocumentMembersComponent,
-    SettingsDocumentComponent
+    SettingsDocumentComponent,
+    DocumentDashboardComponent,
   },
-  data() {
+  data: function () {
     return {
+      /** Current selected tab */
       tabs: [],
-      teacherTabs: ['Attendances', 'Total Attendances', 'Members','Settings','About'],
-      studentTabs: ['Attendances', 'Total Attendances', 'Members','About']
+      /** List of available tabs for teachers */
+      teacherTabs: [
+        "Attendances",
+        "Total Attendances",
+        "Members",
+        "Dashboard",
+        "Settings",
+        "About",
+      ],
+      /** List of available tabs for students */
+      studentTabs: [
+        "Attendances",
+        "Total Attendances",
+        "Members",
+        "Dashboard",
+        "About",
+      ],
     };
   },
   computed: {
+    /** Get document details from the store to display the name or other data */
     documentInfo: function (): DocumentFullViewModule {
       return storeHelper.documentStore.documentDetails;
     },
-    isTeacher: function(): boolean{
+    /** Boolean value for determinate the current user role */
+    isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
-    }
+    },
   },
+  /** Load the document details from the API */
   created: async function () {
     await storeHelper.documentStore.loadCurrentDocument(this.$route.params.id);
   },
+  /** Restore the store related to the current document when the component is destroyed, otherwise the data that appears for other
+   * opened document  will be related  to the previously opened document */
   destroyed: function (): void {
     storeHelper.documentStore.resetCurrentDocumentStore();
   },

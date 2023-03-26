@@ -9,10 +9,8 @@ import { AxiosResponse } from "axios";
 
 //state type
 export interface DocumentState {
-    // array with all the documents created by the teacher
-    createdDocuments: DocumentViewModule[];
-    // array with all the documents where the teacher is just collaborator
-    collaboratorDocuments: DocumentViewModule[];
+    // array with all the documents
+    documents: DocumentViewModule[];
     // current document
     currentDocument: DocumentFullViewModule;
 }
@@ -20,8 +18,7 @@ export interface DocumentState {
 //initialize the state with an empty state
 function initialize(): DocumentState {
     return {
-        createdDocuments: [],
-        collaboratorDocuments: [],
+        documents: [],
         currentDocument: {} as DocumentFullViewModule
     };
 }
@@ -32,16 +29,10 @@ const state: DocumentState = initialize();
 // getters for this store
 const getters = {
     /**
-     * Gets created documents from the store
+     * Get documents from the store
     */
-    createdDocuments(state): DocumentViewModule[] {
-        return state.createdDocuments;
-    },
-    /**
-    * Gets documents the teacher is collaborator from the store
-    */
-    collaboratorDocuments(state): DocumentViewModule[] {
-        return state.collaboratorDocuments;
+    documents(state): DocumentViewModule[] {
+        return state.documents;
     },
     /**
      * Gets created documents from the store
@@ -63,14 +54,8 @@ const mutations = {
     /**
      * Update the entire list of documents existed into the store
      */
-    _createdDocuments(state, payload: DocumentViewModule[]): void {
-        state.createdDocuments = payload;
-    },
-    /**
-     * Update the entire list of documents existed into the store
-     */
-    _collaboratorDocuments(state, payload: DocumentViewModule[]): void {
-        state.collaboratorDocuments = payload;
+    _documents(state, payload: DocumentViewModule[]): void {
+        state.documents = payload;
     },
     /**
      * Update the entire list of documents existed into the store
@@ -115,21 +100,19 @@ const mutations = {
 // actions for this store
 const actions = {
     /**
-     * Load the documents where the user is collaborator or the created documents
-     * @param payload true for created documents, false for documents where the user is collaborator
+     * Load all the documents
      */
-    async loadDocuments({ commit, state }, payload: boolean): Promise<void> {
-        if (state.createdDocuments.length == 0) {
+    async loadDocuments({ commit, state }): Promise<void> {
+        if (state.documents.length == 0) {
             let isSuccess = true;
 
-            const result = await https.get(`${DOCUMENT_CONTROLLER}/documents?loadCreatedDocuments=${payload}`)
+            const result = await https.get(`${DOCUMENT_CONTROLLER}/documents`)
                         .catch(error => {
                             isSuccess = ResponseHandler.errorResponseHandler(error);
                         });
             
             if(isSuccess){
-                const documents: DocumentViewModule[] = (result as AxiosResponse).data as DocumentViewModule[];
-                commit(payload ? "_createdDocuments" : "_collaboratorDocuments", documents);
+                commit( "_documents", (result as AxiosResponse).data as DocumentViewModule[]);
             }
         }
     },

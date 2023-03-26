@@ -15,12 +15,16 @@ export interface DocumentInsertModule{
     attendanceImportance: number;
     bonusPointsImportance: number;
 }
+
+/** Use this view in order to get the documents for the cards */
 export interface DocumentViewModule{
     title: string;
     courseName: string;
     specializationName: string;
     enrollmentYear: number;
     documentId: number;
+    isCreator: boolean;
+    updatedOn: string;
 }
 
 export interface DocumentMembersViewModule{
