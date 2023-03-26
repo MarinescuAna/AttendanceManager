@@ -77,6 +77,7 @@ export default Vue.extend({
 
       if (result) {
         this.email = "";
+        Toastification.success("The teacher was added as collaborator!")
       }
     },
   },

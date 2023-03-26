@@ -64,7 +64,7 @@ export default Vue.extend({
   },
   computed: {
     fullnames: function (): string[] {
-      return storeHelper.documentStore.documentDetails.totalAttendances.map((x) => x.userName);
+      return storeHelper.documentStore.documentDetails?.totalAttendances?.map((x) => x.userName);
     },
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];

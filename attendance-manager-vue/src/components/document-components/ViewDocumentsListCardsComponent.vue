@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-layout row wrap>
     <v-flex v-for="card in documents" :key="card.documentId" md4 class="pa-3">
       <v-card>
         <v-img
@@ -27,7 +27,7 @@
             <v-btn
               color="black"
               icon
-              :to="{ name: 'document', params: { id: card.documentId } }"
+              :to="{ name: 'document', params: { id: card.documentId, isMember: !isCollaborator } }"
             >
               <v-icon>mdi-login-variant</v-icon>
             </v-btn></v-row
@@ -50,7 +50,12 @@ export default Vue.extend({
     documents: {
       type: Array as () => DocumentViewModule[],
       required: true,
-    },
+      },
+    /** Boolean for checking if current user is collaborator or member */
+    isCollaborator: {
+      type: Boolean,
+      default: true
+    }
   },
   data: function () {
     return {

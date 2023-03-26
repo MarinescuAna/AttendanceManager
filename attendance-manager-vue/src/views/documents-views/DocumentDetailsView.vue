@@ -9,15 +9,15 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <template v-slot:extension>
-        <v-tabs v-model="tabs" dark centered>
-          <v-tab v-for="n in isTeacher ? teacherTabs : studentTabs" :key="n">
+        <v-tabs v-model="selectedTab" dark centered>
+          <v-tab v-for="n in tabs" :key="n">
             {{ n }}
           </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
 
-    <v-tabs-items v-model="tabs" class="blue-grey lighten-5">
+    <v-tabs-items v-model="selectedTab" class="blue-grey lighten-5" touchless>
       <v-tab-item>
         <AttendanceTimelineComponent />
       </v-tab-item>
@@ -30,7 +30,7 @@
       <v-tab-item>
         <DocumentDashboardComponent />
       </v-tab-item>
-      <v-tab-item v-if="isTeacher">
+      <v-tab-item v-if="isTeacher && isMember">
         <SettingsDocumentComponent />
       </v-tab-item>
       <v-tab-item>
@@ -66,27 +66,41 @@ export default Vue.extend({
   data: function () {
     return {
       /** Current selected tab */
-      tabs: [],
-      /** List of available tabs for teachers */
-      teacherTabs: [
-        "Attendances",
-        "Total Attendances",
-        "Members",
-        "Dashboard",
-        "Settings",
-        "About",
-      ],
-      /** List of available tabs for students */
-      studentTabs: [
-        "Attendances",
-        "Total Attendances",
-        "Members",
-        "Dashboard",
-        "About",
-      ],
+      selectedTab: [],
     };
   },
   computed: {
+    /** Compute the array of tabs according to the current user role */
+    tabs: function (): string[] {
+      if (!this.isTeacher) {
+        return [
+          "Attendances",
+          "Total Attendances",
+          "Members",
+          "Dashboard",
+          "About",
+        ];
+      }
+
+      if (this.isTeacher && this.isMember) {
+        return [
+          "Attendances",
+          "Total Attendances",
+          "Members",
+          "Dashboard",
+          "Settings",
+          "About",
+        ];
+      }
+
+      return [
+        "Attendances",
+        "Total Attendances",
+        "Members",
+        "Dashboard",
+        "About",
+      ];
+    },
     /** Get document details from the store to display the name or other data */
     documentInfo: function (): DocumentFullViewModule {
       return storeHelper.documentStore.documentDetails;
@@ -95,10 +109,26 @@ export default Vue.extend({
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
     },
+    /** Get the value from the route */
+    isMember: function (): boolean {
+      return Boolean(this.$route.params.isMember);
+    },
   },
-  /** Load the document details from the API */
+  /**
+   * Load the document details from the API
+   *
+   * REMARK:
+   * Using double negation means that:
+   * undefined, null, false etc => false
+   * value => true
+   * Because it's convert the value to boolean
+   *
+   * */
   created: async function () {
-    await storeHelper.documentStore.loadCurrentDocument(this.$route.params.id);
+    if (typeof(this.$route.params.id) !== "undefined")
+      await storeHelper.documentStore.loadCurrentDocument(
+        this.$route.params.id
+      );
   },
   /** Restore the store related to the current document when the component is destroyed, otherwise the data that appears for other
    * opened document  will be related  to the previously opened document */
