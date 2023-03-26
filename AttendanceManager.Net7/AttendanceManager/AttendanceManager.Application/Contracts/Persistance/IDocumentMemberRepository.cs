@@ -7,5 +7,6 @@ namespace AttendanceManager.Application.Contracts.Persistance
     {
         Task<List<DocumentMember>> GetDocumentMembersByDocumentIdAndRoleAsync(int documentId, Role? role);
         Task<DocumentMember?> GetMemberByDocumentIdAndUserIdAsync(int documentId, string userId);
+        void DeleteMembersByDocumentId(int documentId);
     }
 }
