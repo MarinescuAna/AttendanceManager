@@ -33,7 +33,9 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
                 MaxNoLessons = request.MaxNoLessons,
                 MaxNoSeminaries = request.MaxNoSeminaries,
                 Title = request.Title,
-                UpdatedOn = DateTime.Now
+                UpdatedOn = DateTime.Now,
+                AttendanceImportance = request.AttendanceImportance,
+                BonusPointsImportance = request.BonusPointsImportance
             };
             // Save document first to can get the id
             unitOfWork.DocumentRepository.AddAsync(newDocument);

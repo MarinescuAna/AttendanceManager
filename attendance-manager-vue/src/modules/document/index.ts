@@ -2,6 +2,7 @@
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { StudentAttendanceModule, TotalAttendanceModule } from "./attendance";
 
+/** Use this view only for sending the collected data from the form used for creating a new document, to the API */
 export interface DocumentInsertModule{
     title: string;
     courseId: number;
@@ -11,6 +12,8 @@ export interface DocumentInsertModule{
     maxNoLaboratories: number;
     maxNoSeminaries: number;
     studentIds: string[];
+    attendanceImportance: number;
+    bonusPointsImportance: number;
 }
 export interface DocumentViewModule{
     title: string;
@@ -26,6 +29,7 @@ export interface DocumentMembersViewModule{
     name: string;
 }
 
+/** This module is used in the document store to keep all the informations related to a document */
 export interface DocumentFullViewModule{
     documentId:number;
     title: string;
@@ -49,4 +53,6 @@ export interface DocumentFullViewModule{
     currentStudentAttendances: StudentAttendanceModule[];
     // this contains the total attendance for each student (be aware of user's role)
     totalAttendances: TotalAttendanceModule[];
+    attendanceImportance: number;
+    bonusPointsImportance: number;
 }

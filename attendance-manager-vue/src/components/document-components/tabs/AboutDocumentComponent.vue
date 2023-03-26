@@ -1,30 +1,26 @@
 <template>
   <v-container>
-    <p>
-      <strong>Created at </strong>{{ document.creationDate }} (Last update at
-      {{ document.updateDate }})
-    </p>
-    <p><strong>Course name:</strong> {{ document.courseName }}</p>
-    <p><strong>Created by:</strong> {{ document.createdBy }}</p>
-    <p>
-      <strong>Specialization name:</strong> {{ document.specializationName }}
-    </p>
-    <p>
-      <strong>Students' enrollment year:</strong>{{ document.enrollmentYear }}
-    </p>
-    <p>
-      <strong>Maximum number of lessons that will be held:</strong>
-      {{ document.maxNoLessons }}({{ document.noLessons }} held by now)
-    </p>
-    <p>
-      <strong>Maximum number of laboratories that will be held:</strong>
-      {{ document.maxNoLaboratories }}({{ document.noLaboratories }} held by
-      now)
-    </p>
-    <p>
-      <strong>Maximum number of seminaries that will be held:</strong>
-      {{ document.maxNoSeminaries }}({{ document.noSeminaries }} held by now)
-    </p>
+    <strong>Created at </strong>{{ document.creationDate }} (Last update at
+    {{ document.updateDate }})<br />
+    <strong>Course name:</strong> {{ document.courseName }}<br />
+    <strong>Created by:</strong> {{ document.createdBy }}<br />
+    <strong>Specialization name:</strong> {{ document.specializationName }}
+    <br />
+    <strong>Students' enrollment year:</strong>{{ document.enrollmentYear }}
+    <br />
+    <strong>Maximum number of lessons that will be held:</strong>
+    {{ document.maxNoLessons }}({{ document.noLessons }} held by now)
+    <br />
+    <strong>Maximum number of laboratories that will be held:</strong>
+    {{ document.maxNoLaboratories }}({{ document.noLaboratories }} held by now)
+    <br />
+    <strong>Maximum number of seminaries that will be held:</strong>
+    {{ document.maxNoSeminaries }}({{ document.noSeminaries }} held by now)
+    <br />
+    <strong>Attendance importance:</strong> {{ document.attendanceImportance }}%
+    <br />
+    <strong>Bonus points importance:</strong>
+    {{ document.bonusPointsImportance }}%
   </v-container>
 </template>
 

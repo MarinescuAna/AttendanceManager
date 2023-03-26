@@ -21,6 +21,8 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
         public required string SpecializationName { get; set; }
         public required string CreationDate { get; init; }
         public required string UpdateDate { get; init; }
+        public required int AttendanceImportance { get; init; }
+        public required int BonusPointsImportance { get; init; }
         public required string CreatedBy { get; init; }
         public required AttendanceCollectionDto[] AttendanceCollections { get; init; }
         public required DocumentMembersDto[] DocumentMembers { get; init; }

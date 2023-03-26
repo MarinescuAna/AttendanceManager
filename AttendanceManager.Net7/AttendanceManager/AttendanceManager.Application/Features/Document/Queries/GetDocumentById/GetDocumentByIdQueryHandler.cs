@@ -48,7 +48,9 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
                 AttendanceCollections = mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderByDescending(d => d.HeldOn)),
                 DocumentMembers = mapper.Map<DocumentMembersDto[]>(_docMemberStudents),
-                TotalAttendances = ComputeTotalAttendances(request.Role)
+                TotalAttendances = ComputeTotalAttendances(request.Role),
+                AttendanceImportance = currentDocument.AttendanceImportance,
+                BonusPointsImportance= currentDocument.BonusPointsImportance,
             };
         }
 

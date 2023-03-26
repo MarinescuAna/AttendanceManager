@@ -15,6 +15,10 @@ export const rules = {
         required: true,
         between: [0,30]
     },
+    between_0_100: {
+        required: true,
+        between: [0,100]
+    },
     email: {
         required: true,
         email: true

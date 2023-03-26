@@ -15,6 +15,8 @@ namespace AttendanceManager.Domain.Entities
         public required int MaxNoLessons { get; set; }
         [ForeignKey("Course")]
         public required int CourseID { get; set; }
+        public required int AttendanceImportance { get; set; }
+        public required int BonusPointsImportance { get; set; }
         public bool IsDeleted { get; set; } = false;
         public virtual Course? Course { get; set; }
         public ICollection<AttendanceCollection>? AttendanceCollections { get; set; }

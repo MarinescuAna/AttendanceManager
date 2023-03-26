@@ -12,6 +12,9 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
         public required int MaxNoLessons { get; init; }
         public required int CourseId { get; init; }
         public required int SpecializationId { get; set; }
+        public required int AttendanceImportance { get; init; }
+        public required int BonusPointsImportance { get; init; }
         public required string[] StudentIds { get; set; }
+
     }
 }

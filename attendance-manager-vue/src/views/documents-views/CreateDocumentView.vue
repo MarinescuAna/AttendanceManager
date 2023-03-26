@@ -5,7 +5,7 @@
         Add new attendances document</span
       >
     </v-flex>
-    <v-flex >
+    <v-flex>
       <v-stepper v-model="currentStep">
         <!--Headers-->
         <v-stepper-header class="header-color">
@@ -25,38 +25,34 @@
           <v-stepper-content step="1">
             <validation-observer ref="observer" v-slot="{ invalid }">
               <v-layout column>
-                <v-flex>
-                  <validation-provider
-                    name="document title"
-                    v-slot="{ errors }"
-                    :rules="rules.required"
-                  >
-                    <v-textarea
-                      v-model="documentTitle"
-                      type="text"
-                      counter
-                      rows="2"
-                      maxlength="128"
-                      label="Document title"
-                      prepend-icon="mdi-pencil"
-                      :error-messages="errors"
-                      required
-                      color="black"
-                    />
-                  </validation-provider>
-                </v-flex>
-                <v-flex>
-                  <v-select
-                    :items="courses"
-                    label="Course"
-                    v-model="selectedCourse"
+                <validation-provider
+                  name="document title"
+                  v-slot="{ errors }"
+                  :rules="rules.required"
+                >
+                  <v-textarea
+                    v-model="documentTitle"
+                    type="text"
+                    counter
+                    rows="2"
+                    maxlength="128"
+                    label="Document title"
+                    prepend-icon="mdi-pencil"
+                    :error-messages="errors"
                     required
-                    prepend-icon="mdi-school"
-                    item-text="name"
-                    item-value="id"
                     color="black"
-                  ></v-select>
-                </v-flex>
+                  />
+                </validation-provider>
+                <v-select
+                  :items="courses"
+                  label="Course"
+                  v-model="selectedCourse"
+                  required
+                  prepend-icon="mdi-school"
+                  item-text="name"
+                  item-value="id"
+                  color="black"
+                ></v-select>
                 <v-layout row class="pa-3">
                   <v-flex xs12 md4>
                     <validation-provider
@@ -110,6 +106,51 @@
                     </validation-provider>
                   </v-flex>
                 </v-layout>
+                <v-layout row class="pa-3">
+                  <v-flex xs12 md4>
+                    <validation-provider
+                      name="attendances importance percentage"
+                      v-slot="{ errors }"
+                      :rules="rules.between_0_100"
+                    >
+                      <v-text-field
+                        v-model="attendanceImportance"
+                        type="number"
+                        label="The percentage of attandance importance"
+                        prepend-icon="mdi-numeric"
+                        :error-messages="errors"
+                        color="black"
+                        required
+                      />
+                    </validation-provider>
+                  </v-flex>
+                  <v-flex xs12 md4>
+                    <validation-provider
+                      name="bonus points importance percentage"
+                      v-slot="{ errors }"
+                      :rules="rules.between_0_100"
+                    >
+                      <v-text-field
+                        v-model="bonusPointImportance"
+                        type="number"
+                        label="The percentage of bonus points importance"
+                        prepend-icon="mdi-numeric"
+                        :error-messages="errors"
+                        color="black"
+                        required
+                      />
+                    </validation-provider>
+                  </v-flex>
+                </v-layout>
+                <p
+                  class="red--text"
+                  v-if="
+                    computeImportancePercentage != 100 &&
+                    computeImportancePercentage != 0
+                  "
+                >
+                  The sum of those two percentage should be 100!!
+                </p>
               </v-layout>
               <v-layout row align-end column="4">
                 <v-flex class="my-3 mr-4" align-self-end>
@@ -117,7 +158,11 @@
                     class="white--text"
                     color="black"
                     @click="currentStep = 2"
-                    :disabled="invalid || selectedCourse === 0"
+                    :disabled="
+                      invalid ||
+                      selectedCourse === 0 ||
+                      computeImportancePercentage != 100
+                    "
                   >
                     <v-icon>mdi-arrow-right</v-icon>
                   </v-btn>
@@ -193,11 +238,12 @@
                         <v-list-item-content>
                           <v-list-item-title
                             class="black--text font-weight-bold"
-                          >{{ item.fullname }}</v-list-item-title>
+                            >{{ item.fullname }}</v-list-item-title
+                          >
 
-                          <v-list-item-subtitle
-                            class="black--text"
-                          >{{ item.email }}</v-list-item-subtitle>
+                          <v-list-item-subtitle class="black--text">{{
+                            item.email
+                          }}</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-icon v-if="!active" color="grey lighten-1">
@@ -219,8 +265,8 @@
                   <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
                 <v-btn
-                  color="black"
                   class="white--text"
+                  color="black"
                   @click="onSubmit"
                   :disabled="selectedStudents.length == 0"
                 >
@@ -235,9 +281,9 @@
   </v-layout>
 </template>
 
-<style scoped>
-.header-color{
-  background-color: #FFB74D;
+<style lang="scss">
+.header-color {
+  background-color: #ffb74d;
 }
 </style>
 
@@ -254,68 +300,86 @@ import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
   name: "CreateDocumentView",
-  data() {
+  data: function () {
     return {
+      /** Rules for validating the fields */
       rules,
+      /** Variable for keeping the current stat of the process of creating a new document */
       currentStep: 1,
-      // Document title
+      /** Document title */
       documentTitle: "",
-      // Year when the course is available
+      /** Year when the course is held */
       selectedYear: 0,
-      // Selected course
+      /** Selected course */
       selectedCourse: 0,
-      // Selected specializations
+      /** Selected specialization */
       selectedSpecialization: 0,
-      // Maximum number of lessons that will be held
+      /** Maximum number of lessons that will be held */
       maxNoLessons: 0,
-      // Maximum number of laboratories that will be held
+      /** Maximum number of laboratories that will be held */
       maxNoLaboratories: 0,
-      // Maximum number of seminaries that will be held
+      /** Maximum number of seminaries that will be held */
       maxNoSeminaries: 0,
+      /** Boolean value for generating the list of students */
       generateStudentsList: true,
+      /** Array of all students that are under selected specialization and selected year */
       students: [] as StudentForCourseViewModule[],
+      /** Array of selected students from the list above */
       selectedStudents: [] as number[],
+      /** The percentage of importance for attendances */
+      attendanceImportance: 0,
+      /** The percentage of importance for bonus points */
+      bonusPointImportance: 0,
     };
   },
   watch: {
-    selectedSpecialization(): void {
+    /** When the selected specialization has changed, reset the list of the students */
+    selectedSpecialization: function (): void {
       this.resetStudentsList();
     },
-    selectedYear(): void {
+    /** When the selected year has changed, reset the list of the students */
+    selectedYear: function (): void {
       this.resetStudentsList();
     },
   },
   computed: {
-    /**
-     * Get all the years between the current year and 1950
-     */
-    years(): string[] {
+    /** Get all the years between the current year and 1950 */
+    years: function (): string[] {
       return Array.from(Array(new Date().getFullYear() - 1949), (_, i) =>
         (new Date().getFullYear() - i).toString()
       );
     },
-    // User specializations
-    specializations(): SpecializationModule[] {
+    /** Load the current user specializations from the store */
+    specializations: function (): SpecializationModule[] {
       return storeHelper.userStore.currentUser.specializations;
     },
-    // List of current user courses
-    courses(): CourseViewModule[] {
+    /** List of current user courses */
+    courses: function (): CourseViewModule[] {
       return storeHelper.courseStore.courses;
     },
+    /** Return the value of those two percentages to be sure that together will be 100 (I need to convert them because are treat as strings)*/
+    computeImportancePercentage: function (): number {
+      return (
+        Number(this.attendanceImportance) + Number(this.bonusPointImportance)
+      );
+    },
   },
-  async created() {
+  /** Load the current user informations from the API and also his courses */
+  created: async function () {
     await storeHelper.userStore.loadCurrentUserInfo();
     await storeHelper.courseStore.loadCourses();
   },
   methods: {
-    resetStudentsList(): void {
+    /** Use this function to reset the list of students when the specialization or year has changed */
+    resetStudentsList: function (): void {
       this.generateStudentsList = true;
       if (this.students.length > 0) {
         this.students.splice(0);
         this.selectedStudents.splice(0);
       }
     },
-    async step3Actions(): Promise<void> {
+    /** Use this function to load the list of students when we go to the last step */
+    step3Actions: async function (): Promise<void> {
       if (this.generateStudentsList) {
         this.students =
           await UserService.getStudentsBySpecializationIdEnrollmentYear(
@@ -326,7 +390,8 @@ export default Vue.extend({
       }
       this.currentStep = 3;
     },
-    async onSubmit(): Promise<void> {
+    /** Create the new document according to the selected data, and if any error occures, redirect the user to the created documents list */
+    onSubmit: async function (): Promise<void> {
       const response = await DocumentService.addDocument({
         courseId: this.selectedCourse,
         enrollmentYear: this.selectedYear,
@@ -336,6 +401,8 @@ export default Vue.extend({
         title: this.documentTitle,
         specializationId: this.selectedSpecialization,
         studentIds: this.selectedStudents.map((x) => this.students[x].email),
+        attendanceImportance: this.attendanceImportance,
+        bonusPointsImportance: this.bonusPointImportance,
       } as DocumentInsertModule);
 
       if (response) {
