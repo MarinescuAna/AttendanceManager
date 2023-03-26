@@ -3,7 +3,7 @@
     <MenuItemComponent :item="item" />
   </div>
   <div v-else>
-    <v-list-group :prepend-icon="item.icon" no-action>
+    <v-list-group :prepend-icon="item.icon" :value="true" sub-group  no-action>
       <template v-slot:activator>
         <v-list-item-content>
           <v-list-item-title>
