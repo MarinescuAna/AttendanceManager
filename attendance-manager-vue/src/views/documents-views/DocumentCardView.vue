@@ -11,7 +11,7 @@
       <v-tab>View documents when you are collaborator</v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="currentTab" style="background-color: transparent">
+    <v-tabs-items v-model="currentTab" class="pa-3 remove-background-color">
       <!-- First tab: display created documents-->
       <v-tab-item>
         <ViewDocumentsListCardsComponent
@@ -32,6 +32,11 @@
   </v-layout>
 </template>
 
+<style lang="css" scoped>
+.remove-background-color {
+  background-color:transparent;
+}
+</style>
 <script lang="ts">
 import { DocumentViewModule } from "@/modules/document";
 import ViewDocumentsListCardsComponent from "@/components/document-components/ViewDocumentsListCardsComponent.vue";
