@@ -20,7 +20,7 @@ export class MenuItems{
                 {
                     title: "View documents",
                     icon: "mdi-file-multiple",
-                    route: "created-documents",
+                    route: "documents",
                     role: Role.Teacher,
                     description: "View all the documents that you created or the documents where you was added as collaborator."
                 }
@@ -59,7 +59,7 @@ export class MenuItems{
         {
             title: "Subscribed activity",
             icon: "mdi-file-multiple",
-            route: "created-documents",
+            route: "documents",
             role: Role.Student,
             children: [],
             description: "View all the document where you are member."

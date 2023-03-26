@@ -39,5 +39,12 @@ namespace AttendanceManager.Persistance.Repositories
             .AsNoTracking()
             .Where(dm => dm.User!.Role == role && dm.DocumentID == documentId)
             .ToListAsync();
+
+        public void DeleteMembersByDocumentId(int documentId)
+        {
+            var members = dbContext.DocumentMembers.AsNoTracking().Where(dm => dm.DocumentID == documentId);
+
+            dbContext.RemoveRange(members);
+        }
     }
 }

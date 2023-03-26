@@ -406,7 +406,7 @@ export default Vue.extend({
       } as DocumentInsertModule);
 
       if (response) {
-        this.$router.push({ name: "created-documents" });
+        this.$router.push({ name: "documents" });
       }
     },
   },

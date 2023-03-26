@@ -96,7 +96,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/documents',
-    name: 'created-documents',
+    name: 'documents',
     component: () => import('../views/documents-views/DocumentCardView.vue'),
     meta: {
       title: 'Documents',

@@ -49,7 +49,12 @@ export class DocumentStore {
 
     /** Use this method to update the document information */
     public async updateDocument(payload: { module: DocumentUpdateModule, newCourseName: string }): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/updateDocument`,payload);
+        return await this.store.dispatch(`${documentNamespace}/updateDocument`, payload);
+    }
+
+    /** Delete document */
+    public async deleteDocument(): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/deleteDocument`);
     }
 
     /**
@@ -57,12 +62,11 @@ export class DocumentStore {
      * @payload teacher email
     */
     public async addCollaborator(payload: string): Promise<boolean> {
-       return await this.store.dispatch(`${documentNamespace}/addCollaborator`, payload);
+        return await this.store.dispatch(`${documentNamespace}/addCollaborator`, payload);
     }
 
     /**
    * Add a new specialziation only
-   * @test
    */
     public addAttendanceCollection(payload: AttendanceCollectionInsertModule): Promise<boolean> {
         return this.store.dispatch(`${documentNamespace}/addAttendanceCollection`, payload);

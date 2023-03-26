@@ -1,4 +1,4 @@
-import { ERR_BAD_RESPONSE, ERR_NOT_FOUND } from "./constants";
+import { ERR_BAD_RESPONSE, ERR_NOT_FOUND, ERR_UNSUPORTED_MEDIA_TYPE } from "./constants";
 import { Toastification } from "@/plugins/vue-toastification";
 
 interface Response{
@@ -14,7 +14,10 @@ export default class ResponseHandler {
                 Toastification.error(response.error, `${response.status} Not found:`);
                 break;
             case ERR_BAD_RESPONSE:
-                Toastification.error(response.error, `${response.status} Bad request:`)
+                Toastification.error(response.error, `${response.status} Bad request:`);
+                break;
+            case ERR_UNSUPORTED_MEDIA_TYPE:
+                Toastification.error("The provided parameters are not passed correctly!", "415 Unsupported Media Type:");
                 break;
             default:
                 Toastification.simpleError("API doesn't respond!");

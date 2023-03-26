@@ -92,6 +92,11 @@ const mutations = {
             }
         }
     },
+    /** Delete document from the store */
+    _deleteDocument(state, payload: number): void {
+        state.currentDocument = {};
+        state.documents = state.documents.filter(d => d.documentId != payload);
+    },
     _addCollaborator(state, payload: DocumentMembersViewModule): void {
         state.currentDocument.documentMembers.push(payload);
     },
@@ -176,6 +181,22 @@ const actions = {
 
         if (isSuccess) {
             commit("_partialCurrentDocumentUpdate", payload);
+        }
+
+        return isSuccess;
+    },
+    /** Delete document (soft or hard) */
+    async deleteDocument({ commit, state }): Promise<boolean> {
+        let isSuccess = true;
+        const documentId = state.currentDocument.documentId;
+
+        await https.delete(`${DOCUMENT_CONTROLLER}/delete_document/${documentId}`)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (isSuccess) {
+            commit("_deleteDocument", documentId);
         }
 
         return isSuccess;

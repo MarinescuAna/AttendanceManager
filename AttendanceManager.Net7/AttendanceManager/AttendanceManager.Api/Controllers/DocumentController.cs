@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
 using AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName;
 using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
+using AttendanceManager.Application.Features.Document.Commands.DeleteDocumentById;
 using AttendanceManager.Application.Features.Document.Commands.UpdateDocumentById;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
@@ -8,6 +9,7 @@ using AttendanceManager.Application.Features.DocumentMember.Commands.InsertColla
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AttendanceManager.Api.Controllers
 {
@@ -87,5 +89,17 @@ namespace AttendanceManager.Api.Controllers
         {
             return Ok(await mediator.Send(command));
         }
+
+        /// <summary>
+        /// Delete (soft or hard ) a document
+        /// </summary>
+        /// <returns>Success: true/false</returns>
+        [HttpDelete("delete_document/{id}")]
+        public async Task<IActionResult> DeleteDocument(int id)
+        {
+            return Ok(await mediator.Send(new DeleteDocumentByIdCommand { DocumentId = id }));
+        }
+
+
     }
 }
