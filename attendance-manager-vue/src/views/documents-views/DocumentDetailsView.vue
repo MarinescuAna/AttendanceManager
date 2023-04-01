@@ -1,5 +1,15 @@
 <template>
-  <v-card>
+    <div v-if="isLoading">
+    <v-layout justify-center>
+      <v-progress-circular
+        :size="100"
+        :width="8"
+        color="black"
+        indeterminate
+      ></v-progress-circular>
+    </v-layout>
+  </div>
+  <v-card v-else>
     <v-toolbar class="black">
       <v-toolbar-title class="white--text">{{
         documentInfo?.title
@@ -67,6 +77,8 @@ export default Vue.extend({
     return {
       /** Current selected tab */
       selectedTab: [],
+            /** Use this boolean to display the progress circular component */
+            isLoading: true,
     };
   },
   computed: {
@@ -126,7 +138,7 @@ export default Vue.extend({
    * */
   created: async function () {
     if (typeof(this.$route.params.id) !== "undefined")
-      await storeHelper.documentStore.loadCurrentDocument(
+      this.isLoading = !await storeHelper.documentStore.loadCurrentDocument(
         this.$route.params.id
       );
   },

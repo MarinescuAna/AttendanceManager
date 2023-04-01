@@ -1,5 +1,15 @@
 <template>
-  <div v-if="isTeacher">
+  <div v-if="isLoading">
+    <v-layout justify-center>
+      <v-progress-circular
+        :size="100"
+        :width="8"
+        color="black"
+        indeterminate
+      ></v-progress-circular>
+    </v-layout>
+  </div>
+  <div v-else-if="isTeacher">
     <!-- The tabs menu -->
     <v-tabs
       v-model="currentTab"
@@ -74,6 +84,8 @@ export default Vue.extend({
         "There are no documents where you are a collaborator.",
       /** Message that should be displayed when the student has no documents */
       emptyStudentDocumentsMessage: "You are not member of any document yet.",
+      /** Use this boolean to display the progress circular component */
+      isLoading: true,
     };
   },
   computed: {
@@ -92,7 +104,7 @@ export default Vue.extend({
   },
   /** Load all the documents from the API */
   created: async function () {
-    await storeHelper.documentStore.loadDocuments();
+    this.isLoading = !(await storeHelper.documentStore.loadDocuments());
   },
 });
 </script>
