@@ -46,6 +46,20 @@ export interface DocumentMembersViewModule{
     name: string;
 }
 
+/** Use this in order to display the students interest related to document activity*/
+export interface StudentInterestModule{
+    email: string;
+    studentName: string;
+    lessonInterest: number;
+    laboratoryInterest: number;
+    seminaryInterest: number;
+}
+
+/** Use this to display the dashboard for a document */
+export interface DocumentDashboardViewModule{
+    studentInterests: StudentInterestModule[];
+}
+
 /** This module is used in the document store to keep all the informations related to a document */
 export interface DocumentFullViewModule{
     documentId:number;
@@ -72,4 +86,5 @@ export interface DocumentFullViewModule{
     totalAttendances: TotalAttendanceModule[];
     attendanceImportance: number;
     bonusPointsImportance: number;
+    documentDashboard: DocumentDashboardViewModule;
 }

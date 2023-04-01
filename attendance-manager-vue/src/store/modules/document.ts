@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentFullViewModule, DocumentMembersViewModule, DocumentViewModule, DocumentUpdateModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentMembersViewModule, DocumentViewModule, DocumentUpdateModule, DocumentDashboardViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
-import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import { ATTENDANCE_COLLECTION_CONTROLLER, DASHBOARD_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { CourseType } from "@/shared/enums";
 import { AxiosResponse } from "axios";
 
@@ -63,6 +63,10 @@ const mutations = {
     _documentDetails(state, payload: DocumentFullViewModule): void {
         state.currentDocument = payload;
     },
+    /** Update document dashboard on demand */
+    _documentDashboard(state, payload: DocumentDashboardViewModule): void {   
+        state.currentDocument.documentDashboard = payload;
+    },
     /**
  * Update some information related to the current document
  */
@@ -120,7 +124,7 @@ const actions = {
     /**
      * Load all the documents
      */
-    async loadDocuments({ commit, state }): Promise<void> {
+    async loadDocuments({ commit, state }): Promise<boolean> {
         if (state.documents.length == 0) {
             let isSuccess = true;
 
@@ -133,12 +137,33 @@ const actions = {
                 commit("_documents", (result as AxiosResponse).data as DocumentViewModule[]);
             }
         }
+
+        return true;
+    },
+    /**
+ * Load document dashboard
+ */
+    async loadDocumentDashboard({ commit, state }): Promise<boolean> {
+        if (typeof (state.currentDocument.documentDashboard) === "undefined") {
+            let isSuccess = true;
+
+            const result = await https.get(`${DASHBOARD_CONTROLLER}/document_dashboard/${state.currentDocument.documentId}`,)
+                .catch(error => {
+                    isSuccess = ResponseHandler.errorResponseHandler(error);
+                });
+
+            if (isSuccess) {
+                commit("_documentDashboard", (result as AxiosResponse).data as DocumentViewModule[]);
+            }
+        }
+
+        return true;
     },
     /**
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
      * @param payload documentId
      */
-    async loadCurrentDocument({ commit, state }, payload: string): Promise<void> {
+    async loadCurrentDocument({ commit, state }, payload: string): Promise<boolean> {
 
         if (typeof (payload) != "undefined" && Object.keys(state.currentDocument).length === 0) {
             let isFail = false;
@@ -151,6 +176,7 @@ const actions = {
                 commit("_documentDetails", (response as AxiosResponse).data);
             }
         }
+        return true;
     },
     /** Add new collaborator teacher */
     async addCollaborator({ commit, state }, payload: string): Promise<boolean> {

@@ -35,16 +35,23 @@ export class DocumentStore {
     /**
      * Load all the document
      */
-    public async loadDocuments(): Promise<void> {
-        await this.store.dispatch(`${documentNamespace}/loadDocuments`);
+    public async loadDocuments(): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/loadDocuments`);
     }
 
     /**
      * Load the current document from the API and update the store
      * @payload documentId
     */
-    public async loadCurrentDocument(payload: string): Promise<void> {
-        await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
+    public async loadCurrentDocument(payload: string): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
+    }
+
+    /**
+     * Load the current document dashboard
+    */
+    public async loadDocumentDashboard(): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/loadDocumentDashboard`);
     }
 
     /** Use this method to update the document information */
