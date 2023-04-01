@@ -356,3 +356,7 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 TeamWork-AppAPI/Logger/internal_logs/internallog.txt
+/AttendanceManager.Net7/AttendanceManager/.sonarqube
+/attendance-manager-vue/.scannerwork
+/AttendanceManager.Net7/AttendanceManager/AttendanceManager.Persistance/Migrations
+/AttendanceManager.Net7/AttendanceManager/AttendanceManager.Persistance/Migrations/AttendanceManagerDbContextModelSnapshot.cs
