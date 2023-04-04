@@ -62,11 +62,11 @@ namespace AttendanceManager.Persistance.UOW
         {
             get => _userSpecializationRepository ?? new UserSpecializationRepository(_dbContext);
         }
-        public async Task<bool> CommitAsync()
+        public async Task<bool> CommitAsync(int numberOfRows = 1)
         {
             try
             {
-                return (await _dbContext.SaveChangesAsync()) > 0;
+                return (await _dbContext.SaveChangesAsync()) >= numberOfRows;
             }
             catch (Exception ex)
             {
