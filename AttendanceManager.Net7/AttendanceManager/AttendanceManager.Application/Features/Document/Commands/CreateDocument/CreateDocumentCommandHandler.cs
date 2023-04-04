@@ -44,7 +44,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             }
 
             // Save the members 
-            return await unitOfWork.CommitAsync();
+            return await unitOfWork.CommitAsync(request.StudentIds.Length) ;
         }
     }
 }

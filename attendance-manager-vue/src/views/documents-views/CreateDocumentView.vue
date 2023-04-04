@@ -368,6 +368,7 @@ export default Vue.extend({
   created: async function () {
     await storeHelper.userStore.loadCurrentUserInfo();
     await storeHelper.courseStore.loadCourses();
+    storeHelper.documentStore.resetEntireStore();
   },
   methods: {
     /** Use this function to reset the list of students when the specialization or year has changed */
