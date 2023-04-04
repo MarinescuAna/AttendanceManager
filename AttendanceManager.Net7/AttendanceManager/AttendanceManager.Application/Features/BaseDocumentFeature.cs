@@ -17,12 +17,6 @@ namespace AttendanceManager.Application.Features
         // No need to call this method in other places then where the document is initialized
         public async Task InitialiazeDocumentAsync(int documentId)
         {
-            if (currentDocument != null && currentDocument.DocumentId == documentId)
-            {
-                // if the next document is the current document, then don't load it again
-                return;
-            }
-
             // if there is another  current document loaded, clear the data
             if (currentDocument != null)
             {
