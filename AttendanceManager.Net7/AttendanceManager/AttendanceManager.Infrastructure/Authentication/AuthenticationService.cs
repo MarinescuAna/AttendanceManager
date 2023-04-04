@@ -38,36 +38,22 @@ namespace AttendanceManager.Infrastructure.Authentication
                 await _mediator.Send(new ConfirmUserAccountCommand() { Email = request.Email });
             }
 
-            // Get token
+            // Generate refresh token
             var accessToken = _jwtService.GenerateAccessToken(result.Email, result.FullName, result.Role, result.Code);
-
-            if (string.IsNullOrEmpty(result.RefreshToken) || (result.ExpRefreshToken != null && DateTime.Now.Millisecond >= result.ExpRefreshToken.Value.Millisecond))
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            await _mediator.Send(new UpdateRefreshTokenCommand
             {
-                // If the user has a refresh token and this refresh token expired or is empty, recreated another one
-                var refreshToken = _jwtService.GenerateRefreshToken();
-                await _mediator.Send(new UpdateRefreshTokenCommand
-                {
-                    Email = request.Email,
-                    ExpRefreshToken = refreshToken.Expiration,
-                    RefreshToken = refreshToken.Token
-                });
-
-                return new()
-                {
-                    ExpirationDateAccessToken = accessToken.Expiration,
-                    AccessToken = accessToken.Token,
-                    RefreshToken = refreshToken.Token,
-                    ExpirationDateRefreshToken = refreshToken.Expiration
-                };
-            }
-
+                Email = request.Email,
+                ExpRefreshToken = refreshToken.Expiration,
+                RefreshToken = refreshToken.Token
+            });
 
             return new()
             {
                 ExpirationDateAccessToken = accessToken.Expiration,
                 AccessToken = accessToken.Token,
-                RefreshToken = result.RefreshToken,
-                ExpirationDateRefreshToken = (DateTime)result.ExpRefreshToken!
+                RefreshToken = refreshToken.Token,
+                ExpirationDateRefreshToken = refreshToken.Expiration
             };
         }
     }
