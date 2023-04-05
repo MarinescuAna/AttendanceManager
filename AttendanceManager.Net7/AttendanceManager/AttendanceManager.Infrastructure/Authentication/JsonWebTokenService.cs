@@ -52,13 +52,13 @@ namespace AttendanceManager.Infrastructure.Authentication
 
         public GenericToken GenerateRefreshToken()
         {
-            var randomNumber = new byte[60];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
+            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var randomBytes = new byte[32];
+            rngCryptoServiceProvider.GetBytes(randomBytes);
             return new()
             {
                 Expiration = DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpirationDays),
-                Token = Convert.ToBase64String(randomNumber)
+                Token = Convert.ToBase64String(randomBytes).Replace(" ", "")
             };
         }
     }
