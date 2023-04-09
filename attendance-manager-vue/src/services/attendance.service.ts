@@ -1,7 +1,7 @@
 
 import https from "@/plugins/axios";
 import { ATTENDANCE_CONTROLLER } from "@/shared/constants";
-import { StudentAttendanceInsertModule, StudentAttendanceModule, TotalAttendanceModule, UseAttendanceCodeUpdateModule } from "@/modules/document/attendance";
+import { StudentAttendanceInsertModule, StudentAttendanceModule, UseAttendanceCodeUpdateModule } from "@/modules/document/attendance";
 import ResponseHandler from "@/error-handler/error-handler";
 
 export default class AttendanceService {

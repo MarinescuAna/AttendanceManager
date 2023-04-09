@@ -1,5 +1,5 @@
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentFullViewModule, DocumentInsertModule } from "@/modules/document";
+import {  DocumentInsertModule } from "@/modules/document";
 import https from "@/plugins/axios";
 import { DOCUMENT_CONTROLLER } from "@/shared/constants";
 
@@ -19,9 +19,5 @@ export default class DocumentService {
             });
 
         return isSuccess;
-    }
-
-    static async getDocumentById(payload: string): Promise<DocumentFullViewModule>{
-        return (await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)).data;
     }
 }
