@@ -1,126 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentFullViewModule, DocumentMembersViewModule, DocumentViewModule, DocumentUpdateModule, DocumentDashboardViewModule } from "@/modules/document";
+import { DocumentViewModule, DocumentUpdateModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
+import { Toastification } from "@/plugins/vue-toastification";
 import { ATTENDANCE_COLLECTION_CONTROLLER, DASHBOARD_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
-import { CourseType } from "@/shared/enums";
 import { AxiosResponse } from "axios";
 
-//state type
-export interface DocumentState {
-    // array with all the documents
-    documents: DocumentViewModule[];
-    // current document
-    currentDocument: DocumentFullViewModule;
-}
-
-//initialize the state with an empty state
-function initialize(): DocumentState {
-    return {
-        documents: [],
-        currentDocument: {} as DocumentFullViewModule
-    };
-}
-
-// initial state
-const state: DocumentState = initialize();
-
-// getters for this store
-const getters = {
-    /**
-     * Get documents from the store
-    */
-    documents(state): DocumentViewModule[] {
-        return state.documents;
-    },
-    /**
-     * Gets created documents from the store
-    */
-    documentDetails(state): DocumentFullViewModule {
-        return state.currentDocument;
-    },
-    /**
-     * Gets created documents from the store
-    */
-    documentFiles(state): AttendanceCollectionViewModule[] {
-        return typeof (state.currentDocument?.attendanceCollections) === "undefined" ? []
-            : state.currentDocument?.attendanceCollections;
-    }
-};
-
-// mutations for this store
-const mutations = {
-    /**
-     * Update the entire list of documents existed into the store
-     */
-    _documents(state, payload: DocumentViewModule[]): void {
-        state.documents = payload;
-    },
-    /**
-     * Update the entire list of documents existed into the store
-     */
-    _documentDetails(state, payload: DocumentFullViewModule): void {
-        state.currentDocument = payload;
-    },
-    /** Update document dashboard on demand */
-    _documentDashboard(state, payload: DocumentDashboardViewModule): void {   
-        state.currentDocument.documentDashboard = payload;
-    },
-    /**
- * Update some information related to the current document
- */
-    _partialCurrentDocumentUpdate(state, payload: { module: DocumentUpdateModule, newCourseName: string }): void {
-        state.currentDocument.title = payload.module.title;
-        state.currentDocument.courseId = payload.module.courseId;
-        state.currentDocument.maxNoLaboratories = payload.module.noLaboratories;
-        state.currentDocument.maxNoLessons = payload.module.noLessons;
-        state.currentDocument.maxNoSeminaries = payload.module.noSeminaries;
-        state.currentDocument.attendanceImportance = payload.module.attendanceImportance;
-        state.currentDocument.bonusPointsImportance = payload.module.bonusPointsImportance;
-        state.currentDocument.courseName = payload.newCourseName;
-    },
-    /**
-     * Add a documentFile in the current document
-    */
-    _addAttendanceCollection(state, payload: AttendanceCollectionViewModule): void {
-        state.currentDocument.attendanceCollections.push(payload);
-
-        if (payload.courseType == CourseType[CourseType.Laboratory]) {
-            state.currentDocument.noLaboratories++;
-        } else {
-            if (payload.courseType == CourseType[CourseType.Lesson]) {
-                state.currentDocument.noLessons++;
-            } else {
-                state.currentDocument.noSeminaries++;
-            }
-        }
-    },
-    /** Delete document from the store */
-    _deleteDocument(state, payload: number): void {
-        state.currentDocument = {};
-        state.documents = state.documents.filter(d => d.documentId != payload);
-    },
-    _addCollaborator(state, payload: DocumentMembersViewModule): void {
-        state.currentDocument.documentMembers.push(payload);
-    },
-    /**
-     * Reset the state with the initial values
-     */
-    _resetStore(state): void {
-        Object.assign(state, initialize());
-    },
-
-    /**
-     * Reset current document state with the initial values
-     */
-    _resetCurrentDocumentStore(state): void {
-        state.currentDocument = {};
-    }
-};
-
 // actions for this store
-const actions = {
+export const documentActions = {
     /**
      * Load all the documents
      */
@@ -165,18 +53,31 @@ const actions = {
      */
     async loadCurrentDocument({ commit, state }, payload: string): Promise<boolean> {
 
-        if (typeof (payload) != "undefined" && Object.keys(state.currentDocument).length === 0) {
-            let isFail = false;
-
-            //load the document details and update the store
-            const response = await https.get(`${DOCUMENT_CONTROLLER}/document_by_id?id=${payload}`)
-                .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
-
-            if (!isFail) {
-                commit("_documentDetails", (response as AxiosResponse).data);
-            }
+        if (Object.keys(state.currentDocument).length > 0) {
+            return true;
         }
-        return true;
+
+        try {
+            //load the document details and update the store
+            const response = await Promise.race([
+                https.get(`${DOCUMENT_CONTROLLER}/document/${payload}`),
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject(new Error("API call timed out."))
+                    }, 5000)// set timeout to 5 seconds
+                })
+            ]);
+            commit("_documentDetails", (response as AxiosResponse).data);
+            return true;
+
+        } catch (error) {
+            console.log(error)
+            if(typeof(error) === "string")
+            {
+                Toastification.simpleError(error as string);
+            }
+            return false;
+        }
     },
     /** Add new collaborator teacher */
     async addCollaborator({ commit, state }, payload: string): Promise<boolean> {
@@ -261,14 +162,4 @@ const actions = {
     },
 };
 
-// export the namespace
-export const namespace = 'document';
 
-// export the store 'module'
-export default {
-    namespaced: true,
-    state,
-    getters,
-    mutations,
-    actions
-};

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import document, { namespace as documentNamespace} from "./modules/document";
+import document, { namespace as documentNamespace} from "./modules/document/index";
 import department, { namespace as departmentNamespace} from "./modules/department";
 import user, { namespace as userNamespace} from "./modules/user";
 import course, { namespace as courseNamespace} from "./modules/course";

@@ -2,7 +2,7 @@
 import { DocumentFullViewModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { Store } from "vuex";
-import { namespace as documentNamespace } from "../modules/document";
+import { namespace as documentNamespace } from "../modules/document/index";
 
 export class DocumentStore {
     private store: Store<any>;
