@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Features.Dashboard.Helpers;
+using AttendanceManager.Core.Shared;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
@@ -26,6 +27,10 @@ namespace AttendanceManager.Application.Features.Dashboard.Queries.GetDashboardF
             // compute the student interest
             var computeStudentInterestHelper = new ComputeStudentInterestPerDocumentFactory(attendanceCollectionsType,currentDocument!,studentMembers);
             finalResult.StudentInterests = computeStudentInterestHelper.Compute();
+
+            //compute the percentage of students that attend a course
+            var computeDailyAttendancePercentageHelper = new ComputeDailyAttendancePercentageFactory(currentDocument!, studentMembers);
+            finalResult.AttendancePercentage = computeDailyAttendancePercentageHelper.Compute();
 
             return Task.FromResult(finalResult);
         }

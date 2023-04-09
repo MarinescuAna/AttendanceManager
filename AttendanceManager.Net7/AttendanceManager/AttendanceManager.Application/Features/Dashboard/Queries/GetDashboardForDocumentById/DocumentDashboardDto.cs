@@ -2,15 +2,22 @@
 {
     public sealed class DocumentDashboardDto
     {
-        public StudentInteresDto[]? StudentInterests { get; set; }
+        public DocumentDashboardItemsDto[]? StudentInterests { get; set; }
+        public DailyActivityDto[]? AttendancePercentage { get; set; }
     }
-    public class StudentInteresDto
+    public class DocumentDashboardItemsDto
     {
         public required string Email { get; init; }
         public required string StudentName { get; init; }
-        public required float LessonInterest { get; set; }
-        public required float LaboratoryInterest { get; set; }
-        public required float SeminaryInterest { get; set; }
+        public required float LessonValue { get; set; }
+        public required float LaboratoryValue { get; set; }
+        public required float SeminaryValue { get; set; }
     }
 
+    public class DailyActivityDto{
+        public required int AttendanceCollectionId { get; init; }
+        public required string Datetime { get; init; }
+        public required float Percentage { get; init; }
+        public required string CourseType { get; init; }
+    }
 }

@@ -1,10 +1,32 @@
 <template>
-  <div>
+  <div v-if="!canGenerateDiagrams">
+    <v-alert border="left" type="error" class="ma-4"
+      >The diagrams can't be generated because there are fewer than 3 lessons
+      held!</v-alert
+    >
+  </div>
+  <div v-else-if="isLoading">
+    <v-layout justify-center>
+      <v-progress-circular
+        :size="100"
+        :width="8"
+        color="black"
+        indeterminate
+      ></v-progress-circular>
+    </v-layout>
+  </div>
+  <div v-else>
     <v-layout align-center column>
       <BarChartComponent
-        :chartData="studentsLessonInterest"
-        :title="'Students interest regarding the course activity'"
-      ></BarChartComponent>
+        :chartData="studentsInterestData"
+        :xAxiesLabels="studentsInterestsLabels"
+        title="Students interest regarding the course activity"
+      />
+      <LineChartComponent
+        :chartData="attendancePercentagePerDay"
+        :xAxiesLabels="attendancePercentageLabels"
+        title="Attendance percentage for lessons"
+      />
     </v-layout>
   </div>
 </template>
@@ -12,14 +34,26 @@
 <script lang="ts">
 import storeHelper from "@/store/store-helper";
 import BarChartComponent from "@/components/shared-components/charts/BarChartComponent.vue";
+import LineChartComponent from "@/components/shared-components/charts/LineChartComponent.vue";
 import Vue from "vue";
 
 export default Vue.extend({
   name: "DocumentDashboardComponent",
   components: {
     BarChartComponent,
+    LineChartComponent,
+  },
+  data: function () {
+    return {
+      /** Boolean for loading the data*/
+      isLoading: true,
+    };
   },
   computed: {
+    /** Use this computed data to check if there are enough courses held to can generate the diagrams  */
+    canGenerateDiagrams: function (): boolean {
+      return storeHelper.documentStore.documentDetails.noLessons > 3;
+    },
     /**
      * Data related to students interest
      * NOTE:
@@ -30,38 +64,83 @@ export default Vue.extend({
      *   - This average will be then divided by the total possible score of the course
      *   - Percentage = (weighted_average/total_possible_score) * 100
      */
-    studentsLessonInterest: function (): object {
-      return {
-        labels:
-          storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
-            (d) => d.studentName
+    studentsInterestData: function (): object {
+      return [
+        {
+          name: "Students interest regarding the lessons",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
+            (d) => d.lessonValue
           ),
-        datasets: [
-          {
-            label: "Students interest regarding the lessons",
-            data: storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
-              (d) => d.lessonInterest
-            ),
-          },
-          {
-            label: "Students interest regarding the laboratoies",
-            data: storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
-              (d) => d.laboratoryInterest
-            ),
-          },
-          {
-            label: "Students interest regarding the seminaries",
-            data: storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
-              (d) => d.seminaryInterest
-            ),
-          },
-        ],
-      };
+        },
+        {
+          name: "Students interest regarding the laboratories",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
+            (d) => d.laboratoryValue
+          ),
+        },
+        {
+          name: "Students interest regarding the seminaries",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
+            (d) => d.seminaryValue
+          ),
+        },
+      ];
+    },
+    studentsInterestsLabels: function (): string[] {
+      return storeHelper.documentStore.documentDetails.documentDashboard.studentInterests.map(
+        (d) => d.studentName
+      );
+    },
+    /**
+     * Compute the percentage of students that attend a course
+     * NOTE:
+     * Take the number of attendances for each day, divide by the number of students
+     * that are supposed to attend that course on that day, and then multiply by 100 to get the percentage
+     */
+    attendancePercentagePerDay: function (): object {
+      return [
+        {
+          name: "Attendance percentage per day for all activity",
+          type: "column",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage.map(
+            (d) => d.percentage
+          ),
+        },
+        {
+          name: "Attendance percentage per day for lessons",
+          type: "line",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage
+            .filter((d) => d.courseType === "Lesson")
+            .map((d) => d.percentage),
+        },
+        {
+          name: "Attendance percentage per day for laboratories",
+          type: "line",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage
+            .filter((d) => d.courseType === "Laboratory")
+            .map((d) => d.percentage),
+        },
+        {
+          name: "Attendance percentage per day for seminaries",
+          type: "line",
+          data: storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage
+            .filter((d) => d.courseType === "Seminary")
+            .map((d) => d.percentage),
+        },
+      ];
+    },
+    attendancePercentageLabels: function (): string[] {
+      return storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage.map(
+        (d) => d.datetime
+      );
     },
   },
   /** Load data related to the document dashboard before loading the DOM */
   beforeMount: async function (): Promise<void> {
-    await storeHelper.documentStore.loadDocumentDashboard();
+    if (this.canGenerateDiagrams) {
+      this.isLoading =
+        !(await storeHelper.documentStore.loadDocumentDashboard());
+    }
   },
 });
 </script>

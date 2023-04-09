@@ -46,18 +46,27 @@ export interface DocumentMembersViewModule{
     name: string;
 }
 
-/** Use this in order to display the students interest related to document activity*/
-export interface StudentInterestModule{
+/** Use this in order to display the data related to document activity*/
+export interface DocumentDashboardItemsModule{
     email: string;
     studentName: string;
-    lessonInterest: number;
-    laboratoryInterest: number;
-    seminaryInterest: number;
+    lessonValue: number;
+    laboratoryValue: number;
+    seminaryValue: number;
+}
+
+/** Use this in order to display the percentage of students that attend a course */
+export interface DailyActivityModule{
+    attendanceCollectionId: number;
+    datetime: string;
+    percentage: number;
+    courseType: string;
 }
 
 /** Use this to display the dashboard for a document */
 export interface DocumentDashboardViewModule{
-    studentInterests: StudentInterestModule[];
+    studentInterests: DocumentDashboardItemsModule[];
+    attendancePercentage: DailyActivityModule[];
 }
 
 /** This module is used in the document store to keep all the informations related to a document */

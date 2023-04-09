@@ -16,9 +16,9 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
             this.studentMembers = studentMembers;
         }
 
-        public StudentInteresDto[] Compute()
+        public DocumentDashboardItemsDto[] Compute()
         {
-            var partialyResult = new List<StudentInteresDto>();
+            var partialyResult = new List<DocumentDashboardItemsDto>();
 
             // partialy compute student interest
             var maxBonusPoint = ComputePartialyStudentInterest(studentMembers, partialyResult);
@@ -32,9 +32,9 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
             // compute final result
             foreach (var student in partialyResult)
             {
-                student.LessonInterest = student.LessonInterest / totalPossibleScore.lesson * 100;
-                student.LaboratoryInterest = student.LaboratoryInterest / totalPossibleScore.laboratory * 100;
-                student.SeminaryInterest = student.SeminaryInterest / totalPossibleScore.seminary * 100;
+                student.LessonValue = student.LessonValue / totalPossibleScore.lesson * 100;
+                student.LaboratoryValue = student.LaboratoryValue / totalPossibleScore.laboratory * 100;
+                student.SeminaryValue = student.SeminaryValue / totalPossibleScore.seminary * 100;
             }
 
             return partialyResult.ToArray();
@@ -44,7 +44,7 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
         /// Use this function to compute partialy student interest and also to determine the maximum bonus point for all types of courses
         /// </summary>
         /// <returns>(max_bonus_point_lesson, max_bonus_point_laboratory, max_bonus_point_seminary)</returns>
-        private (int lesson, int laboratory, int seminary) ComputePartialyStudentInterest(IEnumerable<Domain.Entities.DocumentMember> studentMembers, List<StudentInteresDto> partialyResult)
+        private (int lesson, int laboratory, int seminary) ComputePartialyStudentInterest(IEnumerable<Domain.Entities.DocumentMember> studentMembers, List<DocumentDashboardItemsDto> partialyResult)
         {
             (int lesson, int laboratory, int seminary) maxBonusPoints = (0, 0, 0);
 
@@ -78,11 +78,11 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
                 {
                     Email = student.UserID,
                     StudentName = student.User!.FullName,
-                    LessonInterest = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lesson && a.IsPresent)
+                    LessonValue = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lesson && a.IsPresent)
                         + currentDocument!.BonusPointsImportance * lessonBonusPoints,
-                    LaboratoryInterest = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory && a.IsPresent)
+                    LaboratoryValue = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory && a.IsPresent)
                         + currentDocument!.BonusPointsImportance * laboratoryBonusPoints,
-                    SeminaryInterest = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory && a.IsPresent)
+                    SeminaryValue = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory && a.IsPresent)
                         + currentDocument!.BonusPointsImportance * seminaryBonusPoints,
                 });
             }

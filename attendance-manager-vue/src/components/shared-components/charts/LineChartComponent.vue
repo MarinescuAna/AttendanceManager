@@ -1,19 +1,19 @@
 <template>
   <VueApexCharts
     width="1000"
-    type="bar"
+    type="line"
     class="ma-3"
     :options="chartOptions"
     :series="chartData"
   ></VueApexCharts>
 </template>
-
-<script lang="ts">
+  
+  <script lang="ts">
 import Vue from "vue";
 import VueApexCharts from "vue-apexcharts";
 
 export default Vue.extend({
-  name: "BarChartComponent",
+  name: "LineChartComponent",
   components: { VueApexCharts },
   props: {
     /** Data to display in the bar chart*/
@@ -32,19 +32,28 @@ export default Vue.extend({
     title: {
       type: String,
       required: true,
-    }
+    },
   },
   data: function () {
     return {
       chartOptions: {
         chart: {
-          stacked: true
+          height: 350,
+          type: "line",
+        },
+        stroke: {
+          width: [0, 4],
         },
         title: {
           text: this.title,
         },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1],
+        },
+        labels: this.xAxiesLabels,
         xaxis: {
-          categories: this.xAxiesLabels,
+          type: "datetime",
         },
       },
     };
