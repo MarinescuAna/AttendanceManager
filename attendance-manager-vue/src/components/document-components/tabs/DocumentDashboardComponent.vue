@@ -52,7 +52,7 @@ export default Vue.extend({
   computed: {
     /** Use this computed data to check if there are enough courses held to can generate the diagrams  */
     canGenerateDiagrams: function (): boolean {
-      return storeHelper.documentStore.documentDetails.noLessons > 3;
+      return storeHelper.documentStore.documentDetails.noLessons >= 3;
     },
     /**
      * Data related to students interest
@@ -138,8 +138,8 @@ export default Vue.extend({
   /** Load data related to the document dashboard before loading the DOM */
   beforeMount: async function (): Promise<void> {
     if (this.canGenerateDiagrams) {
-      this.isLoading =
-        !(await storeHelper.documentStore.loadDocumentDashboard());
+      await storeHelper.documentStore.loadDocumentDashboard();
+      this.isLoading = false;
     }
   },
 });
