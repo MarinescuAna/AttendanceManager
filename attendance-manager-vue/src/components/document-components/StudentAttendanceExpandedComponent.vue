@@ -22,7 +22,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in userAttendances" :key="item.attendanceId">
+            <tr v-for="item in studentAttendances" :key="item.attendanceId">
               <td>{{ item.updatedOn }}</td>
               <td>
                 <v-simple-checkbox
@@ -54,10 +54,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in resultsOverview" :key="item.courseType">
-              <td>{{ item.courseType }}</td>
-              <td>{{ item.attendances }}</td>
-              <td>{{ item.bonusPoints }}</td>
+            <tr>
+              <td>Lesson</td>
+              <td>{{ attendanceLessons }}</td>
+              <td>{{ bonusPointsLessons }}</td>
+            </tr>
+            <tr>
+              <td>Laboratory</td>
+              <td>{{ attendanceLLaboratories }}</td>
+              <td>{{ bonusPointsLaboratories }}</td>
+            </tr>
+            <tr>
+              <td>Seminary</td>
+              <td>{{ attendanceSeminaries }}</td>
+              <td>{{ bonusPointsSeminaries }}</td>
             </tr>
           </tbody>
         </template>
@@ -88,12 +98,13 @@ interface ResultsOverview {
 export default Vue.extend({
   name: "StudentAttendanceExpandedComponent",
   props: {
-    userId: String,
+    userId: {
+      type: String
+    }
   },
   data: function () {
     return {
       studentAttendancesHeader,
-      userAttendances: [] as StudentAttendanceModule[],
       resultsOverview: [] as ResultsOverview[],
       students: [] as StudentAttendanceModule[],
       initStudents: [] as StudentAttendanceModule[],
@@ -101,84 +112,72 @@ export default Vue.extend({
     };
   },
   computed: {
+    /** Get the current user role */
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
     },
+    /**
+     * If the current user is teacher, filter all the attendances related to the selected user
+     * otherwise just load the attendances for the current user
+     */
+    studentAttendances: function(): StudentAttendanceModule[] {
+      return this.isTeacher? storeHelper.documentStore.studentsTotalAttendances.filter(u=> u.userId == this.userId)
+          : storeHelper.documentStore.documentDetails.currentStudentAttendances;
+    },
+    attendanceLessons: function(): number{
+      return this._getTotal(CourseType.Lesson,true);
+    },
+    bonusPointsLessons: function(): number{
+      return this._getTotal(CourseType.Lesson,false);
+    },
+    attendanceLLaboratories: function(): number{
+      return this._getTotal(CourseType.Laboratory,true);
+    },
+    bonusPointsLaboratories: function(): number{
+      return this._getTotal(CourseType.Laboratory,false);
+    },
+    attendanceSeminaries: function(): number{
+      return this._getTotal(CourseType.Seminary,true);
+    },
+    bonusPointsSeminaries: function(): number{
+      return this._getTotal(CourseType.Seminary,false);
+    }
   },
   created: async function () {
     // load user attendances for the selected user in case that the current user's role is teacher,
     // or get from the store the attendances report for the current user
-    this.userAttendances = this.isTeacher
-      ? await AttendanceService.getStudentAttendancesByDocumentIdAndUserId(
-          storeHelper.documentStore.documentDetails.documentId,
-          this.userId
-        )
-      : await storeHelper.documentStore.documentDetails
-          .currentStudentAttendances;
-
-    // make a copy of the results
-    this.userAttendances.forEach((x) =>
-      this.initStudents.push(Object.assign({}, x))
-    );
-
-    // if there are attendances, make a total
-    if (this.userAttendances.length != 0) {
-      this._getResultsOverview();
+    await storeHelper.documentStore.loadStudentTotalAttendances(this.isTeacher? this.userId: null);
+    
+    if(this.studentAttendances.length > 0){
+      // make a copy of the results
+      this.studentAttendances.forEach((x) =>
+        this.initStudents.push(Object.assign({}, x))
+      );
     }
   },
   methods: {
-    _getResultsOverview: function (): void {
-      //get laboratories
-      const laboratories = this.userAttendances.filter(
-        (x) => x.courseType == CourseType[CourseType.Laboratory]
+    _getTotal: function(type: CourseType, doAttendancesTotal: boolean): number {
+      const courses = this.studentAttendances.filter(
+        (x) => x.courseType == CourseType[type]
       );
-      if (laboratories.length != 0) {
-        this.resultsOverview.push({
-          courseType: CourseType[CourseType.Laboratory],
-          attendances: laboratories.filter((x) => x.wasPresent).length,
-          bonusPoints: laboratories.reduce(
-            (x, result) => x + result.bonusPoints,
-            0
-          ),
-        } as ResultsOverview);
-      }
-      //get lessons
-      const lessons = this.userAttendances.filter(
-        (x) => x.courseType == CourseType[CourseType.Lesson]
-      );
-      if (lessons.length != 0) {
-        this.resultsOverview.push({
-          courseType: CourseType[CourseType.Lesson],
-          attendances: lessons.filter((x) => x.wasPresent).length,
-          bonusPoints: lessons.reduce((x, result) => x + result.bonusPoints, 0),
-        } as ResultsOverview);
-      }
-      //get seminaries
-      const seminaries = this.userAttendances.filter(
-        (x) => x.courseType == CourseType[CourseType.Seminary]
-      );
-      if (seminaries.length != 0) {
-        this.resultsOverview.push({
-          courseType: CourseType[CourseType.Seminary],
-          attendances: seminaries.filter((x) => x.wasPresent).length,
-          bonusPoints: seminaries.reduce(
-            (x, result) => x + result.bonusPoints,
-            0
-          ),
-        } as ResultsOverview);
+      if (courses.length != 0) {
+        return doAttendancesTotal? courses.filter((x) => x.wasPresent).length:
+        courses.reduce((x, result) => x + result.bonusPoints, 0);
+      }else{
+        return 0;
       }
     },
     onSave: async function (): Promise<void> {
       let studentsChanged: StudentAttendanceInsertModule[] = [];
 
-      this.userAttendances.forEach((student) => {
+      this.studentAttendances.forEach((student) => {
         let oldStudent = this.initStudents.find(
           (x) => x.attendanceId === student.attendanceId
         );
 
         if (
           oldStudent?.bonusPoints !== student.bonusPoints ||
-          oldStudent.isPresent !== student.wasPresent
+          oldStudent.wasPresent !== student.wasPresent
         ) {
           studentsChanged.push({
             attendanceID: student.attendanceId,
