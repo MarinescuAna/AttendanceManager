@@ -2,10 +2,10 @@
   <v-container>
     <v-row justify="center">
       <v-btn-toggle>
-        <v-btn class="blue-grey lighten-4" :to="{ name: 'new-department' }"
+        <v-btn class="orange lighten-3" :to="{ name: 'new-department' }"
           >Add new department</v-btn
         >
-        <v-btn class="blue-grey lighten-4" :to="{ name: 'new-specialization' }"
+        <v-btn class="orange lighten-3" :to="{ name: 'new-specialization' }"
           >Add new specialization</v-btn
         >
       </v-btn-toggle>
