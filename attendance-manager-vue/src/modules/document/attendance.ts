@@ -6,14 +6,6 @@ export interface AttendanceFileInsertModule{
     documentId: number;
 }
 
-export interface StudentAttendanceModule{
-    attendanceID: number;
-    userID: string;
-    bonusPoints: number;
-    isPresent: boolean;
-    updateOn:string;
-}
-
 export interface StudentAttendanceInsertModule{
     attendanceID: number;
     bonusPoints: number;
@@ -34,6 +26,7 @@ export interface StudentAttendanceModule{
     bonusPoints: number;
     courseType: string;
     wasPresent: boolean;
+    userId: string;
     attendanceId: number;
     updatedOn:string;
 }

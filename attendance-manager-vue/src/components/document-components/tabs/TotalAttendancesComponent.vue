@@ -28,7 +28,7 @@
           <template v-slot:expanded-item="{ headers, item }">
             <td :colspan="headers.length">
               <h1 class="fond-weight-bold ma-3">{{ item.userName }}</h1>
-              <StudentAttendanceExpandedComponent :userId="item.userID" />
+              <StudentAttendanceExpandedComponent :key="item.userID" :userId="item.userID" />
             </td>
           </template>
         </v-data-table>
