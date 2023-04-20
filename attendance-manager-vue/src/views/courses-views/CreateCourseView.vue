@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="orange lighten-3">
-      <v-card-title class="pa-7">
+      <v-card-title class="pa-3">
         <h2>Create new course</h2>
         <v-spacer></v-spacer>
         <router-link to="/courses" tag="button"
@@ -11,44 +11,41 @@
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addCourse)">
-            <validation-provider
-              name="name"
-              v-slot="{ errors }"
-              :rules="rules.required"
-            >
-              <v-text-field
-                v-model="name"
-                type="text"
-                label="Course name"
-                counter
-                maxlength="128"
-                prepend-icon="mdi-pencil"
-                :error-messages="errors"
+            <v-layout column>
+              <validation-provider
+                name="name"
+                v-slot="{ errors }"
+                :rules="rules.required"
+              >
+                <v-text-field
+                  v-model="name"
+                  type="text"
+                  label="Course name"
+                  maxlength="128"
+                  prepend-icon="mdi-pencil"
+                  :error-messages="errors"
+                  required
+                  counter
+                />
+              </validation-provider>
+              <v-select
+                :items="specializations"
+                label="Specializations"
+                v-model="selectedSpecialization"
+                prepend-icon="mdi-file"
+                item-text="name"
+                item-value="id"
+                :disabled="specializations.length == 0"
                 required
-                class="pa-6"
-              />
-            </validation-provider>
-            <v-select
-              :items="specializations"
-              label="Specializations"
-              v-model="selectedSpecialization"
-              prepend-icon="mdi-file"
-              class="pa-6"
-              item-text="name"
-              item-value="id"
-              :disabled="specializations.length == 0"
-              required
-            ></v-select>
-            <v-row justify="center" class="pa-8">
+              ></v-select>
               <v-btn
-                width="50%"
+                width="40%"
                 @click="addCourse"
                 :disabled="invalid || selectedSpecialization === 0"
-                large
-                class="blue-grey lighten-4"
+                class="blue-grey lighten-4 pa-3"
                 >Submit</v-btn
               >
-            </v-row>
+            </v-layout>
           </v-form>
         </validation-observer>
       </v-card-text>

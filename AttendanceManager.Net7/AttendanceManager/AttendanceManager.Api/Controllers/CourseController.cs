@@ -40,7 +40,7 @@ namespace AttendanceManager.Api.Controllers
         /// Soft delete an course
         /// <returns>Success: boolean value</returns>
         /// </summary>
-        [HttpDelete("delete_course")]
+        [HttpDelete("delete_course/{id}")]
         public async Task<IActionResult> DeleteCourse(int id)
         {
             return Ok(await mediator.Send(new DeleteCourseCommand { Id = id }));

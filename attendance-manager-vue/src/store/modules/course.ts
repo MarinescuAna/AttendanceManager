@@ -115,7 +115,7 @@ const actions = {
     async removeCourse({ commit }, payload: number): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${COURSE_CONTROLLER}/delete_course?id=${payload}`)
+        await https.patch(`${COURSE_CONTROLLER}/delete_course/${payload}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

@@ -1,29 +1,18 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-btn-toggle>
-        <v-btn class="orange lighten-3" :to="{ name: 'create-course' }"
-          >Add new course</v-btn
-        >
-      </v-btn-toggle>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="6">
+    <v-layout  justify-center column>
+          <v-btn class="orange lighten-3 ma-3" :to="{ name: 'create-course' }"
+            >Add new course</v-btn
+          >
         <router-view></router-view>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12">
         <ManagementTableComponent
           :dataSource="courses"
           :headers="headers"
-          :title="'Courses'"
+          title="Courses"
           :type="type"
           :expandDetails="false"
+          displayMessage="There is no course defined yet."
         />
-      </v-col>
-    </v-row>
-  </v-container>
+    </v-layout>
 </template>
 
 <script lang="ts">
