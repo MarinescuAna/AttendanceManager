@@ -56,6 +56,16 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: '/upload-users',
+    name: 'upload-users',
+    component: () => import('../views/manage-users-views/UploadUsersView.vue'),
+    meta: {
+      title: 'Users',
+      requireAuth: true,
+      role: [Role.Admin]
+    },
+  },
+  {
     path: '/department',
     name: 'department',
     component: () => import('../views/departments-specializations-views/DepartmentView.vue'),

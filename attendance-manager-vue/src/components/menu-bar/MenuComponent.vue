@@ -21,22 +21,22 @@
       temporary
       width="auto"
     >
-    <v-row>
-      <v-container justify="center">
-        <!--Display title-->
-        <v-container v-if="isLogged">
-          <h3 class="text-uppercase">{{ name }}</h3>
-          <h4>{{ email }}</h4>
-          <h4>{{ code }}</h4>
+      <v-row>
+        <v-container justify="center">
+          <!--Display title-->
+          <v-container v-if="isLogged">
+            <h3 class="text-uppercase">{{ name }}</h3>
+            <h4>{{ email }}</h4>
+            <h4>{{ code }}</h4>
+          </v-container>
+          <v-container v-else>
+            <h3 class="text-uppercase">
+              <span class="font-weight-light">Attendance</span>
+              <span>Manager</span>
+            </h3>
+          </v-container>
         </v-container>
-        <v-container v-else>
-          <h3 class="text-uppercase">
-            <span class="font-weight-light">Attendance</span>
-            <span>Manager</span>
-          </h3>
-        </v-container>
-      </v-container>
-    </v-row>
+      </v-row>
       <!--Login or Logout button-->
       <v-container v-if="!isLogged">
         <v-btn
@@ -56,11 +56,19 @@
 
       <!--links-->
       <v-list>
-        <MenuItemListComponent
+        <v-list-item
           v-for="link in links"
           :key="link.title"
-          :item="link"
-        />
+          :to="{ name: link.route }"
+          router
+        >
+          <v-list-item-icon>
+            <v-icon>{{ link.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ link.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </div>
@@ -78,14 +86,10 @@ import AuthService from "@/services/auth.service";
 import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
-import MenuItemListComponent from "./MenuItemListComponent.vue";
-import { MenuItems, MenuItemListModel } from "./ItemList";
+import { MenuChildModel, MenuItems } from "./ItemList";
 
 export default Vue.extend({
   name: "MenuComponent",
-  components: {
-    MenuItemListComponent,
-  },
   data() {
     return {
       // Username
@@ -97,7 +101,7 @@ export default Vue.extend({
       // Boolean for indicating is the user is logged or not
       isLogged: false,
       // List with all the existent buttons for defined pages
-      links: [] as MenuItemListModel[],
+      links: [] as MenuChildModel[],
       // Use this in order to activeate the drawer
       drawerActivator: false,
     };
