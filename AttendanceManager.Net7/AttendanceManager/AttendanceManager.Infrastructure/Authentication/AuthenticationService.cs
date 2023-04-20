@@ -25,7 +25,7 @@ namespace AttendanceManager.Infrastructure.Authentication
                 ?? throw new Exception($"User with {request.Email} not found.");
 
             // Check the passwords
-            if (result.Password != request.Password)
+            if (result.Password != request.Password.Trim())
             {
                 throw new Exception($"Credentials for '{request.Email} aren't valid.");
             }

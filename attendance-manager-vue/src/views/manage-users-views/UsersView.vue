@@ -1,12 +1,11 @@
 <template>
-  <v-card>
     <ManagementTableComponent
       :dataSource="users"
       :headers="headers"
-      :title="'Users'"
+      title="Users"
       :type="type"
+      displayMessage="There is no student added."
     />
-  </v-card>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,4 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
-using AttendanceManager.Application.Exceptions;
 using AutoMapper;
 using MediatR;
 
@@ -12,6 +11,6 @@ namespace AttendanceManager.Application.Features.User.Queries.GetRefreshTokenByE
         }
 
         public async Task<string?> Handle(GetRefreshTokenByEmailQuery request, CancellationToken cancellationToken)
-            =>(await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email && !u.IsDeleted))?.RefreshToken;
+            => (await unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email && !u.IsDeleted))?.RefreshToken;
     }
 }
