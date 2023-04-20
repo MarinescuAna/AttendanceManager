@@ -1,5 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
-using AttendanceManager.Domain.Entities;
+using AttendanceManager.Application.Dtos;
+using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
@@ -17,31 +19,28 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocu
          */
         public async Task<IEnumerable<DocumentDto>> Handle(GetDocumentsQuery request, CancellationToken cancellationToken)
         {
-            if(request.Role == Domain.Enums.Role.Student)
+            var allDocuments = new List<DocumentDto>();
+            var documents = request.Role == Role.Student ?
+                await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
+                    u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == DocumentRole.Member) && !u.IsDeleted) :
+                await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u => request.Role == Role.Teacher && !u.IsDeleted);
+
+            foreach (var document in documents.OrderByDescending(d => d.CreatedOn))
             {
-                return mapper.Map<IEnumerable<DocumentDto>>((await GetDocumentsForStudent(request.Email)).OrderByDescending(d => d.UpdatedOn));
+                allDocuments.Add(new()
+                {
+                    IsCreator = request.Role == Role.Student ? false: document.Course!.UserSpecialization!.UserID.Equals(request.Email),
+                    CourseName = document.Course!.Name,
+                    DocumentId = document.DocumentId,
+                    EnrollmentYear = document.EnrollmentYear,
+                    SpecializationName = document.Course!.UserSpecialization!.Specialization!.Name,
+                    Title = document.Title,
+                    UpdatedOn = document.UpdatedOn.ToString(Constants.ShortDateFormat)
+                });
             }
-            
-            var allDocuments = new List<DocumentDto>();            
-            // get documents created by the user
-            var documents = await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
-                    request.Role == Domain.Enums.Role.Teacher && u.Course!.UserSpecialization!.UserID.Equals(request.Email)
-                );
 
-            allDocuments.AddRange(mapper.Map<IEnumerable<DocumentDto>>(documents));
-            allDocuments.ForEach(d => d.IsCreator = true);
-
-            //get documents where the user is collaborator
-            allDocuments.AddRange(mapper.Map<IEnumerable<DocumentDto>>(await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
-                    request.Role == Domain.Enums.Role.Teacher &&
-                    u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == Domain.Enums.DocumentRole.Collaborator))
-                ));
-
-            return allDocuments.OrderByDescending(d => d.UpdatedOn);
+            return allDocuments;
         }
-        
-        private async Task<IEnumerable<Domain.Entities.Document>> GetDocumentsForStudent(string email)
-            => await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
-                u.DocumentMembers!.Any(m => m.UserID == email && m.Role == Domain.Enums.DocumentRole.Member));
+
     }
 }
