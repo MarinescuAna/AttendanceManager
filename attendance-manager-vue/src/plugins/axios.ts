@@ -50,7 +50,7 @@ async function checkAccessToken(): Promise<void> {
         await checkRefreshToken();
 
         // get the new access token
-        const response = await https.post(`${ACCOUNT_CONTROLLER}/refresh-access-token?refreshToken=${AuthService.refreshToken}&email=${AuthService.getDataFromToken()!.email}`);
+        const response = await https.post(`${ACCOUNT_CONTROLLER}/refresh-access-token?refreshToken=${AuthService.refreshToken}`);
 
         // update the new access token
         if (typeof (response.data) !== 'undefined') {

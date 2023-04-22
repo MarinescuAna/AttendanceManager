@@ -1,11 +1,12 @@
-﻿using AttendanceManager.Application.Models.Authentication;
+﻿using AttendanceManager.Application.Features.User.Queries.GetRefreshTokens;
+using AttendanceManager.Application.Models.Authentication;
 using AttendanceManager.Application.Modules.Authentication;
 using AttendanceManager.Core.Shared;
+using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace AttendanceManager.Infrastructure.Authentication
@@ -13,9 +14,11 @@ namespace AttendanceManager.Infrastructure.Authentication
     public sealed class JsonWebTokenService : Application.Contracts.Authentication.IJsonWebTokenService
     {
         private readonly JwtSettings _jwtSettings;
+        private readonly IMediator _mediator;
 
-        public JsonWebTokenService(IOptions<JwtSettings> jwtSettings)
+        public JsonWebTokenService(IMediator mediator, IOptions<JwtSettings> jwtSettings)
         {
+            _mediator = mediator;
             _jwtSettings = jwtSettings.Value;
         }
 
@@ -50,16 +53,31 @@ namespace AttendanceManager.Infrastructure.Authentication
             };
         }
 
-        public GenericToken GenerateRefreshToken()
+        public async Task<GenericToken> GenerateRefreshToken()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[32];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
+            var refreshTokens = await _mediator.Send(new GetRefreshTokensQuery());
+            var newRefreshToken = string.Empty;
+
+            if (refreshTokens != null)
+            {
+                do
+                {
+                    newRefreshToken = GenerateToken();
+                } while (refreshTokens.Any(c => c.Equals(newRefreshToken)));
+            }
+            else
+            {
+                newRefreshToken = GenerateToken();
+            }
             return new()
             {
                 Expiration = DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpirationDays),
-                Token = Convert.ToBase64String(randomBytes).Replace(" ", "")
+                Token = newRefreshToken
             };
+
         }
+
+        private string GenerateToken()
+            => new string(Enumerable.Repeat(Constants.CharsString, Constants.RefreshTokenLength).Select(s => s[new Random().Next(s.Length)]).ToArray());
     }
 }

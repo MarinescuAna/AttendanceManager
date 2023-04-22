@@ -1,5 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Authentication;
-using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
+using AttendanceManager.Application.Features.User.Queries.GetUserByRefreshToken;
 using AttendanceManager.Application.Models.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -35,9 +35,9 @@ namespace AttendanceManager.Api.Controllers
         /// <param name="request"></param>
         /// <returns>Success: new access token</returns>
         [HttpPost("refresh-access-token")]
-        public async Task<IActionResult> RefreshAccessToken(string refreshToken, string email)
+        public async Task<IActionResult> RefreshAccessToken(string refreshToken)
         {
-            var user = await mediator.Send(new GetUserByEmailQuery { Email = email });
+            var user = await mediator.Send(new GetUserByRefreshTokenQuery { RefreshToken = refreshToken});
 
             if (user == null || string.IsNullOrEmpty(user.RefreshToken))
             {

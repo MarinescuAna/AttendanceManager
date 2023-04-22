@@ -3,6 +3,7 @@ using AttendanceManager.Application.Features.User.Commands.ConfirmUserAccount;
 using AttendanceManager.Application.Features.User.Commands.UpdateRefreshToken;
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;
 using AttendanceManager.Application.Models.Authentication;
+using AttendanceManager.Application.Modules.Authentication;
 using MediatR;
 
 namespace AttendanceManager.Infrastructure.Authentication
@@ -38,22 +39,35 @@ namespace AttendanceManager.Infrastructure.Authentication
                 await _mediator.Send(new ConfirmUserAccountCommand() { Email = request.Email });
             }
 
-            // Generate refresh token
             var accessToken = _jwtService.GenerateAccessToken(result.Email, result.FullName, result.Role, result.Code);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-            await _mediator.Send(new UpdateRefreshTokenCommand
+
+            // If the user don't have a refreshToken or this is expired, regenerate a new one
+            if (string.IsNullOrEmpty(result.RefreshToken) || DateTime.Now.CompareTo(result.ExpRefreshToken) >= 0)
             {
-                Email = request.Email,
-                ExpRefreshToken = refreshToken.Expiration,
-                RefreshToken = refreshToken.Token
-            });
+                // Generate refresh token
+                var refreshToken = await _jwtService.GenerateRefreshToken();
+                await _mediator.Send(new UpdateRefreshTokenCommand
+                {
+                    Email = request.Email,
+                    ExpRefreshToken = refreshToken.Expiration,
+                    RefreshToken = refreshToken.Token
+                });
+
+                return new()
+                {
+                    ExpirationDateAccessToken = accessToken.Expiration,
+                    AccessToken = accessToken.Token,
+                    RefreshToken = refreshToken.Token,
+                    ExpirationDateRefreshToken = refreshToken.Expiration
+                };
+            }
 
             return new()
             {
                 ExpirationDateAccessToken = accessToken.Expiration,
                 AccessToken = accessToken.Token,
-                RefreshToken = refreshToken.Token,
-                ExpirationDateRefreshToken = refreshToken.Expiration
+                RefreshToken = result.RefreshToken,
+                ExpirationDateRefreshToken = (DateTime)result.ExpRefreshToken!
             };
         }
     }
