@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -7,6 +6,7 @@ namespace AttendanceManager.Domain.Entities
     {
         [Key]
         public int AttendanceCodeID { get; set; }
+        [MaxLength(8)]
         public required string Code { get; set; }
         public required DateTime ExpirationDate { get; set; }
         public required int AttendanceCollectionId { get; set; }

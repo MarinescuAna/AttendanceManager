@@ -12,6 +12,7 @@ namespace AttendanceManager.Domain.Entities
         [Key]
         public int DocumentMemberID { get; set; }
         [ForeignKey("User")]
+        [MaxLength(254)]
         public required string UserID { get; set; }
         [ForeignKey("Document")]
         public required int DocumentID { get; set; }

@@ -14,6 +14,7 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("AttendanceCollection")]
         public required int AttendanceCollectionID { get; set; }
         [ForeignKey("User")]
+        [MaxLength(254)]
         public required string UserID { get; set; }
         public required int BonusPoints { get; set; }
         public required bool IsPresent { get; set; }
