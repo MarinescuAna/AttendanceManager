@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
+import { SpecializationInsertParameter, SpecializationModule } from "@/modules/specialization";
 import https from "@/plugins/axios";
 import { SPECIALIZATION_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
@@ -9,7 +9,7 @@ import { RootState } from "..";
 
 //state type
 interface SpecializationState {
-    specializations: SpecializationViewModule[]
+    specializations: SpecializationModule[]
 }
 
 //initialize the state with an empty array
@@ -27,7 +27,7 @@ const getters: GetterTree<SpecializationState, RootState> = {
     /**
      * Gets specializations from the store
      */
-    specializations(state:SpecializationState): SpecializationViewModule[] {
+    specializations(state:SpecializationState): SpecializationModule[] {
         return state.specializations;
     }
 };
@@ -37,13 +37,13 @@ const mutations: MutationTree<SpecializationState> = {
     /**
      * Update the entire list of specializations existed into the store
      */
-    _specializations(state, payload: SpecializationViewModule[]): void {
+    _specializations(state, payload: SpecializationModule[]): void {
         state.specializations = payload;
     },
     /**
      * Add a new specialziation into the store 
      */
-    _addSpecialization(state, payload: SpecializationViewModule): void {
+    _addSpecialization(state, payload: SpecializationModule): void {
         state.specializations.push(payload);
     },
     /**
@@ -52,23 +52,6 @@ const mutations: MutationTree<SpecializationState> = {
     _resetStore(state): void{
         Object.assign(state, initialize());
     }
-    /**
-     * Remove specialisation
-     * @todo Implement the delete method for specializations
-    _removeSpecialization(state, payload: string): void {
-        state.specializations = state.specializations.filter(cr => cr.id != payload);
-    }, */
-    /**
-     * Update department name
-     * @todo Implement the update method for specializations: update the name and department
-    _updateSpecialization(state, departmentId: string, name: string): void {
-        state.organizations.foreach(cr =>{
-            if(cr.id == departmentId){
-                cr.name = name;
-            }
-        });
-    }
-*/
 };
 
 // actions for this store
@@ -78,14 +61,14 @@ const actions: ActionTree<SpecializationState, RootState> = {
      */
     async loadSpecializations({ commit, state }): Promise<void> {
         if (state.specializations.length == 0) {
-            const specializations: SpecializationViewModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
+            const specializations: SpecializationModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
             commit("_specializations", specializations);
         }
     },
     /**
      * Add a new specialization into the database and initialize the store
      */
-    async addSpecialization({ commit }, payload: SpecializationInsertModule): Promise<boolean> {
+    async addSpecialization({ commit }, payload: SpecializationInsertParameter): Promise<boolean> {
         let isSuccess = true;
 
         // this result represents the id of the specialization
@@ -98,30 +81,11 @@ const actions: ActionTree<SpecializationState, RootState> = {
             commit("_addSpecialization", {
                 id: (result as AxiosResponse).data,
                 name: payload.name,
-                departmentId: payload.departmentId
-            } as SpecializationViewModule);
+                departmentId: payload.departmentId,
+            } as SpecializationModule);
         }
         return isSuccess;
     },
-    /**
-     * Update department name in db and store
-     * @todo implement the update entierly
-     async updateDepartmentName({ commit }, payload: UpdateDepartmentModule): Promise<ResponseModule> {
-        let response: ResponseModule = {
-            error: "",
-            isSuccess: true
-        };
-
-        await axios.patch(`department/update_department`, payload)
-            .catch(error => {
-                response = ResponseHandler.errorResponseHandler(error);
-            });
-
-        if (response.isSuccess) {
-            commit("_updateDepartmentName", payload.departmentId, payload.name);
-        }
-        return response;
-    }*/
     /**
      * Reset the state with the initial values
      */

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DepartmentUpdateModule, DepartmentViewModel } from "@/modules/department";
+import { DepartmentModule } from "@/modules/department";
 import https from "@/plugins/axios";
 import { DEPARTMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 //state type
 export interface DepartmentState {
-    departments: DepartmentViewModel[]
+    departments: DepartmentModule[]
 }
 
 //initialize the state with an empty array
@@ -25,7 +25,7 @@ const getters = {
     /**
      * Gets departments from the store
      */
-    departments(state): DepartmentViewModel[] {
+    departments(state): DepartmentModule[] {
         return state.departments;
     }
 };
@@ -35,19 +35,19 @@ const mutations = {
     /**
      * Update the entire list of departments existed into the store
      */
-    _departments(state, payload: DepartmentViewModel): void {
+    _departments(state, payload: DepartmentModule): void {
         state.departments = payload;
     },
     /**
      * Add a new department into the store 
      */
-    _addDepartment(state, payload: DepartmentViewModel): void {
+    _addDepartment(state, payload: DepartmentModule): void {
         state.departments.push(payload);
     },
     /**
      * Update department name
      */
-    _updateDepartmentName(state, payload: DepartmentUpdateModule): void {
+    _updateDepartmentName(state, payload: DepartmentModule): void {
         state.departments.map(cr => {
             if (cr.id == payload.id) {
                 cr.name = payload.name;
@@ -69,7 +69,7 @@ const actions = {
      */
     async loadDepartments({ commit, state }): Promise<void> {
         if (state.departments.length == 0) {
-            const departments: DepartmentViewModel[] = (await https.get(`${DEPARTMENT_CONTROLLER}/departments`)).data;
+            const departments: DepartmentModule[] = (await https.get(`${DEPARTMENT_CONTROLLER}/departments`)).data;
             commit("_departments", departments);
         }
     },
@@ -78,7 +78,9 @@ const actions = {
      */
     async addDepartment({ commit }, payload: string): Promise<boolean> {
         let isSuccess = true;
-        const result = await https.post(`${DEPARTMENT_CONTROLLER}/create_department?name=${payload}`)
+
+        // get the id of the new department
+        const result = await https.post(`${DEPARTMENT_CONTROLLER}/create_department/${payload}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -87,14 +89,14 @@ const actions = {
             commit("_addDepartment", {
                 id: (result as AxiosResponse).data,
                 name: payload
-            } as DepartmentViewModel);
+            } as DepartmentModule);
         }
         return isSuccess;
     },
     /**
      * Update department name in db and store
      */
-    async updateDepartmentName({ commit }, payload: DepartmentUpdateModule): Promise<boolean> {
+    async updateDepartmentName({ commit }, payload: DepartmentModule): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${DEPARTMENT_CONTROLLER}/update_department_name`, payload)

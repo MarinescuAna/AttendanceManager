@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
+import { DepartmentModule } from "@/modules/department";
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import https from "@/plugins/axios";
 import { USER_CONTROLLER } from "@/shared/constants";
-import { AxiosResponse } from "axios";
+import { Role } from "@/shared/enums";
 
 
 //state type
@@ -93,15 +94,25 @@ const actions = {
     /**
      * Add a new user into the database and initialize the store
      */
-    async addUser({ commit }, payload: CreateUserParameters): Promise<boolean> {
+    async addUser({ commit }, payload: {newUser: CreateUserParameters, department: DepartmentModule}): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${USER_CONTROLLER}/create_user`, payload).catch(error => {
+        await https.post(`${USER_CONTROLLER}/create_user`, payload.newUser).catch(error => {
             isSuccess = ResponseHandler.errorResponseHandler(error);
         });
 
         if (isSuccess) {
-            commit("_addUser", (result as AxiosResponse).data);
+            commit("_addUser", {
+                departmentId: payload.department.id,
+                departmentName: payload.department.name,
+                accountConfirmed: false,
+                code: payload.newUser.code,
+                year: payload.newUser.year,
+                fullname: payload.newUser.fullname,
+                id: payload.newUser.email,
+                role: Role[payload.newUser.role],
+                specializationIds: payload.newUser.specializationIds
+            } as UserViewModule);
         }
         return isSuccess;
     },

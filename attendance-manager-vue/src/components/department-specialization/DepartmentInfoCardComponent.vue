@@ -39,8 +39,8 @@ import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
 import ChangeDepartmentDialog from "./ChangeDepartmentDialog.vue";
-import { DepartmentViewModel } from "@/modules/department";
-import { SpecializationViewModule } from "@/modules/specialization";
+import { DepartmentModule } from "@/modules/department";
+import { SpecializationModule } from "@/modules/specialization";
 import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
@@ -51,7 +51,7 @@ export default Vue.extend({
   props: {
     /** The current department */
     item: {
-      type: Object as () => DepartmentViewModel,
+      type: Object as () => DepartmentModule,
     },
   },
   data: function () {
@@ -62,7 +62,7 @@ export default Vue.extend({
   },
   computed: {
     /** Filter the specializations and display only the once related to a specific department */
-    specializations: function (): SpecializationViewModule[] {
+    specializations: function (): SpecializationModule[] {
       return storeHelper.specializationStore.specializations.filter(
         (specialization) => specialization.departmentId == this.item.id
       );

@@ -20,20 +20,22 @@
         <ManagementTableComponent
           :dataSource="departments"
           :headers="headers"
-          :title="'Departments'"
+          title="Departments"
           :type="type"
+          displayMessage="There is no department added."
         />
       </v-col>
     </v-row>
   </v-container>
 </template>
+
 <script lang="ts">
 import Vue from "vue";
 import ManagementTableComponent from "@/components/shared-components/ManagementTableComponent.vue";
 import storeHelper from "@/store/store-helper";
 import { DepartmentsHeader } from "@/components/shared-components/Headers";
 import { ManagementDataType } from "@/shared/enums";
-import { DepartmentViewModel } from "@/modules/department";
+import { DepartmentModule } from "@/modules/department";
 
 export default Vue.extend({
   name: "DepartmentView",
@@ -41,7 +43,7 @@ export default Vue.extend({
     ManagementTableComponent,
   },
   computed: {
-    departments: function (): DepartmentViewModel[] {
+    departments: function (): DepartmentModule[] {
       return storeHelper.departmentStore.departments;
     },
   },

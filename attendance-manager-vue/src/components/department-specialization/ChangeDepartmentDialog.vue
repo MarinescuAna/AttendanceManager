@@ -21,8 +21,7 @@
 
 <script lang="ts">
 import {
-  DepartmentUpdateModule,
-  DepartmentViewModel,
+  DepartmentModule,
 } from "@/modules/department";
 import storeHelper from "@/store/store-helper";
 
@@ -31,7 +30,7 @@ export default {
   props: {
       /** Department object */
       department: {
-          type: Object as () => DepartmentViewModel,
+          type: Object as () => DepartmentModule,
           required: true
       }
   },
@@ -58,7 +57,7 @@ export default {
       const result = await storeHelper.departmentStore.updateDepartmentName({
         id: this.department.id,
         name: this.name,
-      } as DepartmentUpdateModule);
+      } as DepartmentModule);
 
       if (result) {
         this.$emit("save", this.name);

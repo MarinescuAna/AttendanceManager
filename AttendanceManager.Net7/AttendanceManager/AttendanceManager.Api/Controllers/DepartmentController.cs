@@ -32,7 +32,7 @@ namespace AttendanceManager.Api.Controllers
         /// Create a new department
         /// <returns>Success: the id of the new department added</returns>
         /// </summary>
-        [HttpPost("create_department")]
+        [HttpPost("create_department/{name}")]
         public async Task<IActionResult> CreateDepartment(string name)
         {
             return Ok(await mediator.Send(new CreateDepatmentCommand() { Name = name }));

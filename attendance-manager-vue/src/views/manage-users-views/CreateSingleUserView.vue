@@ -151,8 +151,8 @@ import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import { CreateUserParameters } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
-import { SpecializationViewModule } from "@/modules/specialization";
-import { DepartmentViewModel } from "@/modules/department";
+import { SpecializationModule } from "@/modules/specialization";
+import { DepartmentModule } from "@/modules/department";
 import { Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
 
@@ -172,7 +172,7 @@ export default Vue.extend({
       // Enroll year
       year: 0,
       // All the specializations
-      specializations: [] as SpecializationViewModule[],
+      specializations: [] as SpecializationModule[],
       // Selected specializations
       selectedSpecializations: [] as number[],
       // Selected specialization if just one specialization can be selected
@@ -195,7 +195,7 @@ export default Vue.extend({
     /**
      * All departments
      */
-    departments(): DepartmentViewModel[] {
+    departments(): DepartmentModule[] {
       return storeHelper.departmentStore.departments;
     },
   },
@@ -211,6 +211,8 @@ export default Vue.extend({
         specializationIds.push(this.selectedSpecialization);
       }
 
+      const department = storeHelper.departmentStore.departments.find(d=>d.id == this.specializations[0].departmentId);
+
       const response = await storeHelper.userStore.addUser({
         fullname: this.fullname,
         code: this.code,
@@ -218,21 +220,13 @@ export default Vue.extend({
         role: this.role.toString(),
         year: this.year,
         specializationIds: specializationIds,
-      } as CreateUserParameters);
+      } as CreateUserParameters, department!);
 
       if (response) {
-        this.fullname = "";
-        this.email = "";
-        this.code = "";
-        this.year = 0;
-        this.role = 1;
-        this.specializations = [];
-        this.selectedSpecializations = [];
-        this.$refs.observer?.reset();
-        this.$refs.departmentRef?.reset();
         Toastification.info(
           "The user was created and he will be inform via email regarding his credentials."
         );
+        this.$router.push({ name: "users" });
       }
     },
 

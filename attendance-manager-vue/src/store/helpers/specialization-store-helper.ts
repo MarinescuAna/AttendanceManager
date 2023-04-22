@@ -1,5 +1,5 @@
 
-import { SpecializationInsertModule, SpecializationViewModule } from "@/modules/specialization";
+import { SpecializationInsertParameter, SpecializationModule } from "@/modules/specialization";
 import { Store } from "vuex";
 import { namespace as specializationNamespace } from "../modules/specialization";
 
@@ -13,7 +13,7 @@ export class SpecializationStore {
     /**
      * Getter for fetching all the specializations from the store, not from the API
      */
-    public get specializations(): SpecializationViewModule[] {
+    public get specializations(): SpecializationModule[] {
         return this.store.getters[`${specializationNamespace}/specializations`];
     }
 
@@ -29,8 +29,8 @@ export class SpecializationStore {
      * Add a new specialziation only
      * @test
      */
-    public addSpecialization(specialization: SpecializationInsertModule): Promise<boolean> {
-        return this.store.dispatch(`${specializationNamespace}/addSpecialization`, specialization);
+    public addSpecialization(payload: SpecializationInsertParameter): Promise<boolean> {
+        return this.store.dispatch(`${specializationNamespace}/addSpecialization`, payload);
     }
 
     /**
@@ -39,11 +39,4 @@ export class SpecializationStore {
     public reset(): void {
         this.store.dispatch(`${specializationNamespace}/resetStore`);
     }
-
-    /**
-    * Change department name
-         * @todo implement the update entierly
-    public updateDepartmentName(department: UpdateDepartmentModule): Promise<ResponseModule> {
-        return this.store.dispatch(`${organizationNamespace}/updateDepartmentName`, department);
-    }*/
 }

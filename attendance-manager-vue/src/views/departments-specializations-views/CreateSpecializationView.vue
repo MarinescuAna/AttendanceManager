@@ -58,10 +58,10 @@
   <script lang="ts">
 import Vue from "vue";
 import StoreHelper from "@/store/store-helper";
-import { DepartmentViewModel } from "@/modules/department";
-import { SpecializationInsertModule } from "@/modules/specialization";
+import { DepartmentModule } from "@/modules/department";
 import storeHelper from "@/store/store-helper";
 import { rules } from "@/plugins/vee-validate";
+import { SpecializationInsertParameter } from "@/modules/specialization";
 
 export default Vue.extend({
   name: "CreateSpecializationView",
@@ -76,7 +76,7 @@ export default Vue.extend({
   },
   computed: {
     // Departments list to load them in the v-selector
-    departments(): DepartmentViewModel[] {
+    departments(): DepartmentModule[] {
       return storeHelper.departmentStore.departments;
     },
   },
@@ -87,8 +87,8 @@ export default Vue.extend({
     async addSpecialization() {
       const response = await StoreHelper.specializationStore.addSpecialization({
         name: this.name,
-        departmentId: this.department,
-      } as SpecializationInsertModule);
+        departmentId: this.department
+      } as SpecializationInsertParameter);
 
       if (response) {
         this.$router.currentRoute.meta?.onBack();

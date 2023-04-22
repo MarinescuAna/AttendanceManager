@@ -1,31 +1,28 @@
-import { TableModule } from "../shared";
-import { SpecializationViewModule,SpecializationModule } from "../specialization";
+import { SpecializationModule } from "../specialization";
 
 /**
  * Use this module in order to create a new user's account
  */
- export interface CreateUserParameters {
-    email: string;
-    role: string;
-    fullname: string;
-    year: number;
-    code: string;
-    specializationIds: number[];
+ export interface CreateUserParameters extends UserBaseModule {
+   email: string;
 }
+
 /**
  * Use this module in order to display the users for admin
  */
-export interface UserViewModule extends TableModule {
-   fullname: string;
-   role:string;
-   enrollmentYear: number;
-   code: string;
+export interface UserViewModule extends UserBaseModule {
+   id: string;
    accountConfirmed: boolean;
-   updated: string;
-   created: string;
    departmentId: number;
    departmentName: string;
-   userSpecializations: SpecializationViewModule[];
+}
+
+interface UserBaseModule{
+   role: string;
+   fullname: string;
+   year: number;
+   code: string;
+   specializationIds: number[];
 }
 /**
  * Use this module to get additional information about the user

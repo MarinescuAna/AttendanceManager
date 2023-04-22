@@ -34,6 +34,7 @@ export default Vue.extend({
   },
   created: async function () {
     await storeHelper.userStore.loadUsers();
+    await storeHelper.specializationStore.loadSpecializations();
   },
 });
 </script>

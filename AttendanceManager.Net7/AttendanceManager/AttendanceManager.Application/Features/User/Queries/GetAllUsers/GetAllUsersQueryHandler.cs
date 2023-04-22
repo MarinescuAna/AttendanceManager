@@ -28,17 +28,13 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
                 return new UserDto
                 {
                     AccountConfirmed = userData!.AccountConfirmed,
-                    UserSpecializations = user.Select(us => new SpecializationDto()
-                    {
-                        Id = us.SpecializationID,
-                        Name = us.Specialization!.Name
-                    }).ToArray(),
+                    SpecializationIds = user.Select(us => us.SpecializationID).ToArray(),
                     Code = userData.Code,
                     Created = userData.CreatedOn.ToString(Constants.DateFormat),
                     DepartmentId = department!.DepartmentID,
                     DepartmentName = department!.Name,
                     Email = userData.Email,
-                    EnrollmentYear = userData.EnrollmentYear,
+                    Year = userData.EnrollmentYear,
                     Fullname = userData.FullName,
                     Role = userData.Role.ToString(),
                     Updated = userData.UpdatedOn.ToString(Constants.DateFormat)

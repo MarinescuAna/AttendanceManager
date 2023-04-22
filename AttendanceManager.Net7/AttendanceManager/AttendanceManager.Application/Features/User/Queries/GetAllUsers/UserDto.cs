@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Application.Dtos;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
 {
@@ -9,13 +8,13 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
         [JsonPropertyName("id")]
         public required string Email { get; set; }
         public required string Role { get; set; }
-        public required int EnrollmentYear { get; set; }
+        public required int Year { get; set; }
         public required string Code { get; set; }
         public required string Updated { get; set; }
         public required string Created { get; set; }
         public required bool AccountConfirmed { get; set; }
         public required int DepartmentId { get; set; }
-        public required string DepartmentName { get; set; }  
-        public required SpecializationDto[] UserSpecializations { get; set; }
+        public required string DepartmentName { get; set; }
+        public required int[] SpecializationIds { get; set; }
     }
 }

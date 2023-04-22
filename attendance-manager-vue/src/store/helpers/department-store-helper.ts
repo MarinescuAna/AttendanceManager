@@ -1,5 +1,5 @@
 
-import { DepartmentUpdateModule, DepartmentViewModel } from "@/modules/department";
+import { DepartmentModule } from "@/modules/department";
 import { Store } from "vuex";
 import { namespace as departmentNamespace } from "../modules/department";
 
@@ -13,7 +13,7 @@ export class DepartmentStore {
     /**
      * Getter for fetching all the departments from the store, not from the API
      */
-    public get departments(): DepartmentViewModel[] {
+    public get departments(): DepartmentModule[] {
         return this.store.getters[`${departmentNamespace}/departments`];
     }
 
@@ -34,7 +34,7 @@ export class DepartmentStore {
     /**
     * Change department name from db and store
     */
-    public updateDepartmentName(payload: DepartmentUpdateModule): Promise<boolean> {
+    public updateDepartmentName(payload: DepartmentModule): Promise<boolean> {
         return this.store.dispatch(`${departmentNamespace}/updateDepartmentName`, payload);
     }
 
