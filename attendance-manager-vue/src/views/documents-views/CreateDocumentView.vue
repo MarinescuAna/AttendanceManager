@@ -172,7 +172,7 @@
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <v-layout column>
+            <v-layout v-if="currentStep == 2" column>
               <v-flex>
                 <v-select
                   :items="specializations"
@@ -218,7 +218,7 @@
           </v-stepper-content>
 
           <v-stepper-content step="3">
-            <v-layout v-if="students.length == 0">
+            <v-layout v-if="students.length == 0 && currentStep == 3">
               <p class="pa-6">
                 There is no student available. Try another year and
                 specialization.
