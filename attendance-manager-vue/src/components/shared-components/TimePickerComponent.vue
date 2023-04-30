@@ -1,48 +1,48 @@
 <template>
   <v-menu
     ref="menu"
-    v-model="menu2"
-    :close-on-content-click="false"
-    :nudge-right="40"
-    :return-value.sync="time"
     transition="scale-transition"
-    offset-y
     max-width="290px"
     min-width="290px"
+    :nudge-right="40"
+    :close-on-content-click="false"
+    :return-value.sync="timeSelected"
+    offset-y
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="time"
+        v-model="timeSelected"
         label="Select time"
         prepend-icon="mdi-clock-time-four-outline"
-        readonly
         v-bind="attrs"
         v-on="on"
+        readonly
       ></v-text-field>
     </template>
     <v-time-picker
-      v-if="menu2"
-      v-model="time"
-      full-width
+      v-model="timeSelected"
+      format="24hr"
       @click:minute="onSubmit"
+      full-width
     ></v-time-picker>
   </v-menu>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { VMenu } from 'vuetify/lib/components/VMenu';
+
 export default Vue.extend({
   name: "TimePickerComponent",
   data: function () {
     return {
-      time: null,
-      menu2: false,
+      timeSelected: null,
     };
   },
   methods: {
     onSubmit: function (): void {
-      this.$refs.menu.save(this.time);
-      this.$emit("save", this.time);
+      (this.$refs.menu as VMenu).save(this.timeSelected);
+      this.$emit("save", this.timeSelected);
     },
   },
 });

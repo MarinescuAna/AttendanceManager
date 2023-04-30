@@ -1,46 +1,42 @@
 <template>
   <v-menu
     ref="menu"
-    v-model="menu"
-    :close-on-content-click="false"
-    :return-value.sync="date"
     transition="scale-transition"
-    offset-y
     min-width="auto"
+    :close-on-content-click="false"
+    :return-value.sync="selectedDate"
+    offset-y
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="date"
+        v-model="selectedDate"
         label="Select date"
         prepend-icon="mdi-calendar"
-        readonly
         v-bind="attrs"
         v-on="on"
+        readonly
       ></v-text-field>
     </template>
-    <v-date-picker v-model="date" no-title scrollable>
-      <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="onSubmit"> OK </v-btn>
+    <v-date-picker v-model="selectedDate" @input="onSubmit" no-title scrollable>
     </v-date-picker>
   </v-menu>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { VMenu } from 'vuetify/lib/components/VMenu';
 
 export default Vue.extend({
   name: "DatePickerComponent",
   data: function () {
     return {
-      menu: false,
-      date: null,
+      selectedDate: null
     };
   },
   methods: {
     onSubmit: function (): void {
-      this.$refs.menu.save(this.date);
-      this.$emit("save", this.date);
+      (this.$refs.menu as VMenu).save(this.selectedDate);
+      this.$emit("save", this.selectedDate);
     },
   },
 });
