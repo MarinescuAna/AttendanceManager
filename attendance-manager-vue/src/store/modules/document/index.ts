@@ -2,6 +2,7 @@ import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import {documentGetter} from "./getter";
 import {documentMutations} from "./mutation";
 import {documentActions} from "./action";
+import { StudentAttendanceModule } from "@/modules/document/attendance";
 
 //state type
 interface DocumentState {
@@ -9,13 +10,16 @@ interface DocumentState {
     documents: DocumentViewModule[];
     // current document
     currentDocument: DocumentFullViewModule;
+    // total attendances for each student - lazy loading
+    studentsTotalAttendances: StudentAttendanceModule[]
 }
 
 //initialize the state with an empty state
 export function initializeDocumentState(): DocumentState {
     return {
         documents: [],
-        currentDocument: {} as DocumentFullViewModule
+        currentDocument: {} as DocumentFullViewModule,
+        studentsTotalAttendances: []
     };
 }
 
@@ -30,6 +34,6 @@ export default {
     namespaced: true,
     state: documentState,
     getters: documentGetter,
-    mutuations: documentMutations,
+    mutations: documentMutations,
     actions: documentActions
 };

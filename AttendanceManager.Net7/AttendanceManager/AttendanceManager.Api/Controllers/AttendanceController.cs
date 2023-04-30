@@ -1,7 +1,7 @@
 ﻿using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendanceByCodeAndAttendanceId;
 using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendances;
 using AttendanceManager.Application.Features.Attendance.Queries.GetAttendanceByAttendanceCollectionID;
-using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
+using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,13 +52,10 @@ namespace AttendanceManager.Api.Controllers
         /// Get all attandances
         /// </summary>
         /// <returns>Success: list with all attendances</returns>
-        [HttpGet("student_attendances_by_document_id_and_user_id")]
-        public async Task<IActionResult> GetStudentAttendancesByDocumentIdAndUserId(int documentId, string userId)
+        [HttpGet("student_attendances/{email}")]
+        public async Task<IActionResult> GetStudentAttendancesByUserId(string email, bool isCurrentUser)
         {
-            return Ok(await mediator.Send(new GetStudentAttendanceByDocIdAndUserIdQuery() { 
-                DocumentId = documentId,
-                UserId = userId
-            }));
+            return Ok(await mediator.Send(new GetStudentAttendanceByUserIdQuery() { UserId = isCurrentUser ? UserEmail: email }));
         }
     }
 }

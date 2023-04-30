@@ -2,6 +2,7 @@ import { DocumentDashboardViewModule, DocumentFullViewModule, DocumentMembersVie
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { CourseType } from "@/shared/enums";
 import { initializeDocumentState } from ".";
+import { StudentAttendanceModule } from "@/modules/document/attendance";
 
 // mutations for this store
 export const documentMutations = {
@@ -50,6 +51,15 @@ export const documentMutations = {
             }
         }
     },
+    _addDocument(state, payload: DocumentViewModule): void{
+        state.documents.unshift(payload);
+    },
+    _addStudentAttendances(state, payload: { attendances: StudentAttendanceModule[], resetAttendances: boolean }): void {
+        if (payload.resetAttendances) {
+            state.studentsTotalAttendances = [];
+        }
+        state.studentsTotalAttendances.push(...payload.attendances);
+    },
     /** Delete document from the store */
     _deleteDocument(state, payload: number): void {
         state.currentDocument = {};
@@ -70,5 +80,6 @@ export const documentMutations = {
      */
     _resetCurrentDocumentStore(state): void {
         state.currentDocument = {};
+        state.studentsTotalAttendances = [];
     }
 };

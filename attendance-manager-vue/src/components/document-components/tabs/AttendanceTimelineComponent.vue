@@ -12,9 +12,9 @@
             >
               <v-btn
                 text
-                @click="onOpenAttendanceDialog(item.attendanceCollectionId)"
+                @click="onOpenAttendanceDialog(item.attendanceCollectionId, item.activityTime)"
               >
-                {{ item.activityTime }} - {{ item.courseType }}
+                {{ item.activityTime.replaceAll('/','.') }} - {{ item.courseType }}
               </v-btn>
             </v-timeline-item>
           </v-timeline>
@@ -25,7 +25,7 @@
             <v-list-item
               v-for="(item, index) in documentFiles"
               :key="item.attendanceCollectionId"
-              @click="onOpenAttendanceDialog(item.attendanceCollectionId)"
+              @click="onOpenAttendanceDialog(item.attendanceCollectionId, item.activityTime)"
             >
               <v-list-item-content>
                 <v-divider v-if="index != 0" class="mb-2"></v-divider>
@@ -57,10 +57,12 @@
       scrollable
     >
       <AddAttendanceDialog
-        :attendanceCollectionId="collectionId"
+        :attendanceCollectionId="selectedCollectionId"
+        :attendanceCollectionDate="selectedCollectionDate"
         @close-dialog="addAttendanceDialog = false"
       />
     </v-dialog>
+
     <!--Dialog for displaing the add new attendance form-->
     <v-dialog
       v-if="addAttendanceDateDialog"
@@ -70,8 +72,8 @@
       :fullscreen="isMobile"
     >
       <AddAttendanceDateDialog
-        @close="oncloseaddAttendanceDateDialog"
-        @save="oncloseaddAttendanceDateDialog"
+        @close="oncloseAddAttendanceDateDialog"
+        @save="oncloseAddAttendanceDateDialog"
       />
     </v-dialog>
   </v-container>
@@ -96,8 +98,10 @@ export default Vue.extend({
       addAttendanceDateDialog: false,
       // Display dialog for adding attendances
       addAttendanceDialog: false,
-      // CollectionId which is passed to the dialog
-      collectionId: 0,
+      // CollectionId which will be open in the dialog
+      selectedCollectionId: 0,
+      /** Collection date */
+      selectedCollectionDate: ''
     };
   },
   computed: {
@@ -112,13 +116,13 @@ export default Vue.extend({
     },
   },
   methods: {
-    oncloseaddAttendanceDateDialog: function (): void {
+    oncloseAddAttendanceDateDialog: function (): void {
       this.addAttendanceDateDialog = false;
     },
-
-    onOpenAttendanceDialog: function (collectionId: number): void {
+    onOpenAttendanceDialog: function (collectionId: number, date: string): void {
       this.addAttendanceDialog = true;
-      this.collectionId = collectionId;
+      this.selectedCollectionDate = date;
+      this.selectedCollectionId = collectionId;
     },
   },
 });

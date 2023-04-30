@@ -1,6 +1,6 @@
-﻿namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail
+﻿namespace AttendanceManager.Application.Dtos
 {
-    public sealed class DocumentDto
+    public class DocumentBaseDto
     {
         public required int DocumentId { get; init; }
         public required string Title { get; init; }
@@ -8,6 +8,5 @@
         public required string CourseName { get; init; }
         public required string SpecializationName { get; set; }
         public required string UpdatedOn { get; set; }
-        public bool IsCreator { get; set; } = false;
     }
 }

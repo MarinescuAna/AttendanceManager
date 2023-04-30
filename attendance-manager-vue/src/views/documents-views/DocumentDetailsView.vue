@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isLoading">
+  <div v-if="isLoading">
     <v-layout justify-center>
       <v-progress-circular
         :size="100"
@@ -37,10 +37,10 @@
       <v-tab-item>
         <DocumentMembersComponent />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item v-if="isTeacher">
         <DocumentDashboardComponent />
       </v-tab-item>
-      <v-tab-item v-if="isTeacher && isMember">
+      <v-tab-item v-if="isTeacher && isCreator">
         <SettingsDocumentComponent />
       </v-tab-item>
       <v-tab-item>
@@ -77,8 +77,10 @@ export default Vue.extend({
     return {
       /** Current selected tab */
       selectedTab: [],
-            /** Use this boolean to display the progress circular component */
-            isLoading: true,
+      /** Use this boolean to display the progress circular component */
+      isLoading: true,
+      /** The current user is member */
+      isCreator: true,
     };
   },
   computed: {
@@ -89,12 +91,11 @@ export default Vue.extend({
           "Attendances",
           "Total Attendances",
           "Members",
-          "Dashboard",
           "About",
         ];
       }
 
-      if (this.isTeacher && this.isMember) {
+      if (this.isTeacher && this.isCreator) {
         return [
           "Attendances",
           "Total Attendances",
@@ -120,11 +121,7 @@ export default Vue.extend({
     /** Boolean value for determinate the current user role */
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
-    },
-    /** Get the value from the route */
-    isMember: function (): boolean {
-      return Boolean(this.$route.params.isMember);
-    },
+    }
   },
   /**
    * Load the document details from the API
@@ -137,10 +134,15 @@ export default Vue.extend({
    *
    * */
   created: async function () {
-    if (typeof(this.$route.params.id) !== "undefined")
-      this.isLoading = !await storeHelper.documentStore.loadCurrentDocument(
+    if (typeof this.$route.params.id !== "undefined" || this.documentInfo) {
+      const response = await storeHelper.documentStore.loadCurrentDocument(
         this.$route.params.id
       );
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.isCreator = storeHelper.documentStore.documents.find(d=>d.documentId == this.documentInfo.documentId)!.isCreator;
+      this.isLoading = response ? false : response;
+    }
   },
   /** Restore the store related to the current document when the component is destroyed, otherwise the data that appears for other
    * opened document  will be related  to the previously opened document */

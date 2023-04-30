@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentViewModule, DocumentUpdateModule } from "@/modules/document";
+import { DocumentViewModule, DocumentUpdateModule, DocumentInsertModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
-import { Toastification } from "@/plugins/vue-toastification";
-import { ATTENDANCE_COLLECTION_CONTROLLER, DASHBOARD_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import BaseService from "@/shared/base-service.service";
+import { ATTENDANCE_COLLECTION_CONTROLLER, ATTENDANCE_CONTROLLER, DASHBOARD_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 // actions for this store
@@ -12,8 +12,8 @@ export const documentActions = {
     /**
      * Load all the documents
      */
-    async loadDocuments({ commit, state }): Promise<boolean> {
-        if (state.documents.length == 0) {
+    async loadDocuments({ commit, state }, reload: boolean): Promise<boolean> {
+        if (state.documents.length == 0 || reload) {
             let isSuccess = true;
 
             const result = await https.get(`${DOCUMENT_CONTROLLER}/documents`)
@@ -27,6 +27,33 @@ export const documentActions = {
         }
 
         return true;
+    },
+    /**
+ * Add a new document
+ */
+    async addDocument({commit},payload: { parameters: DocumentInsertModule, courseName: string, specializationName: string}): Promise<boolean> {
+
+        let isSuccess = true;
+
+        const result = await https.post(`${DOCUMENT_CONTROLLER}/create_document?`, payload.parameters)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+            if(isSuccess){
+                console.log((result as AxiosResponse).data);
+                
+                commit("_addDocument", {
+                    documentId: (result as AxiosResponse).data["documentId"],
+                    enrollmentYear: payload.parameters.enrollmentYear,
+                    isCreator: true,
+                    title: payload.parameters.title,
+                    courseName: payload.courseName,
+                    specializationName: payload.specializationName,
+                    updatedOn: (result as AxiosResponse).data["updatedOn"]
+                } as DocumentViewModule);
+            }
+        return isSuccess;
     },
     /**
  * Load document dashboard
@@ -56,28 +83,43 @@ export const documentActions = {
         if (Object.keys(state.currentDocument).length > 0) {
             return true;
         }
+        let isFail = false;
 
-        try {
-            //load the document details and update the store
-            const response = await Promise.race([
-                https.get(`${DOCUMENT_CONTROLLER}/document/${payload}`),
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        reject(new Error("API call timed out."))
-                    }, 5000)// set timeout to 5 seconds
-                })
-            ]);
+        //load the document details and update the store
+        const response = await https.get(`${DOCUMENT_CONTROLLER}/document/${payload}`)
+            .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
+
+        if (!isFail) {
             commit("_documentDetails", (response as AxiosResponse).data);
-            return true;
-
-        } catch (error) {
-            console.log(error)
-            if(typeof(error) === "string")
-            {
-                Toastification.simpleError(error as string);
-            }
-            return false;
         }
+        return isFail;
+    },
+    /**
+     * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
+     * @param payload studentId
+     */
+    async loadStudentTotalAttendances({ commit, state }, payload: { email: string | null, reload: boolean }): Promise<boolean> {
+
+        // check if the payload is null, because in this case, the current user is student
+        if (!payload.reload && payload.email === null && Object.keys(state.studentsTotalAttendances).length > 0) {
+            return true;
+        }
+
+        // if the user attendances was retrived, avoid calling the api again
+        if (!payload.reload && payload.email !== null && state.studentsTotalAttendances.filter(u => u.userId == payload).length > 0) {
+            return true;
+        }
+
+        let isFail = false;
+
+        //load the document details and update the store
+        const response = await https.get(`${ATTENDANCE_CONTROLLER}/student_attendances/${payload.email}?isCurrentUser=${payload.email === null}`)
+            .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
+
+        if (!isFail) {
+            commit("_addStudentAttendances", { attendances: (response as AxiosResponse).data, resetAttendances: payload.reload });
+        }
+        return true;
     },
     /** Add new collaborator teacher */
     async addCollaborator({ commit, state }, payload: string): Promise<boolean> {
@@ -161,5 +203,4 @@ export const documentActions = {
         commit('_resetCurrentDocumentStore');
     },
 };
-
 

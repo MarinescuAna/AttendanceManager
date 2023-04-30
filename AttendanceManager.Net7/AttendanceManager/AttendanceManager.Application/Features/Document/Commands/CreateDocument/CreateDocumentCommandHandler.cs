@@ -1,16 +1,18 @@
 ﻿using AttendanceManager.Application.Contracts.UnitOfWork;
+using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Core.Shared;
 using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Document.Commands.CreateDocument
 {
-    public sealed class CreateDocumentCommandHandler : BaseFeature, IRequestHandler<CreateDocumentCommand, bool>
+    public sealed class CreateDocumentCommandHandler : BaseFeature, IRequestHandler<CreateDocumentCommand, InsertDocumentDto>
     {
         public CreateDocumentCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
 
-        public async Task<bool> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<InsertDocumentDto> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             var newDocument = new Domain.Entities.Document
             {
@@ -44,7 +46,16 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             }
 
             // Save the members 
-            return await unitOfWork.CommitAsync(request.StudentIds.Length) ;
+            if(!await unitOfWork.CommitAsync(request.StudentIds.Length))
+            {
+                throw new SomethingWentWrongException("Something went wrong durig the saving process. Check the log files in order to see the error!");
+            }
+
+            return new()
+            {
+                UpdatedOn = newDocument.UpdatedOn.ToString(Constants.ShortDateFormat),
+                DocumentId = newDocument.DocumentId
+            };
         }
     }
 }

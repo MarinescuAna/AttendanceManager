@@ -1,8 +1,9 @@
 
-import { DocumentFullViewModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentInsertModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
+import { StudentAttendanceModule } from "@/modules/document/attendance";
 
 export class DocumentStore {
     private store: Store<any>;
@@ -17,7 +18,12 @@ export class DocumentStore {
     public get documents(): DocumentViewModule[] {
         return this.store.getters[`${documentNamespace}/documents`];
     }
-
+    /**
+     * Getter for fetching all the documents from the store, not from the API
+    */
+    public get studentsTotalAttendances(): StudentAttendanceModule[] {
+        return this.store.getters[`${documentNamespace}/studentsTotalAttendances`];
+    }
     /**
      * Getter for fetching all the documents from the store, not from the API
     */
@@ -32,11 +38,15 @@ export class DocumentStore {
         return this.store.getters[`${documentNamespace}/documentDetails`];
     }
 
+    public async addDocument(parameters: DocumentInsertModule, courseName: string, specializationName: string): Promise<boolean>{
+        return await this.store.dispatch(`${documentNamespace}/addDocument`, {parameters: parameters, courseName: courseName, specializationName: specializationName});
+    }
+
     /**
      * Load all the document
      */
-    public async loadDocuments(): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/loadDocuments`);
+    public async loadDocuments(reload: boolean): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/loadDocuments`, reload);
     }
 
     /**
@@ -47,6 +57,9 @@ export class DocumentStore {
         return await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
     }
 
+    public async loadStudentTotalAttendances(payload: string|null, reload: boolean ): Promise<boolean>{
+        return await this.store.dispatch(`${documentNamespace}/loadStudentTotalAttendances`, { email: payload, reload: reload})
+    }
     /**
      * Load the current document dashboard
     */

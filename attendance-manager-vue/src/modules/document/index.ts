@@ -1,6 +1,6 @@
 
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
-import { StudentAttendanceModule, TotalAttendanceModule } from "./attendance";
+import {TotalAttendanceModule } from "./attendance";
 
 /** Use this view only for sending the collected data from the form used for creating a new document, to the API */
 export interface DocumentInsertModule{
@@ -85,12 +85,10 @@ export interface DocumentFullViewModule{
     noLaboratories: number;
     noSeminaries: number;
     creationDate: string;
-    updateDate: string;
+    updateOn: string;
     createdBy: string;
     attendanceCollections: AttendanceCollectionViewModule[];
     documentMembers: DocumentMembersViewModule[];
-    // currentStudentAttendances for current user, but only if the user is teacher
-    currentStudentAttendances: StudentAttendanceModule[];
     // this contains the total attendance for each student (be aware of user's role)
     totalAttendances: TotalAttendanceModule[];
     attendanceImportance: number;

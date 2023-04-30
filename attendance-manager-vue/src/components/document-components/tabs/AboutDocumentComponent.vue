@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <strong>Created at </strong>{{ document.creationDate }} (Last update at
-    {{ document.updateDate }})<br />
+    {{ document.updateOn }})<br />
     <strong>Course name:</strong> {{ document.courseName }}<br />
     <strong>Created by:</strong> {{ document.createdBy }}<br />
     <strong>Specialization name:</strong> {{ document.specializationName }}

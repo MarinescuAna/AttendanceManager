@@ -1,52 +1,57 @@
 <template>
-  <div v-if="isLoading">
-    <v-layout justify-center>
-      <v-progress-circular
-        :size="100"
-        :width="8"
+  <div>
+    <div v-if="isLoading">
+      <v-layout justify-center>
+        <v-progress-circular
+          :size="100"
+          :width="8"
+          color="black"
+          indeterminate
+        ></v-progress-circular>
+      </v-layout>
+    </div>
+    <div v-else-if="isTeacher">
+      <!-- The tabs menu -->
+      <v-tabs
+        v-model="currentTab"
+        background-color="transparent"
         color="black"
-        indeterminate
-      ></v-progress-circular>
-    </v-layout>
-  </div>
-  <div v-else-if="isTeacher">
-    <!-- The tabs menu -->
-    <v-tabs
-      v-model="currentTab"
-      background-color="transparent"
-      color="black"
-      centered
-    >
-      <v-tab> View created documents</v-tab>
-      <v-tab> View documents when you are collaborator</v-tab>
-    </v-tabs>
+        centered
+      >
+        <v-tab> View created documents</v-tab>
+        <v-tab> View documents when you are collaborator</v-tab>
+      </v-tabs>
 
-    <v-tabs-items v-model="currentTab" class="pa-3 remove-background-color">
-      <!-- First tab: display created documents-->
-      <v-tab-item>
-        <ViewDocumentsListCardsComponent
-          :documents="documents"
-          :isCollaborator="false"
-          v-if="documents.length !== 0"
-        />
-        <h1 v-else v-html="emptyCreatedDocumentsMessage"></h1>
-      </v-tab-item>
-      <!-- Second tab: display documents where the user is collaborator-->
-      <v-tab-item>
-        <ViewDocumentsListCardsComponent
-          :documents="collaboratorDocuments"
-          v-if="collaboratorDocuments.length !== 0"
-        />
-        <h1 v-else v-html="emptyCollaboratorDocumentsMessage"></h1>
-      </v-tab-item>
-    </v-tabs-items>
-  </div>
-  <div v-else>
-    <ViewDocumentsListCardsComponent
-      :documents="collaboratorDocuments"
-      v-if="collaboratorDocuments.length !== 0"
-    />
-    <h1 v-else v-html="emptyStudentDocumentsMessage"></h1>
+      <v-tabs-items v-model="currentTab" class="pa-3 remove-background-color">
+        <!-- First tab: display created documents-->
+        <v-tab-item>
+          <ViewDocumentsListCardsComponent
+            :documents="documents"
+            :message="emptyCreatedDocumentsMessage"
+          />
+        </v-tab-item>
+        <!-- Second tab: display documents where the user is collaborator-->
+        <v-tab-item>
+          <ViewDocumentsListCardsComponent
+            :documents="collaboratorDocuments"
+            :message="emptyCollaboratorDocumentsMessage"
+          />
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+    <div v-else>
+      <ViewDocumentsListCardsComponent
+        :documents="collaboratorDocuments"
+        :message="emptyStudentDocumentsMessage"
+      />
+    </div>
+    <v-speed-dial fixed absolute bottom right>
+      <template v-slot:activator>
+        <v-btn class="blue-grey lighten-2" @click="onReload" fab>
+          <v-icon> mdi-cached </v-icon>
+        </v-btn>
+      </template>
+    </v-speed-dial>
   </div>
 </template>
 
@@ -104,7 +109,15 @@ export default Vue.extend({
   },
   /** Load all the documents from the API */
   created: async function () {
-    this.isLoading = !(await storeHelper.documentStore.loadDocuments());
+    await this._loadDocuments(false);
+  },
+  methods: {
+    _loadDocuments: async function (reload: boolean): Promise<void> {
+      this.isLoading = !(await storeHelper.documentStore.loadDocuments(reload));
+    },
+    onReload: async function (): Promise<void> {
+      this._loadDocuments(true);
+    },
   },
 });
 </script>

@@ -4,6 +4,7 @@ using AttendanceManager.Application.Dtos;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
+using System.Globalization;
 
 namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {
@@ -31,12 +32,12 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 SpecializationId = currentDocument.Course!.UserSpecializationID,
                 SpecializationName = currentDocument.Course!.UserSpecialization!.Specialization!.Name,
                 Title = currentDocument.Title,
-                UpdateDate = currentDocument.UpdatedOn.ToString(Constants.DateFormat),
+                UpdatedOn = currentDocument.UpdatedOn.ToString(Constants.DateFormat),
                 NoLaboratories = attendanceCollectionsType!.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Laboratory).Count(),
                 NoLessons = attendanceCollectionsType.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Lesson).Count(),
                 NoSeminaries = attendanceCollectionsType.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
-                AttendanceCollections = mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderByDescending(d => d.HeldOn)),
+                AttendanceCollections = mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
                 DocumentMembers = mapper.Map<DocumentMembersDto[]>(documentMembers),
                 TotalAttendances = ComputeTotalAttendances(request.Role),
                 AttendanceImportance = currentDocument.AttendanceImportance,

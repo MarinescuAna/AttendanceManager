@@ -2,7 +2,7 @@
 
 namespace AttendanceManager.Application.Features.Document.Commands.CreateDocument
 {
-    public sealed class CreateDocumentCommand:IRequest<bool>
+    public sealed class CreateDocumentCommand:IRequest<InsertDocumentDto>
     {
         public required string Title { get; init; }
         public required int EnrollmentYear { get; init; }

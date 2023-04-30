@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap>
+  <v-layout v-if="documents.length !== 0" row wrap>
     <v-flex v-for="card in documents" :key="card.documentId" md4 class="pa-3">
       <v-card>
         <v-img
@@ -27,7 +27,7 @@
             <v-btn
               color="black"
               icon
-              :to="{ name: 'document', params: { id: card.documentId, isMember: !isCollaborator } }"
+              :to="{ name: 'document', params: { id: card.documentId } }"
             >
               <v-icon>mdi-login-variant</v-icon>
             </v-btn></v-row
@@ -35,6 +35,9 @@
         </v-card-actions>
       </v-card>
     </v-flex>
+  </v-layout>
+  <v-layout v-else>
+    <h1 v-html="message"></h1>
   </v-layout>
 </template>
 
@@ -51,10 +54,10 @@ export default Vue.extend({
       type: Array as () => DocumentViewModule[],
       required: true,
       },
-    /** Boolean for checking if current user is collaborator or member */
-    isCollaborator: {
-      type: Boolean,
-      default: true
+    /** Message that will be displayed in case that is no document */
+    message: {
+      type: String,
+      required: true
     }
   },
   data: function () {

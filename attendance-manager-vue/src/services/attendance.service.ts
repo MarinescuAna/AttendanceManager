@@ -39,8 +39,4 @@ export default class AttendanceService {
 
         return isSuccess;
     }
-
-    static async getStudentAttendancesByDocumentIdAndUserId(payload1: number, payload2: string): Promise<StudentAttendanceModule[]> {
-        return (await https.get(`${ATTENDANCE_CONTROLLER}/student_attendances_by_document_id_and_user_id?documentId=${payload1}&userId=${payload2}`)).data;
-    }
 }

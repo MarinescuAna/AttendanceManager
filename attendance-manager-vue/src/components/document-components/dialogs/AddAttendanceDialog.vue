@@ -4,7 +4,7 @@
       <v-btn icon @click="onCloseDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-      <v-toolbar-title>Attendances</v-toolbar-title>
+      <v-toolbar-title>Attendances - {{attendanceCollectionDate}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <DotsMenuComponent />
     </v-toolbar>
@@ -39,19 +39,19 @@
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left">Name</th>
+              <th class="text-left">{{isTeacher? 'Name':'GDPR'}}</th>
               <th class="text-left">Last modified</th>
               <th class="text-left">Attendance</th>
               <th class="text-left">Bonus Points</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in students" :key="item.attendanceID">
-              <td>{{ item.userID }}</td>
+            <tr v-for="item in students" :key="item.attendanceId">
+              <td>{{ item.userId }}</td>
               <td>{{ item.updatedOn }}</td>
               <td>
                 <v-checkbox
-                  v-model="item.isPresent"
+                  v-model="item.wasPresent"
                   :disabled="!isTeacher"
                 ></v-checkbox>
               </td>
@@ -123,9 +123,12 @@ export default Vue.extend({
     UseGeneratedAttendanceCodeDialog,
   },
   props: {
+    /** The id of the selected attendance collection */
     attendanceCollectionId: Number,
+    /** The date of the selected attendance collection */
+    attendanceCollectionDate: String
   },
-  data() {
+  data: function() {
     return {
       dialog2: false,
       dialog3: false,
@@ -157,12 +160,12 @@ export default Vue.extend({
     // stop student to enter the code multiple times
     if (!this.isTeacher) {
       const currentUser = this.students.find(
-        (s) => s.userID == AuthService.getDataFromToken()?.code
+        (s) => s.userId == AuthService.getDataFromToken()?.code
       );
 
       if (currentUser != null) {
-        this.currentUserIsPresent = currentUser.isPresent;
-        this.currentUserAttendanceId = currentUser.attendanceID;
+        this.currentUserIsPresent = currentUser.wasPresent;
+        this.currentUserAttendanceId = currentUser.attendanceId;
       }
     }
   },
@@ -178,9 +181,10 @@ export default Vue.extend({
         );
 
       result.forEach((element) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.students.find(
-          (x) => x.attendanceID == element.attendanceID
-        )!.isPresent = element.isPresent;
+          (x) => x.attendanceId == element.attendanceId
+        )!.wasPresent = element.wasPresent;
       });
     },
     /**
@@ -197,17 +201,17 @@ export default Vue.extend({
 
       this.students.forEach((student) => {
         let oldStudent = this.initStudents.find(
-          (x) => x.attendanceID === student.attendanceID
+          (x) => x.attendanceId === student.attendanceId
         );
 
         if (
           oldStudent?.bonusPoints !== student.bonusPoints ||
-          oldStudent.isPresent !== student.isPresent
+          oldStudent.wasPresent !== student.wasPresent
         ) {
           studentsChanged.push({
-            attendanceID: student.attendanceID,
+            attendanceID: student.attendanceId,
             bonusPoints: student.bonusPoints,
-            isPresent: student.isPresent,
+            isPresent: student.wasPresent,
           } as StudentAttendanceInsertModule);
         }
       });
@@ -232,8 +236,8 @@ export default Vue.extend({
       this.currentUserIsPresent = true;
       this.useCodeDialog = false;
       this.students.forEach((student) => {
-        if (student.attendanceID === this.currentUserAttendanceId) {
-          student.isPresent = true;
+        if (student.attendanceId === this.currentUserAttendanceId) {
+          student.wasPresent = true;
         }
       });
     },

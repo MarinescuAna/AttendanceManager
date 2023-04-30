@@ -1,14 +1,10 @@
 ﻿
-using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByDocIdAndUserId;
-using AttendanceManager.Application.Dtos;
+using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
 
-namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
+namespace AttendanceManager.Application.Dtos
 {
-    public sealed class DocumentInfoDto
+    public sealed class DocumentInfoDto: DocumentBaseDto
     {
-        public required int DocumentId { get; init; }
-        public required string Title { get; init; }
-        public required int EnrollmentYear { get; init; }
         public required int MaxNoSeminaries { get; init; }
         public required int MaxNoLaboratories { get; init; }
         public required int MaxNoLessons { get; init; }
@@ -16,11 +12,8 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
         public required int NoLaboratories { get; init; }
         public required int NoLessons { get; init; }
         public required int CourseId { get; init; }
-        public required string CourseName { get; init; }
         public required int SpecializationId { get; set; }
-        public required string SpecializationName { get; set; }
         public required string CreationDate { get; init; }
-        public required string UpdateDate { get; init; }
         public required int AttendanceImportance { get; init; }
         public required int BonusPointsImportance { get; init; }
         public required string CreatedBy { get; init; }

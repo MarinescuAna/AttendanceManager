@@ -23,7 +23,8 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetCreatedDocu
             var documents = request.Role == Role.Student ?
                 await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u =>
                     u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == DocumentRole.Member) && !u.IsDeleted) :
-                await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u => request.Role == Role.Teacher && !u.IsDeleted);
+                await unitOfWork.DocumentRepository.GetUserDocumentsByExpressionAsync(u => 
+                    (u.Course!.UserSpecialization!.UserID == request.Email || u.DocumentMembers!.Any(m => m.UserID == request.Email && m.Role == DocumentRole.Collaborator)) && !u.IsDeleted);
 
             foreach (var document in documents.OrderByDescending(d => d.CreatedOn))
             {

@@ -48,6 +48,7 @@
                   label="Course"
                   v-model="selectedCourse"
                   required
+                  return-object
                   prepend-icon="mdi-school"
                   item-text="name"
                   item-value="id"
@@ -160,7 +161,7 @@
                     @click="currentStep = 2"
                     :disabled="
                       invalid ||
-                      selectedCourse === 0 ||
+                      Object.keys(selectedCourse).length === 0 ||
                       computeImportancePercentage != 100
                     "
                   >
@@ -180,6 +181,7 @@
                   v-model="selectedSpecialization"
                   prepend-icon="mdi-file"
                   item-text="name"
+                  return-object
                   item-value="id"
                   color="black"
                   required
@@ -209,7 +211,9 @@
                   class="white--text"
                   color="black"
                   @click="step3Actions"
-                  :disabled="selectedSpecialization === 0 || selectedYear === 0"
+                  :disabled="
+                    Object.keys(selectedSpecialization).length === 0 || selectedYear === 0
+                  "
                 >
                   <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
@@ -295,7 +299,6 @@ import { StudentForCourseViewModule } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import UserService from "@/services/user.service";
-import DocumentService from "@/services/document.service";
 import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
@@ -311,9 +314,9 @@ export default Vue.extend({
       /** Year when the course is held */
       selectedYear: 0,
       /** Selected course */
-      selectedCourse: 0,
+      selectedCourse: {} as CourseViewModule,
       /** Selected specialization */
-      selectedSpecialization: 0,
+      selectedSpecialization: {} as SpecializationModule,
       /** Maximum number of lessons that will be held */
       maxNoLessons: 0,
       /** Maximum number of laboratories that will be held */
@@ -368,7 +371,6 @@ export default Vue.extend({
   created: async function () {
     await storeHelper.userStore.loadCurrentUserInfo();
     await storeHelper.courseStore.loadCourses();
-    storeHelper.documentStore.resetEntireStore();
   },
   methods: {
     /** Use this function to reset the list of students when the specialization or year has changed */
@@ -385,7 +387,7 @@ export default Vue.extend({
         this.students =
           await UserService.getStudentsBySpecializationIdEnrollmentYear(
             this.selectedYear,
-            this.selectedSpecialization
+            this.selectedSpecialization.id
           );
         this.selectedStudents = Array.from(Array(this.students.length).keys());
       }
@@ -393,18 +395,22 @@ export default Vue.extend({
     },
     /** Create the new document according to the selected data, and if any error occures, redirect the user to the created documents list */
     onSubmit: async function (): Promise<void> {
-      const response = await DocumentService.addDocument({
-        courseId: this.selectedCourse,
-        enrollmentYear: this.selectedYear,
-        maxNoLaboratories: this.maxNoLaboratories,
-        maxNoLessons: this.maxNoLessons,
-        maxNoSeminaries: this.maxNoSeminaries,
-        title: this.documentTitle,
-        specializationId: this.selectedSpecialization,
-        studentIds: this.selectedStudents.map((x) => this.students[x].email),
-        attendanceImportance: this.attendanceImportance,
-        bonusPointsImportance: this.bonusPointImportance,
-      } as DocumentInsertModule);
+      const response = await storeHelper.documentStore.addDocument(
+        {
+          courseId: this.selectedCourse.id,
+          enrollmentYear: this.selectedYear,
+          maxNoLaboratories: this.maxNoLaboratories,
+          maxNoLessons: this.maxNoLessons,
+          maxNoSeminaries: this.maxNoSeminaries,
+          title: this.documentTitle,
+          specializationId: this.selectedSpecialization.id,
+          studentIds: this.selectedStudents.map((x) => this.students[x].email),
+          attendanceImportance: this.attendanceImportance,
+          bonusPointsImportance: this.bonusPointImportance,
+        } as DocumentInsertModule,
+        this.selectedSpecialization.name,
+        this.selectedCourse.name
+      );
 
       if (response) {
         this.$router.push({ name: "documents" });

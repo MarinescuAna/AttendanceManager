@@ -1,17 +1,25 @@
 <template>
   <v-layout column class="ma-3">
-    <v-flex v-if="isTeacher">
+    <v-flex >
       <v-btn
         color="black"
         class="white--text"
         :disabled="!saveChanges"
+        v-if="isTeacher"
         @click="onSave"
       >
         Save Changes
       </v-btn>
+      <v-btn
+        color="black"
+        class="white--text"
+        @click="onReload"
+      >
+        Reload attendances
+      </v-btn>
     </v-flex>
     <v-layout wrap>
-      <v-simple-table>
+      <v-simple-table class="ma-2">
         <template v-slot:default>
           <thead>
             <tr>
@@ -44,7 +52,8 @@
           </tbody>
         </template>
       </v-simple-table>
-      <v-simple-table>
+
+      <v-simple-table class="ma-2">
         <template v-slot:default>
           <thead>
             <tr>
@@ -122,7 +131,7 @@ export default Vue.extend({
      */
     studentAttendances: function(): StudentAttendanceModule[] {
       return this.isTeacher? storeHelper.documentStore.studentsTotalAttendances.filter(u=> u.userId == this.userId)
-          : storeHelper.documentStore.documentDetails.currentStudentAttendances;
+          : storeHelper.documentStore.studentsTotalAttendances;
     },
     attendanceLessons: function(): number{
       return this._getTotal(CourseType.Lesson,true);
@@ -144,12 +153,10 @@ export default Vue.extend({
     }
   },
   created: async function () {
-    // load user attendances for the selected user in case that the current user's role is teacher,
-    // or get from the store the attendances report for the current user
-    await storeHelper.documentStore.loadStudentTotalAttendances(this.isTeacher? this.userId: null);
+    await this._loadStudentAttendances(false);
     
-    if(this.studentAttendances.length > 0){
-      // make a copy of the results
+    if(this.studentAttendances.length > 0 && this.isTeacher){
+      // make a copy of the results only if the user is teacher, because only they can edit this information
       this.studentAttendances.forEach((x) =>
         this.initStudents.push(Object.assign({}, x))
       );
@@ -166,6 +173,11 @@ export default Vue.extend({
       }else{
         return 0;
       }
+    },
+    _loadStudentAttendances: async function(reload: boolean): Promise<void> {    
+      // load user attendances for the selected user in case that the current user's role is teacher,
+      // or get from the store the attendances report for the current user
+      await storeHelper.documentStore.loadStudentTotalAttendances(this.isTeacher? this.userId: null, reload);
     },
     onSave: async function (): Promise<void> {
       let studentsChanged: StudentAttendanceInsertModule[] = [];
@@ -199,6 +211,9 @@ export default Vue.extend({
         }
       }
     },
+    onReload: async function(): Promise<void> {
+      await this._loadStudentAttendances(true);
+    }
   },
 });
 </script>
