@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "install": "npm install",
-    "start": "npm run serve"
+    "install": "npm install"
   },
   "dependencies": {
     "apexcharts": "^3.37.2",
