@@ -23,7 +23,7 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetStudentAt
                     UserId = a.UserID,
                     AttendanceId = a.AttendanceID,
                     BonusPoints = a.BonusPoints,
-                    WasPresent = a.IsPresent,
+                    IsPresent = a.IsPresent,
                     UpdatedOn = a.UpdatedOn.ToString(Constants.DateFormat),
                     CourseType = attendanceCollectionsType![a.AttendanceCollectionID].ToString()
                 }).ToArray());

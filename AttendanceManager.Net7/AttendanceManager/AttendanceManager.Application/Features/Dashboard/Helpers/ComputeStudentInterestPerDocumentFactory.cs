@@ -32,9 +32,9 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
             // compute final result
             foreach (var student in partialyResult)
             {
-                student.LessonValue = student.LessonValue / totalPossibleScore.lesson * 100;
-                student.LaboratoryValue = student.LaboratoryValue / totalPossibleScore.laboratory * 100;
-                student.SeminaryValue = student.SeminaryValue / totalPossibleScore.seminary * 100;
+                student.LessonValue = totalPossibleScore.lesson == 0 ? 0: student.LessonValue / totalPossibleScore.lesson * 100;
+                student.LaboratoryValue = totalPossibleScore.laboratory == 0 ? 0 :  student.LaboratoryValue / totalPossibleScore.laboratory * 100;
+                student.SeminaryValue = totalPossibleScore.seminary == 0 ? 0 : student.SeminaryValue / totalPossibleScore.seminary * 100;
             }
 
             return partialyResult.ToArray();

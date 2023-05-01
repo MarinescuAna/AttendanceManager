@@ -51,7 +51,7 @@
               <td>{{ item.updatedOn }}</td>
               <td>
                 <v-checkbox
-                  v-model="item.wasPresent"
+                  v-model="item.isPresent"
                   :disabled="!isTeacher"
                 ></v-checkbox>
               </td>
@@ -164,7 +164,7 @@ export default Vue.extend({
       );
 
       if (currentUser != null) {
-        this.currentUserIsPresent = currentUser.wasPresent;
+        this.currentUserIsPresent = currentUser.isPresent;
         this.currentUserAttendanceId = currentUser.attendanceId;
       }
     }
@@ -184,7 +184,7 @@ export default Vue.extend({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.students.find(
           (x) => x.attendanceId == element.attendanceId
-        )!.wasPresent = element.wasPresent;
+        )!.isPresent = element.isPresent;
       });
     },
     /**
@@ -206,12 +206,12 @@ export default Vue.extend({
 
         if (
           oldStudent?.bonusPoints !== student.bonusPoints ||
-          oldStudent.wasPresent !== student.wasPresent
+          oldStudent.isPresent !== student.isPresent
         ) {
           studentsChanged.push({
             attendanceID: student.attendanceId,
             bonusPoints: student.bonusPoints,
-            isPresent: student.wasPresent,
+            isPresent: student.isPresent,
           } as StudentAttendanceInsertModule);
         }
       });
@@ -237,7 +237,7 @@ export default Vue.extend({
       this.useCodeDialog = false;
       this.students.forEach((student) => {
         if (student.attendanceId === this.currentUserAttendanceId) {
-          student.wasPresent = true;
+          student.isPresent = true;
         }
       });
     },

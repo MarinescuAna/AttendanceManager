@@ -34,7 +34,7 @@
               <td>{{ item.updatedOn }}</td>
               <td>
                 <v-simple-checkbox
-                  v-model="item.wasPresent"
+                  v-model="item.isPresent"
                   @click="saveChanges = true"
                   :disabled="!isTeacher"
                 ></v-simple-checkbox>
@@ -168,7 +168,7 @@ export default Vue.extend({
         (x) => x.courseType == CourseType[type]
       );
       if (courses.length != 0) {
-        return doAttendancesTotal? courses.filter((x) => x.wasPresent).length:
+        return doAttendancesTotal? courses.filter((x) => x.isPresent).length:
         courses.reduce((x, result) => x + result.bonusPoints, 0);
       }else{
         return 0;
@@ -189,12 +189,12 @@ export default Vue.extend({
 
         if (
           oldStudent?.bonusPoints !== student.bonusPoints ||
-          oldStudent.wasPresent !== student.wasPresent
+          oldStudent.isPresent !== student.isPresent
         ) {
           studentsChanged.push({
             attendanceID: student.attendanceId,
             bonusPoints: student.bonusPoints,
-            isPresent: student.wasPresent,
+            isPresent: student.isPresent,
           } as StudentAttendanceInsertModule);
         }
       });

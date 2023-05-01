@@ -1,8 +1,7 @@
 <template>
   <div v-if="!canGenerateDiagrams">
     <v-alert border="left" type="error" class="ma-4"
-      >The diagrams can't be generated because there are fewer than 3 lessons
-      held!</v-alert
+      >The diagrams can't be generated because you don't have enough data!</v-alert
     >
   </div>
   <div v-else-if="isLoading">
@@ -52,7 +51,8 @@ export default Vue.extend({
   computed: {
     /** Use this computed data to check if there are enough courses held to can generate the diagrams  */
     canGenerateDiagrams: function (): boolean {
-      return storeHelper.documentStore.documentDetails.noLessons >= 3;
+      return storeHelper.documentStore.documentDetails.noLessons >= 3 /* && 
+        storeHelper.documentStore.studentsTotalAttendances.filter(d=>d.isPresent).length > 5 */;
     },
     /**
      * Data related to students interest

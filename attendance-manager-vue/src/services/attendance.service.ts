@@ -1,7 +1,7 @@
 
 import https from "@/plugins/axios";
 import { ATTENDANCE_CONTROLLER } from "@/shared/constants";
-import { StudentAttendanceInsertModule, StudentAttendanceModule, UseAttendanceCodeUpdateModule } from "@/modules/document/attendance";
+import { StudentAttendanceInsertModule, StudentAttendanceModule, StudentAttendancesInsertModule, UseAttendanceCodeUpdateModule } from "@/modules/document/attendance";
 import ResponseHandler from "@/error-handler/error-handler";
 
 export default class AttendanceService {
@@ -18,7 +18,7 @@ export default class AttendanceService {
     static async addStudentsAttendances(payload: StudentAttendanceInsertModule[]): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${ATTENDANCE_CONTROLLER}/update_attendances`, { students: payload })
+        await https.patch(`${ATTENDANCE_CONTROLLER}/update_attendances`, { students: payload } as StudentAttendancesInsertModule)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

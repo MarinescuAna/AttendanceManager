@@ -45,7 +45,7 @@ export const studentAttendancesHeader = [
     },
     {
         text: "Attendance",
-        value: "wasPresent",
+        value: "isPresent",
     },
     {
         text: "Bonus Points",

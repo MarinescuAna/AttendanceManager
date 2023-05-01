@@ -22,10 +22,14 @@ export interface TotalAttendanceModule{
     seminaryAttendances: number;
 }
 
+export interface StudentAttendancesInsertModule{
+    students: StudentAttendanceInsertModule[];
+}
+
 export interface StudentAttendanceModule{
     bonusPoints: number;
     courseType: string;
-    wasPresent: boolean;
+    isPresent: boolean;
     userId: string;
     attendanceId: number;
     updatedOn:string;
