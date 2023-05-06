@@ -8,7 +8,8 @@ interface Response{
 
 export default class ResponseHandler {
     public static errorResponseHandler(error): boolean {
-        const response = error.response.data as Response;
+
+        const response = error.response? error.response.data as Response : {error: error.message, status: error.code} as Response;
         switch (response.status) {
             case ERR_NOT_FOUND:
                 Toastification.error(response.error, `${response.status} Not found:`);
@@ -20,7 +21,7 @@ export default class ResponseHandler {
                 Toastification.error("The provided parameters are not passed correctly!", "415 Unsupported Media Type:");
                 break;
             default:
-                Toastification.simpleError("API doesn't respond!");
+                Toastification.simpleError("API doesn't respond! Check if the server is running.");
         }
 
         return false;
