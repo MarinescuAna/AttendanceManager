@@ -3,7 +3,6 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentViewModule, DocumentUpdateModule, DocumentInsertModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
-import BaseService from "@/shared/base-service.service";
 import { ATTENDANCE_COLLECTION_CONTROLLER, ATTENDANCE_CONTROLLER, DASHBOARD_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
