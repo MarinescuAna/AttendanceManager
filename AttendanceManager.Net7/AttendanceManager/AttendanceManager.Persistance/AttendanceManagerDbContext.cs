@@ -25,6 +25,8 @@ namespace AttendanceManager.Persistance
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<AttendanceCollection> AttendanceCollections { get; set; }
         public DbSet<AttendanceCode> AttendanceCodes { get; set; }
+        public DbSet<Badge> Badges { get; set; }
+        public DbSet<Reward> Rewards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

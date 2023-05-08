@@ -25,6 +25,15 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    AccountConfirmed = true,
                }
            );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = 1,
+                   Title = "First attendance",
+                   BadgeType = Domain.Enums.BadgeType.FirstAttendance
+               }
+           );
         }
     }
 }
