@@ -14,6 +14,7 @@ namespace AttendanceManager.Application.Contracts.UnitOfWork
         IDocumentMemberRepository DocumentMemberRepository { get; }
         IDocumentRepository DocumentRepository { get; }
         IAttendanceCodeRepository AttendanceCodeRepository { get; }
+        IRewardRepository RewardRepository { get; }
         Task<bool> CommitAsync(int numberOfRows = 1);
     }
 }
