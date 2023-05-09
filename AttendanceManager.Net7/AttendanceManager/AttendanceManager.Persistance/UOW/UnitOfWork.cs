@@ -1,5 +1,5 @@
-﻿using AttendanceManager.Application.Contracts.Persistance;
-using AttendanceManager.Application.Contracts.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Persistance.Repositories;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Infrastructure.Shared.Logger;
 using AttendanceManager.Persistance.Repositories;
 

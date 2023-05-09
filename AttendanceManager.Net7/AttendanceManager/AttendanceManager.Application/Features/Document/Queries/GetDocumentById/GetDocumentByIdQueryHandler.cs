@@ -1,10 +1,10 @@
-﻿using AttendanceManager.Application.Contracts.UnitOfWork;
-using AttendanceManager.Core.Shared;
+﻿using AttendanceManager.Core.Shared;
 using AttendanceManager.Application.Dtos;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 using System.Globalization;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 
 namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
 {

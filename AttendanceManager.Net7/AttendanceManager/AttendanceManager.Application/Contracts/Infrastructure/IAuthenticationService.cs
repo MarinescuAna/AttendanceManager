@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Models.Authentication;
 
-namespace AttendanceManager.Application.Contracts.Authentication
+namespace AttendanceManager.Application.Contracts.Infrastructure
 {
     public interface IAuthenticationService
     {

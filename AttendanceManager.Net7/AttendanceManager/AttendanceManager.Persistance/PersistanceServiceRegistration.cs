@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Persistance.UOW;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -1,8 +1,8 @@
-﻿using AttendanceManager.Application.Contracts.UnitOfWork;
-using AttendanceManager.Application.Exceptions;
+﻿using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Dtos;
 using AutoMapper;
 using MediatR;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 
 namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaboratorByDocumentId
 {

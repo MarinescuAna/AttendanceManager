@@ -1,4 +1,5 @@
-﻿using AttendanceManager.Application.Features.User.Queries.GetRefreshTokens;
+﻿using AttendanceManager.Application.Contracts.Infrastructure;
+using AttendanceManager.Application.Features.User.Queries.GetRefreshTokens;
 using AttendanceManager.Application.Models.Authentication;
 using AttendanceManager.Application.Modules.Authentication;
 using AttendanceManager.Core.Shared;
@@ -11,7 +12,7 @@ using System.Text;
 
 namespace AttendanceManager.Infrastructure.Authentication
 {
-    public sealed class JsonWebTokenService : Application.Contracts.Authentication.IJsonWebTokenService
+    public sealed class JsonWebTokenService : IJsonWebTokenService
     {
         private readonly JwtSettings _jwtSettings;
         private readonly IMediator _mediator;

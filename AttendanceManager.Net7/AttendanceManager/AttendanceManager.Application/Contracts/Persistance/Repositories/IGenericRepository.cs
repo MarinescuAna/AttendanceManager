@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace AttendanceManager.Application.Contracts.Persistance
+namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {

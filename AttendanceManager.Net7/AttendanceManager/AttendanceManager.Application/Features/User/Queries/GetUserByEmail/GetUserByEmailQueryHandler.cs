@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AutoMapper;
 using MediatR;

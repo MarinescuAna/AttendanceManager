@@ -1,7 +1,7 @@
 ﻿using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
 
-namespace AttendanceManager.Application.Contracts.Persistance
+namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
     public interface IDocumentMemberRepository : IGenericRepository<DocumentMember>
     {

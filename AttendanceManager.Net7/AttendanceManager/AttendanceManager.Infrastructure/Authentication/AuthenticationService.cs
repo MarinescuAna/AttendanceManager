@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Authentication;
+﻿using AttendanceManager.Application.Contracts.Infrastructure;
 using AttendanceManager.Application.Features.User.Commands.ConfirmUserAccount;
 using AttendanceManager.Application.Features.User.Commands.UpdateRefreshToken;
 using AttendanceManager.Application.Features.User.Queries.GetUserByEmail;

@@ -1,6 +1,6 @@
-﻿using AttendanceManager.Application.Contracts.Persistance;
+﻿using AttendanceManager.Application.Contracts.Persistance.Repositories;
 
-namespace AttendanceManager.Application.Contracts.UnitOfWork
+namespace AttendanceManager.Application.Contracts.Persistance.UnitOfWork
 {
     public interface IUnitOfWork
     {

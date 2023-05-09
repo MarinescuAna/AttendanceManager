@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Persistance;
+﻿using AttendanceManager.Application.Contracts.Persistance.Repositories;
 using AttendanceManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

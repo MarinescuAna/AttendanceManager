@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Modules.Authentication;
 
-namespace AttendanceManager.Application.Contracts.Authentication
+namespace AttendanceManager.Application.Contracts.Infrastructure
 {
     public interface IJsonWebTokenService
     {

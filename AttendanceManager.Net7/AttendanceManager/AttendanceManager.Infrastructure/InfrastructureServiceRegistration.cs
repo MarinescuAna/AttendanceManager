@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Authentication;
-using AttendanceManager.Application.Contracts.Mail;
+﻿using AttendanceManager.Application.Contracts.Infrastructure;
 using AttendanceManager.Infrastructure.Authentication;
 using AttendanceManager.Infrastructure.Mail;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
