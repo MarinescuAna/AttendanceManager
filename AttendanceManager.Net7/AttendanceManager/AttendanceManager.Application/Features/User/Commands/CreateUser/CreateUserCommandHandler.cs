@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Infrastructure;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Mail;
 using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Models.Mail;

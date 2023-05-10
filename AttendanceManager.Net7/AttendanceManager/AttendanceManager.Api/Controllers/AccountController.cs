@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Infrastructure;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Authentication;
 using AttendanceManager.Application.Features.User.Queries.GetUserByRefreshToken;
 using AttendanceManager.Application.Models.Authentication;
 using MediatR;

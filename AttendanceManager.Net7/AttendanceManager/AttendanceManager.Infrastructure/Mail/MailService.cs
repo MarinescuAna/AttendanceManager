@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Infrastructure;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Mail;
 using AttendanceManager.Application.Models.Mail;
 using AttendanceManager.Infrastructure.Shared.Logger;
 using MailKit.Security;

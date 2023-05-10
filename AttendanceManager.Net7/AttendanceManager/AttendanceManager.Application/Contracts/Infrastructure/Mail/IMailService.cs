@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Models.Mail;
 
-namespace AttendanceManager.Application.Contracts.Infrastructure
+namespace AttendanceManager.Application.Contracts.Infrastructure.Mail
 {
     public interface IMailService
     {
