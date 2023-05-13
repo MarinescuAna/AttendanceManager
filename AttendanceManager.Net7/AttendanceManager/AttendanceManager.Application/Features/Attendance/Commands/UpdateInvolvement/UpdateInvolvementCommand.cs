@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.Infrastructure.Rewards;
 using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Core.Shared;
 using AutoMapper;
 using MediatR;
 
@@ -32,7 +33,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
             if (!string.IsNullOrEmpty(request.AttendanceCode) && request.AttendanceCollectionId != null)
             {
                 // check if the code exists into the database
-                var code = await unitOfWork.AttendanceCodeRepository.GetAsync(c => c.Code.Equals(request.AttendanceCode) && c.AttendanceCollectionId == request.AttendanceCollectionId)
+                var code = await unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.AttendanceCode) && c.AttendanceCollectionId == request.AttendanceCollectionId)
                     ?? throw new NotFoundException("Code", request.AttendanceCode);
 
                 // check if the code is still valid
@@ -55,7 +56,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException("Something went wrong during the update involvement process.");
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             await _rewardService.AssignBadge(Domain.Enums.BadgeType.FirstAttendance, objAttendance.AttendanceCollection!, objAttendance.UserID);

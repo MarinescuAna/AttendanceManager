@@ -5,7 +5,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
 {
     public sealed class UpdateInvolvementByCodeAndIdCommand : IRequest<bool>
     {
-        public required string AttendanceCode { get; init; }
+        public required string Code { get; init; }
         public required int AttendanceId { get; init; }
         public required int AttendanceCollectionId { get; init; }
     }
@@ -23,7 +23,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
             return await _mediator.Send(new UpdateInvolvementCommand()
             {
                 AttendanceId = request.AttendanceId,
-                AttendanceCode = request.AttendanceCode,
+                AttendanceCode = request.Code,
                 AttendanceCollectionId = request.AttendanceCollectionId,
             });
         }

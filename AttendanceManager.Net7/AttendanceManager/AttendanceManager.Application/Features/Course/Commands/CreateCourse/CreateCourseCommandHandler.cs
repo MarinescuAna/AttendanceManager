@@ -35,7 +35,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return newCourse.CourseID;

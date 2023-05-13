@@ -1,8 +1,14 @@
 
 import https from "@/plugins/axios";
 import { ATTENDANCE_CONTROLLER } from "@/shared/constants";
-import { StudentAttendanceInsertModule, StudentAttendanceModule, StudentAttendancesInsertModule, UseAttendanceCodeUpdateModule } from "@/modules/document/attendance";
+import { StudentAttendanceInsertModule, StudentAttendanceModule, StudentAttendancesInsertModule } from "@/modules/document/attendance";
 import ResponseHandler from "@/error-handler/error-handler";
+
+interface UseAttendanceCodeUpdateModule{
+    code: string;
+    attendanceId: number;
+    attendanceCollectionId: number;
+}
 
 export default class AttendanceService {
 
@@ -29,10 +35,10 @@ export default class AttendanceService {
     /**
      * Update the students attendances by code and attendance id
      */
-    static async updateAttendanceByCodeAndAttendanceId(payload: UseAttendanceCodeUpdateModule): Promise<boolean> {
+    static async updateAttendanceByCode(payload: UseAttendanceCodeUpdateModule): Promise<boolean> {
         let isSuccess = true;
         
-        await https.patch(`${ATTENDANCE_CONTROLLER}/update_attendance_by_code_and_attendance_id`,payload)
+        await https.patch(`${ATTENDANCE_CONTROLLER}/update_involvement_by_code`,payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

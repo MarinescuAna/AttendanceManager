@@ -32,7 +32,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return true;

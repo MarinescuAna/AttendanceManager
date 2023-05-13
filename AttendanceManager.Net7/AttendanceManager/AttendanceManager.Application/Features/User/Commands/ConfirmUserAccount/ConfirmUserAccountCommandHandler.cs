@@ -25,7 +25,7 @@ namespace AttendanceManager.Application.Features.User.Commands.ConfirmUserAccoun
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return Unit.Value;

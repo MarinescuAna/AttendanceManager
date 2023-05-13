@@ -17,7 +17,7 @@ namespace AttendanceManager.Persistance.UOW
         private readonly IDocumentRepository? _documentRepository;
         private readonly IAttendanceCollectionRepository? _attendanceCollectionRepository;
         private readonly IAttendanceRepository? _attendanceRepository;
-        private readonly IAttendanceCodeRepository? _attendanceCodeRepository;
+        private readonly IInvolvementCodeRepository? _involvementCodeRepository;
         private readonly IRewardRepository? _rewardRepository;
         private readonly IBadgeRepository? _badgeRepository;
         public UnitOfWork(AttendanceManagerDbContext dbContext)
@@ -32,9 +32,9 @@ namespace AttendanceManager.Persistance.UOW
         {
             get => _rewardRepository ?? new RewardRepository(_dbContext);
         }
-        public IAttendanceCodeRepository AttendanceCodeRepository
+        public IInvolvementCodeRepository InvolvementCodeRepository
         {
-            get => _attendanceCodeRepository ?? new AttendanceCodeRepository(_dbContext);
+            get => _involvementCodeRepository ?? new InvolvementCodeRepository(_dbContext);
         }
         public IAttendanceRepository AttendanceRepository
         {

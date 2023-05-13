@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.User.Commands.UpdateRefreshToke
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return Unit.Value;

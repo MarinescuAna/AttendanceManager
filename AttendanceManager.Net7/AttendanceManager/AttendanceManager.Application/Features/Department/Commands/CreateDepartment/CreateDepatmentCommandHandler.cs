@@ -32,7 +32,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             unitOfWork.DepartmentRepository.AddAsync(newDepartment);
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return newDepartment.DepartmentID;

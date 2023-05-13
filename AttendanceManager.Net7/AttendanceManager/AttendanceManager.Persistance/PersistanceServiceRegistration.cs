@@ -3,7 +3,6 @@ using AttendanceManager.Persistance.UOW;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AttendanceManager.Persistance
 {
@@ -16,7 +15,7 @@ namespace AttendanceManager.Persistance
             services.AddDbContext<AttendanceManagerDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AttendanceManagerConnectionString"),
                 b => b.MigrationsAssembly(typeof(AttendanceManagerDbContext).Assembly.FullName)));
 
-            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

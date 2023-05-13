@@ -16,6 +16,6 @@ namespace AttendanceManager.Persistance.Repositories
         public async Task<AttendanceCollection> GetAttendanceCollectionByIdAsync(int id)
             => await dbContext.AttendanceCollections
             .Include(ac => ac.Attendances!).AsNoTracking()
-            .FirstOrDefaultAsync(a => a.AttendanceCollectionID == id);
+            .FirstOrDefaultAsync(a => a.AttendanceCollectionID! == id);
     }
 }

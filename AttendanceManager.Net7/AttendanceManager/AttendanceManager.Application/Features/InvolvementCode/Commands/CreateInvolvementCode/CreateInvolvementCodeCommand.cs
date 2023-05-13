@@ -4,18 +4,24 @@ using AttendanceManager.Core.Shared;
 using AutoMapper;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.AttendanceCode.Commands.CreateAttendanceCode
+namespace AttendanceManager.Application.Features.InvolvementCode.Commands.CreateInvolvementCode
 {
-    public sealed class CreateAttendanceCodeCommandHandler : BaseFeature, IRequestHandler<CreateAttendanceCodeCommand, AttendanceCodeDTO>
+    public sealed class CreateInvolvementCodeCommand : IRequest<InvolvementCodeDto>
     {
-        public CreateAttendanceCodeCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
+        public required int Minutes { get; init; }
+        public required int AttendanceCollectionId { get; init;}
+    }
+
+    public sealed class CreateInvolvementCodeCommandHandler : BaseFeature, IRequestHandler<CreateInvolvementCodeCommand, InvolvementCodeDto>
+    {
+        public CreateInvolvementCodeCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
 
-        public async Task<AttendanceCodeDTO> Handle(CreateAttendanceCodeCommand request, CancellationToken cancellationToken)
+        public async Task<InvolvementCodeDto> Handle(CreateInvolvementCodeCommand request, CancellationToken cancellationToken)
         {
 
-            var codes = await unitOfWork.AttendanceCodeRepository.ListAllAsync();
+            var codes = await unitOfWork.InvolvementCodeRepository.ListAllAsync();
             var code = string.Empty;
 
             // generate code
@@ -25,17 +31,17 @@ namespace AttendanceManager.Application.Features.AttendanceCode.Commands.CreateA
             } while (codes.Any(c => c.Code.Equals(code)));
 
             // save the code
-            var newCode = new Domain.Entities.AttendanceCode()
+            var newCode = new Domain.Entities.InvolvementCode()
             {
                 Code = code,
                 ExpirationDate = DateTime.Now.AddMinutes(request.Minutes),
                 AttendanceCollectionId = request.AttendanceCollectionId
             };
-            unitOfWork.AttendanceCodeRepository.AddAsync(newCode);
+            unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return new()

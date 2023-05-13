@@ -2,11 +2,10 @@
 
 namespace AttendanceManager.Domain.Entities
 {
-    public sealed class AttendanceCode
+    public sealed class InvolvementCode
     {
-        [Key]
-        public int AttendanceCodeID { get; set; }
         [MaxLength(8)]
+        [Key]
         public required string Code { get; set; }
         public required DateTime ExpirationDate { get; set; }
         public required int AttendanceCollectionId { get; set; }

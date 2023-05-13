@@ -1,10 +1,10 @@
 <template>
   <v-card class="pa-4">
-    <validation-observer v-slot="{ handleSubmit, invalid }">
+    <validation-observer v-slot="{ handleSubmit }">
       <v-form @submit.prevent="handleSubmit(onSubmit)">
         <v-layout column class="pa-2">
           <v-card-title>
-            <p>Generate attendance code</p>
+            <p>Generate involvement code</p>
             <v-spacer></v-spacer>
             <v-btn icon @click="onClose">
               <v-icon>mdi-close</v-icon>
@@ -12,19 +12,14 @@
           </v-card-title>
           <v-card-text>
             <v-flex>
-              <validation-provider
-                name="expiration time (minutes)"
-                v-slot="{ errors }"
-                :rules="rules.between_1_240"
-              >
-                <v-text-field
+                <v-subheader>Expiration time in minutes</v-subheader>
+                <v-slider
                   v-model="time"
-                  label="Expiration time (minutes between 1-240)"
-                  type="number"
-                  :error-messages="errors"
+                  max="60"
+                  min="1"
+                  thumb-label
                   prepend-icon="mdi-clock-time-four-outline"
-                ></v-text-field>
-              </validation-provider>
+                ></v-slider>
             </v-flex>
             <v-flex v-if="generatedCode !== ''">
               <p v-html="generatedCode" class="pa-2"></p>
@@ -35,7 +30,6 @@
               <v-btn
                 color="black"
                 class="mr-1 white--text"
-                :disabled="invalid"
                 @click="onSubmit"
               >
                 Generate code
@@ -49,18 +43,16 @@
 </template>
 
 <script lang="ts">
-import AttendanceCodeService from "@/services/attendance-code.service";
-import { rules } from "@/plugins/vee-validate";
+import InvolvementCodeService from "@/services/involvement-code.service";
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "GenerateAttendanceCodeDialog",
-  props:{
-    attendanceCollectionId: Number
+  name: "GenerateInvolvementCodeDialog",
+  props: {
+    attendanceCollectionId: Number,
   },
   data() {
     return {
-      rules,
       time: 0,
       generatedCode: "",
     };
@@ -70,7 +62,7 @@ export default Vue.extend({
       this.$emit("close");
     },
     onSubmit: async function (): Promise<void> {
-      const result = await AttendanceCodeService.createAttendanceCode(
+      const result = await InvolvementCodeService.createInvolvementCode(
         this.time,
         this.attendanceCollectionId
       );
@@ -78,7 +70,7 @@ export default Vue.extend({
       if (typeof result !== "undefined") {
         this.generatedCode = `<b><h3>${result.code}</h3></b> (available until ${result.expirationDate})`;
       }
-    },
+    }
   },
 });
 </script>

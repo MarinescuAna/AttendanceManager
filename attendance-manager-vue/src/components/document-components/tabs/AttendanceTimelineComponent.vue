@@ -43,7 +43,7 @@
       </v-flex>
     </v-layout>
     <v-layout justify-center>
-      <v-btn color="black" dark @click="addAttendanceDateDialog = true">
+      <v-btn color="black" dark @click="addAttendanceDateDialog = true" v-if="isTeacher">
         Add attendance
       </v-btn></v-layout
     >
@@ -85,6 +85,8 @@ import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import AddAttendanceDateDialog from "@/components/document-components/dialogs/AddAttendanceDateDialog.vue";
 import AddAttendanceDialog from "@/components/document-components/dialogs/AddAttendanceDialog.vue";
+import AuthService from "@/services/auth.service";
+import { Role } from "@/shared/enums";
 
 export default Vue.extend({
   name: "AttendanceTimelineComponent",
@@ -110,6 +112,9 @@ export default Vue.extend({
     },
     documentId: function (): number {
       return storeHelper.documentStore.documentDetails.documentId;
+    },
+    isTeacher: function (): boolean {
+      return AuthService.getDataFromToken()?.role == Role[2];
     },
     isMobile: function (): boolean {
       return this.$vuetify.breakpoint.xs;

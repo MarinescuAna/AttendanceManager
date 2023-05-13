@@ -3,9 +3,9 @@ using AttendanceManager.Domain.Entities;
 
 namespace AttendanceManager.Persistance.Repositories
 {
-    public class AttendanceCodeRepository : GenericRepository<AttendanceCode>, IAttendanceCodeRepository
+    public class InvolvementCodeRepository : GenericRepository<InvolvementCode>, IInvolvementCodeRepository
     {
-        public AttendanceCodeRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
+        public InvolvementCodeRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
         {
         }
     }

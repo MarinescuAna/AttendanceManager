@@ -2,7 +2,7 @@
 
 namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
-    public interface IAttendanceCodeRepository : IGenericRepository<AttendanceCode>
+    public interface IInvolvementCodeRepository : IGenericRepository<InvolvementCode>
     {
     }
 }

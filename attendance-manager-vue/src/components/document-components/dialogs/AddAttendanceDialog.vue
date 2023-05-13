@@ -80,7 +80,7 @@
       width="50%"
       :fullscreen="isMobile"
     >
-      <GenerateAttendanceCodeDialog
+      <GenerateInvolvementCodeDialog
         :attendanceCollectionId="attendanceCollectionId"
         @close="generateCodeDialog = false"
       />
@@ -91,7 +91,7 @@
       width="50%"
       :fullscreen="isMobile"
     >
-      <UseGeneratedAttendanceCodeDialog
+      <UseInvolvementCodeDialog
         :attendanceId="currentUserAttendanceId"
         :attendanceCollectionId="attendanceCollectionId"
         @close="useCodeDialog = false"
@@ -109,18 +109,18 @@ import {
 import AttendanceService from "@/services/attendance.service";
 import Vue from "vue";
 import DotsMenuComponent from "@/components/shared-components/DotsMenuComponent.vue";
-import GenerateAttendanceCodeDialog from "@/components/document-components/dialogs/GenerateAttendanceCodeDialog.vue";
+import GenerateInvolvementCodeDialog from "@/components/document-components/dialogs/GenerateInvolvementCodeDialog.vue";
 import { Toastification } from "@/plugins/vue-toastification";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
-import UseGeneratedAttendanceCodeDialog from "./UseGeneratedAttendanceCodeDialog.vue";
+import UseInvolvementCodeDialog from "./UseInvolvementCodeDialog.vue";
 
 export default Vue.extend({
   name: "AddAttendanceDialog",
   components: {
     DotsMenuComponent,
-    GenerateAttendanceCodeDialog,
-    UseGeneratedAttendanceCodeDialog,
+    GenerateInvolvementCodeDialog,
+    UseInvolvementCodeDialog,
   },
   props: {
     /** The id of the selected attendance collection */

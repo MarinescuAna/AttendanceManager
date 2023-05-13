@@ -49,14 +49,14 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             unitOfWork.UserRepository.AddAsync(newUser);
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             //send email
             var message = new Message(newUser.Email, Constants.Subject, string.Format(Constants.Body, newUser.FullName, newUser.Email, newUser.Password), newUser.FullName);
             if (!await _mailService.SendEmail(message, new CancellationToken()))
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessageEmailSend);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return Unit.Value;

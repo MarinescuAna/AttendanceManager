@@ -41,11 +41,11 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
-        /// Update the attendances
+        /// Update the involvement by code
         /// </summary>
         /// <returns>Success: true/false</returns>
-        [HttpPatch("update_attendance_by_code_and_attendance_id")]
-        public async Task<IActionResult> UpdateAttendanceByCodeAndAttendanceId([FromBody] UpdateInvolvementByCodeAndIdCommand command)
+        [HttpPatch("update_involvement_by_code")]
+        public async Task<IActionResult> UpdateAttendanceByCode([FromBody] UpdateInvolvementByCodeAndIdCommand command)
         {
             return Ok(await mediator.Send(command));
         }

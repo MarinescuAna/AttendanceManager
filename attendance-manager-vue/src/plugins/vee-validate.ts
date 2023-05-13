@@ -1,10 +1,11 @@
 import { extend } from "vee-validate";
-import { required, email,  between, min } from "vee-validate/dist/rules";
+import { required, email,  between, min, length } from "vee-validate/dist/rules";
 
 extend("required", required);
 extend("email", email);
 extend("between", between);
 extend("min", min);
+extend("length", length);
 
 
 export const rules = {
@@ -25,14 +26,6 @@ export const rules = {
     },
     password:{
         required:true,
-        min: [6]
-    },
-    between_1_240:{
-        required:true,
-        between: [1,240]
-    },
-    min_6:{
-        required: true,
         min: [6]
     }
 };

@@ -4,7 +4,7 @@
       <v-form @submit.prevent="handleSubmit(onSubmit)">
         <v-layout column class="pa-2">
           <v-card-title>
-            <p>Use attendance code</p>
+            <p>Use involvement code</p>
             <v-spacer></v-spacer>
             <v-btn icon @click="onClose">
               <v-icon>mdi-close</v-icon>
@@ -14,12 +14,14 @@
             <validation-provider
               name="code"
               v-slot="{ errors }"
-              :rules="rules.min_6"
+              :rules="rules.required"
             >
               <v-text-field
                 v-model="code"
                 label="Enter the code"
                 :error-messages="errors"
+                maxlength="8"
+                minlength="6"
                 prepend-icon="mdi-lock"
               ></v-text-field>
             </validation-provider>
@@ -49,7 +51,7 @@ import AttendanceService from "@/services/attendance.service";
 import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
-  name: "UseGeneratedAttendanceCodeDialog",
+  name: "UseInvolvementCodeDialog",
   props: {
     attendanceId: Number,
     attendanceCollectionId: Number
@@ -66,8 +68,8 @@ export default Vue.extend({
     },
     onSubmit: async function (): Promise<void> {
       const result =
-        await AttendanceService.updateAttendanceByCodeAndAttendanceId({
-            attendanceCode: this.code,
+        await AttendanceService.updateAttendanceByCode({
+            code: this.code,
             attendanceId: this.attendanceId,
             attendanceCollectionId: this.attendanceCollectionId
         });

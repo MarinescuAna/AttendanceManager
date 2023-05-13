@@ -48,7 +48,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             // Save the members 
             if(!await unitOfWork.CommitAsync(request.StudentIds.Length))
             {
-                throw new SomethingWentWrongException("Something went wrong durig the saving process. Check the log files in order to see the error!");
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return new()

@@ -1,20 +1,24 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import https from "@/plugins/axios";
-import { ATTENDANCE_CODE } from "@/shared/constants";
+import { INVOLVEMENT_CODE } from "@/shared/constants";
 import { AxiosResponse } from "axios";
-import {AttendanceCodeInsertModule} from "@/modules/document/attendance-code";
 
-export default class AttendanceCodeService {
+type InvolvementCodeInsertModule = {
+    code: string;
+    expirationDate: string;
+}
+
+export default class InvolvementCodeService {
 
     /**
-     * Generate an attendance code
+     * Generate an involvement code
      * @param payload number of minutes
      * @returns undefinde if some errors occured or the new generated code and its expiration date
      */
-    static async createAttendanceCode(minutes: number, attendanceCollectionId: number): Promise<undefined | AttendanceCodeInsertModule> {
+    static async createInvolvementCode(minutes: number, attendanceCollectionId: number): Promise<undefined | InvolvementCodeInsertModule> {
         let isSuccess = true;
 
-        const result = await https.post(`${ATTENDANCE_CODE}/create_attendance_code?minutes=${minutes}&attendanceCollectionId=${attendanceCollectionId}`)
+        const result = await https.post(`${INVOLVEMENT_CODE}/create_code/${minutes}/${attendanceCollectionId}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

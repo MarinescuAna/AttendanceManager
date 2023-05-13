@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.AttendanceCollection.Commands.C
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             // get the current document
@@ -55,7 +55,7 @@ namespace AttendanceManager.Application.Features.AttendanceCollection.Commands.C
 
             if (!await unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(Constants.SomethingWentWrongMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             return attendanceCollection.AttendanceCollectionID;
