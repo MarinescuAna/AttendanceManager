@@ -1,7 +1,9 @@
-﻿using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendanceByCodeAndAttendanceId;
-using AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendances;
+﻿using AttendanceManager.Application.Dtos;
+using AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvementByCodeAndId;
+using AttendanceManager.Application.Features.Attendance.Commands.UpdateStudentsInvolvement;
 using AttendanceManager.Application.Features.Attendance.Queries.GetAttendanceByAttendanceCollectionID;
 using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
+using AttendanceManager.Persistance.UOW;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,11 +31,11 @@ namespace AttendanceManager.Api.Controllers
         }
 
         /// <summary>
-        /// Update the attendances
+        /// Use this API to update the list of students involvement
         /// </summary>
         /// <returns>Success: true/false</returns>
-        [HttpPatch("update_attendances")]
-        public async Task<IActionResult> UpdateAttendances([FromBody] UpdateAttendancesCommand command)
+        [HttpPatch("update_student_involvement")]
+        public async Task<IActionResult> UpdateStudentInvolvement([FromBody] UpdateStudentsInvolvementCommand command)
         {
             return Ok(await mediator.Send(command));
         }
@@ -43,7 +45,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: true/false</returns>
         [HttpPatch("update_attendance_by_code_and_attendance_id")]
-        public async Task<IActionResult> UpdateAttendanceByCodeAndAttendanceId([FromBody] UpdateAttendanceByCodeAndAttendanceIdCommand command)
+        public async Task<IActionResult> UpdateAttendanceByCodeAndAttendanceId([FromBody] UpdateInvolvementByCodeAndIdCommand command)
         {
             return Ok(await mediator.Send(command));
         }

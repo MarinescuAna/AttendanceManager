@@ -18,7 +18,7 @@ export default class AttendanceService {
     static async addStudentsAttendances(payload: StudentAttendanceInsertModule[]): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${ATTENDANCE_CONTROLLER}/update_attendances`, { students: payload } as StudentAttendancesInsertModule)
+        await https.patch(`${ATTENDANCE_CONTROLLER}/update_student_involvement`, { involvements: payload } as StudentAttendancesInsertModule)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

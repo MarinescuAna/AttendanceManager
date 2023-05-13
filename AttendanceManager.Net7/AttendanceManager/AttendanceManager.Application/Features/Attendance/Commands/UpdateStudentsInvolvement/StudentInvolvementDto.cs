@@ -1,6 +1,6 @@
-﻿namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateAttendances
+﻿namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStudentsInvolvement
 {
-    public sealed class StudentAttendanceDTO
+    public sealed class StudentInvolvementDto
     {
         public required int AttendanceID { get; init; }
         public required int BonusPoints { get; init; }

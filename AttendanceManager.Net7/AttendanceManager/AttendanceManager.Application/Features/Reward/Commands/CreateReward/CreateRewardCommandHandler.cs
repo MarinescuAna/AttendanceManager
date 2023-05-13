@@ -21,7 +21,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             // Check if the badge is already added
             if (await unitOfWork.RewardRepository.GetAsync(c => c.UserID == request.UserId && c.ReportID == request.ReportId && c.BadgeID == badge.BadgeID) != null)
             {
-                throw new AlreadyExistsException("Badge", request.BadgeType.ToString());
+                return true;
             }
 
             unitOfWork.RewardRepository.AddAsync(new() { 

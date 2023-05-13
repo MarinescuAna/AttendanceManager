@@ -23,7 +23,7 @@ export interface TotalAttendanceModule{
 }
 
 export interface StudentAttendancesInsertModule{
-    students: StudentAttendanceInsertModule[];
+    involvements: StudentAttendanceInsertModule[];
 }
 
 export interface StudentAttendanceModule{
