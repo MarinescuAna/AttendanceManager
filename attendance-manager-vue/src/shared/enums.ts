@@ -24,3 +24,10 @@ export enum CourseType{
     Laboratory = 2,
     Seminary = 3
 }
+
+export enum BadgeType{
+    Custom = 0,
+    FirstAttendance = 1,
+    LastAttendance = 2,
+    FirstReport = 3,
+}

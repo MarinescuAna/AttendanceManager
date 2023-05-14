@@ -37,6 +37,9 @@
       <v-tab-item>
         <DocumentMembersComponent />
       </v-tab-item>
+      <v-tab-item>
+        <RewardsComponent />
+      </v-tab-item>
       <v-tab-item v-if="isTeacher">
         <DocumentDashboardComponent />
       </v-tab-item>
@@ -59,6 +62,7 @@ import TotalAttendancesComponent from "@/components/document-components/tabs/Tot
 import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
 import SettingsDocumentComponent from "@/components/document-components/tabs/SettingsDocumentComponent.vue";
 import DocumentDashboardComponent from "@/components/document-components/tabs/DocumentDashboardComponent.vue";
+import RewardsComponent from "@/components/document-components/tabs/RewardsComponent.vue";
 import storeHelper from "@/store/store-helper";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
@@ -72,6 +76,7 @@ export default Vue.extend({
     DocumentMembersComponent,
     SettingsDocumentComponent,
     DocumentDashboardComponent,
+    RewardsComponent,
   },
   data: function () {
     return {
@@ -91,6 +96,7 @@ export default Vue.extend({
           "Attendances",
           "Total Attendances",
           "Peers",
+          "Rewards",
           "About",
         ];
       }
@@ -100,6 +106,7 @@ export default Vue.extend({
           "Attendances",
           "Total Attendances",
           "Collaborators",
+          "Rewards",
           "Statistics",
           "Settings",
           "About",
@@ -110,6 +117,7 @@ export default Vue.extend({
         "Attendances",
         "Total Attendances",
         "Collaborators",
+        "Rewards",
         "Statistics",
         "About",
       ];

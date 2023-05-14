@@ -1,4 +1,4 @@
-import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
+import { BadgeViewModule, DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import { StudentAttendanceModule } from "@/modules/document/attendance";
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 
@@ -28,5 +28,9 @@ export const documentGetter = {
     documentFiles(state): AttendanceCollectionViewModule[] {
         return typeof (state.currentDocument?.attendanceCollections) === "undefined" ? []
             : state.currentDocument?.attendanceCollections;
+    },
+    /** Get current user rewards related to the current document */
+    rewards(state): BadgeViewModule[] {
+        return state.currentDocument?.badges;
     }
 };

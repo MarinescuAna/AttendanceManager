@@ -1,6 +1,7 @@
 
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import {TotalAttendanceModule } from "./attendance";
+import { BadgeType } from "@/shared/enums";
 
 /** Use this view only for sending the collected data from the form used for creating a new document, to the API */
 export interface DocumentInsertModule{
@@ -69,6 +70,12 @@ export interface DocumentDashboardViewModule{
     attendancePercentage: DailyActivityModule[];
 }
 
+export interface BadgeViewModule{
+    imagePath: string;
+    type: BadgeType;
+    title: string;
+}
+
 /** This module is used in the document store to keep all the informations related to a document */
 export interface DocumentFullViewModule{
     documentId:number;
@@ -94,4 +101,5 @@ export interface DocumentFullViewModule{
     attendanceImportance: number;
     bonusPointsImportance: number;
     documentDashboard: DocumentDashboardViewModule;
+    badges: BadgeViewModule[];
 }

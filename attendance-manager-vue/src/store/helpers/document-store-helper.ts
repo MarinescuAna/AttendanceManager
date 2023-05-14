@@ -1,5 +1,5 @@
 
-import { DocumentFullViewModule, DocumentInsertModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
+import { BadgeViewModule, DocumentFullViewModule, DocumentInsertModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
@@ -23,6 +23,10 @@ export class DocumentStore {
     */
     public get studentsTotalAttendances(): StudentAttendanceModule[] {
         return this.store.getters[`${documentNamespace}/studentsTotalAttendances`];
+    }
+    /**Get rewards for the current document  */
+    public get rewards(): BadgeViewModule[]{
+        return this.store.getters[`${documentNamespace}/rewards`];
     }
     /**
      * Getter for fetching all the documents from the store, not from the API
