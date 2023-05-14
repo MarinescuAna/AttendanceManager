@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="text-h5">Add attendances</span>
+      <span class="text-h5">Add course activity</span>
     </v-card-title>
     <v-card-text>
       <v-layout class="pa-4" wrap>
@@ -10,7 +10,7 @@
         <v-select
           v-model="selectedCourseType"
           :items="courseType"
-          label="Course type"
+          label="Activity type"
           prepend-icon="mdi-school"
           required
         ></v-select>
@@ -68,7 +68,7 @@ export default Vue.extend({
       storeHelper.documentStore.documentDetails.noLessons <
       storeHelper.documentStore.documentDetails.maxNoLessons
     ) {
-      this.courseType.push(CourseType[CourseType.Lesson]);
+      this.courseType.push(CourseType[CourseType.Lecture]);
     }
     if (
       storeHelper.documentStore.documentDetails.noSeminaries <

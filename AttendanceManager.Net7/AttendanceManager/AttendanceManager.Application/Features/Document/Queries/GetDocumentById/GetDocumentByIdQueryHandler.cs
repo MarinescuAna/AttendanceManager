@@ -38,7 +38,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 NoSeminaries = attendanceCollectionsType.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
                 AttendanceCollections = mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
-                DocumentMembers = mapper.Map<DocumentMembersDto[]>(documentMembers),
+                DocumentMembers = mapper.Map<DocumentMembersDto[]>(request.Role == Role.Teacher? documentMembers?.Where(u=>u.User!.Role == Role.Teacher): documentMembers),
                 TotalAttendances = ComputeTotalAttendances(request.Role),
                 AttendanceImportance = currentDocument.AttendanceImportance,
                 BonusPointsImportance= currentDocument.BonusPointsImportance,

@@ -17,7 +17,7 @@ export const totalAttendancesHeader =[
         value: "userID",
     },
     {
-        text: "Course Attendances",
+        text: "Lecture Attendances",
         value: "courseAttendances",
     },
     {
@@ -52,7 +52,7 @@ export const studentAttendancesHeader = [
         value: "bonusPoints",
     },
     {
-        text: "Course Type",
+        text: "Activity Type",
         value: "courseType",
     },
 ];

@@ -8,7 +8,7 @@
     <br />
     <strong>Students' enrollment year:</strong>{{ document.enrollmentYear }}
     <br />
-    <strong>Maximum number of lessons that will be held:</strong>
+    <strong>Maximum number of lectures that will be held:</strong>
     {{ document.maxNoLessons }}({{ document.noLessons }} held by now)
     <br />
     <strong>Maximum number of laboratories that will be held:</strong>
@@ -17,9 +17,9 @@
     <strong>Maximum number of seminaries that will be held:</strong>
     {{ document.maxNoSeminaries }}({{ document.noSeminaries }} held by now)
     <br />
-    <strong>Attendance importance:</strong> {{ document.attendanceImportance }}%
+    <strong>Attendance weight:</strong> {{ document.attendanceImportance }}%
     <br />
-    <strong>Bonus points importance:</strong>
+    <strong>Bonus points weight:</strong>
     {{ document.bonusPointsImportance }}%
   </v-container>
 </template>

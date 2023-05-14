@@ -3,7 +3,7 @@
     <v-expansion-panels class="pa-1" inset>
       <v-expansion-panel>
         <v-expansion-panel-header class="font-weight-bold"
-          >Delete current document</v-expansion-panel-header
+          >Delete the current involvement report</v-expansion-panel-header
         >
         <v-expansion-panel-content>
           <v-layout justify-center class="ma-3">
@@ -40,13 +40,13 @@ export default Vue.extend({
     onDeleteDocument: async function (): Promise<void> {
       if (
         confirm(
-          "Are you sure that you want to delete this document? The process cannot be reverted!"
+          "Are you sure that you want to delete this report? The process cannot be reverted!"
         )
       ) {
         const result = await storeHelper.documentStore.deleteDocument();
 
         if (result) {
-          Toastification.success("The document was successfully deleted!");
+          Toastification.success("The report was successfully deleted!");
           this.$router.push({ name: "documents" });
         }
       }

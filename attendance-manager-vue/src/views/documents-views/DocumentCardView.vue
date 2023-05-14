@@ -18,8 +18,8 @@
         color="black"
         centered
       >
-        <v-tab> View created documents</v-tab>
-        <v-tab> View documents when you are collaborator</v-tab>
+        <v-tab> View created reports</v-tab>
+        <v-tab> View reports when you are collaborator</v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="currentTab" class="pa-3 remove-background-color">
@@ -83,12 +83,12 @@ export default Vue.extend({
       currentTab: 0,
       /** Message that should be displayed when the created documents list is empty */
       emptyCreatedDocumentsMessage:
-        "There are no documents that you create. If you want to create a document, go to <a href='\\create-document'>Create new document</a> page and complete the flow.",
+        "There are no reports that you create. If you want to create a involvement report, go to <a href='\\create-document'>Create new involvement report</a> page and complete the flow.",
       /** Message that should be displayed when the documents list where the user is collaborator is empty */
       emptyCollaboratorDocumentsMessage:
-        "There are no documents where you are a collaborator.",
+        "There are no involvement report where you are a collaborator.",
       /** Message that should be displayed when the student has no documents */
-      emptyStudentDocumentsMessage: "You are not member of any document yet.",
+      emptyStudentDocumentsMessage: "You are not member of any report yet.",
       /** Use this boolean to display the progress circular component */
       isLoading: true,
     };

@@ -39,7 +39,7 @@
         </div>
       </v-flex>
       <v-flex v-else>
-        <h3 class="pa-9">There is not file available!</h3>
+        <h3 class="pa-9">There is not collection available!</h3>
       </v-flex>
     </v-layout>
     <v-layout justify-center>

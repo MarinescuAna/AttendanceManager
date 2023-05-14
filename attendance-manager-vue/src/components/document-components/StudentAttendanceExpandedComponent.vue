@@ -15,10 +15,10 @@
         class="white--text"
         @click="onReload"
       >
-        Reload attendances
+        Reload involvements
       </v-btn>
     </v-flex>
-    <v-layout wrap>
+    <v-layout v-if="studentAttendances.length > 0" wrap>
       <v-simple-table class="ma-2">
         <template v-slot:default>
           <thead>
@@ -26,7 +26,7 @@
               <th class="text-left">Last Update</th>
               <th class="text-left">Attendance</th>
               <th class="text-left">Bonus Points</th>
-              <th class="text-left">Course Type</th>
+              <th class="text-left">Activity Type</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +57,7 @@
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left">Course Type</th>
+              <th class="text-left">Activity Type</th>
               <th class="text-left">Total attendances</th>
               <th class="text-left">Total points</th>
             </tr>
@@ -82,8 +82,18 @@
         </template>
       </v-simple-table>
     </v-layout>
+    <v-layout v-else>
+      <span class="i-message ma-3"> There is no activity.</span>
+    </v-layout>
   </v-layout>
 </template>
+
+<style scoped>
+.i-message{
+  font-size: 20px;
+  font-weight: bold;
+}
+</style>
 
 <script lang="ts">
 import Vue from "vue";
@@ -134,10 +144,10 @@ export default Vue.extend({
           : storeHelper.documentStore.studentsTotalAttendances;
     },
     attendanceLessons: function(): number{
-      return this._getTotal(CourseType.Lesson,true);
+      return this._getTotal(CourseType.Lecture,true);
     },
     bonusPointsLessons: function(): number{
-      return this._getTotal(CourseType.Lesson,false);
+      return this._getTotal(CourseType.Lecture,false);
     },
     attendanceLLaboratories: function(): number{
       return this._getTotal(CourseType.Laboratory,true);
@@ -206,7 +216,7 @@ export default Vue.extend({
 
         if (!response) {
           Toastification.simpleError(
-            "Something went wrong and not all the attendances was saved!"
+            "Something went wrong and not all the records was saved!"
           );
         }
       }

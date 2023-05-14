@@ -4,13 +4,13 @@
       <v-btn icon @click="onCloseDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-      <v-toolbar-title>Attendances - {{attendanceCollectionDate}}</v-toolbar-title>
+      <v-toolbar-title>Course activities - {{attendanceCollectionDate}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <DotsMenuComponent />
     </v-toolbar>
     <v-card-text>
       <v-btn class="blue-grey lighten-2 ma-2" v-if="isTeacher" disabled>
-        Upload attendance
+        Upload course activities
       </v-btn>
       <v-btn
         class="blue-grey lighten-2 ma-2"
@@ -69,7 +69,7 @@
       </v-simple-table>
       <div v-else>
         <h3>
-          There is no student here. Recreate the document or reload the page.
+          There is no student here. Recreate the involvement report or reload the page.
         </h3>
       </div>
     </v-card-text>

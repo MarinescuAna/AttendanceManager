@@ -4,18 +4,18 @@ export class MenuItems{
     // List with all the buttons that appear into the navigation drawer
     private static links: MenuChildModel[] = [
         {
-            title: "Create new document",
+            title: "Create new involvement report",
             icon: "mdi-plus-box",
             route: "create-document",
             role: Role.Teacher,
-            description: "Create a new document for logging the attendances for a specific course."
+            description: "Create a new involvement report for logging the activities for a specific course."
         },
         {
-            title: "View documents",
+            title: "View involvement reports",
             icon: "mdi-file-multiple",
             route: "documents",
             role: Role.Teacher,
-            description: "View all the documents that you created or the documents where you was added as collaborator."
+            description: "View all the involvement reports that you created or the involvement reports where you was added as collaborator."
         },
         {
             title: "Add single user",
@@ -39,11 +39,11 @@ export class MenuItems{
             description: "View all the users that are defined into the system."
         },
         {
-            title: "Subscribed activity",
+            title: "Subscribed involvement reports",
             icon: "mdi-file-multiple",
             route: "documents",
             role: Role.Student,
-            description: "View all the document where you are member."
+            description: "View all the involvement reports where you are member."
         },
         {
             icon: "mdi-folder",

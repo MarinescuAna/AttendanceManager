@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel>
     <v-expansion-panel-header class="font-weight-bold"
-      >Update the document information</v-expansion-panel-header
+      >Update the information of the current report</v-expansion-panel-header
     >
     <v-expansion-panel-content>
       <validation-observer ref="observer" v-slot="{ invalid, handleSubmit }">
@@ -18,7 +18,7 @@
                 counter
                 rows="2"
                 maxlength="128"
-                label="Document title"
+                label="Involvement report title"
                 prepend-icon="mdi-pencil"
                 :error-messages="errors"
                 required
@@ -39,14 +39,14 @@
             <v-layout row class="pa-3">
               <v-flex xs12 md4>
                 <validation-provider
-                  name="maximum number of lessons"
+                  name="maximum number of lectures"
                   v-slot="{ errors }"
                   :rules="rules.between_0_30"
                 >
                   <v-text-field
                     v-model="maxNoLessons"
                     type="number"
-                    label="Maximum number of lessons that will be held "
+                    label="Maximum number of lectures that will be held "
                     prepend-icon="mdi-numeric"
                     :error-messages="errors"
                     color="black"
@@ -92,14 +92,14 @@
             <v-layout row class="pa-3">
               <v-flex xs12 md4>
                 <validation-provider
-                  name="attendances importance percentage"
+                  name="attendances weight"
                   v-slot="{ errors }"
                   :rules="rules.between_0_100"
                 >
                   <v-text-field
                     v-model="attendanceImportance"
                     type="number"
-                    label="The percentage of attandance importance"
+                    label="Attendance weight (percentage)"
                     prepend-icon="mdi-numeric"
                     :error-messages="errors"
                     color="black"
@@ -109,14 +109,14 @@
               </v-flex>
               <v-flex xs12 md4>
                 <validation-provider
-                  name="bonus points importance percentage"
+                  name="bonus points weight"
                   v-slot="{ errors }"
                   :rules="rules.between_0_100"
                 >
                   <v-text-field
                     v-model="bonusPointImportance"
                     type="number"
-                    label="The percentage of bonus points importance"
+                    label="Bonus points weight (percentage)"
                     prepend-icon="mdi-numeric"
                     :error-messages="errors"
                     color="black"
@@ -144,7 +144,7 @@
                 invalid || !selectedCourse || computeImportancePercentage != 100
               "
             >
-              Update new data
+              Save
             </v-btn>
           </v-layout></v-form
         >

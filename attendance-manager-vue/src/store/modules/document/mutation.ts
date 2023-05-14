@@ -44,7 +44,7 @@ export const documentMutations = {
         if (payload.courseType == CourseType[CourseType.Laboratory]) {
             state.currentDocument.noLaboratories++;
         } else {
-            if (payload.courseType == CourseType[CourseType.Lesson]) {
+            if (payload.courseType == CourseType[CourseType.Lecture]) {
                 state.currentDocument.noLessons++;
             } else {
                 state.currentDocument.noSeminaries++;

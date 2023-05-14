@@ -90,7 +90,7 @@ export default Vue.extend({
         return [
           "Attendances",
           "Total Attendances",
-          "Members",
+          "Peers",
           "About",
         ];
       }
@@ -99,8 +99,8 @@ export default Vue.extend({
         return [
           "Attendances",
           "Total Attendances",
-          "Members",
-          "Dashboard",
+          "Collaborators",
+          "Statistics",
           "Settings",
           "About",
         ];
@@ -109,8 +109,8 @@ export default Vue.extend({
       return [
         "Attendances",
         "Total Attendances",
-        "Members",
-        "Dashboard",
+        "Collaborators",
+        "Statistics",
         "About",
       ];
     },

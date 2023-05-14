@@ -2,7 +2,7 @@
   <v-layout column>
     <v-flex class="my-3">
       <span class="text-h5 black--text font-weight-bold">
-        Add new attendances document</span
+        Add new involvement report</span
       >
     </v-flex>
     <v-flex>
@@ -10,7 +10,7 @@
         <!--Headers-->
         <v-stepper-header class="header-color">
           <v-stepper-step color="black" :complete="currentStep > 1" step="1">
-            Document details
+            Involvement report details
           </v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step color="black" :complete="currentStep > 2" step="2">
@@ -36,7 +36,7 @@
                     counter
                     rows="2"
                     maxlength="128"
-                    label="Document title"
+                    label="Report title"
                     prepend-icon="mdi-pencil"
                     :error-messages="errors"
                     required
@@ -64,7 +64,7 @@
                       <v-text-field
                         v-model="maxNoLessons"
                         type="number"
-                        label="Maximum number of lessons that will be held "
+                        label="Maximum number of lectures that will be held "
                         prepend-icon="mdi-numeric"
                         :error-messages="errors"
                         color="black"
@@ -117,7 +117,7 @@
                       <v-text-field
                         v-model="attendanceImportance"
                         type="number"
-                        label="The percentage of attandance importance"
+                        label="The percentage of attandance weight"
                         prepend-icon="mdi-numeric"
                         :error-messages="errors"
                         color="black"
@@ -134,7 +134,7 @@
                       <v-text-field
                         v-model="bonusPointImportance"
                         type="number"
-                        label="The percentage of bonus points importance"
+                        label="The percentage of bonus points weight"
                         prepend-icon="mdi-numeric"
                         :error-messages="errors"
                         color="black"
@@ -274,7 +274,7 @@
                   @click="onSubmit"
                   :disabled="selectedStudents.length == 0"
                 >
-                  Create document
+                  Create involvement report
                 </v-btn>
               </v-flex>
             </v-layout>
