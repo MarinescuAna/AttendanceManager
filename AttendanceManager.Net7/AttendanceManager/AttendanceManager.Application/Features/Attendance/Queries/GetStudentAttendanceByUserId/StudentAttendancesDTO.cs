@@ -1,6 +1,6 @@
 ﻿namespace AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId
 {
-    public sealed class StudentAttendancesDTO
+    public sealed class StudentAttendancesDto
     {
         public required int BonusPoints { get; init; }
         public required bool IsPresent { get; init; }

@@ -1,5 +1,6 @@
 ﻿
 using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
+using AttendanceManager.Domain.Enums;
 
 namespace AttendanceManager.Application.Dtos
 {
@@ -19,8 +20,15 @@ namespace AttendanceManager.Application.Dtos
         public required string CreatedBy { get; init; }
         public required AttendanceCollectionDto[] AttendanceCollections { get; init; }
         public required DocumentMembersDto[] DocumentMembers { get; init; }
-        public StudentAttendancesDTO[]? CurrentStudentAttendances { get; set; }
-        public required TotalAttendanceDTO[] TotalAttendances { get; init; }
+        public StudentAttendancesDto[]? CurrentStudentAttendances { get; set; }
+        public required TotalAttendanceDto[] TotalAttendances { get; init; }
+        public required BadgeDto[]? Badges { get; init; }
+    }
+    public class BadgeDto
+    {
+        public required string ImagePath { get; init; }
+        public required string Title { get; init; }
+        public required BadgeType Type { get; init; }
     }
 
     public class AttendanceCollectionDto
@@ -30,7 +38,7 @@ namespace AttendanceManager.Application.Dtos
         public required string CourseType { get; init; }
     }
 
-    public sealed class TotalAttendanceDTO
+    public sealed class TotalAttendanceDto
     {
         public required string UserID { get; init; }
         public required string UserName { get; init; }

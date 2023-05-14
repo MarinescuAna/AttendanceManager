@@ -31,6 +31,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                {
                    BadgeID = 1,
                    Title = "First attendance",
+                   ImagePath = "first_attendance.jpg",
                    BadgeType = Domain.Enums.BadgeType.FirstAttendance
                }
            );

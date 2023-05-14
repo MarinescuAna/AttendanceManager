@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 
@@ -10,6 +11,7 @@ namespace AttendanceManager.Application.Features
         protected static Domain.Entities.Document? currentDocument;
         protected static Dictionary<int, CourseType>? attendanceCollectionsType;
         protected static List<Domain.Entities.DocumentMember>? documentMembers;
+        protected static Badge[]? documentBadges;
         public BaseDocumentFeature(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
@@ -34,6 +36,8 @@ namespace AttendanceManager.Application.Features
 
             // get a list with all the members 
             documentMembers = await unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(documentId, null);
+
+            documentBadges = (await unitOfWork.RewardRepository.GetRewardsAsync(r => r.ReportID == documentId)).Select(r=>r.Badge!).ToArray();
         }
 
 

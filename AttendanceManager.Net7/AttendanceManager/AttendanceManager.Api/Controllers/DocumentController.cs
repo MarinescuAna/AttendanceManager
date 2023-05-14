@@ -42,7 +42,8 @@ namespace AttendanceManager.Api.Controllers
             var document = await mediator.Send(new GetDocumentByIdQuery()
             {
                 Id = id,
-                Role = UserRole
+                Role = UserRole,
+                UserId = UserEmail
             });
 
             // load current student attendances instead of all members attendances in case that the user is student
