@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="ma-2" v-if="rewards.length > 0">
+  <v-layout class="ma-2" v-if="rewards?.length > 0">
     <BadgeComponent
       v-for="badge in rewards"
       :key="badge.title"
