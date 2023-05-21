@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvementByCodeAndId;
 using AttendanceManager.Application.Features.Attendance.Commands.UpdateStudentsInvolvement;
 using AttendanceManager.Application.Features.Attendance.Queries.GetAttendanceByAttendanceCollectionID;
+using AttendanceManager.Application.Features.Attendance.Queries.GetInvolvementsByReportId;
 using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
 using AttendanceManager.Persistance.UOW;
 using MediatR;
@@ -15,6 +16,16 @@ namespace AttendanceManager.Api.Controllers
     {
         public AttendanceController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
+        }
+
+        /// <summary>
+        /// Get all the involvements for the given report
+        /// </summary>
+        /// <returns>Success: list with all involvements</returns>
+        [HttpGet("involvements")]
+        public async Task<IActionResult> GetInvolvementsForDocument()
+        {
+            return Ok(await mediator.Send(new GetInvolvementsByReportIdQuery()));
         }
 
         /// <summary>

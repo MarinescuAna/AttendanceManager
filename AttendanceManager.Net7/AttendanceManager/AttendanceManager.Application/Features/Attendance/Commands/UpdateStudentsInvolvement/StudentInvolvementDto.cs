@@ -4,6 +4,7 @@
     {
         public required int AttendanceID { get; init; }
         public required int BonusPoints { get; init; }
+        public required string UserId { get; init; }
         public required bool IsPresent { get; init; }
     }
 }

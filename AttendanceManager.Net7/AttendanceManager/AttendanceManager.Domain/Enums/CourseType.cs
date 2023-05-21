@@ -2,7 +2,7 @@
 {
     public enum CourseType
     {
-        Lesson = 1,
+        Lecture = 1,
         Laboratory = 2,
         Seminary = 3
     }

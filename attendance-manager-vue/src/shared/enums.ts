@@ -20,6 +20,7 @@ export enum ManagementDataType{
 }
 
 export enum CourseType{
+    None = 0,
     Lecture = 1,
     Laboratory = 2,
     Seminary = 3

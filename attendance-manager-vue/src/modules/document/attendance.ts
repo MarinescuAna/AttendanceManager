@@ -10,6 +10,7 @@ export interface StudentAttendanceInsertModule{
     attendanceID: number;
     bonusPoints: number;
     isPresent: boolean;
+    userId:string;
 }
 
 export interface TotalAttendanceModule{
@@ -23,6 +24,7 @@ export interface TotalAttendanceModule{
 }
 
 export interface StudentAttendancesInsertModule{
+    reportId: number;
     involvements: StudentAttendanceInsertModule[];
 }
 

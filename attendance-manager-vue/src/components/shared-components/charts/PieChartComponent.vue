@@ -13,10 +13,10 @@
     </v-flex>
     <VueApexCharts
       width="1000"
-      type="line"
+      type="pie"
       class="ma-3"
       :options="chartOptions"
-      :series="chartData"
+      :series="series"
     ></VueApexCharts>
   </v-layout>
 </template>
@@ -25,28 +25,29 @@
 .one-row {
   display: -webkit-box;
 }
-</style>
-  <script lang="ts">
+</style>   
+
+<script lang="ts">
 import Vue from "vue";
 import VueApexCharts from "vue-apexcharts";
 
 export default Vue.extend({
-  name: "LineChartComponent",
+  name: "PieChartComponent",
   components: { VueApexCharts },
   props: {
-    /** Data to display in the bar chart*/
-    chartData: {
+    /** Data to display in the pie chart*/
+    dataSeries: {
       type: Array,
-      required: true,
+      //required: true,
       default: () => [],
     },
-    /** Data to display in the bar chart*/
-    xAxiesLabels: {
+    /** Data to display in the pie chart*/
+    labels: {
       type: Array,
-      required: true,
+      //required: true,
       default: () => [],
     },
-    /** The title of the bar chart */
+    /** The title of the pie chart */
     title: {
       type: String,
       required: true,
@@ -59,19 +60,16 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      series: this.dataSeries,
       chartOptions: {
         chart: {
-          type: "line",
+          type: "pie",
         },
-        stroke: {
-          curve: "straight",
-        },
-        dataLabels: {
-          enabled: true,
-        },
-        xaxis: {
-          categories: this.xAxiesLabels,
-        },
+        labels: this.labels,
+        legend: {
+        position: 'bottom',
+        fontSize: '14px' // Adjust the font size as desired
+      }
       },
     };
   },

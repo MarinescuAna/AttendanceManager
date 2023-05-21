@@ -33,7 +33,6 @@ namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertC
             // add the new teacher as collaborator
             unitOfWork.DocumentMemberRepository.AddAsync(new Domain.Entities.DocumentMember { 
                 DocumentID = request.DocumentId,
-                Role = Domain.Enums.DocumentRole.Collaborator,
                 UserID = request.Email
             });
 

@@ -55,7 +55,7 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
                 var attendances = student.User!.Attendances!.Where(a => a.IsPresent && attendanceCollectionsType!.ContainsKey(a.AttendanceCollectionID));
 
                 // compute the max bonus point for all type of courses in order cu compute the total_possible_score
-                var lessonBonusPoints = attendances.Where(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lesson).Sum(a => a.BonusPoints);
+                var lessonBonusPoints = attendances.Where(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lecture).Sum(a => a.BonusPoints);
                 if (lessonBonusPoints > maxBonusPoints.lesson)
                 {
                     maxBonusPoints.lesson = lessonBonusPoints;
@@ -78,7 +78,7 @@ namespace AttendanceManager.Application.Features.Dashboard.Helpers
                 {
                     Email = student.UserID,
                     StudentName = student.User!.FullName,
-                    LessonValue = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lesson && a.IsPresent)
+                    LessonValue = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lecture && a.IsPresent)
                         + currentDocument!.BonusPointsImportance * lessonBonusPoints,
                     LaboratoryValue = currentDocument!.AttendanceImportance * attendances.Count(a => attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory && a.IsPresent)
                         + currentDocument!.BonusPointsImportance * laboratoryBonusPoints,

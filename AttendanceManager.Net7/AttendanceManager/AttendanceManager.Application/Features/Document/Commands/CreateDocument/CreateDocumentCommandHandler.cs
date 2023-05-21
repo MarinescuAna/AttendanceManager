@@ -41,7 +41,6 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
                 {
                     DocumentID = newDocument.DocumentId,
                     UserID = user,
-                    Role = Domain.Enums.DocumentRole.Member
                 });
             }
 

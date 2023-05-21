@@ -1,6 +1,6 @@
 <template>
   <VueApexCharts
-    width="1000"
+    width="1500"
     type="bar"
     class="ma-3"
     :options="chartOptions"
@@ -32,16 +32,23 @@ export default Vue.extend({
     title: {
       type: String,
       required: true,
+    },
+    /** Display the chart on horizontal */
+    horizontal: {
+      type: Boolean,
+      default: false,
     }
   },
   data: function () {
     return {
       chartOptions: {
-        chart: {
-          stacked: true
-        },
         title: {
           text: this.title,
+        },
+        plotOptions: {
+          bar: {
+            horizontal: this.horizontal,
+          }
         },
         xaxis: {
           categories: this.xAxiesLabels,

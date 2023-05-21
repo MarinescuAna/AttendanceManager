@@ -156,6 +156,7 @@ export default Vue.extend({
    * opened document  will be related  to the previously opened document */
   destroyed: function (): void {
     storeHelper.documentStore.resetCurrentDocumentStore();
+    storeHelper.involvementStore.resetInvolvementStore();
   },
 });
 </script>

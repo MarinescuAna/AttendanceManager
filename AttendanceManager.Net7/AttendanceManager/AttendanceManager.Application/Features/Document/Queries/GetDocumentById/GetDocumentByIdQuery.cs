@@ -40,7 +40,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 Title = currentDocument.Title,
                 UpdatedOn = currentDocument.UpdatedOn.ToString(Constants.DateFormat),
                 NoLaboratories = attendanceCollectionsType!.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Laboratory).Count(),
-                NoLessons = attendanceCollectionsType.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Lesson).Count(),
+                NoLessons = attendanceCollectionsType.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Lecture).Count(),
                 NoSeminaries = attendanceCollectionsType.Count == 0 ? 0 : attendanceCollectionsType.Where(ca => ca.Value == CourseType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
                 AttendanceCollections = mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
@@ -69,7 +69,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                     UserName = userRole == Role.Teacher ? students[i].User!.FullName : string.Empty,
                     Code = students[i].User!.Code,
                     BonusPoints = userAttendances.Sum(a => a.BonusPoints),
-                    CourseAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lesson).Count(),
+                    CourseAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lecture).Count(),
                     LaboratoryAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory).Count(),
                     SeminaryAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Seminary).Count(),
                 };
