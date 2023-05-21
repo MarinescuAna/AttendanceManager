@@ -6,6 +6,7 @@ namespace AttendanceManager.Domain.Entities
     public class Reward
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RewardID { get; set; }
         [ForeignKey("Badge")]
         public int BadgeID { get; set; }

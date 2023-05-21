@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AttendanceManager.Domain.Entities
 {
     /// <summary>
-    /// No need to inherit EntityBase 
     /// Collection of attendances
     /// </summary>
     public class AttendanceCollection
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AttendanceCollectionID { get; set; }
         [ForeignKey("Document")]
         public required int DocumentID { get; set; }

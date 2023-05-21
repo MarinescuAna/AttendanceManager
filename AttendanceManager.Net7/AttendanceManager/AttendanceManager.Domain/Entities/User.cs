@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AttendanceManager.Domain.Entities
 {
-    public sealed class User: EntityBase
+    public sealed class User
     {
         [MaxLength(254)]
         [Key]
@@ -19,6 +19,8 @@ namespace AttendanceManager.Domain.Entities
         public required string Code { get; set; }
         [MaxLength(64)]
         public string? RefreshToken { get; set; }
+        public required DateTime CreatedOn { get; set; }
+        public required DateTime UpdatedOn { get; set; }
         public DateTime? ExpRefreshToken { get; set; }
         public required bool AccountConfirmed { get; set; }
         public bool IsDeleted { get; set; } = false;

@@ -6,6 +6,7 @@ namespace AttendanceManager.Domain.Entities
     public class UserSpecialization
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserSpecializationID { get; set; }
         [ForeignKey("User")]
         [MaxLength(254)]
