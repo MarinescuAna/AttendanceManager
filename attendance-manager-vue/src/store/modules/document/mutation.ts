@@ -1,4 +1,4 @@
-import { DocumentDashboardViewModule, DocumentFullViewModule, DocumentMembersViewModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentMembersViewModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { CourseType } from "@/shared/enums";
 import { initializeDocumentState } from ".";
@@ -17,10 +17,6 @@ export const documentMutations = {
      */
     _documentDetails(state, payload: DocumentFullViewModule): void {
         state.currentDocument = payload;
-    },
-    /** Update document dashboard on demand */
-    _documentDashboard(state, payload: DocumentDashboardViewModule): void {
-        state.currentDocument.documentDashboard = payload;
     },
     /**
  * Update some information related to the current document

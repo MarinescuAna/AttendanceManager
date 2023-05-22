@@ -64,12 +64,6 @@ export class DocumentStore {
     public async loadStudentTotalAttendances(payload: string|null, reload: boolean ): Promise<boolean>{
         return await this.store.dispatch(`${documentNamespace}/loadStudentTotalAttendances`, { email: payload, reload: reload})
     }
-    /**
-     * Load the current document dashboard
-    */
-    public async loadDocumentDashboard(): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/loadDocumentDashboard`);
-    }
 
     /** Use this method to update the document information */
     public async updateDocument(payload: { module: DocumentUpdateModule, newCourseName: string }): Promise<boolean> {

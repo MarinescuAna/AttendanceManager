@@ -3,7 +3,7 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentViewModule, DocumentUpdateModule, DocumentInsertModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
-import { ATTENDANCE_COLLECTION_CONTROLLER, ATTENDANCE_CONTROLLER, DASHBOARD_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import { ATTENDANCE_COLLECTION_CONTROLLER, ATTENDANCE_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 // actions for this store
@@ -53,25 +53,6 @@ export const documentActions = {
                 } as DocumentViewModule);
             }
         return isSuccess;
-    },
-    /**
- * Load document dashboard
- */
-    async loadDocumentDashboard({ commit, state }): Promise<boolean> {
-        if (typeof (state.currentDocument.documentDashboard) === "undefined") {
-            let isSuccess = true;
-
-            const result = await https.get(`${DASHBOARD_CONTROLLER}/document_dashboard/${state.currentDocument.documentId}`,)
-                .catch(error => {
-                    isSuccess = ResponseHandler.errorResponseHandler(error);
-                });
-
-            if (isSuccess) {
-                commit("_documentDashboard", (result as AxiosResponse).data as DocumentViewModule[]);
-            }
-        }
-
-        return true;
     },
     /**
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one

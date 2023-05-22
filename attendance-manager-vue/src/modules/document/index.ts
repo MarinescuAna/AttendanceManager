@@ -47,29 +47,6 @@ export interface DocumentMembersViewModule{
     name: string;
 }
 
-/** Use this in order to display the data related to document activity*/
-export interface DocumentDashboardItemsModule{
-    email: string;
-    studentName: string;
-    lessonValue: number;
-    laboratoryValue: number;
-    seminaryValue: number;
-}
-
-/** Use this in order to display the percentage of students that attend a course */
-export interface DailyActivityModule{
-    attendanceCollectionId: number;
-    datetime: string;
-    percentage: number;
-    courseType: string;
-}
-
-/** Use this to display the dashboard for a document */
-export interface DocumentDashboardViewModule{
-    studentInterests: DocumentDashboardItemsModule[];
-    attendancePercentage: DailyActivityModule[];
-}
-
 export interface BadgeViewModule{
     imagePath: string;
     type: BadgeType;
@@ -100,6 +77,5 @@ export interface DocumentFullViewModule{
     totalAttendances: TotalAttendanceModule[];
     attendanceImportance: number;
     bonusPointsImportance: number;
-    documentDashboard: DocumentDashboardViewModule;
     badges: BadgeViewModule[];
 }
