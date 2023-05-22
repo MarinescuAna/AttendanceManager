@@ -1,31 +1,13 @@
 <template>
-  <v-layout column>
-    <v-flex class="one-row">
-      <h3>{{ title }}</h3>
-      <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon v-bind="attrs" v-on="on" class="ma-1"
-            >mdi-alert-circle</v-icon
-          >
-        </template>
-        <span v-html="description == '' ? title : description"></span>
-      </v-tooltip>
-    </v-flex>
-    <VueApexCharts
-      width="1000"
-      type="line"
-      class="ma-3"
-      :options="chartOptions"
-      :series="chartData"
-    ></VueApexCharts>
-  </v-layout>
+  <VueApexCharts
+    width="1000"
+    type="line"
+    class="ma-3"
+    :options="chartOptions"
+    :series="values"
+  ></VueApexCharts>
 </template>
 
-<style scoped>
-.one-row {
-  display: -webkit-box;
-}
-</style>
   <script lang="ts">
 import Vue from "vue";
 import VueApexCharts from "vue-apexcharts";
@@ -35,26 +17,16 @@ export default Vue.extend({
   components: { VueApexCharts },
   props: {
     /** Data to display in the bar chart*/
-    chartData: {
+    values: {
       type: Array,
       required: true,
       default: () => [],
     },
     /** Data to display in the bar chart*/
-    xAxiesLabels: {
+    labels: {
       type: Array,
       required: true,
       default: () => [],
-    },
-    /** The title of the bar chart */
-    title: {
-      type: String,
-      required: true,
-    },
-    /**Explanatio regrding the current data from the diagram */
-    description: {
-      type: String,
-      default: "",
     },
   },
   data: function () {
@@ -70,7 +42,7 @@ export default Vue.extend({
           enabled: true,
         },
         xaxis: {
-          categories: this.xAxiesLabels,
+          categories: this.labels,
         },
       },
     };

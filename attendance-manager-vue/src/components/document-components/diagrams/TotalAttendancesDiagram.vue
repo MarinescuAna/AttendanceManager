@@ -1,6 +1,9 @@
 <template>
   <v-layout column>
-    <h2>Attendance percentage per day</h2>
+    <TitleWithInfoComponent
+      title="Total attendances acumulated by each student for selected activity"
+      description="The diagram consists into all the attendances acumulated by each students, grouped by the total attendance."
+    />
     <v-select
       @change="onSelectionChanged"
       v-model="selectedActivityType"
@@ -16,10 +19,8 @@
     ></v-select>
     <PieChartComponent
       v-if="chartData != null"
-      description="The diagram consists into all the attendances acumulated by each students, grouped by the total attendance."
-      :dataSeries="chartData.values"
+      :values="chartData.values"
       :labels="chartData.labels"
-      title="Total attendances acumulated by each student for selected activity"
       class="move-behind"
     />
     <MessageComponent
@@ -37,13 +38,14 @@
 </style>
 
 <script lang="ts">
+import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
 import PieChartComponent from "@/components/shared-components/charts/PieChartComponent.vue";
 import { CourseType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 export default Vue.extend({
   name: "TotalAttendancesDiagram",
-  components: { PieChartComponent },
+  components: { PieChartComponent, TitleWithInfoComponent },
   data: function () {
     return {
       selectedActivityType: CourseType.None,
@@ -64,20 +66,18 @@ export default Vue.extend({
   },
   methods: {
     onSelectionChanged: function (): void {
-        this.chartData = null!;
+      this.chartData = null!;
       this.chartData = this._computeTotalAttendances(
         this.selectedActivityType["id"]
       );
-      console.log(this.chartData);
-      
     },
     /**Count all the attendances per each student and group them by values */
     _computeTotalAttendances: function (type: CourseType): {
       labels: string[];
       values: number[];
     } {
-        console.log(type == CourseType.None);
-        
+      console.log(type == CourseType.None);
+
       const involvements =
         type == CourseType.None
           ? storeHelper.involvementStore.involvements

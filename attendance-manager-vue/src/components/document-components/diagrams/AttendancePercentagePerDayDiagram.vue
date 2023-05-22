@@ -1,6 +1,9 @@
 <template>
   <v-layout column>
-    <h2>Attendance percentage per day</h2>
+    <TitleWithInfoComponent
+      title="Attendance percentage per day for selected activity"
+      description="The values represents the persentage of users attendance per day computed as follow: <br/> <strong>percent = number_of_attedances_per_day/total_students*100</strong>"
+    />
     <v-select
       @change="onSelectionChanged"
       v-model="selectedActivityType"
@@ -16,13 +19,15 @@
     ></v-select>
     <LineChartComponent
       v-if="diagramData != null"
-      :chartData="diagramData.value"
-      description="The values represents the persentage of users attendance per day computed as follow: <br/> <strong>percent = number_of_attedances_per_day/total_students*100</strong>"
-      :xAxiesLabels="diagramData.labels"
-      title="Attendance percentage per day for selected activity"
+      :values="diagramData.value"
+      :labels="diagramData.labels"
       class="move-behind"
     />
-    <MessageComponent icon="mdi-information-variant-circle-outline" description="<strong>There is no data for this type of activity!</strong>" v-else />
+    <MessageComponent
+      icon="mdi-information-variant-circle-outline"
+      description="<strong>There is no data for this type of activity!</strong>"
+      v-else
+    />
   </v-layout>
 </template>
 <style scoped>
@@ -32,6 +37,7 @@
 </style>
 <script lang="ts">
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
+import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
 import LineChartComponent from "@/components/shared-components/charts/LineChartComponent.vue";
 import { CourseType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
@@ -39,7 +45,7 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "AttendancePercentagePerDayDiagram",
-  components: { LineChartComponent, MessageComponent },
+  components: { LineChartComponent, MessageComponent, TitleWithInfoComponent },
   data: function () {
     return {
       selectedActivityType: CourseType.Lecture,
@@ -53,30 +59,6 @@ export default Vue.extend({
         labels: [] as string[],
       },
     };
-  },
-  computed: {
-    /**
-     * Compute the percentage of students that attend a course
-     * NOTE:
-     * Take the number of attendances for each day, divide by the number of students
-     * that are supposed to attend that course on that day, and then multiply by 100 to get the percentage
-     */
-    attendancePercentagePerDay: function (): object {
-      return [
-        {
-          name: "Attendance percentage per day for all activity",
-          type: "column",
-          data: storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage.map(
-            (d) => d.percentage
-          ),
-        },
-      ];
-    },
-    attendancePercentageLabels: function (): string[] {
-      return storeHelper.documentStore.documentDetails.documentDashboard.attendancePercentage.map(
-        (d) => d.datetime
-      );
-    },
   },
   created: function (): void {
     this.diagramData = this._computePercentagePerActivityType(

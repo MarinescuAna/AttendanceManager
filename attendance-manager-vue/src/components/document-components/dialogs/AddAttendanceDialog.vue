@@ -114,6 +114,7 @@ import { Toastification } from "@/plugins/vue-toastification";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import UseInvolvementCodeDialog from "./UseInvolvementCodeDialog.vue";
+import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
   name: "AddAttendanceDialog",
@@ -212,13 +213,17 @@ export default Vue.extend({
             attendanceID: student.attendanceId,
             bonusPoints: student.bonusPoints,
             isPresent: student.isPresent,
+            userId: student.userId
           } as StudentAttendanceInsertModule);
         }
       });
 
       if (studentsChanged.length !== 0) {
         const response = await AttendanceService.addStudentsAttendances(
-          studentsChanged
+          {
+            involvements: studentsChanged,
+            reportId: storeHelper.documentStore.documentDetails.documentId
+          }
         );
 
         if (!response) {

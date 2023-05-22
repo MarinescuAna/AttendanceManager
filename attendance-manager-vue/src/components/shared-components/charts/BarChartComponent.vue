@@ -1,10 +1,10 @@
 <template>
   <VueApexCharts
-    width="1500"
+    width="1000"
     type="bar"
     class="ma-3"
     :options="chartOptions"
-    :series="chartData"
+    :series="values"
   ></VueApexCharts>
 </template>
 
@@ -17,41 +17,23 @@ export default Vue.extend({
   components: { VueApexCharts },
   props: {
     /** Data to display in the bar chart*/
-    chartData: {
+    values: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     /** Data to display in the bar chart*/
-    xAxiesLabels: {
+    labels: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
-    /** The title of the bar chart */
-    title: {
-      type: String,
-      required: true,
-    },
-    /** Display the chart on horizontal */
-    horizontal: {
-      type: Boolean,
-      default: false,
-    }
   },
   data: function () {
     return {
       chartOptions: {
-        title: {
-          text: this.title,
-        },
-        plotOptions: {
-          bar: {
-            horizontal: this.horizontal,
-          }
-        },
         xaxis: {
-          categories: this.xAxiesLabels,
+          categories: this.labels,
         },
       },
     };

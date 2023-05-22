@@ -211,7 +211,10 @@ export default Vue.extend({
 
       if (studentsChanged.length !== 0) {
         const response = await AttendanceService.addStudentsAttendances(
-          studentsChanged
+          {
+            involvements: studentsChanged,
+            reportId: storeHelper.documentStore.documentDetails.documentId
+          }
         );
 
         if (!response) {
