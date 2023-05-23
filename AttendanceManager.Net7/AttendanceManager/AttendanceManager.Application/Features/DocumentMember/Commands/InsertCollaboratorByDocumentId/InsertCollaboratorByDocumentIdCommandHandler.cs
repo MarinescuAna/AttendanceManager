@@ -41,8 +41,7 @@ namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertC
                 return new()
                 {
                     Email = request.Email,
-                    Name = user.FullName,
-                    Role = Domain.Enums.DocumentRole.Collaborator.ToString()
+                    Name = user.FullName
                 };
             }
 

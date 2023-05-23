@@ -6,10 +6,4 @@
         Student,
         Teacher
     }
-
-    public enum DocumentRole
-    {
-        Member,
-        Collaborator
-    }
 }
