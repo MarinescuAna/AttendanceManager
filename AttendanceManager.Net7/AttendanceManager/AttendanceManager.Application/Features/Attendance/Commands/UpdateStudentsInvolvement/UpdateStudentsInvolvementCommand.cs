@@ -1,8 +1,8 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
-using AttendanceManager.Core.Shared;
 using AttendanceManager.Domain.Enums;
+using AttendanceManager.Domain.Common;
 using AutoMapper;
 using MediatR;
 

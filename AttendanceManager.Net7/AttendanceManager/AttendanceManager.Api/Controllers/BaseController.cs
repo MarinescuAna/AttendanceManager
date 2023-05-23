@@ -1,4 +1,4 @@
-﻿using AttendanceManager.Core.Shared;
+﻿using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

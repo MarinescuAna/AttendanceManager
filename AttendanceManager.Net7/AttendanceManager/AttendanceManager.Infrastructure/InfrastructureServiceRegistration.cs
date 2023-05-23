@@ -1,8 +1,10 @@
 ﻿
 using AttendanceManager.Application.Contracts.Infrastructure.Authentication;
+using AttendanceManager.Application.Contracts.Infrastructure.Logging;
 using AttendanceManager.Application.Contracts.Infrastructure.Mail;
 using AttendanceManager.Application.Contracts.Infrastructure.Rewards;
 using AttendanceManager.Infrastructure.Authentication;
+using AttendanceManager.Infrastructure.Logging;
 using AttendanceManager.Infrastructure.Mail;
 using AttendanceManager.Infrastructure.Rewards;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,6 +24,7 @@ namespace AttendanceManager.Infrastructure
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IJsonWebTokenService, JsonWebTokenService>();
             services.AddTransient<IMailService, MailService>();
+            services.AddTransient<ILoggingService, LoggingService>();
 
             AddAuthentication(services, configuration);
         }

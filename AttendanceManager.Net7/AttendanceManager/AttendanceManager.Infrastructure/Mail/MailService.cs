@@ -1,6 +1,6 @@
-﻿using AttendanceManager.Application.Contracts.Infrastructure.Mail;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Logging;
+using AttendanceManager.Application.Contracts.Infrastructure.Mail;
 using AttendanceManager.Application.Models.Mail;
-using AttendanceManager.Infrastructure.Shared.Logger;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -10,8 +10,10 @@ namespace AttendanceManager.Infrastructure.Mail
     public sealed class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
-        public MailService(IOptions<MailSettings> options)
+        private readonly ILoggingService _loggingService;
+        public MailService(IOptions<MailSettings> options, ILoggingService loggingService)
         {
+            _loggingService = loggingService;
             _mailSettings = options.Value;
         }
 
@@ -41,7 +43,7 @@ namespace AttendanceManager.Infrastructure.Mail
                 }
                 catch (Exception ex)
                 {
-                    LoggerSerivce.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+                    _loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
                     return false;
                 }
                 finally

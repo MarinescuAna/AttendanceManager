@@ -1,4 +1,5 @@
-﻿using AttendanceManager.Application.Contracts.Persistance.Repositories;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Logging;
+using AttendanceManager.Application.Contracts.Persistance.Repositories;
 using AttendanceManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace AttendanceManager.Persistance.Repositories
 {
     public class AttendanceCollectionRepository : GenericRepository<AttendanceCollection>, IAttendanceCollectionRepository
     {
-        public AttendanceCollectionRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
+        public AttendanceCollectionRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext,loggingService)
         {
         }
 

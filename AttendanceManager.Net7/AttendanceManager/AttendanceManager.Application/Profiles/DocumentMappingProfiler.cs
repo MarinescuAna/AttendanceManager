@@ -1,5 +1,5 @@
 ﻿using AttendanceManager.Application.Dtos;
-using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Entities;
 using AutoMapper;
 

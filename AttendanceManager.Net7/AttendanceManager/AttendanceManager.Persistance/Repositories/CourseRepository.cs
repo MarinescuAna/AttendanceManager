@@ -1,13 +1,14 @@
-﻿using AttendanceManager.Application.Contracts.Persistance.Repositories;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Logging;
+using AttendanceManager.Application.Contracts.Persistance.Repositories;
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Infrastructure.Shared.Logger;
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceManager.Persistance.Repositories
 {
     public class CourseRepository : GenericRepository<Course>, ICourseRepository
     {
-        public CourseRepository(AttendanceManagerDbContext dbContext) : base(dbContext)
+        
+        public CourseRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext,loggingService)
         {
         }
         public async Task<List<Course>> GetTeacherCoursesByEmailAsync(string email)
@@ -40,7 +41,7 @@ namespace AttendanceManager.Persistance.Repositories
             }
             catch (Exception ex)
             {
-                LoggerSerivce.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+                loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
                 return false;
 
             }

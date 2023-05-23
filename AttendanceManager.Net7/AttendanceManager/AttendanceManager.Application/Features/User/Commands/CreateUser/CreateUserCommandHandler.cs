@@ -2,7 +2,7 @@
 using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Models.Mail;
-using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;

@@ -2,7 +2,7 @@
 using AttendanceManager.Application.Features.User.Queries.GetRefreshTokens;
 using AttendanceManager.Application.Models.Authentication;
 using AttendanceManager.Application.Modules.Authentication;
-using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Common;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

@@ -1,5 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
-using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
