@@ -29,8 +29,4 @@ export const documentGetter = {
         return typeof (state.currentDocument?.attendanceCollections) === "undefined" ? []
             : state.currentDocument?.attendanceCollections;
     },
-    /** Get current user rewards related to the current document */
-    rewards(state): BadgeViewModule[] {
-        return state.currentDocument?.badges;
-    }
 };

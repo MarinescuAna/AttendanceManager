@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Domain.Entities;
+using AttendanceManager.Domain.Enums;
 using MediatR;
 
 namespace AttendanceManager.Application.Contracts.Infrastructure.Rewards
@@ -16,6 +17,6 @@ namespace AttendanceManager.Application.Contracts.Infrastructure.Rewards
             this.mediator = mediator;
         }
 
-        public abstract Task<bool> AssignBadgeAsync();
+        public abstract Task<bool> AssignBadgeAsync(Role userRole, bool commitChnages = true);
     }
 }

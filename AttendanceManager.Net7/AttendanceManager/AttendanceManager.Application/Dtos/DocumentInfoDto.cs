@@ -22,13 +22,6 @@ namespace AttendanceManager.Application.Dtos
         public required DocumentMembersDto[] DocumentMembers { get; init; }
         public StudentAttendancesDto[]? CurrentStudentAttendances { get; set; }
         public required TotalAttendanceDto[] TotalAttendances { get; init; }
-        public required BadgeDto[]? Badges { get; init; }
-    }
-    public class BadgeDto
-    {
-        public required string ImagePath { get; init; }
-        public required string Title { get; init; }
-        public required BadgeType Type { get; init; }
     }
 
     public class AttendanceCollectionDto

@@ -3,6 +3,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-layout
         class="badge-container"
+        :class="!badge.isActive?'inactive':''"
         v-bind="attrs"
         v-on="on"
         align-center
@@ -33,12 +34,14 @@
   border-radius: 50%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7);
 }
-
 .title {
   font-size: 15px !important;
   font-family: cursive !important;
   font-weight: bold;
   text-align: center;
+}
+.inactive{
+  opacity: 0.4;
 }
 </style>
 <script lang="ts">

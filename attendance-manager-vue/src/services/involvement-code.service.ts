@@ -1,6 +1,6 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import https from "@/plugins/axios";
-import { INVOLVEMENT_CODE } from "@/shared/constants";
+import { INVOLVEMENT_CODE_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 type InvolvementCodeInsertModule = {
@@ -18,7 +18,7 @@ export default class InvolvementCodeService {
     static async createInvolvementCode(minutes: number, attendanceCollectionId: number): Promise<undefined | InvolvementCodeInsertModule> {
         let isSuccess = true;
 
-        const result = await https.post(`${INVOLVEMENT_CODE}/create_code/${minutes}/${attendanceCollectionId}`)
+        const result = await https.post(`${INVOLVEMENT_CODE_CONTROLLER}/create_code/${minutes}/${attendanceCollectionId}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

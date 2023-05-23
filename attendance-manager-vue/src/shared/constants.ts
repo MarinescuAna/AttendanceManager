@@ -24,4 +24,5 @@ export const COURSE_CONTROLLER = "course";
 export const DOCUMENT_CONTROLLER = "document";
 export const ATTENDANCE_COLLECTION_CONTROLLER = "attendance_collection";
 export const ATTENDANCE_CONTROLLER = "attendance";
-export const INVOLVEMENT_CODE = "involvement_code";
+export const INVOLVEMENT_CODE_CONTROLLER = "involvement_code";
+export const REWARD_CONTROLLER = "reward";

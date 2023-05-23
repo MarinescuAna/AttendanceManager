@@ -13,6 +13,7 @@ namespace AttendanceManager.Domain.Entities
         public string? Title { get; set; }
         public string? ImagePath { get; set; }
         public BadgeType BadgeType { get; set; }
+        public Role UserRole { get; set; }
         public ICollection<Reward>? Rewards { get; set;}
 
     }

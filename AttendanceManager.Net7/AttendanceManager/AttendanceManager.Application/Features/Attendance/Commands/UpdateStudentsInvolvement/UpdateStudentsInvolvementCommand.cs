@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
 using AttendanceManager.Core.Shared;
+using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
@@ -9,7 +10,6 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
 {
     public sealed class UpdateStudentsInvolvementCommand : IRequest<bool>
     {
-        public required int ReportId { get; init; }
         public required StudentInvolvementDto[] Involvements { get; init; }
     }
 
@@ -23,6 +23,10 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
 
         public async Task<bool> Handle(UpdateStudentsInvolvementCommand request, CancellationToken cancellationToken)
         {
+            if(currentDocument== null) {
+                throw new NoContentException(ErrorMessages.NoContentReportBaseMessage);
+            }
+
             //Update each student involvement separate because in this case, if the attendance is not udpated, the badge will not be received
             foreach (var student in request.Involvements)
             {
@@ -38,17 +42,11 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                 }
             }
 
-            if(!await unitOfWork.CommitAsync(request.Involvements.Length))
-            {
-                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
-            }
-
             foreach(var involvment in request.Involvements)
             {
                 await _mediator.Send(new CreateRewardCommand()
                 {
-                    BadgeType = Domain.Enums.BadgeType.FirstAttendance,
-                    ReportId = request.ReportId,
+                    RoleRole = Role.Student,
                     UserId = involvment.UserId,
                     CommitChanges = false
                 });

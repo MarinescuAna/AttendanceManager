@@ -1,4 +1,8 @@
-﻿using AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvement;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Rewards;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
+using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Domain.Enums;
+using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvementByCodeAndId
@@ -10,22 +14,38 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
         public required int AttendanceCollectionId { get; init; }
     }
 
-    public sealed class UpdateInvolvementByCodeAndIdCommandHandler : IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
+    public sealed class UpdateInvolvementByCodeAndIdCommandHandler : BaseFeature, IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
     {
-        private IMediator _mediator;
-        public UpdateInvolvementByCodeAndIdCommandHandler(IMediator mediator)
+        private IRewardService _rewardService;
+        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit, IMapper mapper, IRewardService rewardService) : base(unit, mapper)
         {
-            _mediator = mediator;
+            _rewardService = rewardService;
         }
 
         public async Task<bool> Handle(UpdateInvolvementByCodeAndIdCommand request, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new UpdateInvolvementCommand()
+            // check if the code exists into the database
+            var code = await unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.AttendanceCollectionId == request.AttendanceCollectionId)
+                ?? throw new NotFoundException("Code", request.Code);
+
+            // check if the code is still valid
+            if (code.ExpirationDate.CompareTo(DateTime.Now) < 0)
             {
-                AttendanceId = request.AttendanceId,
-                AttendanceCode = request.Code,
-                AttendanceCollectionId = request.AttendanceCollectionId,
-            });
+                throw new SomethingWentWrongException("The code has expired!");
+            }
+
+            // get the attendance
+            var attendance = await unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID.Equals(request.AttendanceId))
+                ?? throw new NotFoundException("Attendance", request.AttendanceId);
+
+            //update the attendance
+            attendance.IsPresent = true;
+            unitOfWork.AttendanceRepository.Update(attendance);
+
+            await _rewardService.AssignBadge(BadgeType.FirstAttendance, attendance.AttendanceCollection!, attendance.UserID, Role.Student);
+
+            return await unitOfWork.CommitAsync();
         }
+
     }
 }

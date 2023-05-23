@@ -38,6 +38,7 @@
 }
 </style>
 <script lang="ts">
+import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
 import BarChartComponent from "@/components/shared-components/charts/BarChartComponent.vue";
 import { InvolvementViewModule } from "@/modules/document/involvement";
@@ -52,7 +53,7 @@ interface StudentInterestModule {
 
 export default Vue.extend({
   name: "StudentsInterestDiagramComponent",
-  components: { BarChartComponent, TitleWithInfoComponent },
+  components: { BarChartComponent, TitleWithInfoComponent, MessageComponent },
   data: function () {
     return {
       selectedActivityType: CourseType.None,

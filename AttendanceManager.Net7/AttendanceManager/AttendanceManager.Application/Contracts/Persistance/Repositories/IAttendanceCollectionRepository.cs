@@ -6,5 +6,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
     {
         Task<List<AttendanceCollection>> GetAttendanceCollectionsByDocumentIdAsync(int documentId);
         Task<AttendanceCollection> GetAttendanceCollectionByIdAsync(int id);
+        bool HasAttendanceByReportIdUserId(int reportId, string email);
     }
 }

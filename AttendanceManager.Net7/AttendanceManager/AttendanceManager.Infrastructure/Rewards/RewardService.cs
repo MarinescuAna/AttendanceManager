@@ -13,11 +13,11 @@ namespace AttendanceManager.Infrastructure.Rewards
             _rewardFactory = rewardFactory;
         }
 
-        public Task<bool> AssignBadge(BadgeType badgeType, AttendanceCollection collection, string userId)
+        public Task<bool> AssignBadge(BadgeType badgeType, AttendanceCollection collection, string userId, Role userRole, bool commitChnages = true)
         {
             var concreteReward = _rewardFactory.CreateRewardMethod(badgeType,collection,userId);
 
-            return concreteReward.AssignBadgeAsync();
+            return concreteReward.AssignBadgeAsync(userRole,commitChnages);
         }
     }
 }

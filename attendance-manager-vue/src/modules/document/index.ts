@@ -51,6 +51,9 @@ export interface BadgeViewModule{
     imagePath: string;
     type: BadgeType;
     title: string;
+    rewardId: number;
+    badgeId: number;
+    isActive: boolean;
 }
 
 /** This module is used in the document store to keep all the informations related to a document */
@@ -77,5 +80,4 @@ export interface DocumentFullViewModule{
     totalAttendances: TotalAttendanceModule[];
     attendanceImportance: number;
     bonusPointsImportance: number;
-    badges: BadgeViewModule[];
 }

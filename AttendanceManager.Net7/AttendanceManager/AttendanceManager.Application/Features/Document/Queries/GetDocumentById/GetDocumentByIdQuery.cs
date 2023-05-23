@@ -47,8 +47,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 DocumentMembers = mapper.Map<DocumentMembersDto[]>(request.Role == Role.Teacher ? documentMembers?.Where(u => u.User!.Role == Role.Teacher) : documentMembers),
                 TotalAttendances = ComputeTotalAttendances(request.Role),
                 AttendanceImportance = currentDocument.AttendanceImportance,
-                BonusPointsImportance = currentDocument.BonusPointsImportance,
-                Badges = mapper.Map<BadgeDto[]>(documentBadges)
+                BonusPointsImportance = currentDocument.BonusPointsImportance
             };
         }
 
