@@ -44,6 +44,10 @@ export default Vue.extend({
         xaxis: {
           categories: this.labels,
         },
+        yaxis:{
+          min: 0,
+          max: 100,
+        }
       },
     };
   },

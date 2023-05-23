@@ -17,10 +17,10 @@
       outlined
       filled
     ></v-select>
-    <PieChartComponent
-      v-if="chartData != null"
-      :values="chartData.values"
-      :labels="chartData.labels"
+    <BarChartComponent
+      v-if="chartDataLables != null"
+      :values="chartDataValues"
+      :labels="chartDataLables"
       class="move-behind"
     />
     <MessageComponent
@@ -38,14 +38,16 @@
 </style>
 
 <script lang="ts">
+import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
-import PieChartComponent from "@/components/shared-components/charts/PieChartComponent.vue";
+import BarChartComponent from "@/components/shared-components/charts/BarChartComponent.vue";
 import { CourseType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
+
 export default Vue.extend({
   name: "TotalAttendancesDiagram",
-  components: { PieChartComponent, TitleWithInfoComponent },
+  components: { TitleWithInfoComponent, BarChartComponent, MessageComponent },
   data: function () {
     return {
       selectedActivityType: CourseType.None,
@@ -55,28 +57,39 @@ export default Vue.extend({
         { id: CourseType.Laboratory, name: "Laboratory" },
         { id: CourseType.Seminary, name: "Seminary" },
       ],
-      chartData: {} as {
-        labels: string[];
-        values: number[];
-      },
+      chartDataLables: [] as string[],
+      chartDataValues: {},
     };
   },
   created: function (): void {
-    this.chartData = this._computeTotalAttendances(CourseType.None);
+    const result = this._computeTotalAttendances(CourseType.None);
+
+    this.chartDataLables = result.labels;
+    this.chartDataValues = [
+      {
+        data: result.values,
+      },
+    ];
   },
   methods: {
     onSelectionChanged: function (): void {
-      this.chartData = null!;
-      this.chartData = this._computeTotalAttendances(
+      this.chartDataLables = null!;
+      this.chartDataValues = null!;
+      const result = this._computeTotalAttendances(
         this.selectedActivityType["id"]
       );
+      this.chartDataLables = result.labels;
+      this.chartDataValues = [
+        {
+          data: result.values,
+        },
+      ];
     },
     /**Count all the attendances per each student and group them by values */
     _computeTotalAttendances: function (type: CourseType): {
       labels: string[];
       values: number[];
     } {
-      console.log(type == CourseType.None);
 
       const involvements =
         type == CourseType.None
@@ -99,22 +112,17 @@ export default Vue.extend({
 
       //group involvments by user email
       const involvementsGrouped = involvements.reduce((groups, item) => {
-        const totalAttendances = involvements.filter(
-          (d) => d.studentEmail == item.studentEmail
-        ).length;
-        if ((groups[totalAttendances] || []).length == 0) {
-          groups[totalAttendances] = item.studentEmail;
-        } else {
-          if (!groups[totalAttendances].includes(item.studentEmail)) {
-            groups[totalAttendances] += `\n ${item.studentEmail}`;
-          }
+        if ((groups[item.studentEmail] || []).length == 0) {
+          groups[item.studentEmail] = involvements.filter(
+            (d) => d.studentEmail == item.studentEmail
+          ).length;
         }
         return groups;
       }, {});
 
       for (let email in involvementsGrouped) {
-        result.labels.push(involvementsGrouped[email]);
-        result.values.push(Number.parseFloat(email));
+        result.labels.push(email);
+        result.values.push(Number.parseFloat(involvementsGrouped[email]));
       }
 
       return result;
