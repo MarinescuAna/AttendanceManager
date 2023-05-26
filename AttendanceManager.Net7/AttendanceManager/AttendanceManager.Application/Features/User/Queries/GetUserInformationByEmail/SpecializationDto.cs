@@ -1,8 +1,8 @@
-﻿using AttendanceManager.Application.Dtos;
-
-namespace AttendanceManager.Application.Features.User.Queries.GetUserInformationByEmail
+﻿namespace AttendanceManager.Application.Features.User.Queries.GetUserInformationByEmail
 {
-    public sealed class SpecializationDto : BaseDto
+    public sealed class SpecializationDto
     {
+        public required int Id { get; init; }
+        public required string Name { get; init; }
     }
 }

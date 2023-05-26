@@ -1,11 +1,15 @@
-﻿
-using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
-using AttendanceManager.Domain.Enums;
+﻿using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
 
 namespace AttendanceManager.Application.Dtos
 {
-    public sealed class DocumentInfoDto: DocumentBaseDto
+    public sealed class DocumentInfoDto
     {
+        public required int DocumentId { get; init; }
+        public required string Title { get; init; }
+        public required int EnrollmentYear { get; init; }
+        public required string CourseName { get; init; }
+        public required string SpecializationName { get; set; }
+        public required string UpdatedOn { get; set; }
         public required int MaxNoSeminaries { get; init; }
         public required int MaxNoLaboratories { get; init; }
         public required int MaxNoLessons { get; init; }
