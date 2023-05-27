@@ -14,10 +14,6 @@ namespace AttendanceManager.Persistance.Repositories
 
         public override async Task<Attendance?> GetAsync(Expression<Func<Attendance, bool>> expression)
             => await dbContext.Attendances.Include(a => a.AttendanceCollection).AsNoTracking().FirstOrDefaultAsync(expression);
-            
-        
-        public async Task<bool> HasAttendanceAsync(Expression<Func<Attendance, bool>> expression)
-            => await dbContext.Attendances.AnyAsync(expression);
 
     }
 }
