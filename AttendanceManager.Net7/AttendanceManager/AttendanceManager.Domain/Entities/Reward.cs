@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AttendanceManager.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
@@ -9,7 +10,7 @@ namespace AttendanceManager.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RewardID { get; set; }
         [ForeignKey("Badge")]
-        public int BadgeID { get; set; }
+        public BadgeID BadgeID { get; set; }
         [ForeignKey("User")]
         [MaxLength(254)]
         public string? UserID { get; set; }

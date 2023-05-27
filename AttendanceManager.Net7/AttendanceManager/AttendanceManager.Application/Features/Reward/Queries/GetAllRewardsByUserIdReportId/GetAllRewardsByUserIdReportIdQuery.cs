@@ -24,9 +24,8 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
             var rewards = mapper.Map<List<RewardDto>>(await unitOfWork.RewardRepository.GetRewardsAsync(r => r.UserID == request.Email && r.ReportID == request.ReportId));
 
             //!! right now we filter the badges by id
-            rewards.AddRange(mapper.Map<List<RewardDto>>(
-                (await unitOfWork.BadgeRepository.ListAllAsync())
-                    .Where(b => !rewards.Any(r => r.BadgeId == b.BadgeID))
+            rewards.AddRange(mapper.Map<List<RewardDto>>( unitOfWork.BadgeRepository.ListAll()
+                    .Where(b => !rewards.Any(r => r.BadgeID == b.BadgeID))
                     .Where(b=>b.UserRole == request.Role)
                     .ToList()
                     ));
