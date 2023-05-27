@@ -6,7 +6,6 @@ using AttendanceManager.Application.Contracts.Infrastructure.Rewards;
 using AttendanceManager.Infrastructure.Authentication;
 using AttendanceManager.Infrastructure.Logging;
 using AttendanceManager.Infrastructure.Mail;
-using AttendanceManager.Infrastructure.Rewards;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +18,6 @@ namespace AttendanceManager.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<BaseRewardFactory, RewardFactory>();
-            services.AddScoped<IRewardService,RewardService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IJsonWebTokenService, JsonWebTokenService>();
             services.AddTransient<IMailService, MailService>();
