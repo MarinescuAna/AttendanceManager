@@ -21,7 +21,7 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
         public async Task<InvolvementCodeDto> Handle(CreateInvolvementCodeCommand request, CancellationToken cancellationToken)
         {
 
-            var codes = await unitOfWork.InvolvementCodeRepository.ListAllAsync();
+            var codes = unitOfWork.InvolvementCodeRepository.ListAll();
             var code = string.Empty;
 
             // generate code
