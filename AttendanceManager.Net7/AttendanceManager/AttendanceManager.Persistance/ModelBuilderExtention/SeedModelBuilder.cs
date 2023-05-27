@@ -29,13 +29,24 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
-                   BadgeID = 1,
                    Title = "First attendance",
                    ImagePath = "first_attendance.jpg",
-                   BadgeType = Domain.Enums.BadgeType.FirstAttendance,
+                   Description = "Achieve this badge by getting the first attendance to any of the available activities.",
+                   BadgeID = Domain.Enums.BadgeID.FirstAttendance,
                    UserRole = Domain.Enums.Role.Student
                }
            );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = Domain.Enums.BadgeID.LastAttendance,
+                   Title = "Last attendance",
+                   ImagePath = "last_attendance.jpg",
+                   Description = "Achieve this badge by getting the last attendance to any of the available activities.",
+                   UserRole = Domain.Enums.Role.Student
+               }
+            );
         }
     }
 }

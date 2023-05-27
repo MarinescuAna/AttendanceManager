@@ -12,14 +12,11 @@ namespace AttendanceManager.Application.Profiles
 
             // Used for bagdes when we try to retrive all the badges to display them
             CreateMap<Reward, Features.Reward.Queries.GetAllRewardsByUserIdReportId.RewardDto>()
-                .ForMember(d => d.Type, act => act.MapFrom(b => b.Badge!.BadgeType))
                 .ForMember(d => d.ImagePath, act => act.MapFrom(b => b.Badge!.ImagePath))
                 .ForMember(d => d.Title, act => act.MapFrom(b => b.Badge!.Title))
                 .ForMember(d => d.RewardId, act => act.MapFrom(r => r.RewardID))
-                .ForMember(d => d.BadgeId, act => act.MapFrom(r => r.BadgeID))
                 .ForMember(d => d.IsActive, act => act.MapFrom(_ => true));
             CreateMap<Badge, Features.Reward.Queries.GetAllRewardsByUserIdReportId.RewardDto>()
-                .ForMember(d => d.Type, act => act.MapFrom(b => b.BadgeType))
                 .ForMember(d => d.RewardId, act => act.MapFrom(r => r.BadgeID))
                 .ForMember(d => d.RewardId, act => act.MapFrom(_ => -1));
         }
