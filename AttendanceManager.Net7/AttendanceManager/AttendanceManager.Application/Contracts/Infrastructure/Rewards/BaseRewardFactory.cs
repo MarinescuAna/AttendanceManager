@@ -11,6 +11,6 @@ namespace AttendanceManager.Application.Contracts.Infrastructure.Rewards
         {
             this.mediator = mediator;
         }
-        public abstract BaseReward CreateRewardMethod(BadgeType badgeType, AttendanceCollection collection, string userId);
+        public abstract BaseReward CreateRewardMethod(BadgeID badgeType, AttendanceCollection collection, string userId);
     }
 }
