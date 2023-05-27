@@ -6,7 +6,6 @@ import department, { namespace as departmentNamespace} from "./modules/departmen
 import user, { namespace as userNamespace} from "./modules/user";
 import course, { namespace as courseNamespace} from "./modules/course";
 import specialization, {namespace as specializationNamespace} from "./modules/specialization";
-import involvement, {namespace as involvementNamespace} from "./modules/involvement/index";
 import createPersistedState from "vuex-persistedstate";
 
 //Load Vuex
@@ -21,7 +20,6 @@ modules[departmentNamespace] = department;
 modules[userNamespace] = user;
 modules[courseNamespace] = course;
 modules[specializationNamespace] = specialization;
-modules[involvementNamespace] = involvement;
 
 //Create store
 export default new Vuex.Store<RootState>({
