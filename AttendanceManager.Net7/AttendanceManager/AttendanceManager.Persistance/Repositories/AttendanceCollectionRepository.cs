@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.Contracts.Infrastructure.Logging;
 using AttendanceManager.Application.Contracts.Persistance.Repositories;
 using AttendanceManager.Domain.Entities;
+using AttendanceManager.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceManager.Persistance.Repositories
@@ -10,18 +11,27 @@ namespace AttendanceManager.Persistance.Repositories
         public AttendanceCollectionRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext,loggingService)
         {
         }
+        /// <summary>
+        /// Return all the collections related to a report by report id, INCLUDING the attendances that exists for each collection!
+        /// Use this only if is needed!!
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
+        public IQueryable<AttendanceCollection> GetCollectionsByReportId(int reportId)
+            => dbContext.AttendanceCollections
+                .Include(ac => ac.Attendances)
+                .Where(ac => ac.DocumentID == reportId);
+        /// <summary>
+        /// Get the last order inserted by report id and activity type. If this is the first collection added,
+        /// the return value will be 0
+        /// </summary>
+        public int GetLastOrder(int reportId, CourseType type)
+        {
+            var query = dbContext.AttendanceCollections.AsNoTracking()
+                        .Where(ac => ac.DocumentID == reportId)
+                        .Where(ac => ac.CourseType == type);
 
-        public async Task<List<AttendanceCollection>> GetAttendanceCollectionsByDocumentIdAsync(int documentId)
-            => await dbContext.AttendanceCollections.AsNoTracking().Where(ac => ac.DocumentID == documentId).ToListAsync();
-        public bool HasAttendanceByReportIdUserId(int reportId, string email)
-            => dbContext.AttendanceCollections.AsNoTracking()
-            .Include(ac => ac.Attendances)
-            .Where(ac => ac.DocumentID == reportId)
-            .Where(ac => ac.Attendances!=null && ac.Attendances!.Count() != 0)
-            .Any(ac => ac.Attendances != null && ac.Attendances!.Any(a => a.UserID == email && a.IsPresent));
-        public async Task<AttendanceCollection> GetAttendanceCollectionByIdAsync(int id)
-            => await dbContext.AttendanceCollections
-            .Include(ac => ac.Attendances).AsNoTracking()
-            .FirstOrDefaultAsync(a => a.AttendanceCollectionID == id);
+            return query.Count() > 0 ? query.Max(ac => ac.Order) : 0;   
+        }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using AttendanceManager.Domain.Entities;
+using AttendanceManager.Domain.Enums;
 
 namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
     public interface IAttendanceCollectionRepository : IGenericRepository<AttendanceCollection>
     {
-        Task<List<AttendanceCollection>> GetAttendanceCollectionsByDocumentIdAsync(int documentId);
-        Task<AttendanceCollection> GetAttendanceCollectionByIdAsync(int id);
-        bool HasAttendanceByReportIdUserId(int reportId, string email);
+        IQueryable<AttendanceCollection> GetCollectionsByReportId(int reportId);
+        int GetLastOrder(int reportId, CourseType type);
     }
 }
