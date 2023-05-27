@@ -54,6 +54,12 @@ interface StudentInterestModule {
 export default Vue.extend({
   name: "StudentsInterestDiagramComponent",
   components: { BarChartComponent, TitleWithInfoComponent, MessageComponent },
+  props: {
+    involvements: {
+      type: Array as () => InvolvementViewModule[],
+      required: true,
+    },
+  },
   data: function () {
     return {
       selectedActivityType: CourseType.None,
@@ -138,13 +144,11 @@ export default Vue.extend({
     ): StudentInterestModule[] {
       let objFinalResult: StudentInterestModule[] = [];
 
-      //get all the involvments according to the activity type
+      //get all the involvements according to the activity type
       const involvements: InvolvementViewModule[] =
         type == CourseType.None
-          ? storeHelper.involvementStore.involvements
-          : storeHelper.involvementStore.involvements.filter(
-              (a) => a.activityType == type
-            );
+          ? this.involvements
+          : this.involvements.filter((a) => a.activityType == type);
 
       if (involvements.length == 0) {
         return [];
@@ -155,11 +159,11 @@ export default Vue.extend({
       const pointsWeight =
         storeHelper.documentStore.documentDetails.bonusPointsImportance;
 
-      //get a list with all the involvments gouped by emails
+      //get a list with all the involvements gouped by emails
       const involvementsGrouped = involvements.reduce((groups, item) => {
-        const group = groups[item.studentEmail] || [];
+        const group = groups[item.student] || [];
         group.push(item);
-        groups[item.studentEmail] = group;
+        groups[item.student] = group;
         return groups;
       }, {});
 

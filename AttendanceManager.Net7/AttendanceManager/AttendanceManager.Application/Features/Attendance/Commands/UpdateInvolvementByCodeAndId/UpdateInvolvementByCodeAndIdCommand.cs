@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Application.Contracts.Infrastructure.Rewards;
-using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
@@ -16,10 +15,8 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
 
     public sealed class UpdateInvolvementByCodeAndIdCommandHandler : BaseFeature, IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
     {
-        private IRewardService _rewardService;
-        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit, IMapper mapper, IRewardService rewardService) : base(unit, mapper)
+        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
-            _rewardService = rewardService;
         }
 
         public async Task<bool> Handle(UpdateInvolvementByCodeAndIdCommand request, CancellationToken cancellationToken)
@@ -42,7 +39,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
             attendance.IsPresent = true;
             unitOfWork.AttendanceRepository.Update(attendance);
 
-            await _rewardService.AssignBadge(BadgeType.FirstAttendance, attendance.AttendanceCollection!, attendance.UserID, Role.Student);
+           // await _rewardService.AssignBadge(BadgeID.FirstAttendance, attendance.AttendanceCollection!, attendance.UserID, Role.Student);
 
             return await unitOfWork.CommitAsync();
         }

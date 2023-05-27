@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Dtos;
+using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Entities;
 using AutoMapper;

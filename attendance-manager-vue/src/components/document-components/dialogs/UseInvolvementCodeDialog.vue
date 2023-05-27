@@ -47,7 +47,7 @@
   <script lang="ts">
 import { rules } from "@/plugins/vee-validate";
 import Vue from "vue";
-import AttendanceService from "@/services/attendance.service";
+import InvolvementService from "@/services/involvement.service";
 import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
@@ -68,7 +68,7 @@ export default Vue.extend({
     },
     onSubmit: async function (): Promise<void> {
       const result =
-        await AttendanceService.updateAttendanceByCode({
+        await InvolvementService.updateAttendanceByCode({
             code: this.code,
             attendanceId: this.attendanceId,
             attendanceCollectionId: this.attendanceCollectionId

@@ -56,7 +56,7 @@
       hide-overlay
       scrollable
     >
-      <AddAttendanceDialog
+      <UpdateInvolvementsDialog
         :attendanceCollectionId="selectedCollectionId"
         :attendanceCollectionDate="selectedCollectionDate"
         @close-dialog="addAttendanceDialog = false"
@@ -84,16 +84,16 @@ import { AttendanceCollectionViewModule } from "@/modules/document/attendance-co
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import AddAttendanceDateDialog from "@/components/document-components/dialogs/AddAttendanceDateDialog.vue";
-import AddAttendanceDialog from "@/components/document-components/dialogs/AddAttendanceDialog.vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
+import UpdateInvolvementsDialog from "@/components/document-components/dialogs/UpdateInvolvementsDialog.vue";
 
 export default Vue.extend({
   name: "AttendanceTimelineComponent",
   components: {
-    AddAttendanceDialog,
     AddAttendanceDateDialog,
-  },
+    UpdateInvolvementsDialog
+},
   data() {
     return {
       // Display dialog for adding a new timeline

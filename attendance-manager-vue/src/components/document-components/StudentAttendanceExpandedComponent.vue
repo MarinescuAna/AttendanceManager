@@ -1,133 +1,123 @@
 <template>
   <v-layout column class="ma-3">
-    <v-flex >
-      <v-btn
-        color="black"
-        class="white--text"
-        :disabled="!saveChanges"
-        v-if="isTeacher"
-        @click="onSave"
-      >
-        Save Changes
-      </v-btn>
-      <v-btn
-        color="black"
-        class="white--text"
-        @click="onReload"
-      >
-        Reload involvements
-      </v-btn>
+    <v-flex>
+      <v-btn-toggle class="ma-2" rounded>
+        <v-btn
+          class="blue-grey lighten-2"
+          title="Save changes."
+          :disabled="!saveChanges"
+          @click="onSave"
+          v-if="isTeacher"
+        >
+          <v-icon>mdi-floppy</v-icon>
+        </v-btn>
+        <v-btn class="blue-grey lighten-2" @click="onLoadData" >
+          <v-icon>mdi-cached</v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </v-flex>
-    <v-layout v-if="studentAttendances.length > 0" wrap>
-      <v-simple-table class="ma-2">
+    <v-layout v-if="involvements.length > 0" wrap>
+      <v-simple-table class="ma-2 table-color">
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left">Last Update</th>
-              <th class="text-left">Attendance</th>
-              <th class="text-left">Bonus Points</th>
-              <th class="text-left">Activity Type</th>
+              <th class="text-left black--text text-md-h6">Last Update</th>
+              <th class="text-left black--text text-md-h6">Attendance</th>
+              <th class="text-left black--text text-md-h6">Bonus Points</th>
+              <th class="text-left black--text text-md-h6">Activity Type</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in studentAttendances" :key="item.attendanceId">
-              <td>{{ item.updatedOn }}</td>
+            <tr v-for="item in involvements" :key="item.involvementId">
+              <td>{{ item.updateOn }}</td>
               <td>
                 <v-simple-checkbox
                   v-model="item.isPresent"
-                  @click="saveChanges = true"
                   :disabled="!isTeacher"
+                  @click="onPresenceChanged(item)"
                 ></v-simple-checkbox>
               </td>
               <td>
                 <v-text-field
                   type="number"
                   v-model="item.bonusPoints"
-                  @click="saveChanges = true"
-                  :disabled="!isTeacher"
+                  :disabled="!isTeacher || !item.isPresent"
+                  v-if="isTeacher"
                 ></v-text-field>
+                <span v-else>{{ item.bonusPoints }}</span>
               </td>
-              <td>{{ item.courseType }}</td>
+              <td>{{ getActivityTypeName(item.activityType) }}</td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
 
-      <v-simple-table class="ma-2">
+      <v-simple-table class="ma-2 table-color">
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left">Activity Type</th>
-              <th class="text-left">Total attendances</th>
-              <th class="text-left">Total points</th>
+              <th class="text-left black--text text-md-h6">Activity Type</th>
+              <th class="text-left black--text text-md-h6">Total attendances</th>
+              <th class="text-left black--text text-md-h6">Total points</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Lesson</td>
-              <td>{{ attendanceLessons }}</td>
-              <td>{{ bonusPointsLessons }}</td>
-            </tr>
-            <tr>
-              <td>Laboratory</td>
-              <td>{{ attendanceLLaboratories }}</td>
-              <td>{{ bonusPointsLaboratories }}</td>
-            </tr>
-            <tr>
-              <td>Seminary</td>
-              <td>{{ attendanceSeminaries }}</td>
-              <td>{{ bonusPointsSeminaries }}</td>
+            <tr v-for="(total, key) in resultsOverview" :key="key">
+              <td class="text-left black--text font-weight-black">
+                {{ getActivityTypeName(key) }}
+              </td>
+              <td>{{ total["attendances"] }}</td>
+              <td>{{ total["bonusPoints"] }}</td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
     </v-layout>
     <v-layout v-else>
-      <span class="i-message ma-3"> There is no activity.</span>
+      <MessageComponent
+        description="There is no activity."
+        color="transparent"
+      />
     </v-layout>
   </v-layout>
 </template>
 
 <style scoped>
-.i-message{
-  font-size: 20px;
-  font-weight: bold;
+.table-color {
+  background-color: transparent;
 }
 </style>
 
 <script lang="ts">
 import Vue from "vue";
-import {
-  StudentAttendanceInsertModule,
-  StudentAttendanceModule,
-} from "@/modules/document/attendance";
 import { studentAttendancesHeader } from "./TotalAttendancesHeader";
-import AttendanceService from "@/services/attendance.service";
-import storeHelper from "@/store/store-helper";
 import { CourseType, Role } from "@/shared/enums";
-import { Toastification } from "@/plugins/vue-toastification";
 import AuthService from "@/services/auth.service";
+import MessageComponent from "../shared-components/MessageComponent.vue";
+import { InvolvementViewModule } from "@/modules/document/involvement";
+import InvolvementService from "@/services/involvement.service";
+import { Toastification } from "@/plugins/vue-toastification";
 
 interface ResultsOverview {
-  courseType: string;
   attendances: number;
   bonusPoints: number;
 }
 
 export default Vue.extend({
   name: "StudentAttendanceExpandedComponent",
+  components: { MessageComponent },
   props: {
     userId: {
-      type: String
-    }
+      type: String,
+      required: true,
+    },
   },
   data: function () {
     return {
       studentAttendancesHeader,
-      resultsOverview: [] as ResultsOverview[],
-      students: [] as StudentAttendanceModule[],
-      initStudents: [] as StudentAttendanceModule[],
-      saveChanges: false,
+      resultsOverview: {},
+      involvements: [] as InvolvementViewModule[],
+      involvementsInit: [] as InvolvementViewModule[],
     };
   },
   computed: {
@@ -135,98 +125,83 @@ export default Vue.extend({
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
     },
-    /**
-     * If the current user is teacher, filter all the attendances related to the selected user
-     * otherwise just load the attendances for the current user
-     */
-    studentAttendances: function(): StudentAttendanceModule[] {
-      return this.isTeacher? storeHelper.documentStore.studentsTotalAttendances.filter(u=> u.userId == this.userId)
-          : storeHelper.documentStore.studentsTotalAttendances;
-    },
-    attendanceLessons: function(): number{
-      return this._getTotal(CourseType.Lecture,true);
-    },
-    bonusPointsLessons: function(): number{
-      return this._getTotal(CourseType.Lecture,false);
-    },
-    attendanceLLaboratories: function(): number{
-      return this._getTotal(CourseType.Laboratory,true);
-    },
-    bonusPointsLaboratories: function(): number{
-      return this._getTotal(CourseType.Laboratory,false);
-    },
-    attendanceSeminaries: function(): number{
-      return this._getTotal(CourseType.Seminary,true);
-    },
-    bonusPointsSeminaries: function(): number{
-      return this._getTotal(CourseType.Seminary,false);
-    }
-  },
-  created: async function () {
-    await this._loadStudentAttendances(false);
-    
-    if(this.studentAttendances.length > 0 && this.isTeacher){
-      // make a copy of the results only if the user is teacher, because only they can edit this information
-      this.studentAttendances.forEach((x) =>
-        this.initStudents.push(Object.assign({}, x))
+    saveChanges: function (): boolean {
+      return InvolvementService.isChanged(
+        this.involvementsInit,
+        this.involvements
       );
-    }
+    },
+  },
+  created: async function (): Promise<void> {
+    await this.onLoadData();
   },
   methods: {
-    _getTotal: function(type: CourseType, doAttendancesTotal: boolean): number {
-      const courses = this.studentAttendances.filter(
-        (x) => x.courseType == CourseType[type]
-      );
-      if (courses.length != 0) {
-        return doAttendancesTotal? courses.filter((x) => x.isPresent).length:
-        courses.reduce((x, result) => x + result.bonusPoints, 0);
-      }else{
-        return 0;
+    /**If the student is not present, then the bonus points cannot be inserted */
+    onPresenceChanged: function (item: InvolvementViewModule): void {
+      if (!item.isPresent) {
+        item.bonusPoints = 0;
       }
     },
-    _loadStudentAttendances: async function(reload: boolean): Promise<void> {    
-      // load user attendances for the selected user in case that the current user's role is teacher,
-      // or get from the store the attendances report for the current user
-      await storeHelper.documentStore.loadStudentTotalAttendances(this.isTeacher? this.userId: null, reload);
+    /**Get the data for the second table */
+    getTotalInvolvements: function (): void {
+      for (let i = 1; i <= 3; i++) {
+        const filteredData = this.involvements.filter(
+          (d) => d.activityType == i
+        );
+        this.resultsOverview[i] = {
+          attendances: filteredData.filter((d) => d.isPresent).length,
+          bonusPoints: filteredData.reduce(
+            (acc, item) => acc + item.bonusPoints,
+            0
+          ),
+        } as ResultsOverview;
+      }
+    },
+    getActivityTypeName: function (type: number): string {
+      return CourseType[type].toString();
+    },
+    onLoadData: async function (): Promise<void> {
+      //get involvements
+      this.involvements = await InvolvementService.getInvolvements(
+        -1,
+        this.isTeacher ? this.userId : "",
+        false,
+        !this.isTeacher,
+        false
+      );
+
+      //copy all the involvements
+      this.involvements.forEach((x) =>
+        this.involvementsInit.push(Object.assign({}, x))
+      );
+
+      //compute the data for the second table
+      this.getTotalInvolvements();
     },
     onSave: async function (): Promise<void> {
-      let studentsChanged: StudentAttendanceInsertModule[] = [];
-
-      this.studentAttendances.forEach((student) => {
-        let oldStudent = this.initStudents.find(
-          (x) => x.attendanceId === student.attendanceId
-        );
-
-        if (
-          oldStudent?.bonusPoints !== student.bonusPoints ||
-          oldStudent.isPresent !== student.isPresent
-        ) {
-          studentsChanged.push({
-            attendanceID: student.attendanceId,
-            bonusPoints: student.bonusPoints,
-            isPresent: student.isPresent,
-          } as StudentAttendanceInsertModule);
-        }
-      });
+      //get all the involvements that was updated
+      const studentsChanged = InvolvementService.getInvolvementChanges(
+        this.involvementsInit,
+        this.involvements
+      );
 
       if (studentsChanged.length !== 0) {
-        const response = await AttendanceService.addStudentsAttendances(
-          {
-            involvements: studentsChanged,
-            reportId: storeHelper.documentStore.documentDetails.documentId
-          }
-        );
+        const response = await InvolvementService.addStudentsAttendances({
+          involvements: studentsChanged,
+        });
 
         if (!response) {
           Toastification.simpleError(
-            "Something went wrong and not all the records was saved!"
+            "Something went wrong and not all the attendances was saved"
+          );
+        } else {
+          this.involvementsInit = this.involvements;
+          Toastification.success(
+            "All the involvements were successfully saved and the rewards were added."
           );
         }
       }
     },
-    onReload: async function(): Promise<void> {
-      await this._loadStudentAttendances(true);
-    }
   },
 });
 </script>

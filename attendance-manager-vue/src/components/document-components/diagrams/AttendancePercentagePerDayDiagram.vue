@@ -39,6 +39,7 @@
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
 import LineChartComponent from "@/components/shared-components/charts/LineChartComponent.vue";
+import { InvolvementViewModule } from "@/modules/document/involvement";
 import { CourseType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
@@ -46,6 +47,12 @@ import Vue from "vue";
 export default Vue.extend({
   name: "AttendancePercentagePerDayDiagram",
   components: { LineChartComponent, MessageComponent, TitleWithInfoComponent },
+  props: {
+    involvements: {
+      type: Array as () => InvolvementViewModule[],
+      required: true,
+    },
+  },
   data: function () {
     return {
       selectedActivityType: CourseType.Lecture,
@@ -75,8 +82,8 @@ export default Vue.extend({
       value: object;
       labels: string[];
     } {
-      //filter involvments by given type
-      const involvements = storeHelper.involvementStore.involvements.filter(
+      //filter involvements by given type
+      const involvements = this.involvements.filter(
         (s) => s.activityType == type
       );
 
@@ -86,9 +93,9 @@ export default Vue.extend({
 
       //get the number of students that should be present
       const numberOfAttendances =
-        storeHelper.documentStore.documentDetails.totalAttendances.length;
+        storeHelper.documentStore.documentDetails.numberOfStudents;
 
-      //group involvments bt collection id
+      //group involvements bt collection id
       const involvementsGrouped = involvements.reduce((groups, item) => {
         const group = groups[item.collectionId] || [];
         group.push(item);

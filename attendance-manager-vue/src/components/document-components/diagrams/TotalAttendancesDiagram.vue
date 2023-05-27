@@ -41,13 +41,19 @@
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
 import BarChartComponent from "@/components/shared-components/charts/BarChartComponent.vue";
+import { InvolvementViewModule } from "@/modules/document/involvement";
 import { CourseType } from "@/shared/enums";
-import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 
 export default Vue.extend({
   name: "TotalAttendancesDiagram",
   components: { TitleWithInfoComponent, BarChartComponent, MessageComponent },
+  props: {
+    involvements: {
+      type: Array as () => InvolvementViewModule[],
+      required: true,
+    },
+  },
   data: function () {
     return {
       selectedActivityType: CourseType.None,
@@ -90,13 +96,10 @@ export default Vue.extend({
       labels: string[];
       values: number[];
     } {
-
       const involvements =
         type == CourseType.None
-          ? storeHelper.involvementStore.involvements
-          : storeHelper.involvementStore.involvements.filter(
-              (d) => d.activityType == type
-            );
+          ? this.involvements
+          : this.involvements.filter((d) => d.activityType == type);
 
       if (involvements.length == 0) {
         return null!;
@@ -110,11 +113,11 @@ export default Vue.extend({
         values: [],
       };
 
-      //group involvments by user email
+      //group involvements by user email
       const involvementsGrouped = involvements.reduce((groups, item) => {
-        if ((groups[item.studentEmail] || []).length == 0) {
-          groups[item.studentEmail] = involvements.filter(
-            (d) => d.studentEmail == item.studentEmail
+        if ((groups[item.student] || []).length == 0) {
+          groups[item.student] = involvements.filter(
+            (d) => d.student == item.student
           ).length;
         }
         return groups;

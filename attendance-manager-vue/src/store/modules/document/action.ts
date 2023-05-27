@@ -3,7 +3,7 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { DocumentViewModule, DocumentUpdateModule, DocumentInsertModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
-import { ATTENDANCE_COLLECTION_CONTROLLER, ATTENDANCE_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 // actions for this store
@@ -73,33 +73,6 @@ export const documentActions = {
             commit("_documentDetails", (response as AxiosResponse).data);
         }
         return isFail;
-    },
-    /**
-     * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
-     * @param payload studentId
-     */
-    async loadStudentTotalAttendances({ commit, state }, payload: { email: string | null, reload: boolean }): Promise<boolean> {
-
-        // check if the payload is null, because in this case, the current user is student
-        if (!payload.reload && payload.email === null && Object.keys(state.studentsTotalAttendances).length > 0) {
-            return true;
-        }
-
-        // if the user attendances was retrived, avoid calling the api again
-        if (!payload.reload && payload.email !== null && state.studentsTotalAttendances.filter(u => u.userId == payload).length > 0) {
-            return true;
-        }
-
-        let isFail = false;
-
-        //load the document details and update the store
-        const response = await https.get(`${ATTENDANCE_CONTROLLER}/student_attendances/${payload.email}?isCurrentUser=${payload.email === null}`)
-            .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
-
-        if (!isFail) {
-            commit("_addStudentAttendances", { attendances: (response as AxiosResponse).data, resetAttendances: payload.reload });
-        }
-        return true;
     },
     /** Add new collaborator teacher */
     async addCollaborator({ commit, state }, payload: string): Promise<boolean> {

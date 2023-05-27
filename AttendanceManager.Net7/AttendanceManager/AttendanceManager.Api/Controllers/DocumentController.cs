@@ -1,5 +1,4 @@
-﻿using AttendanceManager.Application.Features.Attendance.Queries.GetStudentAttendanceByUserId;
-using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
+﻿using AttendanceManager.Application.Features.Document.Commands.CreateDocument;
 using AttendanceManager.Application.Features.Document.Commands.DeleteDocumentById;
 using AttendanceManager.Application.Features.Document.Commands.UpdateDocumentById;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
@@ -45,15 +44,6 @@ namespace AttendanceManager.Api.Controllers
                 Role = UserRole,
                 UserId = UserEmail
             });
-
-            // load current student attendances instead of all members attendances in case that the user is student
-            if (UserRole == Domain.Enums.Role.Student)
-            {
-                document.CurrentStudentAttendances = await mediator.Send(new GetStudentAttendanceByUserIdQuery()
-                {
-                    UserId = UserEmail
-                });
-            }
             return Ok(document);
         }
 

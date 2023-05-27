@@ -11,20 +11,20 @@
   </div>
   <div v-else>
     <v-layout class="ma-3" align-center column>
-      <StudentsInterestDiagramComponent />
-      <AttendancePercentagePerDayDiagram/>
-      <TotalAttendancesDiagram />
+      <StudentsInterestDiagramComponent :involvements="involvements"/>
+      <AttendancePercentagePerDayDiagram :involvements="involvements"/>
+      <TotalAttendancesDiagram :involvements="involvements"/>
     </v-layout>
   </div>
 </template>
 
 <script lang="ts">
-import storeHelper from "@/store/store-helper";
 import { InvolvementViewModule } from "@/modules/document/involvement";
 import Vue from "vue";
 import AttendancePercentagePerDayDiagram from "../diagrams/AttendancePercentagePerDayDiagram.vue";
 import TotalAttendancesDiagram from "../diagrams/TotalAttendancesDiagram.vue";
 import StudentsInterestDiagramComponent from "../diagrams/StudentsInterestDiagramComponent.vue";
+import InvolvementService from "@/services/involvement.service";
 
 export default Vue.extend({
   name: "DocumentDashboardComponent",
@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   /** Load data related to the document dashboard before loading the DOM */
   beforeMount: async function (): Promise<void> {
-      await storeHelper.involvementStore.loadInvolvements(false);
+      this.involvements = await InvolvementService.getInvolvements(-1,'',false,false,true);
       this.isLoading = false;
   },
 });

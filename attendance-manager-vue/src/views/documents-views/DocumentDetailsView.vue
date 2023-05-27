@@ -32,7 +32,7 @@
         <AttendanceTimelineComponent />
       </v-tab-item>
       <v-tab-item>
-        <TotalAttendancesComponent />
+        <TotalInvolvementsComponent />
       </v-tab-item>
       <v-tab-item>
         <DocumentMembersComponent />
@@ -40,7 +40,7 @@
       <v-tab-item>
         <RewardsComponent />
       </v-tab-item>
-      <v-tab-item v-if="isTeacher">
+      <v-tab-item v-if="isTeacher && !isMobile">
         <DocumentDashboardComponent />
       </v-tab-item>
       <v-tab-item v-if="isTeacher && isCreator">
@@ -58,7 +58,6 @@ import Vue from "vue";
 import { DocumentFullViewModule } from "@/modules/document";
 import AboutDocumentComponent from "@/components/document-components/tabs/AboutDocumentComponent.vue";
 import AttendanceTimelineComponent from "@/components/document-components/tabs/AttendanceTimelineComponent.vue";
-import TotalAttendancesComponent from "@/components/document-components/tabs/TotalAttendancesComponent.vue";
 import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
 import SettingsDocumentComponent from "@/components/document-components/tabs/SettingsDocumentComponent.vue";
 import DocumentDashboardComponent from "@/components/document-components/tabs/DocumentDashboardComponent.vue";
@@ -66,18 +65,19 @@ import RewardsComponent from "@/components/document-components/tabs/RewardsCompo
 import storeHelper from "@/store/store-helper";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
+import TotalInvolvementsComponent from "@/components/document-components/tabs/TotalInvolvementsComponent.vue";
 
 export default Vue.extend({
   name: "DocumentDetailsView",
   components: {
     AttendanceTimelineComponent,
     AboutDocumentComponent,
-    TotalAttendancesComponent,
     DocumentMembersComponent,
     SettingsDocumentComponent,
     DocumentDashboardComponent,
     RewardsComponent,
-  },
+    TotalInvolvementsComponent
+},
   data: function () {
     return {
       /** Current selected tab */
@@ -93,8 +93,8 @@ export default Vue.extend({
     tabs: function (): string[] {
       if (!this.isTeacher) {
         return [
-          "Attendances",
-          "Total Attendances",
+          "Involvements",
+          "Total involvements",
           "Peers",
           "Rewards",
           "About",
@@ -102,9 +102,16 @@ export default Vue.extend({
       }
 
       if (this.isTeacher && this.isCreator) {
-        return [
-          "Attendances",
-          "Total Attendances",
+        return this.isMobile? [
+          "Involvements",
+          "Total involvements",
+          "Collaborators",
+          "Rewards",
+          "Settings",
+          "About",
+        ]:[
+          "Involvements",
+          "Total involvements",
           "Collaborators",
           "Rewards",
           "Statistics",
@@ -113,9 +120,15 @@ export default Vue.extend({
         ];
       }
 
-      return [
-        "Attendances",
-        "Total Attendances",
+      return this.isMobile? [
+        "Involvements",
+        "Total involvements",
+        "Collaborators",
+        "Rewards",
+        "About",
+      ]:[
+        "Involvements",
+        "Total involvements",
         "Collaborators",
         "Rewards",
         "Statistics",
@@ -129,7 +142,10 @@ export default Vue.extend({
     /** Boolean value for determinate the current user role */
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
-    }
+    },
+    isMobile: function (): boolean {
+      return this.$vuetify.breakpoint.xs;
+    },
   },
   /**
    * Load the document details from the API
@@ -156,7 +172,6 @@ export default Vue.extend({
    * opened document  will be related  to the previously opened document */
   destroyed: function (): void {
     storeHelper.documentStore.resetCurrentDocumentStore();
-    storeHelper.involvementStore.resetInvolvementStore();
   },
 });
 </script>

@@ -1,5 +1,4 @@
-import { BadgeViewModule, DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
-import { StudentAttendanceModule } from "@/modules/document/attendance";
+import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 
 // getters for this store
@@ -15,12 +14,6 @@ export const documentGetter = {
     */
     documentDetails(state): DocumentFullViewModule {
         return state.currentDocument;
-    },
-    /**
-     * Gets created documents from the store
-    */
-    studentsTotalAttendances(state): StudentAttendanceModule[] {
-        return state.studentsTotalAttendances;
     },
     /**
      * Gets created documents from the store

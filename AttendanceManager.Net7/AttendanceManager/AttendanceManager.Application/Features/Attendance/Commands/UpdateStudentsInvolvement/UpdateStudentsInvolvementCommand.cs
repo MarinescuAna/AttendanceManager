@@ -10,7 +10,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
 {
     public sealed class UpdateStudentsInvolvementCommand : IRequest<bool>
     {
-        public required StudentInvolvementDto[] Involvements { get; init; }
+        public required StudentInvolvementVm[] Involvements { get; init; }
     }
 
     public sealed class UpdateStudentsInvolvementCommandHandler :BaseDocumentFeature, IRequestHandler<UpdateStudentsInvolvementCommand, bool>
@@ -30,7 +30,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
             //Update each student involvement separate because in this case, if the attendance is not udpated, the badge will not be received
             foreach (var student in request.Involvements)
             {
-                var oldStudent = await unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID == student.AttendanceID);
+                var oldStudent = await unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID == student.InvolvementId);
 
                 if (oldStudent != null)
                 {
@@ -48,6 +48,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                 {
                     RoleRole = Role.Student,
                     UserId = involvment.UserId,
+                    CollectionId = involvment.CollectionId,
                     CommitChanges = false
                 });
             }

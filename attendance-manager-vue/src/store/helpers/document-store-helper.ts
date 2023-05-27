@@ -1,9 +1,8 @@
 
-import { BadgeViewModule, DocumentFullViewModule, DocumentInsertModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentInsertModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
-import { StudentAttendanceModule } from "@/modules/document/attendance";
 
 export class DocumentStore {
     private store: Store<any>;
@@ -17,12 +16,6 @@ export class DocumentStore {
     */
     public get documents(): DocumentViewModule[] {
         return this.store.getters[`${documentNamespace}/documents`];
-    }
-    /**
-     * Getter for fetching all the documents from the store, not from the API
-    */
-    public get studentsTotalAttendances(): StudentAttendanceModule[] {
-        return this.store.getters[`${documentNamespace}/studentsTotalAttendances`];
     }
     /**
      * Getter for fetching all the documents from the store, not from the API
@@ -55,10 +48,6 @@ export class DocumentStore {
     */
     public async loadCurrentDocument(payload: string): Promise<boolean> {
         return await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
-    }
-
-    public async loadStudentTotalAttendances(payload: string|null, reload: boolean ): Promise<boolean>{
-        return await this.store.dispatch(`${documentNamespace}/loadStudentTotalAttendances`, { email: payload, reload: reload})
     }
 
     /** Use this method to update the document information */

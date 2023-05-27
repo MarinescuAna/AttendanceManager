@@ -7,30 +7,37 @@ export const totalAttendancesHeader =[
         value: "code",
         align: 'start',
         filterable: false,
+        class: "text-left black--text text-h6"
     },
     {
         text: "Fullname",
         value: "userName",
+        class: "text-left black--text text-h6"
     },
     {
         text: "Email",
-        value: "userID",
+        value: "userId",
+        class: "text-left black--text text-h6"
     },
     {
         text: "Lecture Attendances",
         value: "courseAttendances",
+        class: "text-left black--text text-h6"
     },
     {
         text: "Laboratory Attendances",
         value: "laboratoryAttendances",
+        class: "text-left black--text text-h6"
     },
     {
         text: "Seminary Attendances",
         value: "seminaryAttendances",
+        class: "text-left black--text text-h6"
     },
     {
         text: "Bonus Points",
         value: "bonusPoints",
+        class: "text-left black--text text-h6"
     },
 ];
 

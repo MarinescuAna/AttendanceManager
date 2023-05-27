@@ -45,36 +45,10 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
                 AttendanceCollections = mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
                 DocumentMembers = mapper.Map<DocumentMembersDto[]>(request.Role == Role.Teacher ? documentMembers?.Where(u => u.User!.Role == Role.Teacher) : documentMembers),
-                TotalAttendances = ComputeTotalAttendances(request.Role),
                 AttendanceImportance = currentDocument.AttendanceImportance,
-                BonusPointsImportance = currentDocument.BonusPointsImportance
+                BonusPointsImportance = currentDocument.BonusPointsImportance,
+                NumberOfStudents = documentMembers!.Count(u=>u.User!.Role == Role.Student)
             };
-        }
-
-        private TotalAttendanceDto[] ComputeTotalAttendances(Role userRole)
-        {
-            var students = documentMembers!.Where(s => s!.User!.Role == Role.Student).ToList();
-            TotalAttendanceDto[] attendances = new TotalAttendanceDto[students.Count];
-
-            // the user contains the attendances, but those are also from other document, so we will get only the attendances related to the collections from dictionary
-            for (var i = 0; i < students.Count; i++)
-            {
-                // for each student, get the attendances needed
-                var userAttendances = students[i].User!.Attendances!.Where(a => attendanceCollectionsType!.ContainsKey(a.AttendanceCollectionID));
-
-                attendances[i] = new()
-                {
-                    UserID = userRole == Role.Teacher ? students[i].UserID : string.Empty,
-                    UserName = userRole == Role.Teacher ? students[i].User!.FullName : string.Empty,
-                    Code = students[i].User!.Code,
-                    BonusPoints = userAttendances.Sum(a => a.BonusPoints),
-                    CourseAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lecture).Count(),
-                    LaboratoryAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory).Count(),
-                    SeminaryAttendances = userAttendances.Where(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Seminary).Count(),
-                };
-            }
-
-            return attendances;
         }
     }
 }

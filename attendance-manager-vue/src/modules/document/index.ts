@@ -1,6 +1,5 @@
 
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
-import {TotalAttendanceModule } from "./attendance";
 import { BadgeType } from "@/shared/enums";
 
 /** Use this view only for sending the collected data from the form used for creating a new document, to the API */
@@ -43,7 +42,6 @@ export interface DocumentViewModule{
 
 export interface DocumentMembersViewModule{
     email: string;
-    role: string;
     name: string;
 }
 
@@ -76,8 +74,7 @@ export interface DocumentFullViewModule{
     createdBy: string;
     attendanceCollections: AttendanceCollectionViewModule[];
     documentMembers: DocumentMembersViewModule[];
-    // this contains the total attendance for each student (be aware of user's role)
-    totalAttendances: TotalAttendanceModule[];
     attendanceImportance: number;
     bonusPointsImportance: number;
+    numberOfStudents: number;
 }
