@@ -4,13 +4,13 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations
 {
-    public sealed class GetSpecializationsQueryHandler : BaseFeature, IRequestHandler<GetSpecializationsQuery, List<SpecializationDto>>
+    public sealed class GetSpecializationsQueryHandler : BaseFeature, IRequestHandler<GetSpecializationsQuery, SpecializationDto[]>
     {
         public GetSpecializationsQueryHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
         }
 
-        public async Task<List<SpecializationDto>> Handle(GetSpecializationsQuery request, CancellationToken cancellationToken)
-            => mapper.Map<List<SpecializationDto>>(await unitOfWork.SpecializationRepository.ListAllAsync());
+        public Task<SpecializationDto[]> Handle(GetSpecializationsQuery request, CancellationToken cancellationToken)
+            => Task.FromResult(mapper.Map<SpecializationDto[]>(unitOfWork.SpecializationRepository.ListAll().ToArray()));
     }
 }

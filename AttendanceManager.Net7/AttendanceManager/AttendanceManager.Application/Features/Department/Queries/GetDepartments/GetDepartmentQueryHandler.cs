@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AttendanceManager.Application.Features.Department.Queries.GetDepartments
 {
-    public sealed class GetDepartmentQueryHandler : BaseFeature, IRequestHandler<GetDepartmentQuery, List<DepartmentDto>>
+    public sealed class GetDepartmentQueryHandler : BaseFeature, IRequestHandler<GetDepartmentQuery, DepartmentDto[]>
     {
         public GetDepartmentQueryHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
         {
@@ -15,7 +15,7 @@ namespace AttendanceManager.Application.Features.Department.Queries.GetDepartmen
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<List<DepartmentDto>> Handle(GetDepartmentQuery request, CancellationToken cancellationToken)
-            =>  mapper.Map<List<DepartmentDto>>(await unitOfWork.DepartmentRepository.ListAllAsync());
+        public Task<DepartmentDto[]> Handle(GetDepartmentQuery request, CancellationToken cancellationToken)
+            =>  Task.FromResult(mapper.Map<DepartmentDto[]>(unitOfWork.DepartmentRepository.ListAll().ToArray()));
     }
 }

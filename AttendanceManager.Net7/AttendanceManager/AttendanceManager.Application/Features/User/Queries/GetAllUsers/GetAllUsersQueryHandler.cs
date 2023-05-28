@@ -14,7 +14,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
 
         public async Task<List<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var departments = await unitOfWork.DepartmentRepository.ListAllAsync();
+            var departments = unitOfWork.DepartmentRepository.ListAll();
             var userSpecializations = await unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
                 us => us.User!.Role != Role.Admin);
 
