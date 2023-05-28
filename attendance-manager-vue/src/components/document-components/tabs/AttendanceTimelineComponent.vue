@@ -12,9 +12,15 @@
             >
               <v-btn
                 text
-                @click="onOpenAttendanceDialog(item.attendanceCollectionId, item.activityTime)"
+                @click="
+                  onOpenAttendanceDialog(
+                    item.attendanceCollectionId,
+                    item.activityTime
+                  )
+                "
               >
-                {{ item.activityTime.replaceAll('/','.') }} - {{ item.courseType }}
+                {{ item.activityTime.replaceAll("/", ".") }} -
+                {{ item.courseType }}
               </v-btn>
             </v-timeline-item>
           </v-timeline>
@@ -25,7 +31,12 @@
             <v-list-item
               v-for="(item, index) in documentFiles"
               :key="item.attendanceCollectionId"
-              @click="onOpenAttendanceDialog(item.attendanceCollectionId, item.activityTime)"
+              @click="
+                onOpenAttendanceDialog(
+                  item.attendanceCollectionId,
+                  item.activityTime
+                )
+              "
             >
               <v-list-item-content>
                 <v-divider v-if="index != 0" class="mb-2"></v-divider>
@@ -43,7 +54,13 @@
       </v-flex>
     </v-layout>
     <v-layout justify-center>
-      <v-btn color="black" dark @click="addAttendanceDateDialog = true" v-if="isTeacher">
+      <v-btn
+        class="white--text"
+        color="black"
+        @click="addAttendanceDateDialog = true"
+        :disabled="noActivityAvailable"
+        v-if="isTeacher"
+      >
         Add attendance
       </v-btn></v-layout
     >
@@ -92,8 +109,8 @@ export default Vue.extend({
   name: "AttendanceTimelineComponent",
   components: {
     AddAttendanceDateDialog,
-    UpdateInvolvementsDialog
-},
+    UpdateInvolvementsDialog,
+  },
   data() {
     return {
       // Display dialog for adding a new timeline
@@ -103,10 +120,20 @@ export default Vue.extend({
       // CollectionId which will be open in the dialog
       selectedCollectionId: 0,
       /** Collection date */
-      selectedCollectionDate: ''
+      selectedCollectionDate: "",
     };
   },
   computed: {
+    noActivityAvailable: function (): boolean {
+      return (
+        storeHelper.documentStore.documentDetails.noLaboratories ==
+          storeHelper.documentStore.documentDetails.maxNoLaboratories &&
+        storeHelper.documentStore.documentDetails.noLessons ==
+          storeHelper.documentStore.documentDetails.maxNoLessons &&
+        storeHelper.documentStore.documentDetails.noSeminaries ==
+          storeHelper.documentStore.documentDetails.maxNoSeminaries
+      );
+    },
     documentFiles: function (): AttendanceCollectionViewModule[] {
       return storeHelper.documentStore.documentFiles;
     },
@@ -124,7 +151,10 @@ export default Vue.extend({
     oncloseAddAttendanceDateDialog: function (): void {
       this.addAttendanceDateDialog = false;
     },
-    onOpenAttendanceDialog: function (collectionId: number, date: string): void {
+    onOpenAttendanceDialog: function (
+      collectionId: number,
+      date: string
+    ): void {
       this.addAttendanceDialog = true;
       this.selectedCollectionDate = date;
       this.selectedCollectionId = collectionId;
