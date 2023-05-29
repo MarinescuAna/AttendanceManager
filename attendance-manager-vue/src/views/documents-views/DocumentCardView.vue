@@ -1,6 +1,16 @@
 <template>
   <div>
-    <div v-if="isTeacher">
+    <div v-if="isLoading">
+      <v-layout justify-center>
+        <v-progress-circular
+          :size="100"
+          :width="8"
+          color="black"
+          indeterminate
+        ></v-progress-circular>
+      </v-layout>
+    </div>
+    <div v-else-if="isTeacher">
       <!-- The tabs menu -->
       <v-tabs
         v-model="currentTab"
@@ -50,6 +60,7 @@ import Vue from "vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import ReportService from "@/services/report.service";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
   name: "DocumentCardView",
@@ -73,7 +84,10 @@ export default Vue.extend({
       /** Message that should be displayed when the student has no documents */
       emptyStudentDocumentsMessage: "You are not member of any report yet.",
       /** Use this boolean to display the progress circular component */
-      documents: [] as ReportViewModule[]
+      documents: [] as ReportViewModule[],
+      isLoading: true,
+      // Add a flag to track if data fetching is successful
+      isFetchSuccessful: false,
     };
   },
   computed: {
@@ -92,7 +106,28 @@ export default Vue.extend({
   },
   /** Load all the documents from the API */
   created: async function () {
-    this.documents = await ReportService.getReports();
-  }
+    // Fetch data with a timeout of 30 seconds
+    const fetchDataWithTimeout = async () => {
+      try {
+        this.documents = await ReportService.getReports();
+        this.isFetchSuccessful = true;
+      } catch (error) {
+        Toastification.simpleError("An error occurred during data fetching.");
+      } finally {
+        this.isLoading = false;
+      }
+    };
+
+    // Start fetching data
+    fetchDataWithTimeout();
+
+    // Set a timeout to hide the loader if data is not fetched
+    setTimeout(() => {
+      if (!this.isFetchSuccessful) {
+        this.isLoading = false;
+        Toastification.simpleError("Data fetching timeout");
+      }
+    }, 30000);
+  },
 });
 </script>
