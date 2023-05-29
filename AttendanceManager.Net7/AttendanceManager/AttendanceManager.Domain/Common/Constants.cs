@@ -19,6 +19,7 @@
 
     public static class ErrorMessages
     {
+        public readonly static string SomethingWentWrong_CollectionsNotAvailableError = "Something went wrong and no collection was found for this report. Try again later!";
         public readonly static string BadRequest_UnauthorizedError = "Only teachers can access this data!";
         public readonly static string BadRequest_InvalidParameters_EmailCollection_Error = "Invalid parameters: you cannot pass email and collection id in the same time!";
         public readonly static string BadRequest_InvalidParameters_BooleanParams_Error = "Invalid parameters: email cannot be shown!";

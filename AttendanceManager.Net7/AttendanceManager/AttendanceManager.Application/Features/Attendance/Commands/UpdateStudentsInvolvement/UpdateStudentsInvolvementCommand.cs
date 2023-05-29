@@ -51,7 +51,8 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInserAttendancesMessage);
             }
 
-            foreach (var involvment in request.Involvements)
+            var involvementsWithPresents = request.Involvements.Where(i => i.IsPresent);
+            foreach (var involvment in involvementsWithPresents)
             {
                 await _mediator.Send(new CreateRewardCommand()
                 {
@@ -62,7 +63,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                 });
             }
 
-            if (!await _unitOfWork.CommitAsync())
+            if (involvementsWithPresents.Count() != 0 && !await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInsertBadgeMessage);
             }
