@@ -1,8 +1,7 @@
-﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
-using AttendanceManager.Application.Exceptions;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
-using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolvementsPerReport
@@ -10,38 +9,45 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolv
     public sealed class GetSumInvolvementsPerReportQuery : IRequest<List<InvolvementsSumVm>>
     {
     }
-    public sealed class GetSumInvolvementsPerReportQueryHandler : BaseDocumentFeature, IRequestHandler<GetSumInvolvementsPerReportQuery, List<InvolvementsSumVm>>
+    public sealed class GetSumInvolvementsPerReportQueryHandler : IRequestHandler<GetSumInvolvementsPerReportQuery, List<InvolvementsSumVm>>
     {
-        public GetSumInvolvementsPerReportQueryHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
+        private readonly IReportSingleton _currentReport;
+        private readonly IUnitOfWork _unitOfWork;
+        public GetSumInvolvementsPerReportQueryHandler(IUnitOfWork unit, IReportSingleton reportSingleton)
         {
+            _unitOfWork = unit;
+            _currentReport = reportSingleton;
+
+            if (_currentReport.CurrentReportInfo == null)
+            {
+                throw new NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+            }
         }
 
-        public Task<List<InvolvementsSumVm>> Handle(GetSumInvolvementsPerReportQuery request, CancellationToken cancellationToken)
+        public async Task<List<InvolvementsSumVm>> Handle(GetSumInvolvementsPerReportQuery request, CancellationToken cancellationToken)
         {
-            if (currentDocument == null)
-            {
-                throw new NoContentException(ErrorMessages.NoContentReportBaseMessage);
-            }
-
-            var students = documentMembers!.Where(s => s!.User!.Role == Role.Student).ToList();
+            var students = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(_currentReport.CurrentReportInfo.ReportId, Role.Student);
             var involvements = new List<InvolvementsSumVm>();
 
             // the user contains the attendances, but those are also from other document, so we will get only the attendances related to the collections from dictionary
             for (var i = 0; i < students.Count; i++)
             {
+                var studentInvolvments = students[i].User!.Attendances!
+                        .Where(a => a.IsPresent)
+                        .Where(a => _currentReport.ReportCollectionTypes.ContainsKey(a.AttendanceCollectionID));
                 involvements.Add(new()
                 {
                     UserId = students[i].UserID,
                     UserName = students[i].User!.FullName,
                     Code = students[i].User!.Code,
-                    BonusPoints = students[i].User?.Attendances == null ? 0 : students[i].User!.Attendances!.Where(a => attendanceCollectionsType!.ContainsKey(a.AttendanceCollectionID)).Sum(a => a.BonusPoints),
-                    CourseAttendances = students[i].User?.Attendances == null ? 0 : students[i].User!.Attendances!.Count(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Lecture),
-                    LaboratoryAttendances = students[i].User?.Attendances == null ? 0 : students[i].User!.Attendances!.Count(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Laboratory),
-                    SeminaryAttendances = students[i].User?.Attendances == null ? 0 : students[i].User!.Attendances!.Count(a => a.IsPresent && attendanceCollectionsType![a.AttendanceCollectionID] == CourseType.Seminary),
+                    BonusPoints = students[i].User?.Attendances == null ? 0 : studentInvolvments.Sum(a => a.BonusPoints),
+                    CourseAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.AttendanceCollectionID] == CourseType.Lecture),
+                    LaboratoryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.AttendanceCollectionID] == CourseType.Laboratory),
+                    SeminaryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.AttendanceCollectionID] == CourseType.Seminary),
                 });
             }
 
-            return Task.FromResult(involvements);
+            return involvements;
         }
     }
 }
