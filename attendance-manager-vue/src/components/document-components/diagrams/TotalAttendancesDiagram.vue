@@ -18,7 +18,7 @@
       filled
     ></v-select>
     <BarChartComponent
-      v-if="chartDataLables != null"
+      v-if="!noData"
       :values="chartDataValues"
       :labels="chartDataLables"
       class="move-behind"
@@ -26,6 +26,7 @@
     <MessageComponent
       icon="mdi-information-variant-circle-outline"
       description="<strong>There is no data for this type of activity!</strong>"
+      color="transparent"
       v-else
     />
   </v-layout>
@@ -65,17 +66,24 @@ export default Vue.extend({
       ],
       chartDataLables: [] as string[],
       chartDataValues: {},
+      noData: false,
     };
   },
   created: function (): void {
     const result = this._computeTotalAttendances(CourseType.None);
 
-    this.chartDataLables = result.labels;
-    this.chartDataValues = [
-      {
-        data: result.values,
-      },
-    ];
+    if (result != null) {
+      this.chartDataLables = result.labels;
+      this.chartDataValues = [
+        {
+          data: result.values,
+        },
+      ];
+      this.noData = false;
+    }
+    {
+      this.noData = true;
+    }
   },
   methods: {
     onSelectionChanged: function (): void {
