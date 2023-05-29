@@ -13,16 +13,19 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
         public required int AttendanceCollectionId { get; init; }
     }
 
-    public sealed class UpdateInvolvementByCodeAndIdCommandHandler : BaseFeature, IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
+    public sealed class UpdateInvolvementByCodeAndIdCommandHandler : IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
     {
-        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit)
         {
+            _unitOfWork = unit;
         }
 
         public async Task<bool> Handle(UpdateInvolvementByCodeAndIdCommand request, CancellationToken cancellationToken)
         {
             // check if the code exists into the database
-            var code = await unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.AttendanceCollectionId == request.AttendanceCollectionId)
+            var code = await _unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.AttendanceCollectionId == request.AttendanceCollectionId)
                 ?? throw new NotFoundException("Code", request.Code);
 
             // check if the code is still valid
@@ -32,16 +35,14 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
             }
 
             // get the attendance
-            var attendance = await unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID.Equals(request.AttendanceId))
+            var attendance = await _unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID.Equals(request.AttendanceId))
                 ?? throw new NotFoundException("Attendance", request.AttendanceId);
 
             //update the attendance
             attendance.IsPresent = true;
-            unitOfWork.AttendanceRepository.Update(attendance);
+            _unitOfWork.AttendanceRepository.Update(attendance);
 
-           // await _rewardService.AssignBadge(BadgeID.FirstAttendance, attendance.AttendanceCollection!, attendance.UserID, Role.Student);
-
-            return await unitOfWork.CommitAsync();
+            return await _unitOfWork.CommitAsync();
         }
 
     }
