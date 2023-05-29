@@ -7,7 +7,7 @@
     />
   </v-layout>
   <v-layout v-else>
-    <h1>You have no rewards!</h1>
+    <MessageComponent description="You have no rewards!" color="transparent" />
   </v-layout>
 </template>
 
@@ -17,6 +17,7 @@ import BadgeComponent from "@/components/shared-components/BadgeComponent.vue";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import RewardService from "@/services/reward.service";
+import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 
 export default Vue.extend({
   name: "RewardsComponent",
@@ -27,7 +28,8 @@ export default Vue.extend({
   },
   components: {
     BadgeComponent,
-  },
+    MessageComponent
+},
   created: async function():Promise<void> {
     this.rewards = await RewardService.getRewardsByReportIdAsync(storeHelper.documentStore.documentDetails.documentId);
   } 
