@@ -18,10 +18,10 @@
       filled
     ></v-select>
     <BarChartComponent
-      v-if="!noData"
       :values="chartDataValues"
       :labels="chartDataLables"
       class="move-behind"
+      v-if="chartDataLables.length != 0"
     />
     <MessageComponent
       icon="mdi-information-variant-circle-outline"
@@ -65,8 +65,7 @@ export default Vue.extend({
         { id: CourseType.Seminary, name: "Seminary" },
       ],
       chartDataLables: [] as string[],
-      chartDataValues: {},
-      noData: false,
+      chartDataValues: {}
     };
   },
   created: function (): void {
@@ -79,25 +78,26 @@ export default Vue.extend({
           data: result.values,
         },
       ];
-      this.noData = false;
     }
-    {
-      this.noData = true;
-    }
+
   },
   methods: {
     onSelectionChanged: function (): void {
-      this.chartDataLables = null!;
-      this.chartDataValues = null!;
+      this.chartDataLables = [];
+      this.chartDataValues = [];
+      
       const result = this._computeTotalAttendances(
         this.selectedActivityType["id"]
       );
-      this.chartDataLables = result.labels;
-      this.chartDataValues = [
-        {
-          data: result.values,
-        },
-      ];
+
+      if (result != null) {
+        this.chartDataLables = result.labels;
+        this.chartDataValues = [
+          {
+            data: result.values,
+          },
+        ];
+      }
     },
     /**Count all the attendances per each student and group them by values */
     _computeTotalAttendances: function (type: CourseType): {
