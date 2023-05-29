@@ -209,9 +209,13 @@ export default Vue.extend({
         return;
       }
 
-      await this.onSaveInvolvements();
-
-      this.$emit("close-dialog");
+      if(this.saveChanges){
+        if(confirm("You have some unsaved changes! If you go, the changes will be lost.")){
+          this.$emit("close-dialog");
+        }
+      }else{
+        this.$emit("close-dialog");
+      }      
     },
     onSaveInvolvements: async function (): Promise<void> {
       //get all the involvements that was updated
