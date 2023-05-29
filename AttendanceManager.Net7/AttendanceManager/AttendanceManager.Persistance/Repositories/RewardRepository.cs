@@ -12,7 +12,7 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
 
-        public async Task<IEnumerable<Reward>> GetRewardsAsync(Expression<Func<Reward, bool>> expression)
-            => await dbContext.Rewards.Include(r=>r.Badge).Where(expression).AsNoTracking().ToListAsync();
+        public IQueryable<Reward> GetRewardsAsync(Expression<Func<Reward, bool>> expression)
+            => dbContext.Rewards.Include(r=>r.Badge).Where(expression).AsNoTracking();
     }
 }
