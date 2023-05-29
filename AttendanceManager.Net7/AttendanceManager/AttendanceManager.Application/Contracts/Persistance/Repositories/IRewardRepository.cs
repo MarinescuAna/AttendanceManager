@@ -5,6 +5,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
     public interface IRewardRepository : IGenericRepository<Reward>
     {
-        Task<IEnumerable<Reward>> GetRewardsAsync(Expression<Func<Reward, bool>> expression);
+        IQueryable<Reward> GetRewardsAsync(Expression<Func<Reward, bool>> expression);
     }
 }
