@@ -2,9 +2,11 @@
 using AttendanceManager.Application.Contracts.Infrastructure.Authentication;
 using AttendanceManager.Application.Contracts.Infrastructure.Logging;
 using AttendanceManager.Application.Contracts.Infrastructure.Mail;
+using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
 using AttendanceManager.Infrastructure.Authentication;
 using AttendanceManager.Infrastructure.Logging;
 using AttendanceManager.Infrastructure.Mail;
+using AttendanceManager.Infrastructure.Singleton;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +19,11 @@ namespace AttendanceManager.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IJsonWebTokenService, JsonWebTokenService>();
-            services.AddTransient<IMailService, MailService>();
-            services.AddTransient<ILoggingService, LoggingService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IJsonWebTokenService, JsonWebTokenService>();
+            services.AddScoped<IMailService, MailService>();
+            services.AddScoped<ILoggingService, LoggingService>();
+            services.AddSingleton<IReportSingleton,ReportSingleton>();
 
             AddAuthentication(services, configuration);
         }

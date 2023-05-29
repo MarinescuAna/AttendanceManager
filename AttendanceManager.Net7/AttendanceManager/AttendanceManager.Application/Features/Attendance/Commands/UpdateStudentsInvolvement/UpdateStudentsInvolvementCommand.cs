@@ -1,9 +1,9 @@
-﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
-using AttendanceManager.Domain.Enums;
 using AttendanceManager.Domain.Common;
-using AutoMapper;
+using AttendanceManager.Domain.Enums;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStudentsInvolvement
@@ -13,36 +13,45 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
         public required StudentInvolvementVm[] Involvements { get; init; }
     }
 
-    public sealed class UpdateStudentsInvolvementCommandHandler :BaseDocumentFeature, IRequestHandler<UpdateStudentsInvolvementCommand, bool>
+    public sealed class UpdateStudentsInvolvementCommandHandler : IRequestHandler<UpdateStudentsInvolvementCommand, bool>
     {
         private IMediator _mediator;
-        public UpdateStudentsInvolvementCommandHandler(IMediator mediator, IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
+        private IUnitOfWork _unitOfWork;
+        private IReportSingleton _currentReport;
+        public UpdateStudentsInvolvementCommandHandler(IMediator mediator, IUnitOfWork unit, IReportSingleton reportSingleton)
         {
             _mediator = mediator;
+            _unitOfWork = unit;
+            _currentReport = reportSingleton;
+
+            if (_currentReport.CurrentReportInfo == null)
+            {
+                throw new NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+            }
         }
 
         public async Task<bool> Handle(UpdateStudentsInvolvementCommand request, CancellationToken cancellationToken)
         {
-            if(currentDocument== null) {
-                throw new NoContentException(ErrorMessages.NoContentReportBaseMessage);
-            }
-
-            //Update each student involvement separate because in this case, if the attendance is not udpated, the badge will not be received
+            var attendances = _unitOfWork.AttendanceRepository.GetAttendancesByReportId(_currentReport.CurrentReportInfo.ReportId);
             foreach (var student in request.Involvements)
             {
-                var oldStudent = await unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID == student.InvolvementId);
-
+                var oldStudent = attendances.FirstOrDefault(a => a.AttendanceID == student.InvolvementId);
                 if (oldStudent != null)
                 {
-                    oldStudent!.IsPresent = student.IsPresent;
-                    oldStudent!.UpdatedOn = DateTime.Now;
-                    oldStudent!.BonusPoints = student.BonusPoints;
+                    oldStudent.IsPresent = student.IsPresent;
+                    oldStudent.UpdatedOn = DateTime.Now;
+                    oldStudent.BonusPoints = student.BonusPoints;
 
-                    unitOfWork.AttendanceRepository.Update(oldStudent);
+                    _unitOfWork.AttendanceRepository.Update(oldStudent);
                 }
             }
 
-            foreach(var involvment in request.Involvements)
+            if (!await _unitOfWork.CommitAsync())
+            {
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInserAttendancesMessage);
+            }
+
+            foreach (var involvment in request.Involvements)
             {
                 await _mediator.Send(new CreateRewardCommand()
                 {
@@ -53,7 +62,12 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                 });
             }
 
-            return await unitOfWork.CommitAsync();
+            if (!await _unitOfWork.CommitAsync())
+            {
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInsertBadgeMessage);
+            }
+
+            return true;
         }
     }
 }

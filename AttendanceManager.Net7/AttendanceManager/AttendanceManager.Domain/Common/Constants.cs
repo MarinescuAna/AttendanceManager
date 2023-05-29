@@ -25,8 +25,9 @@
         public readonly static string Info_LogError = "An error occures when we try to call {0}.";
         public readonly static string MessageReceived_LogError = "Message received: {0}";
         public readonly static string InnerMessageReceived_LogError = "Inner exception received: {0}";
-        public static readonly string NoContentReportBaseMessage = "Something went wrong and the current report couldn't be loaded!";
+        public static readonly string NoContentReportBaseMessage = "Something went wrong and the current report couldn't be loaded! Reload the page.";
         public static readonly string SomethingWentWrongGenericMessage = "Something went wrong! See log files to more details or try again.";
+        public static readonly string SomethingWentWrongInserAttendancesMessage = "Something went wrong when the involvements was added! See log files to more details or try again.";
         public static readonly string SomethingWentWrongInsertBadgeMessage = "Something went wrong when the rewards was added. See the log files for more details!";
         public static readonly string SomethingWentWrongEmailSendMessage = "Something went wrong and the user will not receive any email, but the account was created. Please contact him and give him the credentials.";
     }
