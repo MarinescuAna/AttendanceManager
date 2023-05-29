@@ -1,16 +1,6 @@
 <template>
   <div>
-    <div v-if="isLoading">
-      <v-layout justify-center>
-        <v-progress-circular
-          :size="100"
-          :width="8"
-          color="black"
-          indeterminate
-        ></v-progress-circular>
-      </v-layout>
-    </div>
-    <div v-else-if="isTeacher">
+    <div v-if="isTeacher">
       <!-- The tabs menu -->
       <v-tabs
         v-model="currentTab"
@@ -45,13 +35,6 @@
         :message="emptyStudentDocumentsMessage"
       />
     </div>
-    <v-speed-dial fixed absolute bottom right>
-      <template v-slot:activator>
-        <v-btn class="blue-grey lighten-2" @click="onReload" fab>
-          <v-icon> mdi-cached </v-icon>
-        </v-btn>
-      </template>
-    </v-speed-dial>
   </div>
 </template>
 
@@ -61,12 +44,12 @@
 }
 </style>
 <script lang="ts">
-import { DocumentViewModule } from "@/modules/document";
+import { ReportViewModule } from "@/modules/document";
 import ViewDocumentsListCardsComponent from "@/components/document-components/ViewDocumentsListCardsComponent.vue";
-import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
+import ReportService from "@/services/report.service";
 
 export default Vue.extend({
   name: "DocumentCardView",
@@ -90,17 +73,17 @@ export default Vue.extend({
       /** Message that should be displayed when the student has no documents */
       emptyStudentDocumentsMessage: "You are not member of any report yet.",
       /** Use this boolean to display the progress circular component */
-      isLoading: true,
+      documents: [] as ReportViewModule[]
     };
   },
   computed: {
     /** Array of created documents */
-    documents: function (): DocumentViewModule[] {
-      return storeHelper.documentStore.documents.filter((d) => d.isCreator);
+    ownDocuments: function (): ReportViewModule[] {
+      return this.documents.filter((d) => d.isCreator);
     },
     /** Array of documents where the used is collaborator */
-    collaboratorDocuments: function (): DocumentViewModule[] {
-      return storeHelper.documentStore.documents.filter((d) => !d.isCreator);
+    collaboratorDocuments: function (): ReportViewModule[] {
+      return this.documents.filter((d) => !d.isCreator);
     },
     /** Boolean value for determinate the current user role */
     isTeacher: function (): boolean {
@@ -109,15 +92,7 @@ export default Vue.extend({
   },
   /** Load all the documents from the API */
   created: async function () {
-    await this._loadDocuments(false);
-  },
-  methods: {
-    _loadDocuments: async function (reload: boolean): Promise<void> {
-      this.isLoading = !(await storeHelper.documentStore.loadDocuments(reload));
-    },
-    onReload: async function (): Promise<void> {
-      this._loadDocuments(true);
-    },
-  },
+    this.documents = await ReportService.getReports();
+  }
 });
 </script>

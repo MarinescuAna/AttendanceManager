@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DocumentViewModule, DocumentUpdateModule, DocumentInsertModule } from "@/modules/document";
+import {  DocumentUpdateModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import https from "@/plugins/axios";
 import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
@@ -8,52 +8,6 @@ import { AxiosResponse } from "axios";
 
 // actions for this store
 export const documentActions = {
-    /**
-     * Load all the documents
-     */
-    async loadDocuments({ commit, state }, reload: boolean): Promise<boolean> {
-        if (state.documents.length == 0 || reload) {
-            let isSuccess = true;
-
-            const result = await https.get(`${DOCUMENT_CONTROLLER}/documents`)
-                .catch(error => {
-                    isSuccess = ResponseHandler.errorResponseHandler(error);
-                });
-
-            if (isSuccess) {
-                commit("_documents", (result as AxiosResponse).data as DocumentViewModule[]);
-            }
-        }
-
-        return true;
-    },
-    /**
- * Add a new document
- */
-    async addDocument({commit},payload: { parameters: DocumentInsertModule, courseName: string, specializationName: string}): Promise<boolean> {
-
-        let isSuccess = true;
-
-        const result = await https.post(`${DOCUMENT_CONTROLLER}/create_document?`, payload.parameters)
-            .catch(error => {
-                isSuccess = ResponseHandler.errorResponseHandler(error);
-            });
-
-            if(isSuccess){
-                console.log((result as AxiosResponse).data);
-                
-                commit("_addDocument", {
-                    documentId: (result as AxiosResponse).data["documentId"],
-                    enrollmentYear: payload.parameters.enrollmentYear,
-                    isCreator: true,
-                    title: payload.parameters.title,
-                    courseName: payload.courseName,
-                    specializationName: payload.specializationName,
-                    updatedOn: (result as AxiosResponse).data["updatedOn"]
-                } as DocumentViewModule);
-            }
-        return isSuccess;
-    },
     /**
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
      * @param payload documentId
@@ -118,7 +72,7 @@ export const documentActions = {
             });
 
         if (isSuccess) {
-            commit("_deleteDocument", documentId);
+            commit("_deleteDocument");
         }
 
         return isSuccess;

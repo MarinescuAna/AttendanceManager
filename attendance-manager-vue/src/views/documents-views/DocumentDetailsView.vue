@@ -164,7 +164,7 @@ export default Vue.extend({
       );
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.isCreator = storeHelper.documentStore.documents.find(d=>d.documentId == this.documentInfo.documentId)!.isCreator;
+      this.isCreator = storeHelper.documentStore.documentDetails.isCreator;
       this.isLoading = response ? false : response;
     }
   },

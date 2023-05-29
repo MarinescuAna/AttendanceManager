@@ -1,5 +1,5 @@
 
-import { DocumentFullViewModule, DocumentInsertModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentUpdateModule, ReportViewModule } from "@/modules/document";
 import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
@@ -14,7 +14,7 @@ export class DocumentStore {
     /**
      * Getter for fetching all the documents from the store, not from the API
     */
-    public get documents(): DocumentViewModule[] {
+    public get documents(): ReportViewModule[] {
         return this.store.getters[`${documentNamespace}/documents`];
     }
     /**
@@ -29,17 +29,6 @@ export class DocumentStore {
     */
     public get documentDetails(): DocumentFullViewModule {
         return this.store.getters[`${documentNamespace}/documentDetails`];
-    }
-
-    public async addDocument(parameters: DocumentInsertModule, courseName: string, specializationName: string): Promise<boolean>{
-        return await this.store.dispatch(`${documentNamespace}/addDocument`, {parameters: parameters, courseName: courseName, specializationName: specializationName});
-    }
-
-    /**
-     * Load all the document
-     */
-    public async loadDocuments(reload: boolean): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/loadDocuments`, reload);
     }
 
     /**

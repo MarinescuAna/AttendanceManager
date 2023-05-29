@@ -1,16 +1,10 @@
-import { DocumentFullViewModule, DocumentMembersViewModule, DocumentUpdateModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule, DocumentMembersViewModule, DocumentUpdateModule } from "@/modules/document";
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { CourseType } from "@/shared/enums";
 import { initializeDocumentState } from ".";
 
 // mutations for this store
 export const documentMutations = {
-    /**
-     * Update the entire list of documents existed into the store
-     */
-    _documents(state, payload: DocumentViewModule[]): void {
-        state.documents = payload;
-    },
     /**
      * Update the entire list of documents existed into the store
      */
@@ -46,13 +40,9 @@ export const documentMutations = {
             }
         }
     },
-    _addDocument(state, payload: DocumentViewModule): void{
-        state.documents.unshift(payload);
-    },
     /** Delete document from the store */
-    _deleteDocument(state, payload: number): void {
+    _deleteDocument(state): void {
         state.currentDocument = {};
-        state.documents = state.documents.filter(d => d.documentId != payload);
     },
     _addCollaborator(state, payload: DocumentMembersViewModule): void {
         state.currentDocument.documentMembers.push(payload);

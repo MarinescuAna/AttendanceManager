@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { DocumentViewModule } from "@/modules/document";
+import { ReportViewModule } from "@/modules/document";
 import { ImageSelector } from "@/shared/image";
 import Vue from "vue";
 
@@ -51,7 +51,7 @@ export default Vue.extend({
   props: {
     /** Array of documents */
     documents: {
-      type: Array as () => DocumentViewModule[],
+      type: Array as () => ReportViewModule[],
       required: true,
       },
     /** Message that will be displayed in case that is no document */

@@ -294,12 +294,13 @@
 <script lang="ts">
 import { CourseViewModule } from "@/modules/course";
 import { SpecializationModule } from "@/modules/specialization";
-import { DocumentInsertModule } from "@/modules/document";
+import { ReportInsertModule } from "@/modules/document";
 import { StudentForCourseViewModule } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import UserService from "@/services/user.service";
 import { rules } from "@/plugins/vee-validate";
+import ReportService from "@/services/report.service";
 
 export default Vue.extend({
   name: "CreateDocumentView",
@@ -395,7 +396,7 @@ export default Vue.extend({
     },
     /** Create the new document according to the selected data, and if any error occures, redirect the user to the created documents list */
     onSubmit: async function (): Promise<void> {
-      const response = await storeHelper.documentStore.addDocument(
+      const response = await ReportService.addReport(
         {
           courseId: this.selectedCourse.id,
           enrollmentYear: this.selectedYear,
@@ -407,9 +408,7 @@ export default Vue.extend({
           studentIds: this.selectedStudents.map((x) => this.students[x].email),
           attendanceImportance: this.attendanceImportance,
           bonusPointsImportance: this.bonusPointImportance,
-        } as DocumentInsertModule,
-        this.selectedSpecialization.name,
-        this.selectedCourse.name
+        } as ReportInsertModule
       );
 
       if (response) {

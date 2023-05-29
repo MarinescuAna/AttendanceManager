@@ -1,12 +1,10 @@
-import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule} from "@/modules/document";
 import { documentGetter } from "./getter";
 import { documentMutations } from "./mutation";
 import { documentActions } from "./action";
 
 //state type
 interface DocumentState {
-    // array with all the documents
-    documents: DocumentViewModule[];
     // current document
     currentDocument: DocumentFullViewModule;
 }
@@ -14,7 +12,6 @@ interface DocumentState {
 //initialize the state with an empty state
 export function initializeDocumentState(): DocumentState {
     return {
-        documents: [],
         currentDocument: {} as DocumentFullViewModule,
     };
 }

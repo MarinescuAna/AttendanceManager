@@ -1,14 +1,8 @@
-import { DocumentFullViewModule, DocumentViewModule } from "@/modules/document";
+import { DocumentFullViewModule } from "@/modules/document";
 import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 
 // getters for this store
 export const documentGetter = {
-    /**
-     * Get documents from the store
-    */
-    documents(state): DocumentViewModule[] {
-        return state.documents;
-    },
     /**
      * Gets created documents from the store
     */

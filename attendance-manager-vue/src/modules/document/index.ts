@@ -3,7 +3,7 @@ import { AttendanceCollectionViewModule } from "@/modules/document/attendance-co
 import { BadgeType } from "@/shared/enums";
 
 /** Use this view only for sending the collected data from the form used for creating a new document, to the API */
-export interface DocumentInsertModule{
+export interface ReportInsertModule{
     title: string;
     courseId: number;
     specializationId: number;
@@ -30,7 +30,7 @@ export interface DocumentUpdateModule{
 
 
 /** Use this view in order to get the documents for the cards */
-export interface DocumentViewModule{
+export interface ReportViewModule{
     title: string;
     courseName: string;
     specializationName: string;
@@ -77,4 +77,5 @@ export interface DocumentFullViewModule{
     attendanceImportance: number;
     bonusPointsImportance: number;
     numberOfStudents: number;
+    isCreator: boolean;
 }
