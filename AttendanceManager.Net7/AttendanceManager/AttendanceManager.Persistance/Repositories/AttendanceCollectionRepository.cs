@@ -19,6 +19,7 @@ namespace AttendanceManager.Persistance.Repositories
         /// <returns></returns>
         public IQueryable<AttendanceCollection> GetCollectionsByReportId(int reportId)
             => dbContext.AttendanceCollections
+                .AsNoTracking()
                 .Include(ac => ac.Attendances)
                 .Where(ac => ac.DocumentID == reportId);
         /// <summary>
