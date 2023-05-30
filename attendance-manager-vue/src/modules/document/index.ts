@@ -52,6 +52,7 @@ export interface BadgeViewModule{
     rewardId: number;
     badgeId: number;
     isActive: boolean;
+    description: string;
 }
 
 /** This module is used in the document store to keep all the informations related to a document */

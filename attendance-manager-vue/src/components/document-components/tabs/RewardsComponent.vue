@@ -1,13 +1,41 @@
 <template>
-  <v-layout class="ma-2" v-if="rewards?.length > 0">
-    <BadgeComponent
-      v-for="badge in rewards"
-      :key="badge.badgeId"
-      :badge="badge"
-    />
+  <v-layout class="ma-2" v-if="rewards?.length > 0" column>
+    <v-flex class="pa-5">
+      <h2 class="ma-3">Achieved rewards</h2>
+      <v-layout v-if="achievedRewards.length > 0" wrap>
+        <BadgeComponent
+          v-for="badge in achievedRewards"
+          :key="badge.badgeId"
+          :badge="badge"
+        />
+      </v-layout>
+      <MessageComponent
+        description="You have no rewards achieved by now!"
+        color="transparent"
+        v-else
+      />
+    </v-flex>
+    <v-flex class="pa-5">
+      <h2 class="ma-3">Unachieved rewards</h2>
+      <v-layout v-if="unachievedRewards.length > 0" wrap>
+        <BadgeComponent
+          v-for="badge in unachievedRewards"
+          :key="badge.badgeId"
+          :badge="badge"
+        />
+      </v-layout>
+      <MessageComponent
+        description="Great job! You achieved all the rewards."
+        color="transparent"
+        v-else
+      />
+    </v-flex>
   </v-layout>
   <v-layout v-else>
-    <MessageComponent description="You have no rewards!" color="transparent" />
+    <MessageComponent
+      description="You have no rewards defined that can be achieved."
+      color="transparent"
+    />
   </v-layout>
 </template>
 
@@ -21,17 +49,27 @@ import MessageComponent from "@/components/shared-components/MessageComponent.vu
 
 export default Vue.extend({
   name: "RewardsComponent",
-  data: function() {
+  data: function () {
     return {
-      rewards: [] as BadgeViewModule[]
-    }
+      rewards: [] as BadgeViewModule[],
+    };
   },
   components: {
     BadgeComponent,
-    MessageComponent
-},
-  created: async function():Promise<void> {
-    this.rewards = await RewardService.getRewardsByReportIdAsync(storeHelper.documentStore.documentDetails.documentId);
-  } 
+    MessageComponent,
+  },
+  computed: {
+    achievedRewards: function (): BadgeViewModule[] {
+      return this.rewards.filter((s) => s.isActive);
+    },
+    unachievedRewards: function (): BadgeViewModule[] {
+      return this.rewards.filter((s) => !s.isActive);
+    },
+  },
+  created: async function (): Promise<void> {
+    this.rewards = await RewardService.getRewardsByReportIdAsync(
+      storeHelper.documentStore.documentDetails.documentId
+    );
+  },
 });
 </script>

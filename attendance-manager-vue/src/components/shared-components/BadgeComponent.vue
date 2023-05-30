@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-layout
         class="badge-container"
-        :class="!badge.isActive?'inactive':''"
+        :class="!badge.isActive ? 'inactive' : ''"
         v-bind="attrs"
         v-on="on"
         align-center
@@ -28,8 +28,10 @@
   width: 130px;
 }
 .image-display {
-  width: 130px;
-  height: 130px;
+  max-width: 130px;
+  max-height: 130px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 50%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7);
@@ -40,7 +42,7 @@
   font-weight: bold;
   text-align: center;
 }
-.inactive{
+.inactive {
   opacity: 0.4;
 }
 </style>
@@ -55,14 +57,12 @@ export default Vue.extend({
       required: true,
       type: Object as () => BadgeViewModule,
     },
-    details: {
-      type: String,
-      default: "",
-    },
   },
   computed: {
     tooltip: function (): string {
-      return this.details === "" ? this.badge.title : this.details;
+      return this.badge.description === ""
+        ? this.badge.title
+        : this.badge.description;
     },
   },
 });
