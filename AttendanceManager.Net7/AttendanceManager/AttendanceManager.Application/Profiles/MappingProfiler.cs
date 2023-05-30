@@ -17,6 +17,9 @@ namespace AttendanceManager.Application.Profiles
                 .ForMember(d => d.RewardId, act => act.MapFrom(r => r.RewardID))
                 .ForMember(d => d.Description, act => act.MapFrom(r => r.Badge!.Description))
                 .ForMember(d => d.IsActive, act => act.MapFrom(_ => true));
+
+            //Used for getting the notifications
+            CreateMap<Notification, Features.Notification.Queries.GetNotificationsByUserId.NotificationVm>();
         }
     }
 }
