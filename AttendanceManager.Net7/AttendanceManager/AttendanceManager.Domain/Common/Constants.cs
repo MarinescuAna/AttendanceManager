@@ -19,7 +19,6 @@
 
     public static class ErrorMessages
     {
-        public readonly static string SomethingWentWrong_CollectionsNotAvailableError = "Something went wrong and no collection was found for this report. Try again later!";
         public readonly static string BadRequest_UnauthorizedError = "Only teachers can access this data!";
         public readonly static string BadRequest_InvalidParameters_EmailCollection_Error = "Invalid parameters: you cannot pass email and collection id in the same time!";
         public readonly static string BadRequest_InvalidParameters_BooleanParams_Error = "Invalid parameters: email cannot be shown!";
@@ -27,9 +26,21 @@
         public readonly static string MessageReceived_LogError = "Message received: {0}";
         public readonly static string InnerMessageReceived_LogError = "Inner exception received: {0}";
         public static readonly string NoContentReportBaseMessage = "Something went wrong and the current report couldn't be loaded! Reload the page.";
+
+
+        public readonly static string SomethingWentWrong_NotificationDelete_Error = "Something went wrong and the notification wasn't been deleted. Please try again!";
+        public readonly static string SomethingWentWrong_NotificationUpdate_Error = "Something went wrong and the notification wasn't been set as read. Please try again!";
+        public readonly static string SomethingWentWrong_NotificationInsert_Error = "Something went wrong when the notification was sent. The user(s) wasn't(weren't) informed about your changes.";
+        public readonly static string SomethingWentWrong_CreateReportNotificationInsert_Error = "Something went wrong and the notifications weren't sent, but the document was successfully created. The users weren't informed about this new report.";
+        public readonly static string SomethingWentWrong_CollectionsNotAvailableError = "Something went wrong and no collection was found for this report. Try again later!";
         public static readonly string SomethingWentWrongGenericMessage = "Something went wrong! See log files to more details or try again.";
         public static readonly string SomethingWentWrongInserAttendancesMessage = "Something went wrong when the involvements was added! See log files to more details or try again.";
         public static readonly string SomethingWentWrongInsertBadgeMessage = "Something went wrong when the rewards was added. See the log files for more details!";
         public static readonly string SomethingWentWrongEmailSendMessage = "Something went wrong and the user will not receive any email, but the account was created. Please contact him and give him the credentials.";
+    }
+
+    public static class NotificationMessages
+    {
+        public readonly static string CreateReportNotification = "You are now member of report <strong>{0}</strong>. This report was created by {1} on {2}.";
     }
 }
