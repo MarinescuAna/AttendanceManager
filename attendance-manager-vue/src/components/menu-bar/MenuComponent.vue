@@ -1,9 +1,11 @@
 <template>
   <div>
-    <v-toolbar flat color="transparent">
+    <v-toolbar color="transparent" flat>
+      <!--nav bar button for open the navigation drawer-->
       <v-app-bar-nav-icon
         @click.stop="drawerActivator = !drawerActivator"
       ></v-app-bar-nav-icon>
+      <!--Attendance manager title-->
       <router-link :to="{ name: 'home' }" v-slot="{ navigate }">
         <v-toolbar-title
           class="text-uppercase font-weight-black"
@@ -13,7 +15,19 @@
           <span>Manager</span>
         </v-toolbar-title>
       </router-link>
+      <!--Badge for notifications-->
+      <v-badge
+        :content="messages"
+        :value="messages"
+        color="green"
+        class="mx-2"
+        bottom
+        overlap
+      >
+        <v-btn @click="openNotificationDialog = true" icon><v-icon> mdi-message-text </v-icon></v-btn>
+      </v-badge>
     </v-toolbar>
+    <!--navigation drawer-->
     <v-navigation-drawer
       v-model="drawerActivator"
       class="blue-grey lighten-4 navigation-drawer-style"
@@ -71,6 +85,16 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <!--Dialog for notification-->
+    <v-dialog
+      v-if="openNotificationDialog"
+      v-model="openNotificationDialog"
+      fullscreen
+      hide-overlay
+      scrollable
+    >
+      <NotificationDialog @close-dialog="openNotificationDialog = false" />
+    </v-dialog>
   </div>
 </template>
 
@@ -87,9 +111,11 @@ import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
 import { MenuChildModel, MenuItems } from "./ItemList";
+import NotificationDialog from "./NotificationDialog.vue";
 
 export default Vue.extend({
   name: "MenuComponent",
+  components: { NotificationDialog },
   data() {
     return {
       // Username
@@ -104,6 +130,8 @@ export default Vue.extend({
       links: [] as MenuChildModel[],
       // Use this in order to activeate the drawer
       drawerActivator: false,
+      openNotificationDialog: false,
+      messages: 1,
     };
   },
   created(): void {
