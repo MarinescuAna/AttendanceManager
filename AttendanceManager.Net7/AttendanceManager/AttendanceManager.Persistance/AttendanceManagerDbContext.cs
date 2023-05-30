@@ -27,6 +27,7 @@ namespace AttendanceManager.Persistance
         public DbSet<InvolvementCode> InvolvementCodes { get; set; }
         public DbSet<Badge> Badges { get; set; }
         public DbSet<Reward> Rewards { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

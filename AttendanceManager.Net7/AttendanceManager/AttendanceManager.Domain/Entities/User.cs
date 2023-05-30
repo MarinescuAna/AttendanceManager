@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AttendanceManager.Domain.Entities
 {
-    public sealed class User
+    public class User
     {
         [MaxLength(254)]
         [Key]
@@ -28,5 +28,6 @@ namespace AttendanceManager.Domain.Entities
         public ICollection<DocumentMember>? DocumentMembers { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }
         public ICollection<Reward>? Rewards { get; set; }
+        public virtual ICollection<Notification>? Notifications { get; set; }
     }
 }
