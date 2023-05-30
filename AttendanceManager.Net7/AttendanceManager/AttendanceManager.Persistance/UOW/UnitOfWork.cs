@@ -21,11 +21,16 @@ namespace AttendanceManager.Persistance.UOW
         private readonly IInvolvementCodeRepository? _involvementCodeRepository;
         private readonly IRewardRepository? _rewardRepository;
         private readonly IBadgeRepository? _badgeRepository;
+        private readonly INotificationRepository? _notificationRepository;
         public UnitOfWork(AttendanceManagerDbContext dbContext, ILoggingService loggingService)
         {
             _loggingSerivce = loggingService;
             _dbContext = dbContext;
         }
+        public INotificationRepository NotificationRepository
+        {
+            get => _notificationRepository ?? new NotificationRepository(_dbContext, _loggingSerivce);
+        }         
         public IBadgeRepository BadgeRepository
         {
             get => _badgeRepository ?? new BadgeRepository(_dbContext, _loggingSerivce);

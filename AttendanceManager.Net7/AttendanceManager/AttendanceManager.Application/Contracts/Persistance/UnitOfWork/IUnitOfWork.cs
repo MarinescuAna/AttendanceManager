@@ -16,6 +16,7 @@ namespace AttendanceManager.Application.Contracts.Persistance.UnitOfWork
         IInvolvementCodeRepository InvolvementCodeRepository { get; }
         IRewardRepository RewardRepository { get; }
         IBadgeRepository BadgeRepository { get; }
+        INotificationRepository NotificationRepository { get; }
         Task<bool> CommitAsync(int numberOfRows = 1);
     }
 }
