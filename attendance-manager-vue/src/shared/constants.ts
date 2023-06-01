@@ -26,3 +26,4 @@ export const ATTENDANCE_COLLECTION_CONTROLLER = "attendance_collection";
 export const ATTENDANCE_CONTROLLER = "attendance";
 export const INVOLVEMENT_CODE_CONTROLLER = "involvement_code";
 export const REWARD_CONTROLLER = "reward";
+export const NOTIFICATION_CONTROLLER = "notification";

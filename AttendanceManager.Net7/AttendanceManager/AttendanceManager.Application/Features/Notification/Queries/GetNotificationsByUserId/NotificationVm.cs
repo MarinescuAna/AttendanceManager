@@ -5,6 +5,7 @@
         public required int NotificationId { get; set; }
         public required string Message { get; set; }
         public required string CreatedOn { get; set; }
+        public required Domain.Enums.NotificationPriority Priority { get; set; }
         public required bool IsRead { get; set; }
     }
 }

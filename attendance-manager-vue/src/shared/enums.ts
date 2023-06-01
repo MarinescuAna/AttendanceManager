@@ -32,3 +32,9 @@ export enum BadgeType{
     LastAttendance = 2,
     FirstReport = 3,
 }
+
+export enum NotificationPriority{
+    Info,
+    Warning,
+    Alert
+}

@@ -16,16 +16,41 @@
         </v-toolbar-title>
       </router-link>
       <!--Badge for notifications-->
-      <v-badge
-        :content="messages"
-        :value="messages"
-        color="green"
-        class="mx-2"
+      <v-spacer></v-spacer>
+      <v-menu
+        v-model="openNotificationDialog"
+        v-if="isLogged"
+        :close-on-content-click="false"
+        :nudge-width="200"
         bottom
-        overlap
+        offset-y
       >
-        <v-btn @click="openNotificationDialog = true" icon><v-icon> mdi-message-text </v-icon></v-btn>
-      </v-badge>
+        <template v-slot:activator="{ on, attrs }">
+          <v-badge
+            :content="messages"
+            :value="messages"
+            color="green"
+            class="mx-2"
+            bottom
+            overlap
+          >
+            <v-btn
+              class="orange lighten-3 black--text"
+              elevation="3"
+              v-bind="attrs"
+              v-on="on"
+              icon
+              ><v-icon> mdi-message-text </v-icon></v-btn
+            >
+          </v-badge>
+        </template>
+        <NotificationMenuContent
+          class="dialog-notification-menu"
+          :notifications="notifications"
+          @delete-notification="onRemoveNotification"
+          @read-notification="onReadNotification"
+        />
+      </v-menu>
     </v-toolbar>
     <!--navigation drawer-->
     <v-navigation-drawer
@@ -35,107 +60,49 @@
       temporary
       width="auto"
     >
-      <v-row>
-        <v-container justify="center">
-          <!--Display title-->
-          <v-container v-if="isLogged">
-            <h3 class="text-uppercase">{{ name }}</h3>
-            <h4>{{ email }}</h4>
-            <h4>{{ code }}</h4>
-          </v-container>
-          <v-container v-else>
-            <h3 class="text-uppercase">
-              <span class="font-weight-light">Attendance</span>
-              <span>Manager</span>
-            </h3>
-          </v-container>
-        </v-container>
-      </v-row>
-      <!--Login or Logout button-->
-      <v-container v-if="!isLogged">
-        <v-btn
-          @click="onRedirectToLogin"
-          title="Login"
-          class="orange lighten-3"
-          block
-        >
-          SIGN IN
-        </v-btn>
-      </v-container>
-      <v-container v-else>
-        <v-btn @click="logout" class="orange lighten-3" block> SIGN OUT </v-btn>
-      </v-container>
-
-      <v-divider></v-divider>
-
-      <!--links-->
-      <v-list>
-        <v-list-item
-          v-for="link in links"
-          :key="link.title"
-          :to="{ name: link.route }"
-          router
-        >
-          <v-list-item-icon>
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ link.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <MenuNavigationDrawerContent
+        :isLogged="isLogged"
+        @login-changed="onLoginChanged"
+      />
     </v-navigation-drawer>
-    <!--Dialog for notification-->
-    <v-dialog
-      v-if="openNotificationDialog"
-      v-model="openNotificationDialog"
-      fullscreen
-      hide-overlay
-      scrollable
-    >
-      <NotificationDialog @close-dialog="openNotificationDialog = false" />
-    </v-dialog>
   </div>
 </template>
 
-<style>
+<style scoped>
 .navigation-drawer-style {
-  min-width: 10%;
+  min-width: 10% !important;
+}
+.dialog-notification-menu {
+  max-width: 500px;
+  min-height: 180px;
 }
 </style>
 
 <script lang="ts">
-import { Role } from "@/shared/enums";
-import AuthService from "@/services/auth.service";
 import Vue from "vue";
-import { EventBus } from "@/main";
+import MenuNavigationDrawerContent from "./MenuNavigationDrawerContent.vue";
+import NotificationMenuContent from "./NotificationMenuContent.vue";
+import NotificationService from "@/services/notification.service";
+import { NotificationViewModel } from "@/modules/notification/index";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
-import { MenuChildModel, MenuItems } from "./ItemList";
-import NotificationDialog from "./NotificationDialog.vue";
+import { EventBus } from "@/main";
 
 export default Vue.extend({
   name: "MenuComponent",
-  components: { NotificationDialog },
+  components: { MenuNavigationDrawerContent, NotificationMenuContent },
   data() {
     return {
-      // Username
-      name: "",
-      // Code
-      code: "",
-      // Email
-      email: "",
-      // Boolean for indicating is the user is logged or not
-      isLogged: false,
-      // List with all the existent buttons for defined pages
-      links: [] as MenuChildModel[],
       // Use this in order to activeate the drawer
       drawerActivator: false,
       openNotificationDialog: false,
-      messages: 1,
+      notifications: [] as NotificationViewModel[],
+      isLogged: false,
     };
   },
-  created(): void {
-    this.setProperties();
+  computed: {
+    messages: function (): number {
+      return this.notifications.filter((n) => !n.isRead).length;
+    },
   },
   mounted: function () {
     /**
@@ -143,48 +110,30 @@ export default Vue.extend({
      */
     EventBus.$on(EVENT_BUS_ISLOGGED, () => {
       this.isLogged = true;
-      this.setProperties();
     });
   },
   destroyed(): void {
     EventBus.$off(EVENT_BUS_ISLOGGED);
   },
+  created: async function (): Promise<void> {
+    this.notifications =
+      await NotificationService.getCurrentUserNotificationsAsync();
+  },
   methods: {
-    /**
-     * Use this method in order to set the page properties
-     */
-    setProperties(): void {
-      const data = AuthService.getDataFromToken();
-
-      if (data === null) {
-        this.links = MenuItems.getLinkListByRole(Role.All);
-        this.isLogged = false;
-      } else {
-        this.isLogged = true;
-        this.name = data.name;
-        this.code = data.code;
-        this.email = data.email;
-        this.links = MenuItems.getLinkListByRole(Role[data.role]);
-      }
+    onRemoveNotification: function (notificationId): void {
+      this.notifications = this.notifications.filter(
+        (n) => n.notificationId != notificationId
+      );
     },
-
-    /**
-     * Use this method to logout
-     */
-    logout(): void {
-      this.isLogged = false;
-      this.links = MenuItems.getLinkListByRole(Role.All);
-      AuthService.logout();
-      this.onRedirectToLogin();
+    onReadNotification: function (notificationId): void {
+      this.notifications.forEach((notification) => {
+        if (notification.notificationId == notificationId) {
+          notification.isRead = true;
+        }
+      });
     },
-
-    /**
-     * Use this method to redirect the user to login page
-     */
-    onRedirectToLogin(): void {
-      if (this.$route.name !== "login") {
-        this.$router.push({ name: "login" });
-      }
+    onLoginChanged: function (value): void {
+      this.isLogged = value;
     },
   },
 });

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using AttendanceManager.Domain.Enums;
 
 namespace AttendanceManager.Domain.Entities
 {
@@ -15,6 +16,7 @@ namespace AttendanceManager.Domain.Entities
         public required string Message { get; set; }
         public required bool IsRead { get; set; }
         public required DateTime CreatedOn { get; set; }
+        public required NotificationPriority Priority { get; set; }
         public virtual User? User { get; set; }
     }
 }

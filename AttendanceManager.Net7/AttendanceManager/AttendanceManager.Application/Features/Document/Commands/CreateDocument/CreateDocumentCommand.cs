@@ -72,6 +72,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             {
                 _unitOfWork.NotificationRepository.AddAsync(new()
                 {
+                    Priority= Domain.Enums.NotificationPriority.Info,
                     UserID = user,
                     CreatedOn = DateTime.Now,
                     IsRead = false,
