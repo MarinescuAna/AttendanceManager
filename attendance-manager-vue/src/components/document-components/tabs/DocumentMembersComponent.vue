@@ -12,7 +12,11 @@
         >
         </v-data-table>
         <div v-else>
-          <MessageComponent description="There is no collaborators added yet." color="transparent"/>
+          <MessageComponent description="There are no collaborators added yet. Go to the SETTINGS tab if you what to add a new collaborator." 
+            fontSize="20px"
+            fontWeight="bold"
+            :color="'#FF6F00'"
+          />
         </div>
       </v-flex>
     </v-layout>

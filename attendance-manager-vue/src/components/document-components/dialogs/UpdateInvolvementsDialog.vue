@@ -23,7 +23,7 @@
           v-if="isTeacher"
         >
           <v-icon v-if="isMobile">mdi-lock</v-icon>
-          <div v-else>Generate code </div>
+          <div v-else>Generate code</div>
         </v-btn>
         <v-btn
           class="blue-grey lighten-2"
@@ -85,7 +85,13 @@
         </template>
       </v-simple-table>
       <div v-else>
-        <MessageComponent description="There is no student here or the page is not loaded yet. Reload the page, this can be caused by an error." color="transparent"/>
+        <MessageComponent
+          description="There is no student here or the page is not loaded yet. Reload the page, this can be caused by an error."
+          icon="mdi-alert"
+          color="red"
+          fontSize="24px"
+          fontWeight="bold"
+        />
       </div>
     </v-layout>
 
@@ -134,8 +140,8 @@ export default Vue.extend({
     DotsMenuComponent,
     GenerateInvolvementCodeDialog,
     UseInvolvementCodeDialog,
-    MessageComponent
-},
+    MessageComponent,
+  },
   props: {
     /** The id of the selected attendance collection */
     attendanceCollectionId: Number,
@@ -165,7 +171,10 @@ export default Vue.extend({
         : undefined;
     },
     saveChanges: function (): boolean {
-      return InvolvementService.isChanged(this.involvementsCopy,this.involvements);
+      return InvolvementService.isChanged(
+        this.involvementsCopy,
+        this.involvements
+      );
     },
   },
   created: async function (): Promise<void> {
@@ -190,7 +199,7 @@ export default Vue.extend({
 
       this.involvements = await InvolvementService.getInvolvements(
         this.attendanceCollectionId,
-        '',
+        "",
         !this.isTeacher,
         false,
         false
@@ -209,13 +218,17 @@ export default Vue.extend({
         return;
       }
 
-      if(this.saveChanges){
-        if(confirm("You have some unsaved changes! If you go, the changes will be lost.")){
+      if (this.saveChanges) {
+        if (
+          confirm(
+            "You have some unsaved changes! If you go, the changes will be lost."
+          )
+        ) {
           this.$emit("close-dialog");
         }
-      }else{
+      } else {
         this.$emit("close-dialog");
-      }      
+      }
     },
     onSaveInvolvements: async function (): Promise<void> {
       //get all the involvements that was updated

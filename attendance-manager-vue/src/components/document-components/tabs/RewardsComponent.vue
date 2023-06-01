@@ -11,7 +11,10 @@
       </v-layout>
       <MessageComponent
         description="You have no rewards achieved by now!"
-        color="transparent"
+        :color="'#FF6F00'"
+        icon="mdi-information"
+        fontSize="20px"
+        fontWeight="bold"
         v-else
       />
     </v-flex>
@@ -26,15 +29,20 @@
       </v-layout>
       <MessageComponent
         description="Great job! You achieved all the rewards."
-        color="transparent"
+        color="green"
+        fontSize="20px"
+        fontWeight="bold"
         v-else
       />
     </v-flex>
   </v-layout>
   <v-layout v-else>
     <MessageComponent
-      description="You have no rewards defined that can be achieved."
-      color="transparent"
+      description="You have no rewards defined in the system for your role that can be achieved."
+      color="blue"
+      icon="mdi-information"
+      fontSize="20px"
+      fontWeight="bold"
     />
   </v-layout>
 </template>

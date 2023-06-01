@@ -75,8 +75,9 @@
     </v-layout>
     <v-layout v-else>
       <MessageComponent
-        description="There is no activity."
-        color="transparent"
+        description="There is no activity registered to this report."
+        icon="mdi-information"
+        :color="'#FF6F00'"
       />
     </v-layout>
   </v-layout>

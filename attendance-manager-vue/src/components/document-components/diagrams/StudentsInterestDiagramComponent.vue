@@ -28,7 +28,7 @@
     <MessageComponent
       icon="mdi-information-variant-circle-outline"
       description="<strong>There is no data for this type of activity!</strong>"
-      color="transparent"
+      :color="'#FF6F00'"
       v-else
     />
   </v-layout>
