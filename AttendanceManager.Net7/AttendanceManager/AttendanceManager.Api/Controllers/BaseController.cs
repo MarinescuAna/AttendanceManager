@@ -22,6 +22,18 @@ namespace AttendanceManager.Api.Controllers
                 return result;
             }
         }
+        protected string Username
+        {
+            get
+            {
+                var result = string.Empty;
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    result = HttpContext.User.FindFirstValue(Constants.Claim_Name_Name)!;
+                }
+                return result;
+            }
+        }
         protected Role UserRole
         {
             get

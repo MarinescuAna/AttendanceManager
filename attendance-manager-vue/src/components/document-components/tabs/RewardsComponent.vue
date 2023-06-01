@@ -76,7 +76,7 @@ export default Vue.extend({
   },
   created: async function (): Promise<void> {
     this.rewards = await RewardService.getRewardsByReportIdAsync(
-      storeHelper.documentStore.documentDetails.documentId
+      storeHelper.documentStore.report.reportId
     );
   },
 });

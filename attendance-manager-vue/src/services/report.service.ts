@@ -1,10 +1,10 @@
 import ResponseHandler from "@/error-handler/error-handler";
-import { ReportInsertModule, ReportViewModule } from "@/modules/document";
+import { ReportInsertModule, ReportCardViewModule } from "@/modules/document";
 import https from "@/plugins/axios";
 import { DOCUMENT_CONTROLLER } from "@/shared/constants";
 
 export default class ReportService {
-    static async getReports(): Promise<ReportViewModule[]> {
+    static async getReports(): Promise<ReportCardViewModule[]> {
         return (await https.get(`${DOCUMENT_CONTROLLER}/documents`)).data;
     }
 

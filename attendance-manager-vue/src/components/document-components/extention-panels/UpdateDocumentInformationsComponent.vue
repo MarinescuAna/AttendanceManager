@@ -168,25 +168,25 @@ export default Vue.extend({
       /** Rules for validating the fields */
       rules,
       /** Document title */
-      documentTitle: storeHelper.documentStore.documentDetails.title,
+      documentTitle: storeHelper.documentStore.report.title,
       /** Selected course */
       selectedCourse: storeHelper.courseStore.courses.find(
-        (c) => c.id == storeHelper.documentStore.documentDetails.courseId
+        (c) => c.id == storeHelper.documentStore.report.courseId
       ),
       /** Maximum number of lessons that will be held */
-      maxNoLessons: storeHelper.documentStore.documentDetails.maxNoLessons,
+      maxNoLessons: storeHelper.documentStore.report.maxNoLessons,
       /** Maximum number of laboratories that will be held */
       maxNoLaboratories:
-        storeHelper.documentStore.documentDetails.maxNoLaboratories,
+        storeHelper.documentStore.report.maxNoLaboratories,
       /** Maximum number of seminaries that will be held */
       maxNoSeminaries:
-        storeHelper.documentStore.documentDetails.maxNoSeminaries,
+        storeHelper.documentStore.report.maxNoSeminaries,
       /** The percentage of importance for attendances */
       attendanceImportance:
-        storeHelper.documentStore.documentDetails.attendanceImportance,
+        storeHelper.documentStore.report.attendanceImportance,
       /** The percentage of importance for bonus points */
       bonusPointImportance:
-        storeHelper.documentStore.documentDetails.bonusPointsImportance,
+        storeHelper.documentStore.report.bonusPointsImportance,
     };
   },
   computed: {
@@ -222,7 +222,7 @@ export default Vue.extend({
           title: this.documentTitle,
           attendanceImportance: this.attendanceImportance,
           bonusPointsImportance: this.bonusPointImportance,
-          documentId: storeHelper.documentStore.documentDetails.documentId,
+          documentId: storeHelper.documentStore.report.reportId,
         } as DocumentUpdateModule,
         newCourseName: this.selectedCourse.name,
       });

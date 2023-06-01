@@ -1,5 +1,3 @@
-
-import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import { BadgeType } from "@/shared/enums";
 
 /** Use this view only for sending the collected data from the form used for creating a new document, to the API */
@@ -30,7 +28,7 @@ export interface DocumentUpdateModule{
 
 
 /** Use this view in order to get the documents for the cards */
-export interface ReportViewModule{
+export interface ReportCardViewModule{
     title: string;
     courseName: string;
     specializationName: string;
@@ -40,7 +38,7 @@ export interface ReportViewModule{
     updatedOn: string;
 }
 
-export interface DocumentMembersViewModule{
+export interface MembersViewModule{
     email: string;
     name: string;
 }
@@ -55,9 +53,16 @@ export interface BadgeViewModule{
     description: string;
 }
 
+/**Use this interface to display collection in timeline */
+export interface CollectionViewModule{
+    collectionId: number;
+    activityTime: string;
+    courseType: string;
+}
+
 /** This module is used in the document store to keep all the informations related to a document */
-export interface DocumentFullViewModule{
-    documentId:number;
+export interface ReportViewModule{
+    reportId:number;
     title: string;
     courseId: number;
     courseName: string;
@@ -73,8 +78,8 @@ export interface DocumentFullViewModule{
     creationDate: string;
     updateOn: string;
     createdBy: string;
-    attendanceCollections: AttendanceCollectionViewModule[];
-    documentMembers: DocumentMembersViewModule[];
+    collections: CollectionViewModule[];
+    members: MembersViewModule[];
     attendanceImportance: number;
     bonusPointsImportance: number;
     numberOfStudents: number;

@@ -1,4 +1,4 @@
-import { DocumentFullViewModule} from "@/modules/document";
+import { ReportViewModule} from "@/modules/document";
 import { documentGetter } from "./getter";
 import { documentMutations } from "./mutation";
 import { documentActions } from "./action";
@@ -6,13 +6,13 @@ import { documentActions } from "./action";
 //state type
 interface DocumentState {
     // current document
-    currentDocument: DocumentFullViewModule;
+    currentReport: ReportViewModule;
 }
 
 //initialize the state with an empty state
 export function initializeDocumentState(): DocumentState {
     return {
-        currentDocument: {} as DocumentFullViewModule,
+        currentReport: {} as ReportViewModule,
     };
 }
 

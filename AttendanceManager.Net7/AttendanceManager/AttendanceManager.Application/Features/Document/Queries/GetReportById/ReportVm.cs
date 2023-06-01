@@ -1,10 +1,8 @@
-﻿using AttendanceManager.Application.Dtos;
-
-namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
+﻿namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
 {
-    public sealed class DocumentInfoDto
+    public sealed class ReportVm
     {
-        public required int DocumentId { get; init; }
+        public required int ReportId { get; init; }
         public required string Title { get; init; }
         public required int EnrollmentYear { get; init; }
         public required string CourseName { get; init; }
@@ -24,14 +22,19 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
         public required string CreatedBy { get; init; }
         public required bool IsCreator { get; init; }
         public required int NumberOfStudents { get; init; }
-        public required AttendanceCollectionDto[] AttendanceCollections { get; init; }
-        public required DocumentMembersDto[] DocumentMembers { get; init; }
+        public required CollectionDto[] Collections { get; init; }
+        public required MembersDto[] Members { get; init; }
     }
 
-    public class AttendanceCollectionDto
+    public class CollectionDto
     {
-        public required int AttendanceCollectionId { get; init; }
+        public required int CollectionId { get; init; }
         public required string ActivityTime { get; init; }
         public required string CourseType { get; init; }
+    }
+    public sealed class MembersDto
+    {
+        public required string Email { get; init; }
+        public required string Name { get; init; }
     }
 }

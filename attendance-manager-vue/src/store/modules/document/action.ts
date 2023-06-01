@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import {  DocumentUpdateModule } from "@/modules/document";
-import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
+import { CollectionViewModule, DocumentUpdateModule } from "@/modules/document";
 import https from "@/plugins/axios";
-import { ATTENDANCE_COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import { COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 // actions for this store
@@ -12,19 +11,19 @@ export const documentActions = {
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
      * @param payload documentId
      */
-    async loadCurrentDocument({ commit, state }, payload: string): Promise<boolean> {
+    async loadCurrentReport({ commit, state }, payload: string): Promise<boolean> {
 
-        if (Object.keys(state.currentDocument).length > 0) {
+        if (Object.keys(state.currentReport).length > 0) {
             return true;
         }
         let isFail = false;
 
         //load the document details and update the store
-        const response = await https.get(`${DOCUMENT_CONTROLLER}/document/${payload}`)
+        const response = await https.get(`${DOCUMENT_CONTROLLER}/${payload}`)
             .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
 
         if (!isFail) {
-            commit("_documentDetails", (response as AxiosResponse).data);
+            commit("_currentReport", (response as AxiosResponse).data);
         }
         return isFail;
     },
@@ -78,20 +77,20 @@ export const documentActions = {
         return isSuccess;
     },
     /** Add new attendance collection */
-    async addAttendanceCollection({ commit }, payload: AttendanceCollectionInsertModule): Promise<boolean> {
+    async addCollection({ commit }, payload: { activityTime: string, type: string }): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${ATTENDANCE_COLLECTION_CONTROLLER}/create_attendance_collection`, payload)
+        const result = await https.post(`${COLLECTION_CONTROLLER}/create_collection?activityTime=${payload.activityTime}&type=${payload.type}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
         if (isSuccess) {
-            commit("_addAttendanceCollection", {
-                attendanceCollectionId: (result as AxiosResponse).data,
-                activityTime: payload.activityDateTime,
-                courseType: payload.courseType
-            } as AttendanceCollectionViewModule);
+            commit("_addCollection", {
+                collectionId: (result as AxiosResponse).data,
+                activityTime: payload.activityTime,
+                courseType: payload.type
+            } as CollectionViewModule);
         }
 
         return isSuccess;

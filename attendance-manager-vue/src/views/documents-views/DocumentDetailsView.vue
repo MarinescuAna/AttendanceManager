@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { DocumentFullViewModule } from "@/modules/document";
+import { ReportViewModule } from "@/modules/document";
 import AboutDocumentComponent from "@/components/document-components/tabs/AboutDocumentComponent.vue";
 import AttendanceTimelineComponent from "@/components/document-components/tabs/AttendanceTimelineComponent.vue";
 import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
@@ -136,8 +136,8 @@ export default Vue.extend({
       ];
     },
     /** Get document details from the store to display the name or other data */
-    documentInfo: function (): DocumentFullViewModule {
-      return storeHelper.documentStore.documentDetails;
+    documentInfo: function (): ReportViewModule {
+      return storeHelper.documentStore.report;
     },
     /** Boolean value for determinate the current user role */
     isTeacher: function (): boolean {
@@ -159,12 +159,12 @@ export default Vue.extend({
    * */
   created: async function () {
     if (typeof this.$route.params.id !== "undefined" || this.documentInfo) {
-      const response = await storeHelper.documentStore.loadCurrentDocument(
+      const response = await storeHelper.documentStore.loadCurrentReport(
         this.$route.params.id
       );
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.isCreator = storeHelper.documentStore.documentDetails.isCreator;
+      this.isCreator = storeHelper.documentStore.report.isCreator;
       this.isLoading = response ? false : response;
     }
   },

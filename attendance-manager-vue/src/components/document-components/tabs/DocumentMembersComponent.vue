@@ -30,7 +30,7 @@
 <script lang="ts">
 import Vue from "vue";
 import storeHelper from "@/store/store-helper";
-import { DocumentMembersViewModule } from "@/modules/document";
+import { MembersViewModule } from "@/modules/document";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 
 export default Vue.extend({
@@ -52,8 +52,8 @@ export default Vue.extend({
         };
     },
     computed: {
-        members: function (): DocumentMembersViewModule[] {
-            return storeHelper.documentStore.documentDetails.documentMembers;
+        members: function (): MembersViewModule[] {
+            return storeHelper.documentStore.report.members;
         },
     },
     components: { MessageComponent }

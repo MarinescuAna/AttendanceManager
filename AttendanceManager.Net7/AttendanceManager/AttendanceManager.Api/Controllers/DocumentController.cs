@@ -2,8 +2,9 @@
 using AttendanceManager.Application.Features.Document.Commands.DeleteDocumentById;
 using AttendanceManager.Application.Features.Document.Commands.UpdateDocumentById;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
-using AttendanceManager.Application.Features.Document.Queries.GetDocumentById;
+using AttendanceManager.Application.Features.Document.Queries.GetReportById;
 using AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaboratorByDocumentId;
+using AttendanceManager.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,16 +36,20 @@ namespace AttendanceManager.Api.Controllers
         /// Get created document by the id
         /// <returns>Success: information regarding the document with the given id</returns>
         /// </summary>
-        [HttpGet("document/{id}")]
-        public async Task<IActionResult> GetDocumentById(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDocumentById(int? id)
         {
-            var document = await mediator.Send(new GetDocumentByIdQuery()
+            if (id == null)
             {
-                Id = id,
+                return BadRequest(ErrorMessages.BadRequest_IdMissing_EmailCollection_Error);
+            }
+
+            return Ok(await mediator.Send(new GetReportByIdQuery()
+            {
+                Id = (int)id,
                 Role = UserRole,
                 UserId = UserEmail
-            });
-            return Ok(document);
+            }));
         }
 
         /// <summary>

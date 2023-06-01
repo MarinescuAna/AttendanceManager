@@ -94,7 +94,7 @@ export default Vue.extend({
 
       //get the number of students that should be present
       const numberOfAttendances =
-        storeHelper.documentStore.documentDetails.numberOfStudents;
+        storeHelper.documentStore.report.numberOfStudents;
 
       //group involvements bt collection id
       const involvementsGrouped = involvements.reduce((groups, item) => {
@@ -106,7 +106,7 @@ export default Vue.extend({
 
       //get all the collections
       const collections =
-        storeHelper.documentStore.documentDetails.attendanceCollections;
+        storeHelper.documentStore.report.collections;
       const percentages: { label: string; value: number }[] = [];
       for (var collectionId in involvementsGrouped) {
         percentages.push({
@@ -114,7 +114,7 @@ export default Vue.extend({
             (involvementsGrouped[collectionId].length / numberOfAttendances) *
             100,
           label: collections.find(
-            (d) => d.attendanceCollectionId.toString() == collectionId
+            (d) => d.collectionId.toString() == collectionId
           )!.activityTime,
         });
       }

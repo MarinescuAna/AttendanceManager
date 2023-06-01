@@ -156,9 +156,9 @@ export default Vue.extend({
       }
       //get the weight form the store
       const attendanceWeight =
-        storeHelper.documentStore.documentDetails.attendanceImportance;
+        storeHelper.documentStore.report.attendanceImportance;
       const pointsWeight =
-        storeHelper.documentStore.documentDetails.bonusPointsImportance;
+        storeHelper.documentStore.report.bonusPointsImportance;
 
       //get a list with all the involvements gouped by emails
       const involvementsGrouped = involvements.reduce((groups, item) => {
@@ -191,18 +191,18 @@ export default Vue.extend({
       let possibleScore = 0;
       if (type == CourseType.Laboratory) {
         possibleScore =
-          storeHelper.documentStore.documentDetails.maxNoLaboratories *
+          storeHelper.documentStore.report.maxNoLaboratories *
             attendanceWeight +
           maxBonusPoints * pointsWeight;
       } else if (type == CourseType.Seminary) {
         possibleScore =
-          storeHelper.documentStore.documentDetails.maxNoSeminaries *
+          storeHelper.documentStore.report.maxNoSeminaries *
             attendanceWeight +
           maxBonusPoints * pointsWeight;
       }
       if (type == CourseType.Lecture) {
         possibleScore =
-          storeHelper.documentStore.documentDetails.maxNoLessons *
+          storeHelper.documentStore.report.maxNoLessons *
             attendanceWeight +
           maxBonusPoints * pointsWeight;
       }

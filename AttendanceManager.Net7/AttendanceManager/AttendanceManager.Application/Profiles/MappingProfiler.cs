@@ -1,4 +1,5 @@
-﻿using AttendanceManager.Domain.Entities;
+﻿using AttendanceManager.Domain.Common;
+using AttendanceManager.Domain.Entities;
 using AutoMapper;
 
 namespace AttendanceManager.Application.Profiles
@@ -20,6 +21,14 @@ namespace AttendanceManager.Application.Profiles
 
             //Used for getting the notifications
             CreateMap<Notification, Features.Notification.Queries.GetNotificationsByUserId.NotificationVm>();
+
+            //Used when we get info about a report
+            CreateMap<AttendanceCollection, Features.Document.Queries.GetReportById.CollectionDto>()
+                .ForMember(a => a.CollectionId, act => act.MapFrom(ac => ac.AttendanceCollectionID))
+                .ForMember(a => a.ActivityTime, act => act.MapFrom(ac => ac.HeldOn.ToString(Constants.ShortDateFormat)));
+            CreateMap<DocumentMember, Features.Document.Queries.GetReportById.MembersDto>()
+                .ForMember(u => u.Name, act => act.MapFrom(d => d.User!.FullName))
+                .ForMember(u => u.Email, act => act.MapFrom(d => d.User!.Email));
         }
     }
 }

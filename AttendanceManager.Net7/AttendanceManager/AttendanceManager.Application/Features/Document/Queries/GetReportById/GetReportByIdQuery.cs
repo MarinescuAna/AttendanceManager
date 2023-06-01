@@ -1,22 +1,21 @@
 ﻿using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
 using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
-using AttendanceManager.Application.Dtos;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentById
+namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
 {
-    public sealed class GetDocumentByIdQuery : IRequest<DocumentInfoDto>
+    public sealed class GetReportByIdQuery : IRequest<ReportVm>
     {
         public required int Id { get; init; }
         public required Role Role { get; init; }
         public required string UserId { get; init; }
     }
 
-    public sealed class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery, DocumentInfoDto>
+    public sealed class GetDocumentByIdQueryHandler : IRequestHandler<GetReportByIdQuery, ReportVm>
     {
         private readonly IReportSingleton _currentReportService;
         private readonly IUnitOfWork _unitOfWork;
@@ -28,7 +27,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
             _currentReportService = currentReportService;
         }
 
-        public async Task<DocumentInfoDto> Handle(GetDocumentByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ReportVm> Handle(GetReportByIdQuery request, CancellationToken cancellationToken)
         {
             // get current document, which includes AttendanceCollection
             var currentDocument = await _unitOfWork.DocumentRepository.GetDocumentByIdAsync(request.Id)
@@ -38,12 +37,12 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
             _currentReportService.InitializeReport(currentDocument!);
             var documentMembers = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(request.Id, null);
 
-            return new DocumentInfoDto
+            return new ReportVm
             {
                 CourseId = currentDocument!.CourseID,
                 CourseName = currentDocument.Course!.Name,
                 CreationDate = currentDocument.CreatedOn.ToString(Constants.DateFormat),
-                DocumentId = currentDocument.DocumentId,
+                ReportId = currentDocument.DocumentId,
                 EnrollmentYear = currentDocument.EnrollmentYear,
                 MaxNoLaboratories = currentDocument.MaxNoLaboratories,
                 MaxNoLessons = currentDocument.MaxNoLessons,
@@ -59,9 +58,9 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetDocumentByI
                 NoSeminaries = _currentReportService.ReportCollectionTypes.Count == 0 ?
                     0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == CourseType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
-                AttendanceCollections = _mapper.Map<AttendanceCollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
-                DocumentMembers = _mapper.Map<DocumentMembersDto[]>(request.Role == Role.Teacher ?
-                    documentMembers.Where(u => u.User!.Role == Role.Teacher) : documentMembers.Where(u=>u.User!.Role==Role.Student)),
+                Collections = _mapper.Map<CollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
+                Members = _mapper.Map<MembersDto[]>(request.Role == Role.Teacher ?
+                    documentMembers.Where(u => u.User!.Role == Role.Teacher) : documentMembers.Where(u => u.User!.Role == Role.Student)),
                 AttendanceImportance = currentDocument.AttendanceImportance,
                 BonusPointsImportance = currentDocument.BonusPointsImportance,
                 NumberOfStudents = documentMembers.Count(u => u.User!.Role == Role.Student),

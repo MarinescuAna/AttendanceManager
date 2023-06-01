@@ -1,6 +1,5 @@
 
-import { DocumentFullViewModule, DocumentUpdateModule, ReportViewModule } from "@/modules/document";
-import { AttendanceCollectionInsertModule, AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
+import { ReportViewModule, DocumentUpdateModule, ReportCardViewModule } from "@/modules/document";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
 
@@ -14,29 +13,23 @@ export class DocumentStore {
     /**
      * Getter for fetching all the documents from the store, not from the API
     */
-    public get documents(): ReportViewModule[] {
+    public get documents(): ReportCardViewModule[] {
         return this.store.getters[`${documentNamespace}/documents`];
-    }
-    /**
-     * Getter for fetching all the documents from the store, not from the API
-    */
-    public get documentFiles(): AttendanceCollectionViewModule[] {
-        return this.store.getters[`${documentNamespace}/documentFiles`];
     }
 
     /**
     * Getter for fetching all the documents from the store, not from the API
     */
-    public get documentDetails(): DocumentFullViewModule {
-        return this.store.getters[`${documentNamespace}/documentDetails`];
+    public get report(): ReportViewModule {
+        return this.store.getters[`${documentNamespace}/report`];
     }
 
     /**
      * Load the current document from the API and update the store
      * @payload documentId
     */
-    public async loadCurrentDocument(payload: string): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/loadCurrentDocument`, payload);
+    public async loadCurrentReport(payload: string): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/loadCurrentReport`, payload);
     }
 
     /** Use this method to update the document information */
@@ -60,8 +53,8 @@ export class DocumentStore {
     /**
    * Add a new specialziation only
    */
-    public addAttendanceCollection(payload: AttendanceCollectionInsertModule): Promise<boolean> {
-        return this.store.dispatch(`${documentNamespace}/addAttendanceCollection`, payload);
+    public addCollection(activityTime: string, type: string): Promise<boolean> {
+        return this.store.dispatch(`${documentNamespace}/addCollection`, { activityTime: activityTime, type: type });
     }
 
     /**

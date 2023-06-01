@@ -1,6 +1,5 @@
 ﻿
 using AttendanceManager.Domain.Entities;
-using AttendanceManager.Domain.Enums;
 
 namespace AttendanceManager.Application.Modules.Singleton
 {
@@ -15,15 +14,17 @@ namespace AttendanceManager.Application.Modules.Singleton
         public int MaxNumberOfLaboratories { get; }
         // UPDATE this when update the report
         public int MaxNumberOfSeminaries { get; }
+        public string Title { get; }
 
         public ReportDto(Document report)
         {
             ReportId = report.DocumentId;
             EnrollmentYear = report.EnrollmentYear;
             SpecializationId = report.Course!.UserSpecialization!.SpecializationID;
+            Title= report.Title;
 
             MaxNumberOfLectures = report.MaxNoLessons;
-            MaxNumberOfLaboratories= report.MaxNoLaboratories;
+            MaxNumberOfLaboratories = report.MaxNoLaboratories;
             MaxNumberOfSeminaries = report.MaxNoSeminaries;
         }
 

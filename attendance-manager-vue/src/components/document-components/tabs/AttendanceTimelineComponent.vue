@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-layout justify-center class="pa-2">
-      <v-flex md5 lg5 v-if="documentFiles.length > 0">
+      <v-flex md5 lg5 v-if="collections.length > 0">
         <div v-if="!isMobile">
           <v-timeline>
             <v-timeline-item
-              v-for="(item, index) in documentFiles"
-              :key="item.attendanceCollectionId"
+              v-for="(item, index) in collections"
+              :key="item.collectionId"
               :class="index % 2 == 0 ? 'text-right' : ''"
               color="black"
             >
@@ -14,7 +14,7 @@
                 text
                 @click="
                   onOpenAttendanceDialog(
-                    item.attendanceCollectionId,
+                    item.collectionId,
                     item.activityTime
                   )
                 "
@@ -29,11 +29,11 @@
           <!-- diplay the bullets as a list when the user is on mobile-->
           <v-list dense>
             <v-list-item
-              v-for="(item, index) in documentFiles"
-              :key="item.attendanceCollectionId"
+              v-for="(item, index) in collections"
+              :key="item.collectionId"
               @click="
                 onOpenAttendanceDialog(
-                  item.attendanceCollectionId,
+                  item.collectionId,
                   item.activityTime
                 )
               "
@@ -61,7 +61,7 @@
         :disabled="noActivityAvailable"
         v-if="isTeacher"
       >
-        Add attendance
+        Add collection
       </v-btn></v-layout
     >
 
@@ -97,13 +97,13 @@
 </template>
 
 <script lang="ts">
-import { AttendanceCollectionViewModule } from "@/modules/document/attendance-collection";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import AddAttendanceDateDialog from "@/components/document-components/dialogs/AddAttendanceDateDialog.vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import UpdateInvolvementsDialog from "@/components/document-components/dialogs/UpdateInvolvementsDialog.vue";
+import { CollectionViewModule } from "@/modules/document";
 
 export default Vue.extend({
   name: "AttendanceTimelineComponent",
@@ -126,19 +126,19 @@ export default Vue.extend({
   computed: {
     noActivityAvailable: function (): boolean {
       return (
-        storeHelper.documentStore.documentDetails.noLaboratories ==
-          storeHelper.documentStore.documentDetails.maxNoLaboratories &&
-        storeHelper.documentStore.documentDetails.noLessons ==
-          storeHelper.documentStore.documentDetails.maxNoLessons &&
-        storeHelper.documentStore.documentDetails.noSeminaries ==
-          storeHelper.documentStore.documentDetails.maxNoSeminaries
+        storeHelper.documentStore.report.noLaboratories ==
+          storeHelper.documentStore.report.maxNoLaboratories &&
+        storeHelper.documentStore.report.noLessons ==
+          storeHelper.documentStore.report.maxNoLessons &&
+        storeHelper.documentStore.report.noSeminaries ==
+          storeHelper.documentStore.report.maxNoSeminaries
       );
     },
-    documentFiles: function (): AttendanceCollectionViewModule[] {
-      return storeHelper.documentStore.documentFiles;
+    collections: function (): CollectionViewModule[] {
+      return storeHelper.documentStore.report.collections;
     },
     documentId: function (): number {
-      return storeHelper.documentStore.documentDetails.documentId;
+      return storeHelper.documentStore.report.reportId;
     },
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
@@ -154,7 +154,7 @@ export default Vue.extend({
     onOpenAttendanceDialog: function (
       collectionId: number,
       date: string
-    ): void {
+    ): void {     
       this.addAttendanceDialog = true;
       this.selectedCollectionDate = date;
       this.selectedCollectionId = collectionId;

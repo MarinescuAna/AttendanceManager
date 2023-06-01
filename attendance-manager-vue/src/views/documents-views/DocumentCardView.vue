@@ -54,7 +54,7 @@
 }
 </style>
 <script lang="ts">
-import { ReportViewModule } from "@/modules/document";
+import { ReportCardViewModule } from "@/modules/document";
 import ViewDocumentsListCardsComponent from "@/components/document-components/ViewDocumentsListCardsComponent.vue";
 import Vue from "vue";
 import AuthService from "@/services/auth.service";
@@ -84,7 +84,7 @@ export default Vue.extend({
       /** Message that should be displayed when the student has no documents */
       emptyStudentDocumentsMessage: "You are not member of any report yet.",
       /** Use this boolean to display the progress circular component */
-      documents: [] as ReportViewModule[],
+      documents: [] as ReportCardViewModule[],
       isLoading: true,
       // Add a flag to track if data fetching is successful
       isFetchSuccessful: false,
@@ -92,11 +92,11 @@ export default Vue.extend({
   },
   computed: {
     /** Array of created documents */
-    ownDocuments: function (): ReportViewModule[] {
+    ownDocuments: function (): ReportCardViewModule[] {
       return this.documents.filter((d) => d.isCreator);
     },
     /** Array of documents where the used is collaborator */
-    collaboratorDocuments: function (): ReportViewModule[] {
+    collaboratorDocuments: function (): ReportCardViewModule[] {
       return this.documents.filter((d) => !d.isCreator);
     },
     /** Boolean value for determinate the current user role */
