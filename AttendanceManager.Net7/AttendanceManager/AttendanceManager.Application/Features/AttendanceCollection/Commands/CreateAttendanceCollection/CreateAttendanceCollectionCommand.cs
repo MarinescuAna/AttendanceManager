@@ -24,7 +24,7 @@ namespace AttendanceManager.Application.Features.AttendanceCollection.Commands.C
 
             if (_currentReport.CurrentReportInfo == null)
             {
-                throw new NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+                throw new Exceptions.NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
             }
         }
 

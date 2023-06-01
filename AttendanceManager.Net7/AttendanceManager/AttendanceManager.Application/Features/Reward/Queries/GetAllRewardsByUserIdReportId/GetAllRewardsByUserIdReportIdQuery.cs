@@ -1,6 +1,5 @@
 ﻿using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
 using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
-using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using AutoMapper;
@@ -24,11 +23,11 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
         {
             _currentReport = currentReport;
             _unitOfWork = unit;
-            _mapper= mapper;
+            _mapper = mapper;
 
             if (_currentReport.CurrentReportInfo == null)
             {
-                throw new NoContentException(ErrorMessages.NoContentReportBaseMessage);
+                throw new Exceptions.NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
             }
         }
 
@@ -41,9 +40,9 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
             var badges = _unitOfWork.BadgeRepository.ListAll().Where(b => b.UserRole == request.Role);
 
             //add inactive badges into the list
-            foreach(var badge in badges)
+            foreach (var badge in badges)
             {
-                if(!rewards.Any(r=>r.BadgeID == badge.BadgeID))
+                if (!rewards.Any(r => r.BadgeID == badge.BadgeID))
                 {
                     rewards.Add(new()
                     {

@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Modules.Singleton;
 using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
+using System;
 
 namespace AttendanceManager.Infrastructure.Singleton
 {
@@ -16,7 +17,7 @@ namespace AttendanceManager.Infrastructure.Singleton
         {
             if (currentReport == null)
             {
-                throw new NotImplementedException(nameof(currentReport));
+                throw new Application.Exceptions.NotImplementedException(nameof(currentReport));
             }
 
             if (CurrentReportInfo != null)

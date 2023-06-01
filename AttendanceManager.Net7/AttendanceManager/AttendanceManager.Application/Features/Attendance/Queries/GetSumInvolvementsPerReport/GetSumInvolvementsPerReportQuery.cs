@@ -20,7 +20,7 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolv
 
             if (_currentReport.CurrentReportInfo == null)
             {
-                throw new NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+                throw new Exceptions.NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
             }
         }
 

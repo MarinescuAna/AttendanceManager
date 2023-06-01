@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
 
             if (_currentReport.CurrentReportInfo == null)
             {
-                throw new NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+                throw new Exceptions.NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
             }
         }
 
