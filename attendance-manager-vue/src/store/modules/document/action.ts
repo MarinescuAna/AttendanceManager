@@ -28,12 +28,11 @@ export const documentActions = {
         return isFail;
     },
     /** Add new collaborator teacher */
-    async addCollaborator({ commit, state }, payload: string): Promise<boolean> {
+    async addCollaborator({ commit}, payload: string): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator`, {
-            email: payload,
-            documentId: state.currentDocument.documentId
+        const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator?email=${payload}`, {
+            email: payload
         })
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);

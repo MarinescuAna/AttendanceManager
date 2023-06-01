@@ -22,6 +22,8 @@ namespace AttendanceManager.Application.Features.Notification.Queries.GetNotific
             => Task.FromResult(_mapper.Map<NotificationVm[]>(
                 _unitOfWork.NotificationRepository.ListAll()
                     .Where(n => n.UserID.Equals(request.UserId))
+                    .OrderBy(n => n.IsRead) // Sort by IsRead (ascending)
+                    .ThenByDescending(n => n.CreatedOn) // Sort by CreatedOn (descending)
                     .ToArray()));
     }
 }

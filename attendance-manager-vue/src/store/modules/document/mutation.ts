@@ -44,7 +44,7 @@ export const documentMutations = {
         state.currentReport = {};
     },
     _addCollaborator(state, payload: MembersViewModule): void {
-        state.currentReport.documentMembers.push(payload);
+        state.currentReport.members.push(payload);
     },
     /**
      * Reset the state with the initial values

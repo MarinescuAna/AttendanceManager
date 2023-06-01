@@ -19,9 +19,13 @@
 
     public static class ErrorMessages
     {
+        public static readonly string AlreadyExists_CollaboratorInsert_Error = "The teacher is already a member of this document!";
+
+        public static readonly string BadRequest_CollaboratorInsert_Error = "You can add only teachers as collaborators! This user ({0}) is a student.";
         public readonly static string BadRequest_UnauthorizedError = "Only teachers can access this data!";
         public readonly static string BadRequest_InvalidParameters_EmailCollection_Error = "Invalid parameters: you cannot pass email and collection id in the same time!";
-        public readonly static string BadRequest_IdMissing_EmailCollection_Error = "Invalid parameters:the id is missing!";
+        public readonly static string BadRequest_InvalidParameters_Collaborator_Error = "Invalid parameters: you cannot be a collaborator because you own this report!";
+        public readonly static string BadRequest_ParametersMissing_Error = "Invalid parameters: some required parameters are missing! Check the API documentation.";
         public readonly static string BadRequest_InvalidParameters_BooleanParams_Error = "Invalid parameters: email cannot be shown!";
         public readonly static string BadRequest_CreateCollectionParams_Error = "Activity time and type are required.";
         public readonly static string BadRequest_CreateCollectionParams2_Error = "Invalid activity time format. Expected format: yyyy-MM-dd HH:mm";
@@ -46,8 +50,9 @@
 
     public static class NotificationMessages
     {
-        public readonly static string AchievedBadgeNotification = "You achived <strong>{0}</strong> at <strong>{1}</strong>.";
-        public readonly static string CreateReportNotification = "You are now member of report <strong>{0}</strong>. This report was created by {1} on {2}.";
-        public readonly static string CreateCollectionNotification = "<strong>{0}</strong> added a new collection into the report <strong>{1}</string>. Be careful in case that you need to be present or not.";
+        public readonly static string CollaboratorAddedNotification = "<i>{0}</i> was added you as collaborator to the report called <i>{1}</i>.";
+        public readonly static string AchievedBadgeNotification = "You achived <i>{0}</i> at <i>{1}</i>.";
+        public readonly static string CreateReportNotification = "You are now member of report <i>{0}</i>. This report was created by <i>{1}</i> on <i>{2}</i>.";
+        public readonly static string CreateCollectionNotification = "<i>{0}</i>added a new collection into the report <i>{1}</i>. Be careful in case that you need to be present or not.";
     }
 }

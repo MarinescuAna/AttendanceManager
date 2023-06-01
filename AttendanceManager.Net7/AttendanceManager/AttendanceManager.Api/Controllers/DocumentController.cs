@@ -3,7 +3,7 @@ using AttendanceManager.Application.Features.Document.Commands.DeleteDocumentByI
 using AttendanceManager.Application.Features.Document.Commands.UpdateDocumentById;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetReportById;
-using AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaboratorByDocumentId;
+using AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaborator;
 using AttendanceManager.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +41,7 @@ namespace AttendanceManager.Api.Controllers
         {
             if (id == null)
             {
-                return BadRequest(ErrorMessages.BadRequest_IdMissing_EmailCollection_Error);
+                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
             }
 
             return Ok(await mediator.Send(new GetReportByIdQuery()
@@ -68,9 +68,23 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: true/false</returns>
         /// </summary>
         [HttpPost("add_collaborator")]
-        public async Task<IActionResult> AddCollaborator([FromBody] InsertCollaboratorByDocumentIdCommand command)
+        public async Task<IActionResult> AddCollaborator(string email)
         {
-            return Ok(await mediator.Send(command));
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
+            }
+
+            if (email.Equals(UserEmail))
+            {
+                return BadRequest(ErrorMessages.BadRequest_InvalidParameters_Collaborator_Error);
+            }
+
+            return Ok(await mediator.Send(new InsertCollaboratorCommand()
+            {
+                Email = email,
+                CurrentUsername = Username
+            }));
         }
 
         /// <summary>
