@@ -40,7 +40,9 @@
               v-bind="attrs"
               v-on="on"
               icon
-              ><v-icon> mdi-message-text </v-icon></v-btn
+              ><v-icon>
+                {{ messages != 0 ? "mdi-bell-ring" : "mdi-bell" }}
+              </v-icon></v-btn
             >
           </v-badge>
         </template>

@@ -14,6 +14,7 @@ namespace AttendanceManager.Domain.Entities
         public required string UserID { get; set; }
         [MaxLength(254)]
         public required string Message { get; set; }
+        public string? Image { get; set; }
         public required bool IsRead { get; set; }
         public required DateTime CreatedOn { get; set; }
         public required NotificationPriority Priority { get; set; }

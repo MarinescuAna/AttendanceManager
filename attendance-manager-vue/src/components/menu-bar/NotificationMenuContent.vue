@@ -6,12 +6,22 @@
         v-for="notification in notifications"
         :key="notification.notificationId"
         @click="onRead(notification)"
+        :style="
+          !notification.isRead
+            ? { 'background-color': getBackgroundColor(notification.priority) }
+            : {}
+        "
       >
-        <v-list-item-icon class="mr-3">
+        <v-list-item-icon class="mr-3" v-if="notification.image == null">
           <v-icon :color="getIconColor(notification.priority)">{{
             getIcon(notification.priority)
           }}</v-icon>
         </v-list-item-icon>
+        <v-list-item-avatar class="mr-3" v-else>
+          <v-img
+            :src="require(`@/assets/images/badges/${notification.image}`)"
+          ></v-img>
+        </v-list-item-avatar>
         <v-list-item-content class="pt-1 pb-1">
           <v-list-item-title
             class="text-wrap"
@@ -73,6 +83,17 @@ export default Vue.extend({
       } else {
         if (priority == NotificationPriority.Warning) {
           iconColor = "yellow";
+        }
+      }
+      return iconColor;
+    },
+    getBackgroundColor: function (priority: NotificationPriority): string {
+      let iconColor = "#FFEBEE";
+      if (priority == NotificationPriority.Info) {
+        iconColor = "#E3F2FD";
+      } else {
+        if (priority == NotificationPriority.Warning) {
+          iconColor = "#FFFDE7";
         }
       }
       return iconColor;

@@ -4,7 +4,6 @@ using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
-using AutoMapper;
 using MediatR;
 using System.Collections.Immutable;
 
@@ -25,7 +24,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
     {
         public readonly IUnitOfWork _unitOfWork;
         public IReportSingleton _currentReport;
-        private IEnumerable<Domain.Entities.AttendanceCollection> _collections; 
+        private IEnumerable<Domain.Entities.AttendanceCollection> _collections;
         private readonly int _currentReportId;
         public CreateRewardCommandHandler(IUnitOfWork unit, IReportSingleton reportSingleton)
         {
@@ -42,7 +41,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
         public async Task<bool> Handle(CreateRewardCommand request, CancellationToken cancellationToken)
         {
             //get all the badges that are inactive
-            var inactiveBadges = await _unitOfWork.BadgeRepository.GetUnachievedBadgesAsync(request.UserId,_currentReportId);
+            var inactiveBadges = await _unitOfWork.BadgeRepository.GetUnachievedBadgesAsync(request.UserId, _currentReportId);
 
             if (inactiveBadges.Count() == 0)
             {
@@ -53,7 +52,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             //get all the collections related to the document
             _collections = _unitOfWork.AttendanceCollectionRepository.GetCollectionsByReportId(_currentReportId).ToImmutableList();
 
-            if(_collections == null)
+            if (_collections == null)
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrong_CollectionsNotAvailableError);
             }
@@ -64,7 +63,18 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             //insert the achieved rewards
             foreach (var reward in achievedRewards)
             {
+                var badge = inactiveBadges.Find(b => b.BadgeID == reward.BadgeID);
+
                 _unitOfWork.RewardRepository.AddAsync(reward);
+                _unitOfWork.NotificationRepository.AddAsync(new()
+                {
+                    CreatedOn = DateTime.Now,
+                    IsRead = false,
+                    Message = string.Format(NotificationMessages.AchievedBadgeNotification, badge!.Title, _currentReport.CurrentReportInfo.Title),
+                    Priority = NotificationPriority.Info,
+                    UserID = request.UserId,
+                    Image = badge.ImagePath,
+                });
             }
 
             if (achievedRewards.Count() > 0 && request.CommitChanges && !await _unitOfWork.CommitAsync())
@@ -105,13 +115,19 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 BadgeID.LastAttendance => currentCollection!.Order == GetMaxNumberByCourseType(currentCollection!.CourseType)
                                             && currentCollection.Attendances!.FirstOrDefault(a => a.UserID.Equals(email) && a.IsPresent) != null,
                 //check if the current user, for given activity type, recevied the half of them
-                BadgeID.LecturesAttendances50 => GetAttendancesAchievedByEmail(email, CourseType.Lecture) == GetMaxNumberByCourseType(CourseType.Lecture) / 2,
-                BadgeID.LaboratoriesAttendances50 => GetAttendancesAchievedByEmail(email, CourseType.Laboratory) == GetMaxNumberByCourseType(CourseType.Laboratory) / 2,
-                BadgeID.SeminariesAttendances50 => GetAttendancesAchievedByEmail(email, CourseType.Seminary) == GetMaxNumberByCourseType(CourseType.Seminary) / 2,
+                BadgeID.LecturesAttendances50 => GetMaxNumberByCourseType(CourseType.Lecture)!=0 &&
+                    GetAttendancesAchievedByEmail(email, CourseType.Lecture) == GetMaxNumberByCourseType(CourseType.Lecture) / 2,
+                BadgeID.LaboratoriesAttendances50 => GetMaxNumberByCourseType(CourseType.Laboratory)!=0 &&
+                    GetAttendancesAchievedByEmail(email, CourseType.Laboratory) == GetMaxNumberByCourseType(CourseType.Laboratory) / 2,
+                BadgeID.SeminariesAttendances50 => GetMaxNumberByCourseType(CourseType.Seminary)!=0 &&
+                    GetAttendancesAchievedByEmail(email, CourseType.Seminary) == GetMaxNumberByCourseType(CourseType.Seminary) / 2,
                 //check if the current user, for given activity type, recevied the all of them
-                BadgeID.LecturesAttendancesComplete => GetAttendancesAchievedByEmail(email, CourseType.Lecture) == GetMaxNumberByCourseType(CourseType.Lecture),
-                BadgeID.LaboratoriesAttendancesComplete => GetAttendancesAchievedByEmail(email, CourseType.Laboratory) == GetMaxNumberByCourseType(CourseType.Laboratory),
-                BadgeID.SeminariesAttendancesComplete => GetAttendancesAchievedByEmail(email, CourseType.Seminary) == GetMaxNumberByCourseType(CourseType.Seminary),
+                BadgeID.LecturesAttendancesComplete => GetMaxNumberByCourseType(CourseType.Lecture) != 0 &&
+                    GetAttendancesAchievedByEmail(email, CourseType.Lecture) == GetMaxNumberByCourseType(CourseType.Lecture),
+                BadgeID.LaboratoriesAttendancesComplete => GetMaxNumberByCourseType(CourseType.Laboratory) != 0 &&
+                    GetAttendancesAchievedByEmail(email, CourseType.Laboratory) == GetMaxNumberByCourseType(CourseType.Laboratory),
+                BadgeID.SeminariesAttendancesComplete => GetMaxNumberByCourseType(CourseType.Seminary) != 0 &&
+                    GetAttendancesAchievedByEmail(email, CourseType.Seminary) == GetMaxNumberByCourseType(CourseType.Seminary),
                 //check if this is the first bonus point achieved
                 BadgeID.FirstBonus => currentCollection!.Attendances!.Any(a => a.UserID.Equals(email) && a.BonusPoints != 0),
                 //check if the current if one of the users that have the maximum number of bonus points
@@ -131,7 +147,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             };
         private List<Domain.Entities.Attendance> GetAttendanceWithMaxBonusPoint()
         {
-            var attendances = _collections!.SelectMany(a => a.Attendances!.Where(a=>a.IsPresent && a.BonusPoints!=0)).ToList();
+            var attendances = _collections!.SelectMany(a => a.Attendances!.Where(a => a.IsPresent && a.BonusPoints != 0)).ToList();
 
             if (attendances.Count() == 0)
             {

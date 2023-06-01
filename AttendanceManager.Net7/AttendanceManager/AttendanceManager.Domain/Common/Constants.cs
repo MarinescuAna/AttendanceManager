@@ -46,6 +46,7 @@
 
     public static class NotificationMessages
     {
+        public readonly static string AchievedBadgeNotification = "You achived <strong>{0}</strong> at <strong>{1}</strong>.";
         public readonly static string CreateReportNotification = "You are now member of report <strong>{0}</strong>. This report was created by {1} on {2}.";
         public readonly static string CreateCollectionNotification = "<strong>{0}</strong> added a new collection into the report <strong>{1}</string>. Be careful in case that you need to be present or not.";
     }
