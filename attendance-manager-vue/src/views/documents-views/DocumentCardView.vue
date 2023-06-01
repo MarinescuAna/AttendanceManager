@@ -26,24 +26,39 @@
         <!-- First tab: display created documents-->
         <v-tab-item>
           <ViewDocumentsListCardsComponent
-            :documents="documents"
-            :message="emptyCreatedDocumentsMessage"
+            :documents="ownDocuments"
+            v-if="ownDocuments.length != 0"
           />
+          <MessageComponent 
+          description="There are no reports that you create. If you want to create a involvement report, go to <a href='\\create-document'>Create new involvement report</a> page and complete the flow."
+          fontWeight="bold"
+          fontSize="20px"
+          v-else/>
         </v-tab-item>
         <!-- Second tab: display documents where the user is collaborator-->
         <v-tab-item>
           <ViewDocumentsListCardsComponent
             :documents="collaboratorDocuments"
-            :message="emptyCollaboratorDocumentsMessage"
+            v-if="collaboratorDocuments.length != 0"
           />
+          <MessageComponent 
+          description= "There are no involvement report where you are a collaborator."
+          fontWeight="bold"
+          fontSize="20px"
+          v-else/>
         </v-tab-item>
       </v-tabs-items>
     </div>
     <div v-else>
       <ViewDocumentsListCardsComponent
         :documents="collaboratorDocuments"
-        :message="emptyStudentDocumentsMessage"
-      />
+        v-if="collaboratorDocuments.length != 0"
+          />
+          <MessageComponent 
+          description="You are not member of any report yet. Only teachers can add you."
+          fontWeight="bold"
+          fontSize="20px"
+          v-else/>
     </div>
   </div>
 </template>
@@ -61,12 +76,14 @@ import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import ReportService from "@/services/report.service";
 import { Toastification } from "@/plugins/vue-toastification";
+import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 
 export default Vue.extend({
   name: "DocumentCardView",
   components: {
     ViewDocumentsListCardsComponent,
-  },
+    MessageComponent
+},
   data: function () {
     return {
       /**
@@ -75,14 +92,6 @@ export default Vue.extend({
        * 1 -> Documents where the user is collaborator
        * */
       currentTab: 0,
-      /** Message that should be displayed when the created documents list is empty */
-      emptyCreatedDocumentsMessage:
-        "There are no reports that you create. If you want to create a involvement report, go to <a href='\\create-document'>Create new involvement report</a> page and complete the flow.",
-      /** Message that should be displayed when the documents list where the user is collaborator is empty */
-      emptyCollaboratorDocumentsMessage:
-        "There are no involvement report where you are a collaborator.",
-      /** Message that should be displayed when the student has no documents */
-      emptyStudentDocumentsMessage: "You are not member of any report yet.",
       /** Use this boolean to display the progress circular component */
       documents: [] as ReportCardViewModule[],
       isLoading: true,
@@ -93,10 +102,13 @@ export default Vue.extend({
   computed: {
     /** Array of created documents */
     ownDocuments: function (): ReportCardViewModule[] {
+      console.log(this.documents.filter((d) => d.isCreator));
       return this.documents.filter((d) => d.isCreator);
     },
     /** Array of documents where the used is collaborator */
     collaboratorDocuments: function (): ReportCardViewModule[] {
+      console.log(this.documents.filter((d) => !d.isCreator));
+      
       return this.documents.filter((d) => !d.isCreator);
     },
     /** Boolean value for determinate the current user role */

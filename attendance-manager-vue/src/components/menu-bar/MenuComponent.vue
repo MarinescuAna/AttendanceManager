@@ -106,6 +106,16 @@ export default Vue.extend({
       return this.notifications.filter((n) => !n.isRead).length;
     },
   },
+  watch: {
+    isLogged: async function (): Promise<void> {
+      if (this.isLogged) {
+        this.notifications =
+          await NotificationService.getCurrentUserNotificationsAsync();
+      } else {
+        this.notifications = [];
+      }
+    },
+  },
   mounted: function () {
     /**
      * Emit an event using EventBus every time the user logs in to update the navbar
@@ -133,9 +143,25 @@ export default Vue.extend({
           notification.isRead = true;
         }
       });
+      // Sort the notifications array
+      this.notifications.sort(this._compareNotifications);
     },
     onLoginChanged: function (value): void {
       this.isLogged = value;
+    },
+    // Custom comparison function for sorting
+    _compareNotifications: function (
+      a: NotificationViewModel,
+      b: NotificationViewModel
+    ): number {
+      // Sort by isRead (ascending)
+      if (a.isRead === b.isRead) {
+        // Sort by createdOn (descending)
+        return (
+          new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime()
+        );
+      }
+      return a.isRead ? 1 : -1;
     },
   },
 });
