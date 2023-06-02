@@ -15,6 +15,7 @@ namespace AttendanceManager.Application.Modules.Singleton
         // UPDATE this when update the report
         public int MaxNumberOfSeminaries { get; }
         public string Title { get; }
+        public string CreatedBy { get; }
 
         public ReportDto(Document report)
         {
@@ -22,6 +23,7 @@ namespace AttendanceManager.Application.Modules.Singleton
             EnrollmentYear = report.EnrollmentYear;
             SpecializationId = report.Course!.UserSpecialization!.SpecializationID;
             Title= report.Title;
+            CreatedBy = report.Course.UserSpecialization!.UserID;
 
             MaxNumberOfLectures = report.MaxNoLessons;
             MaxNumberOfLaboratories = report.MaxNoLaboratories;

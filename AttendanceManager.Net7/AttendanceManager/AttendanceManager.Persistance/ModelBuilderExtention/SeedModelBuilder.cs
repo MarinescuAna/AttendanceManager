@@ -135,6 +135,28 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    UserRole = Domain.Enums.Role.Student
                }
             );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   Title = "First code generated",
+                   ImagePath = "first_code_generated.jpg",
+                   Description = "Achieve this badge by generating the first involvement code.",
+                   BadgeID = Domain.Enums.BadgeID.FirstCodeGenerated,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   Title = "First code used",
+                   ImagePath = "first_code_used.jpg",
+                   Description = "Achieve this badge when the generated code is used for the first time.",
+                   BadgeID = Domain.Enums.BadgeID.FirstCodeUsed,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
         }
     }
 }

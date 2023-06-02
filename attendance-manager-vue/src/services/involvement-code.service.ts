@@ -18,7 +18,7 @@ export default class InvolvementCodeService {
     static async createInvolvementCode(minutes: number, attendanceCollectionId: number): Promise<undefined | InvolvementCodeInsertModule> {
         let isSuccess = true;
 
-        const result = await https.post(`${INVOLVEMENT_CODE_CONTROLLER}/create_code/${minutes}/${attendanceCollectionId}`)
+        const result = await https.post(`${INVOLVEMENT_CODE_CONTROLLER}/create_code?minutes=${minutes}&collectionId=${attendanceCollectionId}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

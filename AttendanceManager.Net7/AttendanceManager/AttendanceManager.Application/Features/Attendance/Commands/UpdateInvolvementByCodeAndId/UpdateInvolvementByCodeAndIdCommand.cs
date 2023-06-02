@@ -1,7 +1,8 @@
-﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Domain.Enums;
-using AutoMapper;
+using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
+using AttendanceManager.Domain.Common;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvementByCodeAndId
@@ -16,10 +17,19 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
     public sealed class UpdateInvolvementByCodeAndIdCommandHandler : IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReportSingleton _currentReport;
+        private readonly IMediator _mediator;
 
-        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit)
+        public UpdateInvolvementByCodeAndIdCommandHandler(IUnitOfWork unit, IReportSingleton reportSingleton, IMediator mediator)
         {
+            _currentReport = reportSingleton;
             _unitOfWork = unit;
+            _mediator = mediator;
+
+            if (_currentReport.CurrentReportInfo == null)
+            {
+                throw new Exceptions.NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+            }
         }
 
         public async Task<bool> Handle(UpdateInvolvementByCodeAndIdCommand request, CancellationToken cancellationToken)
@@ -42,7 +52,21 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
             attendance.IsPresent = true;
             _unitOfWork.AttendanceRepository.Update(attendance);
 
-            return await _unitOfWork.CommitAsync();
+            if(!await _unitOfWork.CommitAsync())
+            {
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
+            }
+
+            await _mediator.Send(new CreateRewardCommand()
+            {
+                CurrentCollectionId = request.AttendanceCollectionId,
+                AchievedUserRole = Domain.Enums.Role.Teacher,
+                AchievedUserId = _currentReport.CurrentReportInfo.CreatedBy,
+                BadgeID=Domain.Enums.BadgeID.FirstCodeUsed,
+                CommitChanges = true
+            });
+
+            return true;
         }
 
     }

@@ -1,27 +1,32 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
 using AttendanceManager.Domain.Common;
-using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.InvolvementCode.Commands.CreateInvolvementCode
 {
-    public sealed class CreateInvolvementCodeCommand : IRequest<InvolvementCodeDto>
+    public sealed class CreateInvolvementCodeCommand : IRequest<InvolvementCodeVm>
     {
         public required int Minutes { get; init; }
-        public required int AttendanceCollectionId { get; init;}
+        public required int CollectionId { get; init; }
+        public required string UserId { get; init; }
     }
 
-    public sealed class CreateInvolvementCodeCommandHandler : BaseFeature, IRequestHandler<CreateInvolvementCodeCommand, InvolvementCodeDto>
+    public sealed class CreateInvolvementCodeCommandHandler : IRequestHandler<CreateInvolvementCodeCommand, InvolvementCodeVm>
     {
-        public CreateInvolvementCodeCommandHandler(IUnitOfWork unit, IMapper mapper) : base(unit, mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
+        public CreateInvolvementCodeCommandHandler(IUnitOfWork unit, IMediator mediator)
         {
+            _unitOfWork = unit;
+            _mediator = mediator;
         }
 
-        public async Task<InvolvementCodeDto> Handle(CreateInvolvementCodeCommand request, CancellationToken cancellationToken)
+        public async Task<InvolvementCodeVm> Handle(CreateInvolvementCodeCommand request, CancellationToken cancellationToken)
         {
 
-            var codes = unitOfWork.InvolvementCodeRepository.ListAll();
+            var codes = _unitOfWork.InvolvementCodeRepository.ListAll();
             var code = string.Empty;
 
             // generate code
@@ -35,14 +40,22 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
             {
                 Code = code,
                 ExpirationDate = DateTime.Now.AddMinutes(request.Minutes),
-                AttendanceCollectionId = request.AttendanceCollectionId
+                AttendanceCollectionId = request.CollectionId
             };
-            unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
+            _unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
 
-            if (!await unitOfWork.CommitAsync())
+            if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
+
+            await _mediator.Send(new CreateRewardCommand()
+            {
+                CurrentCollectionId = request.CollectionId,
+                AchievedUserRole = Domain.Enums.Role.Teacher,
+                AchievedUserId = request.UserId,
+                CommitChanges = true
+            });
 
             return new()
             {

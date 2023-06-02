@@ -14,5 +14,8 @@
         FirstBonus = 9,
         SmartOwl = 10,
 
+        //teachers' badges
+        FirstCodeGenerated=11,
+        FirstCodeUsed=12,
     }
 }

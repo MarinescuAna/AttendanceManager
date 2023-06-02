@@ -9,7 +9,7 @@ namespace AttendanceManager.Application.Profiles
         public MappingProfiler()
         {
             // Used for involvement codes when we create an involvement code and return something that is not void or null
-            CreateMap<InvolvementCode, Features.InvolvementCode.Commands.CreateInvolvementCode.InvolvementCodeDto>();
+            CreateMap<InvolvementCode, Features.InvolvementCode.Commands.CreateInvolvementCode.InvolvementCodeVm>();
 
             // Used for bagdes when we try to retrive all the badges to display them
             CreateMap<Reward, Features.Reward.Queries.GetAllRewardsByUserIdReportId.RewardVm>()

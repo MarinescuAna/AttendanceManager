@@ -102,13 +102,10 @@ export default Vue.extend({
   computed: {
     /** Array of created documents */
     ownDocuments: function (): ReportCardViewModule[] {
-      console.log(this.documents.filter((d) => d.isCreator));
       return this.documents.filter((d) => d.isCreator);
     },
     /** Array of documents where the used is collaborator */
     collaboratorDocuments: function (): ReportCardViewModule[] {
-      console.log(this.documents.filter((d) => !d.isCreator));
-      
       return this.documents.filter((d) => !d.isCreator);
     },
     /** Boolean value for determinate the current user role */

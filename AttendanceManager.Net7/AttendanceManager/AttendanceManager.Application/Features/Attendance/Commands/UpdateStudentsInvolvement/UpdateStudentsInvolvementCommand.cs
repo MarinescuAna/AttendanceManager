@@ -56,9 +56,9 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
             {
                 await _mediator.Send(new CreateRewardCommand()
                 {
-                    RoleRole = Role.Student,
-                    UserId = involvment.UserId,
-                    CollectionId = involvment.CollectionId,
+                    AchievedUserRole = Role.Student,
+                    AchievedUserId = involvment.UserId,
+                    CurrentCollectionId = involvment.CollectionId,
                     CommitChanges = false
                 });
             }

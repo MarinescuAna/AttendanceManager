@@ -29,7 +29,7 @@
             ><span v-html="notification.message"></span
           ></v-list-item-title>
           <v-list-item-subtitle>
-            {{ notification.createdOn }}
+            {{ getRelativeTime(notification.createdOn) }}
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
@@ -55,6 +55,8 @@ import NotificationService from "@/services/notification.service";
 import { NotificationPriority } from "@/shared/enums";
 import Vue from "vue";
 import MessageComponent from "../shared-components/MessageComponent.vue";
+import moment from "moment";
+
 export default Vue.extend({
   name: "NotificationMenuContent",
   components: { MessageComponent },
@@ -65,6 +67,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
     getIcon: function (priority: NotificationPriority): string {
       let icon = "mdi-alert-box";
       if (priority == NotificationPriority.Info) {

@@ -31,7 +31,7 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
             }
         }
 
-        public async Task<List<RewardVm>> Handle(GetAllRewardsByUserIdReportIdQuery request, CancellationToken cancellationToken)
+        public Task<List<RewardVm>> Handle(GetAllRewardsByUserIdReportIdQuery request, CancellationToken cancellationToken)
         {
             // get all the active badges
             var rewards = _mapper.Map<List<RewardVm>>(_unitOfWork.RewardRepository.GetRewardsAsync(r => r.UserID == request.Email && r.ReportID == _currentReport.CurrentReportInfo.ReportId));
@@ -56,7 +56,7 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
                 }
             }
 
-            return rewards;
+            return Task.FromResult(rewards);
 
         }
     }
