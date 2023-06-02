@@ -313,7 +313,7 @@ export default Vue.extend({
         if(currentElement!=undefined){
           element.isPresent=currentElement["isPresent"];
           element.bonusPoints=currentElement["bonusPoints"];
-          element.updateOn =new Date();
+          element.updateOn =(new Date()).toString();
         }
       });
       this.uploadInvolvementsDialog = false; 
