@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <strong>Created at </strong>{{ document.creationDate }} (Last update at
-    {{ document.updateOn }})<br />
+    <span :title="document.updatedOn">{{ getRelativeTime(document.updatedOn) }}</span>)<br />
     <strong>Course name:</strong> {{ document.courseName }}<br />
     <strong>Created by:</strong> {{ document.createdBy }}<br />
     <strong>Specialization name:</strong> {{ document.specializationName }}
@@ -28,6 +28,7 @@
 import { ReportViewModule } from "@/modules/document";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
+import moment from "moment";
 
 export default Vue.extend({
   name: "AboutDocumentComponent",
@@ -37,5 +38,10 @@ export default Vue.extend({
       return storeHelper.documentStore.report;
     },
   },
+  methods:{
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
+  }
 });
 </script>

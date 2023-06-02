@@ -11,7 +11,7 @@
         >
           <v-icon>mdi-floppy</v-icon>
         </v-btn>
-        <v-btn class="blue-grey lighten-2" @click="onLoadData" >
+        <v-btn class="blue-grey lighten-2" @click="onLoadData">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-btn-toggle>
@@ -29,7 +29,7 @@
           </thead>
           <tbody>
             <tr v-for="item in involvements" :key="item.involvementId">
-              <td>{{ item.updateOn }}</td>
+              <td :title="item.updateOn">{{ getRelativeTime(item.updateOn) }}</td>
               <td>
                 <v-simple-checkbox
                   v-model="item.isPresent"
@@ -57,7 +57,9 @@
           <thead>
             <tr>
               <th class="text-left black--text text-md-h6">Activity Type</th>
-              <th class="text-left black--text text-md-h6">Total attendances</th>
+              <th class="text-left black--text text-md-h6">
+                Total attendances
+              </th>
               <th class="text-left black--text text-md-h6">Total points</th>
             </tr>
           </thead>
@@ -98,6 +100,7 @@ import MessageComponent from "../shared-components/MessageComponent.vue";
 import { InvolvementViewModule } from "@/modules/document/involvement";
 import InvolvementService from "@/services/involvement.service";
 import { Toastification } from "@/plugins/vue-toastification";
+import moment from "moment";
 
 interface ResultsOverview {
   attendances: number;
@@ -137,6 +140,9 @@ export default Vue.extend({
     await this.onLoadData();
   },
   methods: {
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
     /**If the student is not present, then the bonus points cannot be inserted */
     onPresenceChanged: function (item: InvolvementViewModule): void {
       if (!item.isPresent) {

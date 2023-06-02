@@ -69,7 +69,7 @@
               <td>{{ item.student }}</td>
               <td v-if="isTeacher">{{ item.email }}</td>
               <td :title="item.updateOn">
-                {{ item.updateOn | moment("from", "now") }}
+                {{ getRelativeTime(item.updateOn) }}
               </td>
               <td>
                 <v-checkbox
@@ -179,7 +179,6 @@ export default Vue.extend({
   },
   data: function () {
     return {
-      moment,
       generateCodeDialog: false,
       uploadInvolvementsDialog: false,
       involvements: [] as InvolvementViewModule[],
@@ -213,6 +212,9 @@ export default Vue.extend({
     this.onReloadAttendances();
   },
   methods: {
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
     /**If the student is not present, then the bonus points cannot be inserted */
     onPresenceChanged: function (item: InvolvementViewModule): void {
       if (!item.isPresent) {

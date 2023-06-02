@@ -20,7 +20,7 @@
           }}</v-card-subtitle>
           <v-card-subtitle class="black--text">{{
             "Specialization: " + card.specializationName
-          }} ({{ card.updatedOn }})</v-card-subtitle>
+          }} ({{ getRelativeTime(card.updatedOn) }})</v-card-subtitle>
         </v-img>
         <v-card-actions class="button-color">
           <v-row justify="center" class="pa-2">
@@ -42,6 +42,7 @@
 import { ReportCardViewModule } from "@/modules/document";
 import { ImageSelector } from "@/shared/image";
 import Vue from "vue";
+import moment from "moment";
 
 export default Vue.extend({
   name: "ViewDocumentsListCardsComponent",
@@ -58,5 +59,10 @@ export default Vue.extend({
       ImageSelector,
     };
   },
+  methods:{
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
+  }
 });
 </script>

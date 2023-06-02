@@ -76,7 +76,7 @@ export interface ReportViewModule{
     noLaboratories: number;
     noSeminaries: number;
     creationDate: string;
-    updateOn: string;
+    updatedOn: string;
     createdBy: string;
     collections: CollectionViewModule[];
     members: MembersViewModule[];
