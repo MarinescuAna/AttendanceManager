@@ -13,10 +13,7 @@
               <v-btn
                 text
                 @click="
-                  onOpenAttendanceDialog(
-                    item.collectionId,
-                    item.activityTime
-                  )
+                  onOpenAttendanceDialog(item.collectionId, item.activityTime)
                 "
               >
                 {{ item.activityTime.replaceAll("/", ".") }} -
@@ -32,10 +29,7 @@
               v-for="(item, index) in collections"
               :key="item.collectionId"
               @click="
-                onOpenAttendanceDialog(
-                  item.collectionId,
-                  item.activityTime
-                )
+                onOpenAttendanceDialog(item.collectionId, item.activityTime)
               "
             >
               <v-list-item-content>
@@ -57,7 +51,7 @@
       <v-btn
         class="white--text"
         color="black"
-        @click="addAttendanceDateDialog = true"
+        @click="addCollectionDialog = true"
         :disabled="noActivityAvailable"
         v-if="isTeacher"
       >
@@ -67,8 +61,8 @@
 
     <!--Dialog for displaing the details about an attendance collection-->
     <v-dialog
-      v-if="addAttendanceDialog"
-      v-model="addAttendanceDialog"
+      v-if="updateInvolvementsDialog"
+      v-model="updateInvolvementsDialog"
       fullscreen
       hide-overlay
       scrollable
@@ -76,23 +70,24 @@
       <UpdateInvolvementsDialog
         :attendanceCollectionId="selectedCollectionId"
         :attendanceCollectionDate="selectedCollectionDate"
-        @close-dialog="addAttendanceDialog = false"
+        @close-dialog="updateInvolvementsDialog = false"
       />
     </v-dialog>
 
     <!--Dialog for displaing the add new attendance form-->
     <v-dialog
-      v-if="addAttendanceDateDialog"
-      v-model="addAttendanceDateDialog"
+      v-if="addCollectionDialog"
+      v-model="addCollectionDialog"
       persistent
       max-width="50%"
       :fullscreen="isMobile"
     >
       <AddAttendanceDateDialog
-        @close="oncloseAddAttendanceDateDialog"
-        @save="oncloseAddAttendanceDateDialog"
+        @close="oncloseAddCollectionDialog"
+        @save="oncloseAddCollectionDialog"
       />
     </v-dialog>
+
   </v-container>
 </template>
 
@@ -111,15 +106,11 @@ export default Vue.extend({
     AddAttendanceDateDialog,
     UpdateInvolvementsDialog,
   },
-  data() {
+  data: function () {
     return {
-      // Display dialog for adding a new timeline
-      addAttendanceDateDialog: false,
-      // Display dialog for adding attendances
-      addAttendanceDialog: false,
-      // CollectionId which will be open in the dialog
+      addCollectionDialog: false,
+      updateInvolvementsDialog: false,
       selectedCollectionId: 0,
-      /** Collection date */
       selectedCollectionDate: "",
     };
   },
@@ -148,14 +139,14 @@ export default Vue.extend({
     },
   },
   methods: {
-    oncloseAddAttendanceDateDialog: function (): void {
-      this.addAttendanceDateDialog = false;
+    oncloseAddCollectionDialog: function (): void {
+      this.addCollectionDialog = false;
     },
     onOpenAttendanceDialog: function (
       collectionId: number,
       date: string
-    ): void {     
-      this.addAttendanceDialog = true;
+    ): void {
+      this.updateInvolvementsDialog = true;
       this.selectedCollectionDate = date;
       this.selectedCollectionId = collectionId;
     },

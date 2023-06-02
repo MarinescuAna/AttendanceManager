@@ -8,7 +8,10 @@ import VueCookies from 'vue-cookies';
 import { ValidationProvider } from 'vee-validate/dist/vee-validate.full.esm';
 import {ValidationObserver} from 'vee-validate'
 import "@/plugins/vue-toastification";
+import VueMoment from 'vue-moment';
+import moment from 'moment';
 
+Vue.use(VueMoment, { moment });
 /**
  * This is used for validations reasons.
  */

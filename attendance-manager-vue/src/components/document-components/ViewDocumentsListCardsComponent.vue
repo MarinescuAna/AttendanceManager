@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-if="documents.length !== 0" row wrap>
+  <v-layout row wrap>
     <v-flex v-for="card in documents" :key="card.documentId" md4 class="pa-3">
       <v-card>
         <v-img
@@ -36,9 +36,6 @@
       </v-card>
     </v-flex>
   </v-layout>
-  <v-layout v-else>
-    <h1 v-html="message"></h1>
-  </v-layout>
 </template>
 
 <script lang="ts">
@@ -54,11 +51,6 @@ export default Vue.extend({
       type: Array as () => ReportCardViewModule[],
       required: true,
       },
-    /** Message that will be displayed in case that is no document */
-    message: {
-      type: String,
-      required: true
-    }
   },
   data: function () {
     return {

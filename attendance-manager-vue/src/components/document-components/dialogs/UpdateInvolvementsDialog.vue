@@ -12,9 +12,13 @@
     </v-toolbar>
     <v-layout column>
       <v-btn-toggle class="ma-5" rounded>
-        <v-btn class="blue-grey lighten-2" v-if="isTeacher" disabled>
+        <v-btn
+          class="blue-grey lighten-2"
+          @click="uploadInvolvementsDialog = true"
+          v-if="isTeacher"
+        >
           <v-icon v-if="isMobile">mdi-upload</v-icon>
-          <div v-else>Upload course activities</div>
+          <div v-else>Upload involvements</div>
         </v-btn>
         <v-btn
           class="blue-grey lighten-2"
@@ -64,7 +68,9 @@
             <tr v-for="item in involvements" :key="item.involvementId">
               <td>{{ item.student }}</td>
               <td v-if="isTeacher">{{ item.email }}</td>
-              <td>{{ item.updateOn }}</td>
+              <td :title="item.updateOn">
+                {{ item.updateOn | moment("from", "now") }}
+              </td>
               <td>
                 <v-checkbox
                   v-model="item.isPresent"
@@ -98,14 +104,16 @@
     <v-dialog
       v-if="generateCodeDialog"
       v-model="generateCodeDialog"
-      width="50%"
+      width="60%"
       :fullscreen="isMobile"
     >
       <GenerateInvolvementCodeDialog
+        class="pa-8"
         :attendanceCollectionId="attendanceCollectionId"
         @close="generateCodeDialog = false"
       />
     </v-dialog>
+
     <v-dialog
       v-if="useCodeDialog"
       v-model="useCodeDialog"
@@ -117,6 +125,21 @@
         :attendanceCollectionId="attendanceCollectionId"
         @close="useCodeDialog = false"
         @save="onUseGeneratedCode"
+      />
+    </v-dialog>
+
+    <!--Dialog for displaing the upload involvements form-->
+    <v-dialog
+      v-if="uploadInvolvementsDialog"
+      v-model="uploadInvolvementsDialog"
+      max-width="60%"
+      :fullscreen="isMobile"
+    >
+      <UploadInvolvementsDialog
+        :currentInvolvements="involvementsCopy"
+        @update="onUpdateCurrentInvolvements"
+        class="pa-6"
+        @close="uploadInvolvementsDialog = false"
       />
     </v-dialog>
   </v-card>
@@ -131,8 +154,13 @@ import { Toastification } from "@/plugins/vue-toastification";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import UseInvolvementCodeDialog from "./UseInvolvementCodeDialog.vue";
-import { InvolvementViewModule } from "@/modules/document/involvement";
+import {
+  InvolvementsUpdateViewModule,
+  InvolvementViewModule,
+} from "@/modules/document/involvement";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
+import UploadInvolvementsDialog from "@/components/document-components/dialogs/UploadInvolvementsDialog.vue";
+import moment from "moment";
 
 export default Vue.extend({
   name: "AddAttendanceDialog",
@@ -141,6 +169,7 @@ export default Vue.extend({
     GenerateInvolvementCodeDialog,
     UseInvolvementCodeDialog,
     MessageComponent,
+    UploadInvolvementsDialog,
   },
   props: {
     /** The id of the selected attendance collection */
@@ -150,7 +179,9 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      moment,
       generateCodeDialog: false,
+      uploadInvolvementsDialog: false,
       involvements: [] as InvolvementViewModule[],
       involvementsCopy: [] as InvolvementViewModule[],
       useCodeDialog: false,
@@ -273,6 +304,19 @@ export default Vue.extend({
           student.isPresent = true;
         }
       });
+    },
+    onUpdateCurrentInvolvements: async function (
+      newInvolvements: InvolvementsUpdateViewModule[]
+    ): Promise<void> {
+     this.involvements.forEach(element =>{
+        let currentElement = newInvolvements.find(e=>e["involvementId"]==element.involvementId);
+        if(currentElement!=undefined){
+          element.isPresent=currentElement["isPresent"];
+          element.bonusPoints=currentElement["bonusPoints"];
+          element.updateOn =new Date();
+        }
+      });
+      this.uploadInvolvementsDialog = false; 
     },
   },
 });
