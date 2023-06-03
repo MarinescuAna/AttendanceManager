@@ -8,28 +8,37 @@
               card.documentId
             )}`)
           "
-          class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-          height="200px"
+          height="150px"
         >
-          <v-card-title class="text-h5 black--text font-weight-bold">{{
-            card.title
-          }}</v-card-title>
-          <v-card-subtitle class="black--text">{{
-            "Course: " + card.courseName
-          }}</v-card-subtitle>
-          <v-card-subtitle class="black--text">{{
-            "Specialization: " + card.specializationName
-          }} ({{ getRelativeTime(card.updatedOn) }})</v-card-subtitle>
         </v-img>
-        <v-card-actions class="button-color">
-          <v-row justify="center" class="pa-2">
+        <v-card-title>
+          <div class="text-h5 black--text font-weight-bold mb-2">
+            {{ card.title }}
+          </div>
+        </v-card-title>
+        <v-card-subtitle>
+          <v-icon color="grey" left> mdi-clock </v-icon> Created
+          {{ getRelativeTime(card.updatedOn) }}</v-card-subtitle
+        >
+        <v-divider class="mx-6"></v-divider>
+        <v-card-text>
+          <v-chip class="ma-1">
+            <v-icon color="red" left> mdi-book </v-icon>
+            {{ card.courseName }}
+          </v-chip>
+          <v-chip class="ma-1">
+            <v-icon color="brown" left> mdi-brightness-5 </v-icon>
+            {{ card.specializationName }}
+          </v-chip>
+        </v-card-text>
+        <v-card-actions>
+          <v-row justify="center" class="mb-1">
             <v-btn
-              color="black"
-              icon
+              class="dark_button white--text"
               :to="{ name: 'document', params: { id: card.documentId } }"
             >
-              <v-icon>mdi-login-variant</v-icon>
+              Open report
             </v-btn></v-row
           >
         </v-card-actions>
@@ -45,13 +54,13 @@ import Vue from "vue";
 import moment from "moment";
 
 export default Vue.extend({
-  name: "ViewDocumentsListCardsComponent",
+  name: "ReportCardsComponent",
   props: {
     /** Array of documents */
     documents: {
       type: Array as () => ReportCardViewModule[],
       required: true,
-      },
+    },
   },
   data: function () {
     return {
@@ -59,10 +68,10 @@ export default Vue.extend({
       ImageSelector,
     };
   },
-  methods:{
+  methods: {
     getRelativeTime(updateOn: string) {
       return moment(new Date(updateOn)).fromNow();
     },
-  }
+  },
 });
 </script>

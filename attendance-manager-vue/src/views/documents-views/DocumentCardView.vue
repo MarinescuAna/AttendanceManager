@@ -25,7 +25,7 @@
       <v-tabs-items v-model="currentTab" class="pa-3 remove-background-color">
         <!-- First tab: display created documents-->
         <v-tab-item>
-          <ViewDocumentsListCardsComponent
+          <ReportCardComponent
             :documents="ownDocuments"
             v-if="ownDocuments.length != 0"
           />
@@ -37,7 +37,7 @@
         </v-tab-item>
         <!-- Second tab: display documents where the user is collaborator-->
         <v-tab-item>
-          <ViewDocumentsListCardsComponent
+          <ReportCardComponent
             :documents="collaboratorDocuments"
             v-if="collaboratorDocuments.length != 0"
           />
@@ -50,7 +50,7 @@
       </v-tabs-items>
     </div>
     <div v-else>
-      <ViewDocumentsListCardsComponent
+      <ReportCardComponent
         :documents="collaboratorDocuments"
         v-if="collaboratorDocuments.length != 0"
           />
@@ -70,7 +70,7 @@
 </style>
 <script lang="ts">
 import { ReportCardViewModule } from "@/modules/document";
-import ViewDocumentsListCardsComponent from "@/components/document-components/ViewDocumentsListCardsComponent.vue";
+import ReportCardComponent from "@/components/document-components/ReportCardComponent.vue";
 import Vue from "vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
@@ -81,7 +81,7 @@ import MessageComponent from "@/components/shared-components/MessageComponent.vu
 export default Vue.extend({
   name: "DocumentCardView",
   components: {
-    ViewDocumentsListCardsComponent,
+    ReportCardComponent,
     MessageComponent
 },
   data: function () {
