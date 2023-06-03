@@ -151,8 +151,8 @@ import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import { CreateUserParameters } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
-import { SpecializationModule } from "@/modules/specialization";
-import { DepartmentModule } from "@/modules/department";
+import { SpecializationViewModule } from "@/modules/specialization";
+import { DepartmentViewModule } from "@/modules/department";
 import { Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
 
@@ -172,7 +172,7 @@ export default Vue.extend({
       // Enroll year
       year: 0,
       // All the specializations
-      specializations: [] as SpecializationModule[],
+      specializations: [] as SpecializationViewModule[],
       // Selected specializations
       selectedSpecializations: [] as number[],
       // Selected specialization if just one specialization can be selected
@@ -191,7 +191,7 @@ export default Vue.extend({
     /**
      * All departments
      */
-    departments(): DepartmentModule[] {
+    departments(): DepartmentViewModule[] {
       return storeHelper.departmentStore.departments;
     },
   },

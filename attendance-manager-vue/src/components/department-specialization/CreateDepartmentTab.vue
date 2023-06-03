@@ -1,10 +1,8 @@
 <template>
   <v-container>
-    <v-card class="orange lighten-2">
+    <v-card class="orange_background">
       <v-card-title class="pa-7">
-        <h2>Create new department</h2>
-         <v-spacer></v-spacer>
-         <router-link :to="{name:'department'}" tag="button"><v-icon>mdi-close</v-icon></router-link> 
+        <h4>Create new department</h4>
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
@@ -22,6 +20,7 @@
                 :error-messages="errors"
                 required
                 counter
+                color="black"
                 maxlength="128"
                 class="pa-6"
               />
@@ -32,7 +31,7 @@
                 @click="addDepartment"
                 :disabled="invalid"
                 large
-                class="blue-grey lighten-4"
+                class="dark_button white--text"
                 >Submit</v-btn
               >
             </v-row>
@@ -42,35 +41,33 @@
     </v-card>
   </v-container>
 </template>
-
-
+  
 <script lang="ts">
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
-import StoreHelper from "@/store/store-helper";
+import storeHelper from "@/store/store-helper";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
-  name: "CreateDepartmentView",
-  data() {
+  name: "CreateDepartmentTab",
+  data: function () {
     return {
       rules,
-      // Department name
       department: "",
     };
   },
   methods: {
-    /**
-     * Add new department in store and db
-     * Success: reset the form and reload the treeview
-     */
-    async addDepartment() {
-      const response = await StoreHelper.departmentStore.addDepartment(this.department);
+    addDepartment: async function (): Promise<void> {
+      const response = await storeHelper.departmentStore.addDepartment(
+        this.department
+      );
 
       if (response) {
-        this.$router.currentRoute.meta?.onBack();
+       Toastification.success("The department was successfully added!");
+       this.department='';
       }
     },
   },
 });
 </script>
-  
+    

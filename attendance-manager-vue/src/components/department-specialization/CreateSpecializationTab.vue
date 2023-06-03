@@ -1,12 +1,8 @@
 <template>
   <v-container>
-    <v-card class="orange lighten-2">
+    <v-card class="orange_background">
       <v-card-title class="pa-7">
-        <h2>Create new specialization</h2>
-        <v-spacer></v-spacer>
-        <router-link :to="{ name: 'department' }" tag="button"
-          ><v-icon>mdi-close</v-icon></router-link
-        >
+        <h4>Create new specialization</h4>
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
@@ -25,6 +21,7 @@
                 prepend-icon="mdi-pencil"
                 :error-messages="errors"
                 required
+                color="black"
                 class="pa-6"
               />
             </validation-provider>
@@ -35,6 +32,7 @@
               item-value="id"
               v-model="department"
               required
+              color="black"
               class="pa-6"
             ></v-select>
             <v-row justify="center" class="pa-8">
@@ -43,7 +41,7 @@
                 @click="addSpecialization"
                 :disabled="invalid || department === 0"
                 large
-                class="blue-grey lighten-4"
+                class="dark_button white--text"
                 >Submit</v-btn
               >
             </v-row>
@@ -53,48 +51,44 @@
     </v-card>
   </v-container>
 </template>
-  
-  
-  <script lang="ts">
+    
+    
+    <script lang="ts">
 import Vue from "vue";
 import StoreHelper from "@/store/store-helper";
-import { DepartmentModule } from "@/modules/department";
+import { DepartmentViewModule } from "@/modules/department";
 import storeHelper from "@/store/store-helper";
 import { rules } from "@/plugins/vee-validate";
-import { SpecializationInsertParameter } from "@/modules/specialization";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
-  name: "CreateSpecializationView",
+  name: "CreateSpecializationTab",
   data() {
     return {
       rules,
-      // Specialization name
       name: "",
-      // The department id of the specialization
       department: 0,
     };
   },
   computed: {
-    // Departments list to load them in the v-selector
-    departments(): DepartmentModule[] {
+    departments(): DepartmentViewModule[] {
       return storeHelper.departmentStore.departments;
     },
   },
   methods: {
-    /**
-     * Use this method for adding a new specialization
-     */
     async addSpecialization() {
-      const response = await StoreHelper.specializationStore.addSpecialization({
-        name: this.name,
-        departmentId: this.department
-      } as SpecializationInsertParameter);
+      const response = await StoreHelper.specializationStore.addSpecialization(
+        this.name,
+        this.department
+      );
 
       if (response) {
-        this.$router.currentRoute.meta?.onBack();
+        Toastification.success("The specialization was successfully added!");
+        this.name = "";
+        this.department = 0;
       }
     },
   },
 });
 </script>
-    
+      

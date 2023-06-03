@@ -293,7 +293,7 @@
 
 <script lang="ts">
 import { CourseViewModule } from "@/modules/course";
-import { SpecializationModule } from "@/modules/specialization";
+import { SpecializationViewModule } from "@/modules/specialization";
 import { ReportInsertModule } from "@/modules/document";
 import { StudentForCourseViewModule } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
@@ -317,7 +317,7 @@ export default Vue.extend({
       /** Selected course */
       selectedCourse: {} as CourseViewModule,
       /** Selected specialization */
-      selectedSpecialization: {} as SpecializationModule,
+      selectedSpecialization: {} as SpecializationViewModule,
       /** Maximum number of lessons that will be held */
       maxNoLessons: 0,
       /** Maximum number of laboratories that will be held */
@@ -354,7 +354,7 @@ export default Vue.extend({
       );
     },
     /** Load the current user specializations from the store */
-    specializations: function (): SpecializationModule[] {
+    specializations: function (): SpecializationViewModule[] {
       return storeHelper.userStore.currentUser.specializations;
     },
     /** List of current user courses */

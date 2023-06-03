@@ -27,15 +27,6 @@ export const UserHeader: HeaderModule[] = [
     },
 ];
 /**
- * Headers for tabel used to display departments and specializations
- */
-export const DepartmentsHeader: HeaderModule[] = [
-    {
-        text: "Department Name",
-        value: "name",
-    }
-];
-/**
  * Headers for tabel used to display courses
  */
 export const CoursesHeader: HeaderModule[] = [

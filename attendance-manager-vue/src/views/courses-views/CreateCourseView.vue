@@ -59,7 +59,7 @@ import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import storeHelper from "@/store/store-helper";
 import { CreateCourseModule } from "@/modules/course";
-import { SpecializationModule } from "@/modules/specialization";
+import { SpecializationViewModule } from "@/modules/specialization";
 
 export default Vue.extend({
   name: "CreateCourseView",
@@ -74,7 +74,7 @@ export default Vue.extend({
   },
   computed: {
     // All the specializations
-    specializations(): SpecializationModule[] {
+    specializations(): SpecializationViewModule[] {
       return storeHelper.userStore.currentUser.specializations;
     },
   },

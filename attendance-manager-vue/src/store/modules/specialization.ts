@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { SpecializationInsertParameter, SpecializationModule } from "@/modules/specialization";
+import { SpecializationViewModule } from "@/modules/specialization";
 import https from "@/plugins/axios";
 import { SPECIALIZATION_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
@@ -9,7 +9,7 @@ import { RootState } from "..";
 
 //state type
 interface SpecializationState {
-    specializations: SpecializationModule[]
+    specializations: SpecializationViewModule[]
 }
 
 //initialize the state with an empty array
@@ -27,7 +27,7 @@ const getters: GetterTree<SpecializationState, RootState> = {
     /**
      * Gets specializations from the store
      */
-    specializations(state:SpecializationState): SpecializationModule[] {
+    specializations(state:SpecializationState): SpecializationViewModule[] {
         return state.specializations;
     }
 };
@@ -37,13 +37,13 @@ const mutations: MutationTree<SpecializationState> = {
     /**
      * Update the entire list of specializations existed into the store
      */
-    _specializations(state, payload: SpecializationModule[]): void {
+    _specializations(state, payload: SpecializationViewModule[]): void {
         state.specializations = payload;
     },
     /**
      * Add a new specialziation into the store 
      */
-    _addSpecialization(state, payload: SpecializationModule): void {
+    _addSpecialization(state, payload: SpecializationViewModule): void {
         state.specializations.push(payload);
     },
     /**
@@ -61,18 +61,22 @@ const actions: ActionTree<SpecializationState, RootState> = {
      */
     async loadSpecializations({ commit, state }): Promise<void> {
         if (state.specializations.length == 0) {
-            const specializations: SpecializationModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
+            const specializations: SpecializationViewModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
             commit("_specializations", specializations);
         }
     },
     /**
      * Add a new specialization into the database and initialize the store
      */
-    async addSpecialization({ commit }, payload: SpecializationInsertParameter): Promise<boolean> {
+    async addSpecialization({ commit }, payload: {
+        name: string;
+        departmentId: number;
+    }): Promise<boolean> {
+
         let isSuccess = true;
 
         // this result represents the id of the specialization
-        const result = await https.post(`${SPECIALIZATION_CONTROLLER}/create_specialization`, payload)
+        const result = await https.post(`${SPECIALIZATION_CONTROLLER}/create_specialization?departmentId=${payload.departmentId}&name=${payload.name}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -82,7 +86,7 @@ const actions: ActionTree<SpecializationState, RootState> = {
                 id: (result as AxiosResponse).data,
                 name: payload.name,
                 departmentId: payload.departmentId,
-            } as SpecializationModule);
+            } as SpecializationViewModule);
         }
         return isSuccess;
     },

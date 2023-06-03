@@ -1,6 +1,7 @@
 ﻿using AttendanceManager.Application.Features.Department.Commands.CreateDepartment;
 using AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
+using AttendanceManager.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,11 @@ namespace AttendanceManager.Api.Controllers
         [HttpPost("create_department/{name}")]
         public async Task<IActionResult> CreateDepartment(string name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
+            }
+
             return Ok(await mediator.Send(new CreateDepatmentCommand() { Name = name }));
         }
 
@@ -43,9 +49,18 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: true/false</returns>
         [HttpPatch("update_department_name")]
-        public async Task<IActionResult> UpdateDepartmentName([FromBody] UpdateDepartmentNameCommand command)
+        public async Task<IActionResult> UpdateDepartmentName(string name, int id)
         {
-            return Ok(await mediator.Send(command));
+            if (string.IsNullOrEmpty(name) || id < 1)
+            {
+                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
+            }
+
+            return Ok(await mediator.Send(new UpdateDepartmentNameCommand()
+            {
+                DepartmentID= id,
+                Name = name
+            }));
         }
     }
 }

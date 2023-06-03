@@ -1,6 +1,6 @@
 ﻿namespace AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations
 {
-    public sealed class SpecializationDto
+    public sealed class SpecializationVm
     {
         public required int Id { get; init; }
         public required string Name { get; init; }

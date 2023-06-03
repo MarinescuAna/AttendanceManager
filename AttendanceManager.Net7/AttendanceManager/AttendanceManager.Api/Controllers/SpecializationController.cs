@@ -1,5 +1,6 @@
 ﻿using AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization;
 using AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations;
+using AttendanceManager.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,9 +32,18 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: true/false</returns>
         /// </summary>
         [HttpPost("create_specialization")]
-        public async Task<IActionResult> CreateSpecialization([FromBody] CreateSpecializationCommand specialization)
+        public async Task<IActionResult> CreateSpecialization(int departmentId, string name)
         {
-            return Ok(await mediator.Send(specialization));
+            if (string.IsNullOrEmpty(name) || departmentId < 1)
+            {
+                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
+            }
+
+            return Ok(await mediator.Send(new CreateSpecializationCommand()
+            {
+                DepartmentId= departmentId,
+                Name= name
+            }));
         }
     }
 }

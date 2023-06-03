@@ -5,7 +5,6 @@
       :items="dataSource"
       :expanded.sync="expanded"
       item-key="id"
-      dense
       :show-expand="expandDetails"
       class="elevation-1"
     >
@@ -20,10 +19,6 @@
             :item="item"
             v-if="type == 0"
           ></user-info-card-component>
-          <department-info-card-component
-            :item="item"
-            v-if="type == 1"
-          ></department-info-card-component>
         </td>
       </template>
     </v-data-table>
@@ -44,7 +39,6 @@
 import { ManagementDataType } from "@/shared/enums";
 import Vue from "vue";
 import UserInfoCardComponent from "../user/UserInfoCardComponent.vue";
-import DepartmentInfoCardComponent from "../department-specialization/DepartmentInfoCardComponent.vue";
 import { TableModule } from "@/modules/shared";
 import { HeaderModule } from "./Headers";
 
@@ -83,7 +77,6 @@ export default Vue.extend({
   },
   components: {
     UserInfoCardComponent,
-    DepartmentInfoCardComponent,
   },
   data: function () {
     return {

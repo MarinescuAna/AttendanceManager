@@ -1,4 +1,4 @@
-import { SpecializationModule } from "../specialization";
+import { SpecializationViewModule } from "../specialization";
 
 /**
  * Use this module in order to create a new user's account
@@ -30,7 +30,7 @@ interface UserBaseModule{
 export interface UserInformationViewModule{
    departmentId: number;
    departmentName: string;
-   specializations: SpecializationModule[];
+   specializations: SpecializationViewModule[];
 }
 export interface StudentForCourseViewModule{
    email: string;

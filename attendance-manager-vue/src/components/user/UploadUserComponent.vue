@@ -364,8 +364,8 @@
 </style>
 
 <script lang="ts">
-import { DepartmentModule } from "@/modules/department";
-import { SpecializationModule } from "@/modules/specialization";
+import { DepartmentViewModule } from "@/modules/department";
+import { SpecializationViewModule } from "@/modules/specialization";
 import { CreateUserParameters } from "@/modules/user";
 import { Role } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
@@ -390,7 +390,7 @@ export default Vue.extend({
       gdprStartCell: "",
       gdprEndCell: "",
       year: 0,
-      specializations: [] as SpecializationModule[],
+      specializations: [] as SpecializationViewModule[],
       // Selected specializations
       selectedSpecializations: [] as number[],
       // Selected specialization if just one specialization can be selected
@@ -417,7 +417,7 @@ export default Vue.extend({
     /**
      * All departments
      */
-    departments(): DepartmentModule[] {
+    departments(): DepartmentViewModule[] {
       return storeHelper.departmentStore.departments;
     },
   },

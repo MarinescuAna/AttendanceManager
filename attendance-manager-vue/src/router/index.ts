@@ -59,30 +59,11 @@ const routes: Array<RouteConfig> = [
     path: '/department',
     name: 'department',
     component: () => import('../views/departments-specializations-views/DepartmentView.vue'),
-    children: [
-      {
-        meta: {
-          onBack: () => { router.push({ name: 'department' }) },
-          title: 'Create Department',
-          requireAuth: true,
-          role: [Role.Admin]
-        },
-        path: 'new-department',
-        name: 'new-department',
-        component: () => import('../views/departments-specializations-views/CreateDepartmentView.vue')
-      },
-      {
-        meta: {
-          onBack: () => { router.push({ name: 'department' }) },
-          title: 'Create Specialization',
-          requireAuth: true,
-          role: [Role.Admin]
-        },
-        path: 'new-specialization',
-        name: 'new-specialization',
-        component: () => import('../views/departments-specializations-views/CreateSpecializationView.vue')
-      }
-    ],
+    meta: {
+      title: 'Departments and Specializations',
+      requireAuth: true,
+      role: [Role.Admin]
+    },
   },
   {
     path: '/create-document',

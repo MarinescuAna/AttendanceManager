@@ -1,7 +1,7 @@
 import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import { Store } from "vuex";
 import { namespace as userNamespace } from "../modules/user";
-import { DepartmentModule } from "@/modules/department";
+import { DepartmentViewModule } from "@/modules/department";
 
 export class UserStore {
     private store: Store<any>;
@@ -42,7 +42,7 @@ export class UserStore {
     /**
      * Add a new user only
      */
-    public addUser(payload: CreateUserParameters, department: DepartmentModule): Promise<boolean> {
+    public addUser(payload: CreateUserParameters, department: DepartmentViewModule): Promise<boolean> {
         return this.store.dispatch(`${userNamespace}/addUser`, { newUser: payload, department: department });
     }
 

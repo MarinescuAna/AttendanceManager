@@ -8,6 +8,14 @@ namespace AttendanceManager.Application.Profiles
     {
         public MappingProfiler()
         {
+            //Used to get departments
+            CreateMap<Department, Features.Department.Queries.GetDepartments.DepartmentVm>()
+                .ForMember(d => d.Id, act => act.MapFrom(d => d.DepartmentID));
+
+            //Used to get specializations with the departmentId
+            CreateMap<Specialization, Features.Specialization.Queries.GetSpecializations.SpecializationVm>()
+             .ForMember(d => d.Id, act => act.MapFrom(d => d.SpecializationID));
+
             // Used for involvement codes when we create an involvement code and return something that is not void or null
             CreateMap<InvolvementCode, Features.InvolvementCode.Commands.CreateInvolvementCode.InvolvementCodeVm>();
 

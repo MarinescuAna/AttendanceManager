@@ -27,3 +27,6 @@ export const ATTENDANCE_CONTROLLER = "attendance";
 export const INVOLVEMENT_CODE_CONTROLLER = "involvement_code";
 export const REWARD_CONTROLLER = "reward";
 export const NOTIFICATION_CONTROLLER = "notification";
+
+/**Colors codes */
+export const WARNING_AMBER_DARKEN_4='#FF6F00';

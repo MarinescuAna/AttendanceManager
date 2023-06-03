@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-card-title class="pa-3">Change the department name</v-card-title>
-    <v-divider></v-divider>
+    <v-card-title class="ma-3">Change the department name     <v-spacer></v-spacer>
+      <v-btn @click="$emit('close')" icon> <v-icon>mdi-close</v-icon> </v-btn></v-card-title>
     <v-card-text class="pa-4">
       <v-text-field
         label="New department name"
@@ -10,18 +10,19 @@
         required
       />
     </v-card-text>
-    <v-divider></v-divider>
     <v-card-actions class="ma-3">
-      <v-btn color="blue darken-1" text @click="onSaveName" :disabled="isValid">
+      <v-row justify="center" class="pa-8">
+      <v-btn color="dark_button white--text" @click="onSaveName" :disabled="isValid">
         Save
       </v-btn>
+      </v-row>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
 import {
-  DepartmentModule,
+  DepartmentViewModule,
 } from "@/modules/department";
 import storeHelper from "@/store/store-helper";
 
@@ -30,7 +31,7 @@ export default {
   props: {
       /** Department object */
       department: {
-          type: Object as () => DepartmentModule,
+          type: Object as () => DepartmentViewModule,
           required: true
       }
   },
@@ -57,7 +58,7 @@ export default {
       const result = await storeHelper.departmentStore.updateDepartmentName({
         id: this.department.id,
         name: this.name,
-      } as DepartmentModule);
+      } as DepartmentViewModule);
 
       if (result) {
         this.$emit("save", this.name);
