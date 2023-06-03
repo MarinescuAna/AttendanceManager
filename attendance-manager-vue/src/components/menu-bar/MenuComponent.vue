@@ -19,7 +19,7 @@
       <v-spacer></v-spacer>
       <v-menu
         v-model="openNotificationDialog"
-        v-if="isLogged"
+        v-if="isLogged && !isAdmin"
         :close-on-content-click="false"
         :nudge-width="200"
         bottom
@@ -35,7 +35,7 @@
             overlap
           >
             <v-btn
-              class="orange lighten-3 black--text"
+              class="light_button black--text"
               elevation="3"
               v-bind="attrs"
               v-on="on"
@@ -57,7 +57,7 @@
     <!--navigation drawer-->
     <v-navigation-drawer
       v-model="drawerActivator"
-      class="blue-grey lighten-4 navigation-drawer-style"
+      class="blue_grey navigation-drawer-style"
       absolute
       temporary
       width="auto"
@@ -88,6 +88,8 @@ import NotificationService from "@/services/notification.service";
 import { NotificationViewModel } from "@/modules/notification/index";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
 import { EventBus } from "@/main";
+import { Role } from "@/shared/enums";
+import AuthService from "@/services/auth.service";
 
 export default Vue.extend({
   name: "MenuComponent",
@@ -104,6 +106,9 @@ export default Vue.extend({
   computed: {
     messages: function (): number {
       return this.notifications.filter((n) => !n.isRead).length;
+    },
+    isAdmin: function (): boolean {
+      return AuthService.getDataFromToken()?.role == Role[0];
     },
   },
   watch: {

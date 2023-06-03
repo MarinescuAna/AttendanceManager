@@ -56,6 +56,7 @@ import { NotificationPriority } from "@/shared/enums";
 import Vue from "vue";
 import MessageComponent from "../shared-components/MessageComponent.vue";
 import moment from "moment";
+import { colors } from "vuetify/lib";
 
 export default Vue.extend({
   name: "NotificationMenuContent",
@@ -93,12 +94,12 @@ export default Vue.extend({
       return iconColor;
     },
     getBackgroundColor: function (priority: NotificationPriority): string {
-      let iconColor = "#FFEBEE";
+      let iconColor = colors.red.lighten5;
       if (priority == NotificationPriority.Info) {
-        iconColor = "#E3F2FD";
+        iconColor = colors.blue.lighten5;
       } else {
         if (priority == NotificationPriority.Warning) {
-          iconColor = "#FFFDE7";
+          iconColor = colors.yellow.lighten5;
         }
       }
       return iconColor;

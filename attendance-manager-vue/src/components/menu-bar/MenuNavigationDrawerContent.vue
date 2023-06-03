@@ -19,14 +19,14 @@
       <v-btn
         @click="onRedirectToLogin"
         title="Login"
-        class="orange lighten-3"
+        class="light_button"
         block
       >
         SIGN IN
       </v-btn>
     </div>
     <div class="ma-5" v-else>
-      <v-btn @click="logout" class="orange lighten-3" block> SIGN OUT </v-btn>
+      <v-btn @click="logout" class="light_button" block> SIGN OUT </v-btn>
     </div>
 
     <v-divider></v-divider>
@@ -72,7 +72,7 @@ export default Vue.extend({
       links: [] as MenuChildModel[],
     };
   },
-  created(): void {
+  created: function(): void {
     this.setProperties();
   },
   watch: {
