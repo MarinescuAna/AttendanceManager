@@ -103,14 +103,14 @@
                   </validation-provider>
                 </v-col>
                 <v-col cols="6">
-                    <v-select
-                      :items="years"
-                      label="Enrollment year"
-                      v-model="year"
-                      required
-                      prepend-icon="mdi-school"
-                      class="pa-6"
-                    ></v-select>
+                  <v-select
+                    :items="years"
+                    label="Enrollment year"
+                    v-model="year"
+                    required
+                    prepend-icon="mdi-school"
+                    class="pa-6"
+                  ></v-select>
                 </v-col>
               </v-row>
               <v-container class="ml-3">
@@ -145,8 +145,8 @@
     >
   </v-container>
 </template>
-  
-  <script lang="ts">
+    
+    <script lang="ts">
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import { CreateUserParameters } from "@/modules/user";
@@ -157,7 +157,7 @@ import { Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
-  name: "CreateSingleUserView",
+  name: "CreateUserComponent",
   data() {
     return {
       rules,
@@ -178,10 +178,6 @@ export default Vue.extend({
       // Selected specialization if just one specialization can be selected
       selectedSpecialization: 0,
     };
-  },
-  async created() {
-    await storeHelper.departmentStore.loadDepartments();
-    await storeHelper.specializationStore.loadSpecializations();
   },
   computed: {
     /**
@@ -211,16 +207,21 @@ export default Vue.extend({
         specializationIds.push(this.selectedSpecialization);
       }
 
-      const department = storeHelper.departmentStore.departments.find(d=>d.id == this.specializations[0].departmentId);
+      const department = storeHelper.departmentStore.departments.find(
+        (d) => d.id == this.specializations[0].departmentId
+      );
 
-      const response = await storeHelper.userStore.addUser({
-        fullname: this.fullname,
-        code: this.code,
-        email: this.email,
-        role: this.role.toString(),
-        year: this.year,
-        specializationIds: specializationIds,
-      } as CreateUserParameters, department!);
+      const response = await storeHelper.userStore.addUser(
+        {
+          fullname: this.fullname,
+          code: this.code,
+          email: this.email,
+          role: this.role.toString(),
+          year: this.year,
+          specializationIds: specializationIds,
+        } as CreateUserParameters,
+        department!
+      );
 
       if (response) {
         Toastification.info(
@@ -251,4 +252,4 @@ export default Vue.extend({
   },
 });
 </script>
-    
+      

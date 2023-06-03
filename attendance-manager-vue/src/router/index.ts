@@ -56,16 +56,6 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: '/upload-users',
-    name: 'upload-users',
-    component: () => import('../views/manage-users-views/UploadUsersView.vue'),
-    meta: {
-      title: 'Users',
-      requireAuth: true,
-      role: [Role.Admin]
-    },
-  },
-  {
     path: '/department',
     name: 'department',
     component: () => import('../views/departments-specializations-views/DepartmentView.vue'),
@@ -127,7 +117,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/create-user',
     name: 'create-user',
-    component: () => import('../views/manage-users-views/CreateSingleUserView.vue'),
+    component: () => import('../views/manage-users-views/CreateUserView.vue'),
     meta: {
       title: 'Create User',
       requireAuth: true,

@@ -18,18 +18,11 @@ export class MenuItems{
             description: "View all the involvement reports that you created or the involvement reports where you was added as collaborator."
         },
         {
-            title: "Add single user",
+            title: "Add user",
             icon: "mdi-account-plus-outline",
             route: "create-user",
             role: Role.Admin,
-            description: "Add a new user (student or teacher) into the system."
-        },
-        {
-            title: "Upload users",
-            icon: "mdi-account-arrow-up",
-            route: "upload-users",
-            role: Role.Admin,
-            description: "Upload a group of users from an excel file."
+            description: "Add a new user (student or teacher) into the system or upload multiple users."
         },
         {
             title: "View users",
