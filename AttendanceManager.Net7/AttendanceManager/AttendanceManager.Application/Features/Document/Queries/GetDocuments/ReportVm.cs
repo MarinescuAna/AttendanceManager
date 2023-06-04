@@ -1,6 +1,6 @@
-﻿namespace AttendanceManager.Application.Dtos
+﻿namespace AttendanceManager.Application.Features.Document.Queries.GetDocuments
 {
-    public class DocumentBaseDto
+    public sealed class ReportVm
     {
         public required int DocumentId { get; init; }
         public required string Title { get; init; }
@@ -8,5 +8,6 @@
         public required string CourseName { get; init; }
         public required string SpecializationName { get; set; }
         public required string UpdatedOn { get; set; }
+        public bool IsCreator { get; set; } = false;
     }
 }

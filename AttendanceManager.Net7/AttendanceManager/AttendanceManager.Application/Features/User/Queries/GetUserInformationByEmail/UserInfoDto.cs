@@ -1,6 +1,4 @@
-﻿using AttendanceManager.Application.Dtos;
-
-namespace AttendanceManager.Application.Features.User.Queries.GetUserInformationByEmail
+﻿namespace AttendanceManager.Application.Features.User.Queries.GetUserInformationByEmail
 {
     public sealed class UserInfoDto
     {
