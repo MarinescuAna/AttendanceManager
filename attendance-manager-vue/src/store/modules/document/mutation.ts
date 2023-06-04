@@ -27,7 +27,7 @@ export const documentMutations = {
      * Add a documentFile in the current document
     */
     _addCollection(state, payload: CollectionViewModule): void {
-        state.currentReport.attendanceCollections.unshift(payload);
+        state.currentReport.collections.unshift(payload);
 
         if (payload.courseType == CourseType[CourseType.Laboratory]) {
             state.currentReport.noLaboratories++;
