@@ -16,14 +16,16 @@ namespace AttendanceManager.Application.Modules.Singleton
         public int MaxNumberOfSeminaries { get; }
         public string Title { get; }
         public string CreatedBy { get; }
+        public int NoOfStudents { get; }
 
-        public ReportDto(Document report)
+        public ReportDto(Document report, int noOfStudents)
         {
             ReportId = report.DocumentId;
             EnrollmentYear = report.EnrollmentYear;
             SpecializationId = report.Course!.UserSpecialization!.SpecializationID;
             Title= report.Title;
             CreatedBy = report.Course.UserSpecialization!.UserID;
+            NoOfStudents = noOfStudents;
 
             MaxNumberOfLectures = report.MaxNoLessons;
             MaxNumberOfLaboratories = report.MaxNoLaboratories;

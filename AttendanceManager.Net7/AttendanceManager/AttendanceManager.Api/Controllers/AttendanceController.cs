@@ -77,6 +77,13 @@ namespace AttendanceManager.Api.Controllers
         [HttpPatch("update_student_involvement")]
         public async Task<IActionResult> UpdateStudentsInvolvement([FromBody] UpdateStudentsInvolvementCommand command)
         {
+            if (command.Involvements.Length == 0)
+            {
+                throw new BadRequestException(ErrorMessages.BadRequest_ParametersMissing_Error);
+            }
+
+            command.CurrentUserEmail = UserEmail;
+
             return Ok(await mediator.Send(command));
         }
 

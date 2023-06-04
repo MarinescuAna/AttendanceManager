@@ -13,7 +13,7 @@ namespace AttendanceManager.Infrastructure.Singleton
         // UPDATE this each time when you add a new collection into this report!!
         public Dictionary<int, CourseType> ReportCollectionTypes { get; set; } = new Dictionary<int, CourseType>();
         public ReportDto? CurrentReportInfo { get; set; }
-        public void InitializeReport(Document currentReport)
+        public void InitializeReport(Document currentReport,int noOfStudents)
         {
             if (currentReport == null)
             {
@@ -25,7 +25,7 @@ namespace AttendanceManager.Infrastructure.Singleton
                 CleanReport();
             }
 
-            CurrentReportInfo = new ReportDto(currentReport);
+            CurrentReportInfo = new ReportDto(currentReport, noOfStudents);
 
             LastCollectionOrder = new Dictionary<CourseType, int>();
             foreach (var type in Enum.GetValues(typeof(CourseType)))

@@ -34,8 +34,8 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
                 ?? throw new NotFoundException("The document cannot be found!");
 
             //get the current document
-            _currentReportService.InitializeReport(currentDocument!);
             var documentMembers = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(request.Id, null);
+            _currentReportService.InitializeReport(currentDocument!,documentMembers.Count(m=>m.User!.Role==Role.Student));
 
             return new ReportVm
             {

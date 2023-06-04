@@ -157,6 +157,17 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    UserRole = Domain.Enums.Role.Teacher
                }
             );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   Title = "Full class",
+                   ImagePath = "first_class_full.jpg",
+                   Description = "Achieve this badge when you have all the students at any activity.",
+                   BadgeID = Domain.Enums.BadgeID.FullClass,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
         }
     }
 }

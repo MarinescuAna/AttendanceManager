@@ -11,6 +11,8 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
     public sealed class UpdateStudentsInvolvementCommand : IRequest<bool>
     {
         public required StudentInvolvementVm[] Involvements { get; init; }
+        public string? CurrentUserEmail { get; set; }
+
     }
 
     public sealed class UpdateStudentsInvolvementCommandHandler : IRequestHandler<UpdateStudentsInvolvementCommand, bool>
@@ -51,6 +53,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInserAttendancesMessage);
             }
 
+            // check if you can add any badges for students
             var involvementsWithPresents = request.Involvements.Where(i => i.IsPresent);
             foreach (var involvment in involvementsWithPresents)
             {
@@ -59,6 +62,17 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
                     AchievedUserRole = Role.Student,
                     AchievedUserId = involvment.UserId,
                     CurrentCollectionId = involvment.CollectionId,
+                    CommitChanges = false
+                });
+            }
+
+            foreach (var collection in involvementsWithPresents.DistinctBy(c => c.CollectionId).Select(c => c.CollectionId))
+            { //check if you can add any badges for current teacher
+                await _mediator.Send(new CreateRewardCommand()
+                {
+                    AchievedUserRole = Role.Teacher,
+                    AchievedUserId = request!.CurrentUserEmail!,
+                    CurrentCollectionId = collection,
                     CommitChanges = false
                 });
             }

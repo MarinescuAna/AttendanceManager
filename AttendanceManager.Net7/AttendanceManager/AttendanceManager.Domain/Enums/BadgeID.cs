@@ -17,5 +17,6 @@
         //teachers' badges
         FirstCodeGenerated=11,
         FirstCodeUsed=12,
+        FullClass=13
     }
 }
