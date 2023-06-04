@@ -22,6 +22,7 @@
         v-if="isLogged && !isAdmin"
         :close-on-content-click="false"
         :nudge-width="200"
+        max-height="650px"
         bottom
         offset-y
       >

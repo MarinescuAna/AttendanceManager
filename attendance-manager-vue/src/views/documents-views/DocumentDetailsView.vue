@@ -5,6 +5,8 @@
         :size="100"
         :width="8"
         color="black"
+        show-arrows
+        align-with-title
         indeterminate
       ></v-progress-circular>
     </v-layout>

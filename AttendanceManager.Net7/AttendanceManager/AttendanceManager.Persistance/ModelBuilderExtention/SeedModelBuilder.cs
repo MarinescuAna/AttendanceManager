@@ -29,10 +29,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID=1,
                    Title = "Met your teacher",
                    ImagePath = "first_attendance.jpg",
                    Description = "Achieve this badge by getting the first attendance to any of the available activities.",
-                   BadgeID = Domain.Enums.BadgeID.FirstAttendance,
+                   BadgeType = Domain.Enums.BadgeType.FirstAttendance,
                    UserRole = Domain.Enums.Role.Student
                }
            );
@@ -40,10 +41,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID = 2,
                    Title = "Half-master of theory",
                    ImagePath = "lessons_50.jpg",
                    Description = "Achieve this badge by getting half of the attendance to lecture.",
-                   BadgeID = Domain.Enums.BadgeID.LecturesAttendances50,
+                   BadgeType = Domain.Enums.BadgeType.LecturesAttendances50,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -51,10 +53,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID = 3,
                    Title = "Half-master of practice",
                    ImagePath = "laboratory_50.jpg",
                    Description = "Achieve this badge by getting half of the attendance to laboratory.",
-                   BadgeID = Domain.Enums.BadgeID.LaboratoriesAttendances50,
+                   BadgeType = Domain.Enums.BadgeType.LaboratoriesAttendances50,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -62,10 +65,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 4,
                    Title = "Half-master of seminaries",
                    ImagePath = "seminary_50.jpg",
                    Description = "Achieve this badge by getting half of the attendance to seminary.",
-                   BadgeID = Domain.Enums.BadgeID.SeminariesAttendances50,
+                   BadgeType = Domain.Enums.BadgeType.SeminariesAttendances50,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -73,7 +77,8 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
-                   BadgeID = Domain.Enums.BadgeID.LastAttendance,
+                   BadgeID= 5,
+                   BadgeType = Domain.Enums.BadgeType.LastAttendance,
                    Title = "First goodbye!",
                    ImagePath = "last_attendance.jpg",
                    Description = "Achieve this badge by getting the last attendance to any of the available activities.",
@@ -84,10 +89,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 6,
                    Title = "Master of theory",
                    ImagePath = "complete_lecture.jpg",
                    Description = "Achieve this badge by getting all the attendance to lecture.",
-                   BadgeID = Domain.Enums.BadgeID.LecturesAttendancesComplete,
+                   BadgeType = Domain.Enums.BadgeType.LecturesAttendancesComplete,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -95,10 +101,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 7,
                    Title = "Master of practice",
                    ImagePath = "complete_laboratory.jpg",
                    Description = "Achieve this badge by getting all the attendance to laboratory.",
-                   BadgeID = Domain.Enums.BadgeID.LaboratoriesAttendancesComplete,
+                   BadgeType = Domain.Enums.BadgeType.LaboratoriesAttendancesComplete,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -106,10 +113,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 8,
                    Title = "Master of seminaries",
                    ImagePath = "complete_seminary.jpg",
                    Description = "Achieve this badge by getting all the attendance to seminary.",
-                   BadgeID = Domain.Enums.BadgeID.SeminariesAttendancesComplete,
+                   BadgeType = Domain.Enums.BadgeType.SeminariesAttendancesComplete,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -117,10 +125,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 9,
                    Title = "First bonus",
                    ImagePath = "first_point.jpg",
                    Description = "Achieve this badge by getting the first bonus point to any of the available activities.",
-                   BadgeID = Domain.Enums.BadgeID.FirstBonus,
+                   BadgeType = Domain.Enums.BadgeType.FirstBonus,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -128,10 +137,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 10,
                    Title = "Smart owl",
                    ImagePath = "smart_owl.jpg",
                    Description = "Achieve this badge by having the greater point of any of the available activities.",
-                   BadgeID = Domain.Enums.BadgeID.SmartOwl,
+                   BadgeType = Domain.Enums.BadgeType.SmartOwl,
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -139,10 +149,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 11,
                    Title = "First code generated",
                    ImagePath = "first_code_generated.jpg",
                    Description = "Achieve this badge by generating the first involvement code.",
-                   BadgeID = Domain.Enums.BadgeID.FirstCodeGenerated,
+                   BadgeType = Domain.Enums.BadgeType.FirstCodeGenerated,
                    UserRole = Domain.Enums.Role.Teacher
                }
             );
@@ -150,10 +161,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 12,
                    Title = "First code used",
                    ImagePath = "first_code_used.jpg",
                    Description = "Achieve this badge when the generated code is used for the first time.",
-                   BadgeID = Domain.Enums.BadgeID.FirstCodeUsed,
+                   BadgeType = Domain.Enums.BadgeType.FirstCodeUsed,
                    UserRole = Domain.Enums.Role.Teacher
                }
             );
@@ -161,10 +173,11 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
             modelBuilder.Entity<Badge>().HasData(
                new Badge
                {
+                   BadgeID= 13,
                    Title = "Full class",
                    ImagePath = "first_class_full.jpg",
                    Description = "Achieve this badge when you have all the students at any activity.",
-                   BadgeID = Domain.Enums.BadgeID.FullClass,
+                   BadgeType = Domain.Enums.BadgeType.FullClass,
                    UserRole = Domain.Enums.Role.Teacher
                }
             );

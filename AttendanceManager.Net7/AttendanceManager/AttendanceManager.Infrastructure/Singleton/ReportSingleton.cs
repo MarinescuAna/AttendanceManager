@@ -2,7 +2,6 @@
 using AttendanceManager.Application.Modules.Singleton;
 using AttendanceManager.Domain.Entities;
 using AttendanceManager.Domain.Enums;
-using System;
 
 namespace AttendanceManager.Infrastructure.Singleton
 {
@@ -12,8 +11,9 @@ namespace AttendanceManager.Infrastructure.Singleton
         public Dictionary<CourseType, int> LastCollectionOrder { get; set; } = new Dictionary<CourseType, int>();
         // UPDATE this each time when you add a new collection into this report!!
         public Dictionary<int, CourseType> ReportCollectionTypes { get; set; } = new Dictionary<int, CourseType>();
-        public ReportDto? CurrentReportInfo { get; set; }
-        public void InitializeReport(Document currentReport,int noOfStudents)
+        public ReportDto CurrentReportInfo { get; set; }
+        public Dictionary<string, Role> Members { get; set; } = new Dictionary<string, Role>();
+        public void InitializeReport(Document currentReport, List<DocumentMember> members)
         {
             if (currentReport == null)
             {
@@ -25,7 +25,9 @@ namespace AttendanceManager.Infrastructure.Singleton
                 CleanReport();
             }
 
-            CurrentReportInfo = new ReportDto(currentReport, noOfStudents);
+            CurrentReportInfo = new ReportDto(currentReport, members.Count(m => m.User!.Role == Role.Student));
+
+            Members = members.ToDictionary(k => k.UserID, v => v.User!.Role);
 
             LastCollectionOrder = new Dictionary<CourseType, int>();
             foreach (var type in Enum.GetValues(typeof(CourseType)))
@@ -41,6 +43,7 @@ namespace AttendanceManager.Infrastructure.Singleton
         {
             CurrentReportInfo = null;
             LastCollectionOrder.Clear();
+            Members.Clear();
             ReportCollectionTypes.Clear();
         }
     }

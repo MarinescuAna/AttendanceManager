@@ -82,7 +82,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             {
                 _unitOfWork.NotificationRepository.AddAsync(new()
                 {
-                    Priority = Domain.Enums.NotificationPriority.Info,
+                    Priority = Domain.Enums.NotificationPriority.Warning,
                     UserID = user.UserID,
                     CreatedOn = DateTime.Now,
                     IsRead = false,

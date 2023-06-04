@@ -1,6 +1,6 @@
 ﻿namespace AttendanceManager.Domain.Enums
 {
-    public enum BadgeID
+    public enum BadgeType
     {
         //students' badges
         FirstAttendance = 1,
@@ -17,6 +17,9 @@
         //teachers' badges
         FirstCodeGenerated=11,
         FirstCodeUsed=12,
-        FullClass=13
+        FullClass=13,
+        //WARNING: those are mapped in vue
+        CustomAttendanceAchieved=14,
+        CustomBonusPointAchieved=15,
     }
 }

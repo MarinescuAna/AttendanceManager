@@ -1,4 +1,4 @@
-import { BadgeType } from "@/shared/enums";
+import { BadgeType, CourseType } from "@/shared/enums";
 
 /** Use this view only for sending the collected data from the form used for creating a new document, to the API */
 export interface ReportInsertModule{
@@ -48,9 +48,13 @@ export interface BadgeViewModule{
     type: BadgeType;
     title: string;
     rewardId: number;
+    badgeType: BadgeType;
+    activityType: CourseType;
+    maxNumber: number;
     badgeId: number;
     isActive: boolean;
     description: string;
+    isCustom: boolean;
 }
 
 /**Use this interface to display collection in timeline */

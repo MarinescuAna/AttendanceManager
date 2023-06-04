@@ -35,7 +35,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
 
             //get the current document
             var documentMembers = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(request.Id, null);
-            _currentReportService.InitializeReport(currentDocument!,documentMembers.Count(m=>m.User!.Role==Role.Student));
+            _currentReportService.InitializeReport(currentDocument!,documentMembers);
 
             return new ReportVm
             {

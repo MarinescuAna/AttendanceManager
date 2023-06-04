@@ -23,6 +23,9 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<Reward, Features.Reward.Queries.GetAllRewardsByUserIdReportId.RewardVm>()
                 .ForMember(d => d.ImagePath, act => act.MapFrom(b => b.Badge!.ImagePath))
                 .ForMember(d => d.Title, act => act.MapFrom(b => b.Badge!.Title))
+                .ForMember(d => d.BadgeType, act => act.MapFrom(b => b.Badge!.BadgeType))
+                .ForMember(d => d.MaxNumber, act => act.MapFrom(b => b.Badge!.MaxNumber))
+                .ForMember(d => d.ActivityType, act => act.MapFrom(b => b.Badge!.CourseType))
                 .ForMember(d => d.RewardId, act => act.MapFrom(r => r.RewardID))
                 .ForMember(d => d.Description, act => act.MapFrom(r => r.Badge!.Description))
                 .ForMember(d => d.IsActive, act => act.MapFrom(_ => true));

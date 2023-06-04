@@ -10,7 +10,7 @@ export default class ReportService {
 
     static async addReport(parameters: ReportInsertModule): Promise<boolean> {
         let isSuccess = true;
-        await https.post(`${DOCUMENT_CONTROLLER}/create_document?`, parameters)
+        await https.post(`${DOCUMENT_CONTROLLER}/create_document`, parameters)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
