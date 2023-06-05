@@ -134,7 +134,8 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 //check if this is the first bonus point achieved
                 BadgeType.FirstBonus => currentCollection!.Attendances!.Any(a => a.UserID.Equals(_command!.AchievedUserId) && a.BonusPoints != 0),
                 //check if the current if one of the users that have the maximum number of bonus points
-                BadgeType.SmartOwl => GetAttendanceWithMaxBonusPoint().Count(a => a.UserID.Equals(_command!.AchievedUserId)) != 0,
+                BadgeType.SmartOwl => GetMaxNumberByCourseType(currentCollection.CourseType)==currentCollection.Order 
+                     && GetAttendanceWithMaxBonusPoint().Count(a => a.UserID.Equals(_command!.AchievedUserId)) != 0,
                 BadgeType.FirstCodeGenerated => FirstCodeGenerated(currentCollection.AttendanceCollectionID),
                 BadgeType.FirstCodeUsed=>_command!.BadgeID!=null && _command!.BadgeID==BadgeType.FirstCodeUsed,
                 //check if all the students came to the lecture
