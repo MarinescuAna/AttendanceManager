@@ -106,16 +106,6 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue'),
-    meta: {
-      title: 'About',
-      requireAuth: false,
-      role: [Role.All]
-    },
-  },
-  {
     path: "/login",
     name: "login",
     component: () => import('../views/LoginView.vue'),

@@ -59,13 +59,6 @@ export class MenuItems{
             role: Role.All,
             description: "Home page"
         },
-        {
-            icon: "mdi-information-variant",
-            title: "About",
-            route: "about",
-            role: Role.All,
-            description: "View the details about this site."
-        }
     ];
     static getLinkListByRole(role: Role): MenuChildModel[]{
         return this.links.filter(cr =>  cr.role == role || cr.role == Role.All);

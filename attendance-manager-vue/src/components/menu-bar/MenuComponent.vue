@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="transparent" flat>
+    <v-toolbar color="transparent" flat fixed>
       <!--nav bar button for open the navigation drawer-->
       <v-app-bar-nav-icon
         @click.stop="drawerActivator = !drawerActivator"

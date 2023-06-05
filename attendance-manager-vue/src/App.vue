@@ -9,8 +9,7 @@
 
 <style lang="scss" scoped>
 .background-image {
-  background: url('@/assets/images/background.jpg') no-repeat center center fixed !important;
-  background-size: cover;
+  background-color: #CFD8DC;
 }
 </style>
 
@@ -22,6 +21,6 @@ export default Vue.extend({
   name: "App",
   components: {
     MenuComponent,
-  },
+  }
 });
 </script>
