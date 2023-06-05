@@ -17,7 +17,7 @@
         public static readonly string CustomBonusPointsImage = "custom_bonus_points.jpg";
         public static readonly string CustomAttendanceImage = "custom_attendances.jpg";
         public static readonly string CustomAttendanceDescription = "Achieve this bagde by having {0} attendances at {1}.";
-        public static readonly string CustomBonusPointsDescription = "Achieve this bagde by having {0} bonnus points at {1}.";
+        public static readonly string CustomBonusPointsDescription = "Achieve this bagde by having {0} bonus points at {1}.";
     }
 
     public static class ErrorMessages

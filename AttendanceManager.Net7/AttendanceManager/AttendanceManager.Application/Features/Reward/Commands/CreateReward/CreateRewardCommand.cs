@@ -85,7 +85,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInsertBadgeMessage);
             }
 
-            return true;
+            return achievedRewards.Count() > 0;
         }
 
         private IEnumerable<Domain.Entities.Reward> GetAllAchievedBadges(IEnumerable<Domain.Entities.Badge> inactiveBadges)

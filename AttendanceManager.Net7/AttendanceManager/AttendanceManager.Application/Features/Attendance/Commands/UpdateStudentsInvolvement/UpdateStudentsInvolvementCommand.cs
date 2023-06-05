@@ -55,29 +55,34 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
 
             // check if you can add any badges for students
             var involvementsWithPresents = request.Involvements.Where(i => i.IsPresent);
+
             foreach (var involvment in involvementsWithPresents)
             {
                 await _mediator.Send(new CreateRewardCommand()
                 {
                     AchievedUserRole = Role.Student,
                     AchievedUserId = involvment.UserId,
-                    CurrentCollectionId = involvment.CollectionId,
-                    CommitChanges = false
+                    CurrentCollectionId = involvment.CollectionId
                 });
             }
 
+            var saveChanges = false;
             foreach (var collection in involvementsWithPresents.DistinctBy(c => c.CollectionId).Select(c => c.CollectionId))
-            { //check if you can add any badges for current teacher
-                await _mediator.Send(new CreateRewardCommand()
+            {
+                //check if you can add any badges for current teacher
+                if (await _mediator.Send(new CreateRewardCommand()
                 {
                     AchievedUserRole = Role.Teacher,
                     AchievedUserId = request!.CurrentUserEmail!,
                     CurrentCollectionId = collection,
                     CommitChanges = false
-                });
+                }))
+                {
+                    saveChanges = true;
+                }
             }
 
-            if (involvementsWithPresents.Count() != 0 && !await _unitOfWork.CommitAsync())
+            if (saveChanges && !await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInsertBadgeMessage);
             }
