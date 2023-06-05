@@ -28,7 +28,7 @@
     <MessageComponent
       icon="mdi-information-variant-circle-outline"
       description="<strong>There is no data for this type of activity!</strong>"
-      :color="'#FF6F00'"
+      :color="WARNING_AMBER_DARKEN_4"
       v-else
     />
   </v-layout>
@@ -46,6 +46,7 @@ import { InvolvementViewModule } from "@/modules/document/involvement";
 import { CourseType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
+import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
 
 interface StudentInterestModule {
   email: string;
@@ -63,6 +64,7 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      WARNING_AMBER_DARKEN_4,
       selectedActivityType: CourseType.None,
       activityTypes: [
         { id: CourseType.None, name: "All activities" },

@@ -24,7 +24,10 @@
         <v-tab-item>
           <v-layout wrap>
             <v-flex lg8 md8 xs12>
-              <div class="d-flex justify-center" v-if="customBadges.length != 0">
+              <div
+                class="d-flex justify-center"
+                v-if="customBadges.length != 0"
+              >
                 <BadgeComponent
                   v-for="badge in customBadges"
                   :key="badge.badgeId"
@@ -41,12 +44,10 @@
                 v-else
             /></v-flex>
             <v-flex lg4 md4 xs12>
-              <v-card class="orange_background" :class="isMobile?'mt-3':''">
+              <v-card class="orange_background" :class="isMobile ? 'mt-3' : ''">
                 <v-card-title>Create badge</v-card-title>
                 <v-card-text>
-                  <validation-observer
-                    v-slot="{ handleSubmit, invalid }"
-                  >
+                  <validation-observer v-slot="{ handleSubmit, invalid }">
                     <v-form @submit.prevent="handleSubmit(onCreateBadge)">
                       <v-layout column align-center>
                         <validation-provider
@@ -65,7 +66,11 @@
                             color="black"
                             maxlength="128"
                             class="pa-3"
-                            :class="isMobile?'custom-inputs-size-smaller-screen':'custom-inputs-size-large-screen'"
+                            :class="
+                              isMobile
+                                ? 'custom-inputs-size-smaller-screen'
+                                : 'custom-inputs-size-large-screen'
+                            "
                           />
                         </validation-provider>
                         <v-select
@@ -74,7 +79,11 @@
                           label="Activity type"
                           prepend-icon="mdi-school"
                           class="pa-3"
-                          :class="isMobile?'custom-inputs-size-smaller-screen':'custom-inputs-size-large-screen'"
+                          :class="
+                            isMobile
+                              ? 'custom-inputs-size-smaller-screen'
+                              : 'custom-inputs-size-large-screen'
+                          "
                           @change="onActivityChanged"
                           required
                         ></v-select>
@@ -96,13 +105,23 @@
                             prepend-icon="mdi-animation"
                             v-model="selectedBadge"
                             class="pa-3"
-                            :class="isMobile?'custom-inputs-size-smaller-screen':'custom-inputs-size-large-screen'"
+                            :class="
+                              isMobile
+                                ? 'custom-inputs-size-smaller-screen'
+                                : 'custom-inputs-size-large-screen'
+                            "
                             color="black"
                             return-object
                             required
                           ></v-select>
 
-                          <label class="black--text"                             :class="isMobile?'custom-inputs-size-smaller-screen':'custom-inputs-size-large-screen'"
+                          <label
+                            class="black--text"
+                            :class="
+                              isMobile
+                                ? 'custom-inputs-size-smaller-screen'
+                                : 'custom-inputs-size-large-screen'
+                            "
                             >Number of
                             {{ selectedBadge.name.toLowerCase() }} that students
                             need to achieve this badge</label
@@ -111,7 +130,11 @@
                             v-model="selectedNumber"
                             thumb-label="always"
                             class="mt-8"
-                            :class="isMobile?'custom-inputs-size-smaller-screen':'custom-inputs-size-large-screen'"
+                            :class="
+                              isMobile
+                                ? 'custom-inputs-size-smaller-screen'
+                                : 'custom-inputs-size-large-screen'
+                            "
                             :max="maxPossibleNumber"
                             color="black"
                             track-color="black"

@@ -79,7 +79,7 @@
       <MessageComponent
         description="There is no activity registered to this report."
         icon="mdi-information"
-        :color="'#FF6F00'"
+        :color="WARNING_AMBER_DARKEN_4"
       />
     </v-layout>
   </v-layout>
@@ -101,6 +101,7 @@ import { InvolvementViewModule } from "@/modules/document/involvement";
 import InvolvementService from "@/services/involvement.service";
 import { Toastification } from "@/plugins/vue-toastification";
 import moment from "moment";
+import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
 
 interface ResultsOverview {
   attendances: number;
@@ -118,6 +119,7 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      WARNING_AMBER_DARKEN_4,
       studentAttendancesHeader,
       resultsOverview: {},
       involvements: [] as InvolvementViewModule[],

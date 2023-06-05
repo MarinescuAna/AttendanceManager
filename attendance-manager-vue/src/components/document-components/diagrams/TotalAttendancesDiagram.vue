@@ -26,7 +26,7 @@
     <MessageComponent
       icon="mdi-information-variant-circle-outline"
       description="<strong>There is no data for this type of activity!</strong>"
-      :color="'#FF6F00'"
+      :color="WARNING_AMBER_DARKEN_4"
       v-else
     />
   </v-layout>
@@ -45,6 +45,7 @@ import BarChartComponent from "@/components/shared-components/charts/BarChartCom
 import { InvolvementViewModule } from "@/modules/document/involvement";
 import { CourseType } from "@/shared/enums";
 import Vue from "vue";
+import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
 
 export default Vue.extend({
   name: "TotalAttendancesDiagram",
@@ -57,6 +58,7 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      WARNING_AMBER_DARKEN_4,
       selectedActivityType: CourseType.None,
       activityTypes: [
         { id: CourseType.None, name: "All activities" },

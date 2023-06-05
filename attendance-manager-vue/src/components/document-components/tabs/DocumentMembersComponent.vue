@@ -15,7 +15,7 @@
           <MessageComponent description="There are no collaborators added yet. Go to the SETTINGS tab if you what to add a new collaborator." 
             fontSize="20px"
             fontWeight="bold"
-            :color="'#FF6F00'"
+            :color="WARNING_AMBER_DARKEN_4"
           />
         </div>
       </v-flex>
@@ -32,11 +32,13 @@ import Vue from "vue";
 import storeHelper from "@/store/store-helper";
 import { MembersViewModule } from "@/modules/document";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
+import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
 
 export default Vue.extend({
     name: "DocumentMembersComponent",
-    data() {
+    data: function() {
         return {
+            WARNING_AMBER_DARKEN_4,
             header: [
                 {
                     text: "Email",
