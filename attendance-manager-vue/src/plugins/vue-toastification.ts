@@ -13,7 +13,7 @@ import ToastificationComponent from '@/components/shared-components/Toastificati
  * Configuration the toast popup 
  */
 const options = {
-  position: "top-right",
+  position: "bottom-right",
   timeout: 5000,
   closeOnClick: true,
   pauseOnFocusLoss: true,
@@ -22,7 +22,7 @@ const options = {
   draggablePercent: 0.6,
   showCloseButtonOnHover: false,
   hideProgressBar: true,
-  closeButton: false,
+  closeButton: true,
   icon: true,
   rtl: false
 };
