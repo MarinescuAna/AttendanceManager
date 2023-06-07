@@ -26,6 +26,7 @@ export const COLLECTION_CONTROLLER = "collection";
 export const ATTENDANCE_CONTROLLER = "attendance";
 export const INVOLVEMENT_CODE_CONTROLLER = "involvement_code";
 export const REWARD_CONTROLLER = "reward";
+export const BADGE_CONTROLLER = "badge";
 export const NOTIFICATION_CONTROLLER = "notification";
 
 /**Colors codes */

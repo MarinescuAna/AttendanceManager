@@ -11,6 +11,7 @@
       >
         <v-tab>Your rewards</v-tab>
         <v-tab>Student rewards</v-tab>
+        <v-tab>Badges statistics</v-tab>
       </v-tabs>
 
       <v-tabs-items
@@ -164,6 +165,9 @@
             </v-flex>
           </v-layout>
         </v-tab-item>
+        <v-tab-item>
+          <BadgePercentageComponent />
+        </v-tab-item>
       </v-tabs-items>
     </div>
     <CurrentUserRewardsComponent :rewards="rewards" v-else />
@@ -201,6 +205,8 @@ import { BadgeViewModule } from "@/modules/document";
 import RewardService from "@/services/reward.service";
 import { rules } from "@/plugins/vee-validate";
 import BadgeComponent from "@/components/shared-components/BadgeComponent.vue";
+import BadgeService from "@/services/badge.service";
+import BadgePercentageComponent from "./BadgePercentageComponent.vue";
 
 interface BadgeDto {
   id: number;
@@ -229,7 +235,8 @@ export default Vue.extend({
     MessageComponent,
     CurrentUserRewardsComponent,
     BadgeComponent,
-  },
+    BadgePercentageComponent
+},
   computed: {
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
@@ -245,9 +252,7 @@ export default Vue.extend({
     },
   },
   created: async function (): Promise<void> {
-    this.rewards = await RewardService.getRewardsByReportIdAsync(
-      storeHelper.documentStore.report.reportId
-    );
+    this.rewards = await RewardService.getRewardsByReportIdAsync();
     this.badges = [
       {
         id: BadgeType.CustomAttendanceAchieved,
@@ -282,7 +287,7 @@ export default Vue.extend({
       }
     },
     onCreateBadge: async function (): Promise<void> {
-      const result = await RewardService.createBadge({
+      const result = await BadgeService.createBadge({
         maxNumber: this.selectedNumber,
         badgeType: BadgeType[this.selectedBadge.id],
         title: this.title,

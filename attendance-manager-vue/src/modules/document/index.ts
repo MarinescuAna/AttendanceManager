@@ -43,6 +43,17 @@ export interface MembersViewModule{
     name: string;
 }
 
+export interface BadgePercentageViewModule{   
+    badgeId: number;
+    imagePath: string;
+    badgeType: BadgeType;
+    title: string;
+    description: string;
+    isCustom: boolean;
+    percentage:number;
+    studentsId: string[];
+}
+
 export interface BadgeViewModule{
     imagePath: string;
     type: BadgeType;
@@ -56,7 +67,6 @@ export interface BadgeViewModule{
     description: string;
     isCustom: boolean;
 }
-
 /**Use this interface to display collection in timeline */
 export interface CollectionViewModule{
     collectionId: number;

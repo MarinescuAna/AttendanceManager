@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip v-if="!displayAsCustomBadge" bottom>
+  <v-tooltip v-if="!displayAsCustomBadge && !displayPercentage" bottom>
     <template v-slot:activator="{ on, attrs }">
       <v-layout
         class="badge-container"
@@ -27,19 +27,63 @@
     </template>
     <span>{{ tooltip }}</span>
   </v-tooltip>
-  <v-card width="400px" class="d-flex flex-column align-center ma-2" v-else>
+  <v-card
+    width="400px"
+    class="d-flex flex-column align-center ma-2"
+    v-else-if="displayAsCustomBadge"
+  >
+  <v-badge
+      color="grey"
+      content="Custom"
+      bottom
+      overlap
+      bordered
+    >
     <v-img
       :src="require(`@/assets/images/badges/${badge.imagePath}`)"
       width="200px"
       height="100px"
+      class="custom-image-display mt-3"
       contain
     ></v-img>
+    </v-badge>
     <v-card-title>{{ badge.title }}</v-card-title>
     <v-card-subtitle
       ><b>Description: </b>{{ badge.description }}<br />
       <b>Activity type: </b
       >{{ CourseType[badge.activityType] }}</v-card-subtitle
     >
+  </v-card>
+  <v-card width="400px" class="d-flex flex-column align-center ma-2" v-else>
+    <v-badge
+      :bordered="badgePercentage.isCustom"
+      :color="badgePercentage.isCustom ? 'grey' : ''"
+      :content="badgePercentage.isCustom ? 'Custom' : ''"
+      bottom
+      overlap
+    >
+      <v-img
+        :src="require(`@/assets/images/badges/${badgePercentage.imagePath}`)"
+        width="200px"
+        height="100px"
+        class="custom-image-display mt-3"
+        contain
+      ></v-img
+    ></v-badge>
+    <v-card-title>{{ badgePercentage.title }}</v-card-title>
+    <v-card-subtitle
+      ><b>Requirements: </b>{{ badgePercentage.description }}</v-card-subtitle
+    >
+    <v-progress-circular
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="badgePercentage.percentage"
+      class="ma-5"
+      :color="WARNING_AMBER_DARKEN_4"
+    >
+      {{ Number.parseFloat(badgePercentage.percentage.toFixed(2)) }}%
+    </v-progress-circular>
   </v-card>
 </template>
 
@@ -69,23 +113,31 @@
 </style>
 <script lang="ts">
 import Vue from "vue";
-import { BadgeViewModule } from "@/modules/document";
+import { BadgePercentageViewModule, BadgeViewModule } from "@/modules/document";
 import { CourseType } from "@/shared/enums";
+import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 
 export default Vue.extend({
   name: "BadgeComponent",
   props: {
     badge: {
-      required: true,
       type: Object as () => BadgeViewModule,
     },
     displayAsCustomBadge: {
       type: Boolean,
       default: false,
     },
+    displayPercentage: {
+      type: Boolean,
+      default: false,
+    },
+    badgePercentage: {
+      type: Object as () => BadgePercentageViewModule,
+    },
   },
   data: function () {
     return {
+      WARNING_AMBER_DARKEN_4,
       CourseType,
     };
   },

@@ -9,7 +9,6 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
 {
     public sealed class GetAllRewardsByUserIdReportIdQuery : IRequest<List<RewardVm>>
     {
-        public required int ReportId { get; set; }
         public required string Email { get; set; }
         public required Role Role { get; set; }
     }
