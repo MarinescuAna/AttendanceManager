@@ -1,5 +1,7 @@
-﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
+﻿using AttendanceManager.Application.Contracts.Infrastructure.Singleton;
+using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
+using AttendanceManager.Application.Features.Notification.Commands.CreateNotification;
 using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
 using AttendanceManager.Domain.Common;
 using MediatR;
@@ -17,15 +19,16 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMediator _mediator;
-        public CreateInvolvementCodeCommandHandler(IUnitOfWork unit, IMediator mediator)
+        private readonly IReportSingleton _currentReport;
+        public CreateInvolvementCodeCommandHandler(IUnitOfWork unit, IMediator mediator, IReportSingleton currentReport)
         {
             _unitOfWork = unit;
             _mediator = mediator;
+            _currentReport= currentReport;
         }
 
         public async Task<InvolvementCodeVm> Handle(CreateInvolvementCodeCommand request, CancellationToken cancellationToken)
         {
-
             var codes = _unitOfWork.InvolvementCodeRepository.ListAll();
             var code = string.Empty;
 
@@ -43,6 +46,17 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
                 AttendanceCollectionId = request.CollectionId
             };
             _unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
+
+            foreach (var student in _currentReport.Members.Where(m => m.Value == Domain.Enums.Role.Student))
+            {
+                await _mediator.Send(new CreateNotificationCommand()
+                {
+                    CommitChanges = false,
+                    Message = string.Format(NotificationMessages.CreateCodeNotification, request.UserId, _currentReport.CurrentReportInfo.Title,request.Minutes),
+                    Priority = Domain.Enums.NotificationPriority.Warning,
+                    UserEmail = student.Key
+                });
+            }
 
             if (!await _unitOfWork.CommitAsync())
             {
