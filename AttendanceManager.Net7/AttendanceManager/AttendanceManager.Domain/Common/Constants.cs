@@ -57,6 +57,8 @@
 
     public static class NotificationMessages
     {
+        public readonly static string LastCollectionNoAttendancesNotification = "The <i>last</i> collection was added into <i>{0}</i> at <i>{1}</i>. You are far away from the number of attendances that you should have (currently you have {2} attendances)!";
+        public readonly static string HalfSemesterNoAttendancesNotification = "The new collection was added into <i>{0}</i> at <i>{1}</i> and there are {2} collections left. You are far away from the number of attendances that you can have (currently you have {3} attendances)!";
         public readonly static string CreateCodeNotification = "<i>{0}</i> created a new involement code for report <i>{1}</i>. This will be available for <i>{2}</i> minutes!";
         public readonly static string CustomBadgeAddedNotification = "A new badge called <i>{0}</i> was added in <i>{1}</i> report. Check out the report to see what you need to do to achieve this badge!";
         public readonly static string CollaboratorAddedNotification = "<i>{0}</i> was added you as collaborator to the report called <i>{1}</i>.";

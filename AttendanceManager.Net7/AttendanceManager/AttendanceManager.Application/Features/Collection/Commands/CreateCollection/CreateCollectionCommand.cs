@@ -52,11 +52,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             _currentReport.LastCollectionOrder[request.CourseType]++;
 
             // get all the students according to the document data
-            var students = await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
-                us => us.User!.EnrollmentYear == _currentReport.CurrentReportInfo.EnrollmentYear &&
-                    us.SpecializationID == _currentReport.CurrentReportInfo.SpecializationId &&
-                    us.User!.Role == Role.Student &&
-                    !us.User.IsDeleted);
+            var students = _currentReport.Members.Where(s => s.Value.Equals(Role.Student));
 
             // add each student as not present and with 0 bonus points
             foreach (var student in students)
@@ -68,7 +64,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                     AttendanceCollectionID = attendanceCollection.AttendanceCollectionID,
                     BonusPoints = 0,
                     IsPresent = false,
-                    UserID = student.UserID,
+                    UserID = student.Key,
                 });
             }
 
@@ -78,16 +74,62 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             }
 
             //send notifications to each user 
+            var attendances = attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) / 2 ||
+                  attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) ?
+                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollection!.DocumentID==_currentReport.CurrentReportInfo.ReportId)
+                        .Where(a => a.IsPresent) : null;
+
             foreach (var user in students)
             {
-                _unitOfWork.NotificationRepository.AddAsync(new()
+                //is the half of the activity
+                if (attendances != null && attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) / 2)
                 {
-                    Priority = Domain.Enums.NotificationPriority.Warning,
-                    UserID = user.UserID,
-                    CreatedOn = DateTime.Now,
-                    IsRead = false,
-                    Message = string.Format(NotificationMessages.CreateCollectionNotification, request.Username, _currentReport.CurrentReportInfo.Title)
-                });
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.AttendanceCollection!.CourseType==attendanceCollection.CourseType);
+                    //user don't have enough attendances
+                    if (noAttendancesStudent < attendanceCollection.Order)
+                    {
+                        _unitOfWork.NotificationRepository.AddAsync(new()
+                        {
+                            Priority = Domain.Enums.NotificationPriority.Alert,
+                            UserID = user.Key,
+                            CreatedOn = DateTime.Now,
+                            IsRead = false,
+                            Message = string.Format(NotificationMessages.HalfSemesterNoAttendancesNotification,
+                                _currentReport.CurrentReportInfo.Title, attendanceCollection.CourseType.ToString(),
+                                GetMaxNumberByCourseType(attendanceCollection.CourseType) - noAttendancesStudent, noAttendancesStudent)
+                        });
+
+                    }
+                }
+                else if (attendances != null && attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType))
+                {
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.AttendanceCollection!.CourseType == attendanceCollection.CourseType);
+                    //check if this is the last collection and the student don't have enough attendances 
+                    if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(attendanceCollection.CourseType))
+                    {
+                        _unitOfWork.NotificationRepository.AddAsync(new()
+                        {
+                            Priority = Domain.Enums.NotificationPriority.Alert,
+                            UserID = user.Key,
+                            CreatedOn = DateTime.Now,
+                            IsRead = false,
+                            Message = string.Format(NotificationMessages.LastCollectionNoAttendancesNotification,
+                                _currentReport.CurrentReportInfo.Title, attendanceCollection.CourseType.ToString(), noAttendancesStudent)
+                        });
+                    }
+                }
+                else
+                {
+                    //notification: a new collection was added
+                    _unitOfWork.NotificationRepository.AddAsync(new()
+                    {
+                        Priority = Domain.Enums.NotificationPriority.Warning,
+                        UserID = user.Key,
+                        CreatedOn = DateTime.Now,
+                        IsRead = false,
+                        Message = string.Format(NotificationMessages.CreateCollectionNotification, request.Username, _currentReport.CurrentReportInfo.Title)
+                    });
+                }
             }
 
             // Save the members 
@@ -98,5 +140,13 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
 
             return attendanceCollection.AttendanceCollectionID;
         }
+        private int GetMaxNumberByCourseType(CourseType type)
+            => type switch
+            {
+                CourseType.Laboratory => _currentReport.CurrentReportInfo.MaxNumberOfLaboratories,
+                CourseType.Seminary => _currentReport.CurrentReportInfo.MaxNumberOfSeminaries,
+                CourseType.Lecture => _currentReport.CurrentReportInfo.MaxNumberOfLectures,
+                _ => 0
+            };
     }
 }
