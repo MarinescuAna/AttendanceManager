@@ -27,7 +27,5 @@ namespace AttendanceManager.Domain.Entities
         public ICollection<UserSpecialization>? UserSpecializations { get; set; }
         public ICollection<DocumentMember>? DocumentMembers { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }
-        public ICollection<Reward>? Rewards { get; set; }
-        public virtual ICollection<Notification>? Notifications { get; set; }
     }
 }

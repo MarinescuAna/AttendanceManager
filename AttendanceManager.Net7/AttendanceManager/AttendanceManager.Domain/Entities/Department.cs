@@ -12,7 +12,6 @@ namespace AttendanceManager.Domain.Entities
         public required string Name { get; set; }
         public required DateTime CreatedOn { get; set; }
         public required DateTime UpdatedOn { get; set; }
-        public ICollection<Specialization>? Specializations { get; set; }
 
     }
 }

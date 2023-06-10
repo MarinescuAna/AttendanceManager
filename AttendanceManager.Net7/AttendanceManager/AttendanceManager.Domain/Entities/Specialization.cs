@@ -14,8 +14,6 @@ namespace AttendanceManager.Domain.Entities
         public required DateTime UpdatedOn { get; set; }
         [ForeignKey("Department")]
         public required int DepartmentID { get; set; }
-        public virtual Department? Department { get; set; }
-        public ICollection<UserSpecialization>? UserSpecializations { get; set; }
 
     }
 }

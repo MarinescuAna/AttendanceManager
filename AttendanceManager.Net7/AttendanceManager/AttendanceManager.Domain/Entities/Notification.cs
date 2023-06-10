@@ -18,6 +18,5 @@ namespace AttendanceManager.Domain.Entities
         public required bool IsRead { get; set; }
         public required DateTime CreatedOn { get; set; }
         public required NotificationPriority Priority { get; set; }
-        public virtual User? User { get; set; }
     }
 }

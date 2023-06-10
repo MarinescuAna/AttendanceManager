@@ -17,7 +17,6 @@ namespace AttendanceManager.Domain.Entities
         public required int Order { get; set; }
         public required DateTime HeldOn { get; set; }
         public required CourseType CourseType { get; set; }
-        public virtual Document? Document { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }
     }
 }

@@ -15,6 +15,5 @@ namespace AttendanceManager.Domain.Entities
         public required int SpecializationID { get; set; }
         public virtual Specialization? Specialization { get; set; }
         public virtual User? User { get; set; }
-        public ICollection<Course>? Courses { get; set; }
     }
 }

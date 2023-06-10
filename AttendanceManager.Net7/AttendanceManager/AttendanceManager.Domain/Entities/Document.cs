@@ -24,7 +24,6 @@ namespace AttendanceManager.Domain.Entities
         public virtual Course? Course { get; set; }
         public ICollection<AttendanceCollection>? AttendanceCollections { get; set; }
         public ICollection<DocumentMember>? DocumentMembers { get; set; }
-        public ICollection<Reward>? Rewards { get; set; }
 
     }
 }

@@ -15,8 +15,6 @@ namespace AttendanceManager.Domain.Entities
         public string? UserID { get; set; }
         [ForeignKey("Report")]
         public int ReportID { get; set; }
-        public virtual Document? Report { get; set; }
-        public virtual User? User { get; set; }
         public virtual Badge? Badge { get; set; }
 
     }
