@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Collection.Commands.CreateCollection;
+using AttendanceManager.Application.Features.Collection.Commands.DeleteCollectionById;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using MediatR;
@@ -44,6 +45,12 @@ namespace AttendanceManager.Api.Controllers
                 CourseType = courseType
             }));
 
+        }
+
+        [HttpDelete("delete/{collectionId:int}")]
+        public async Task<IActionResult> DeleteCollection(int collectionId)
+        {
+            return Ok(await mediator.Send(new DeleteCollectionByIdCommand() { CollectionId = collectionId }));
         }
 
     }

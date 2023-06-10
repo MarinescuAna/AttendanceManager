@@ -34,5 +34,16 @@ namespace AttendanceManager.Persistance.Repositories
 
             return query.Count() > 0 ? query.Max(ac => ac.Order) : 0;   
         }
+        public void UpdateRange(List<AttendanceCollection> entity)
+        {
+            try
+            {
+                dbContext.Set<AttendanceCollection>().UpdateRange(entity);
+            }
+            catch (Exception ex)
+            {
+                loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+            }
+        }
     }
 }

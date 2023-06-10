@@ -28,7 +28,7 @@ export const documentActions = {
         return isFail;
     },
     /** Add new collaborator teacher */
-    async addCollaborator({ commit}, payload: string): Promise<boolean> {
+    async addCollaborator({ commit }, payload: string): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator?email=${payload}`, {
@@ -71,6 +71,25 @@ export const documentActions = {
 
         if (isSuccess) {
             commit("_deleteDocument");
+        }
+
+        return isSuccess;
+    },
+    /**
+     * 1.Call api
+     * 2.remove the collection from store
+     * 3.update document details regarding the courses held by now
+     */
+    async deleteCollection({ commit }, collectionId: number): Promise<boolean> {
+        let isSuccess = true;
+
+        await https.delete(`${COLLECTION_CONTROLLER}/delete/${collectionId}`)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (isSuccess) {
+            commit("_deleteCollection", collectionId);
         }
 
         return isSuccess;

@@ -43,6 +43,18 @@ export const documentMutations = {
     _deleteDocument(state): void {
         state.currentReport = {};
     },
+    _deleteCollection(state, collectionId: number): void {
+        const removedCollection = state.currentReport.collections.find(c => c.collectionId == collectionId);
+        state.currentReport.collections = state.currentReport.collections.filter(c => c.collectionId != collectionId);
+
+        if (removedCollection.courseType == CourseType[CourseType.Laboratory]) {
+            state.currentReport.noLaboratories--;
+        } else if (removedCollection.courseType == CourseType[CourseType.Lecture]) {
+            state.currentReport.noLessons--;
+        } else if (removedCollection.courseType == CourseType[CourseType.Seminary]) {
+            state.currentReport.noSeminaries--;
+        }
+    },
     _addCollaborator(state, payload: MembersViewModule): void {
         state.currentReport.members.push(payload);
     },

@@ -8,7 +8,7 @@
         >Course activities - {{ attendanceCollectionDate }}</v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <DotsMenuComponent />
+      <DotsMenuComponent @delete="onDeleteCollection" />
     </v-toolbar>
     <v-layout column>
       <v-btn-toggle class="ma-5" rounded>
@@ -161,6 +161,7 @@ import {
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import UploadInvolvementsDialog from "@/components/document-components/dialogs/UploadInvolvementsDialog.vue";
 import moment from "moment";
+import storeHelper from "@/store/store-helper";
 
 export default Vue.extend({
   name: "AddAttendanceDialog",
@@ -212,6 +213,22 @@ export default Vue.extend({
     this.onReloadAttendances();
   },
   methods: {
+    onDeleteCollection: async function (): Promise<void> {
+      if (
+        confirm(
+          "Are you sure that you want to delete this collection? All the involvements will be deleted as well, but the badges received by now will remain."
+        )
+      ) {
+        const result = await storeHelper.documentStore.deleteCollection(
+          this.attendanceCollectionId
+        );
+
+        if (result) {
+          Toastification.success("The collection was successfully deleted!");
+          this.$emit("close-dialog");
+        }
+      }
+    },
     getRelativeTime(updateOn: string) {
       return moment(new Date(updateOn)).fromNow();
     },
@@ -310,15 +327,17 @@ export default Vue.extend({
     onUpdateCurrentInvolvements: async function (
       newInvolvements: InvolvementsUpdateViewModule[]
     ): Promise<void> {
-     this.involvements.forEach(element =>{
-        let currentElement = newInvolvements.find(e=>e["involvementId"]==element.involvementId);
-        if(currentElement!=undefined){
-          element.isPresent=currentElement["isPresent"];
-          element.bonusPoints=currentElement["bonusPoints"];
-          element.updateOn =(new Date()).toString();
+      this.involvements.forEach((element) => {
+        let currentElement = newInvolvements.find(
+          (e) => e["involvementId"] == element.involvementId
+        );
+        if (currentElement != undefined) {
+          element.isPresent = currentElement["isPresent"];
+          element.bonusPoints = currentElement["bonusPoints"];
+          element.updateOn = new Date().toString();
         }
       });
-      this.uploadInvolvementsDialog = false; 
+      this.uploadInvolvementsDialog = false;
     },
   },
 });

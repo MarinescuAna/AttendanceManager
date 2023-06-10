@@ -41,6 +41,9 @@ export class DocumentStore {
     public async deleteDocument(): Promise<boolean> {
         return await this.store.dispatch(`${documentNamespace}/deleteDocument`);
     }
+    public async deleteCollection(collectionId: number): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/deleteCollection`, collectionId);
+    }
 
     /**
      * Add new teacher as collaborator to a document

@@ -23,8 +23,8 @@ export default Vue.extend({
   data: function () {
     return {
       itemsMenu: [
-        { name: "Change details", event: "onChange" },
-        { name: "Delete", event: "onDelete" },
+        { name: "Change details", event: "change" },
+        { name: "Delete", event: "delete" },
       ],
     };
   },
