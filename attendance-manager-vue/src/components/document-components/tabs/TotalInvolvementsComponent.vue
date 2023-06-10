@@ -1,19 +1,25 @@
 <template>
   <div>
-    <v-layout column>
-      <v-flex class="mx-5 my-1" v-if="isTeacher">
+    <v-layout align-center column>
+      <v-flex class="d-flex flex-row ma-5" v-if="isTeacher">
         <v-autocomplete
           v-model="search"
           :items="fullnames"
           persistent-hint
-          label="Search (name)"
+          label="Search (student name)"
           maxlength="128"
           color="black"
           append-icon="mdi-magnify"
+          style="width: 500px"
+          class="mt-2"
+          clearable
         >
         </v-autocomplete>
+        <v-btn class="blue-grey lighten-2 ma-5" @click="loadInvolvements" icon>
+          <v-icon>mdi-cached</v-icon>
+        </v-btn>
       </v-flex>
-      <v-flex class="mx-md-5 mb-2" v-if="isTeacher">
+      <v-flex class="mb-2" v-if="isTeacher">
         <v-data-table
           :headers="totalAttendancesHeader"
           :items="involvements"
@@ -75,21 +81,27 @@ export default Vue.extend({
   created: async function (): Promise<void> {
     //if the current user is teacher, get the total of involvements per sutudent
     if (this.isTeacher) {
-      this.involvements = await InvolvementService.getInvolvementsTotal();
+      await this.loadInvolvements();
     }
   },
   computed: {
     fullnames: function (): string[] {
-      return this.involvements.map(
-        (x) => x.userName
-      );
+      return this.involvements.map((x) => x.userName);
+    },
+    isMobile: function (): boolean {
+      return this.$vuetify.breakpoint.lg;
     },
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
     },
     currentUserId: function (): string {
       return AuthService.getDataFromToken()!.email;
-    }
+    },
+  },
+  methods: {
+    loadInvolvements: async function (): Promise<void> {
+      this.involvements = await InvolvementService.getInvolvementsTotal();
+    },
   },
 });
 </script>
