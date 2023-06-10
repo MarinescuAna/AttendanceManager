@@ -86,7 +86,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: '/document/id',
+    path: '/document/:id',
     name: 'document',
     component: () => import('../views/documents-views/DocumentDetailsView.vue'),
     meta: {
