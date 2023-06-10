@@ -181,6 +181,68 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    UserRole = Domain.Enums.Role.Teacher
                }
             );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = 14,
+                   Title = "Good teacher",
+                   ImagePath = "good_teacher.jpg",
+                   Description = "Achieve this badge when half of the students achieved attendance at any activtiy.",
+                   BadgeType = Domain.Enums.BadgeType.GoodTeacher,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = 15,
+                   Title = "Best teacher",
+                   ImagePath = "best_teacher.jpg",
+                   Description = "Achieve this badge when half of the students achieved more than half of the attendance at any activity.",
+                   BadgeType = Domain.Enums.BadgeType.BestTeacher,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = 16,
+                   Title = "Good bye laboratory",
+                   ImagePath = "last_laboratory.jpg",
+                   Description = "Achieve this badge at the last laboratory if more than half of the students are present.",
+                   BadgeType = Domain.Enums.BadgeType.SayByeLaboratory,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = 17,
+                   Title = "Good bye lecture",
+                   ImagePath = "last_lecture.jpg",
+                   Description = "Achieve this badge at the last lecture if more than half of the students are present.",
+                   BadgeType = Domain.Enums.BadgeType.SayByeLecture,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
+
+
+            modelBuilder.Entity<Badge>().HasData(
+               new Badge
+               {
+                   BadgeID = 18,
+                   Title = "Good bye seminary",
+                   ImagePath = "last_seminary.jpg",
+                   Description = "Achieve this badge at the last seminary if more than half of the students are present.",
+                   BadgeType = Domain.Enums.BadgeType.SayByeSeminary,
+                   UserRole = Domain.Enums.Role.Teacher
+               }
+            );
+
         }
     }
 }

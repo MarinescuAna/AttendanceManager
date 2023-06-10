@@ -18,6 +18,12 @@
         FirstCodeGenerated=11,
         FirstCodeUsed=12,
         FullClass=13,
+        GoodTeacher = 16,
+        SayByeLecture = 17,
+        SayByeSeminary = 18,
+        SayByeLaboratory = 19,
+        BestTeacher = 20,
+
         //WARNING: those are mapped in vue
         CustomAttendanceAchieved=14,
         CustomBonusPointAchieved=15,
