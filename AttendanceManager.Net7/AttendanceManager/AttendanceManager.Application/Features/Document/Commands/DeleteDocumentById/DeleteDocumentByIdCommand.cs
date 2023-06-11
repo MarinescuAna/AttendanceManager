@@ -2,7 +2,6 @@
 using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
-using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumentById
@@ -39,7 +38,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumen
             if (document == null && request.ReportId == null)
             {
                 //this is deleted from current document section
-                 throw new NotFoundException("The document was not found, so it cannot be deleted.");
+                throw new NotFoundException("The document was not found, so it cannot be deleted.");
             }
 
             //delete document members

@@ -197,6 +197,9 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 //achieved when the student collects all the attendances that was set by the teacher to seminaries
                 BadgeType.SeminariesAttendancesComplete => currentCollection.CourseType == CourseType.Seminary &&
                     GetAttendancesAchievedByEmail(CourseType.Seminary) == GetMaxNumberByCourseType(CourseType.Seminary),
+
+                BadgeType.CustomAttendanceAchieved => GetAttendancesAchievedByEmail(currentCollection.CourseType) == badge.MaxNumber,
+                BadgeType.CustomBonusPointAchieved => GetBonusPointsAchievedByEmail(currentCollection.CourseType) == badge.MaxNumber,
                 _ => false
 
             };
