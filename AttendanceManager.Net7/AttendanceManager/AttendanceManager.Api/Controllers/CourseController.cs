@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Features.Course.Commands.DeleteCourse;
 using AttendanceManager.Application.Features.Course.Commands.UpdateCourseName;
 using AttendanceManager.Application.Features.Course.Queries.GetCoursesQuery;
+using AttendanceManager.Application.Features.Course.Queries.GetDashboardDataQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,12 @@ namespace AttendanceManager.Api.Controllers
         {
             command.UserEmail = UserEmail;
             return Ok(await mediator.Send(command));
+        }
+
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetDashboardData()
+        {
+            return Ok(await mediator.Send(new GetDashboardDataQuery() { CurrentUserEmail = UserEmail }));
         }
     }
 }

@@ -19,6 +19,19 @@ namespace AttendanceManager.Persistance.Repositories
                 .Include(s=>s.Documents)
                 .Where(c => c.UserSpecialization!.UserID == email)
                 .ToListAsync();
+        public async Task<List<Course>> GetCoursesForDashboardAsync(string email)
+           => await dbContext.Courses
+                .Include(s => s.UserSpecialization)
+                .Include(s => s.Documents)
+                    .ThenInclude(s=>s.DocumentMembers)
+                        .ThenInclude(m=>m.User)
+                .Include(s => s.Documents)
+                    .ThenInclude(s => s.AttendanceCollections)
+                        .ThenInclude(a => a.Attendances)
+                .AsNoTracking()
+                .Where(d=>d.UserSpecialization!.UserID.Equals(email))
+                .ToListAsync();
+            
         public override async Task<Course?> GetAsync(Expression<Func<Course, bool>> expression) =>
           await dbContext.Set<Course>().Include(c=>c.Documents).FirstOrDefaultAsync(expression);
     }
