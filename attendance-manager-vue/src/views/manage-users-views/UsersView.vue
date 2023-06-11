@@ -11,10 +11,10 @@
 <script lang="ts">
 import Vue from "vue";
 import ManagementTableComponent from "@/components/shared-components/ManagementTableComponent.vue";
-import { UserViewModule } from "@/modules/user";
 import { UserHeader } from "@/components/shared-components/Headers";
 import { ManagementDataType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
+import { UserViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "UsersView",

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DepartmentViewModule } from "@/modules/department";
+import { InsertDepartmentParameters, UpdateDepartmentParameters } from "@/modules/commands-parameters";
+import { DepartmentViewModule } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { DEPARTMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
@@ -47,9 +48,9 @@ const mutations = {
     /**
      * Update department name
      */
-    _updateDepartmentName(state, payload: { name: string, id: number }): void {
+    _updateDepartmentName(state, payload: UpdateDepartmentParameters): void {
         state.departments.map(cr => {
-            if (cr.id == payload.id) {
+            if (cr.id == payload.departmentId) {
                 cr.name = payload.name;
             }
         });
@@ -76,11 +77,11 @@ const actions = {
     /**
      * Add a new department into the database and initialize the store
      */
-    async addDepartment({ commit }, payload: string): Promise<boolean> {
+    async addDepartment({ commit }, payload: InsertDepartmentParameters): Promise<boolean> {
         let isSuccess = true;
 
         // get the id of the new department
-        const result = await https.post(`${DEPARTMENT_CONTROLLER}/create_department/${payload}`)
+        const result = await https.post(`${DEPARTMENT_CONTROLLER}/create_department`,payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -88,7 +89,7 @@ const actions = {
         if (isSuccess) {
             commit("_addDepartment", {
                 id: (result as AxiosResponse).data,
-                name: payload
+                name: payload.name
             } as DepartmentViewModule);
         }
         return isSuccess;
@@ -96,10 +97,10 @@ const actions = {
     /**
      * Update department name in db and store
      */
-    async updateDepartmentName({ commit }, payload: { name: string, id: number }): Promise<boolean> {
+    async updateDepartment({ commit }, payload: UpdateDepartmentParameters): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${DEPARTMENT_CONTROLLER}/update_department_name?name=${payload.name}&id=${payload.id}`)
+        await https.patch(`${DEPARTMENT_CONTROLLER}/update_department`,payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

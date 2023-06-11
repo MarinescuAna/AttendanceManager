@@ -158,7 +158,7 @@ import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import { CourseViewModule } from "@/modules/view-modules";
 import storeHelper from "@/store/store-helper";
-import { DocumentUpdateModule } from "@/modules/document";
+import { UpdateReportParameters } from "@/modules/commands-parameters";
 import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
@@ -223,7 +223,7 @@ export default Vue.extend({
           attendanceImportance: this.attendanceImportance,
           bonusPointsImportance: this.bonusPointImportance,
           documentId: storeHelper.documentStore.report.reportId,
-        } as DocumentUpdateModule,
+        } as UpdateReportParameters,
         newCourseName: this.selectedCourse.name,
       });
 

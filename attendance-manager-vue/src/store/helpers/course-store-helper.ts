@@ -1,8 +1,7 @@
 
-import { UpdateCourseParameters } from "@/modules/commands-parameters";
 import { Store } from "vuex";
 import { namespace as courseNamespace } from "../modules/course";
-import { CreateCourseParameters } from "@/modules/commands-parameters";
+import { CreateCourseParameters, UpdateCourseParameters } from "@/modules/commands-parameters";
 import { CourseViewModule } from "@/modules/view-modules";
 
 export class CourseStore {

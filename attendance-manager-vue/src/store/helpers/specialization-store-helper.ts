@@ -1,7 +1,8 @@
 
-import { SpecializationViewModule } from "@/modules/specialization";
 import { Store } from "vuex";
 import { namespace as specializationNamespace } from "../modules/specialization";
+import { InsertSpecializationParameters } from "@/modules/commands-parameters";
+import { SpecializationViewModule } from "@/modules/view-modules";
 
 export class SpecializationStore {
     private store: Store<any>;
@@ -29,11 +30,8 @@ export class SpecializationStore {
      * Add a new specialziation only
      * @test
      */
-    public addSpecialization(name: string,departmentId: number): Promise<boolean> {
-        return this.store.dispatch(`${specializationNamespace}/addSpecialization`, {
-            name: name,
-            departmentId: departmentId
-        });
+    public addSpecialization(payload: InsertSpecializationParameters): Promise<boolean> {
+        return this.store.dispatch(`${specializationNamespace}/addSpecialization`,payload);
     }
 
     /**

@@ -1,7 +1,7 @@
-
-import { DepartmentViewModule } from "@/modules/department";
 import { Store } from "vuex";
 import { namespace as departmentNamespace } from "../modules/department";
+import { InsertDepartmentParameters, UpdateDepartmentParameters } from "@/modules/commands-parameters";
+import { DepartmentViewModule } from "@/modules/view-modules";
 
 export class DepartmentStore {
     private store: Store<any>;
@@ -27,15 +27,15 @@ export class DepartmentStore {
     /**
      * Add a new departments in db and store
      */
-    public addDepartment(payload: string): Promise<boolean> {
+    public addDepartment(payload: InsertDepartmentParameters): Promise<boolean> {
         return this.store.dispatch(`${departmentNamespace}/addDepartment`, payload);
     }
 
     /**
     * Change department name from db and store
     */
-    public updateDepartmentName(payload: DepartmentViewModule): Promise<boolean> {
-        return this.store.dispatch(`${departmentNamespace}/updateDepartmentName`, payload);
+    public updateDepartment(payload: UpdateDepartmentParameters): Promise<boolean> {
+        return this.store.dispatch(`${departmentNamespace}/updateDepartment`, payload);
     }
 
     /**

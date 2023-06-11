@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ACCESS_TOKEN, ACCOUNT_CONTROLLER, EXP_ACCESS_TOKEN, EXP_REFRESH_TOKEN, REFRESH_TOKEN } from "@/shared/constants";
-import { TokenData } from "@/shared/modules";
-import { LoginModule, LoginResponseModule, TokenModule } from "@/modules/user/auth";
+import { TokenData, TokenModule } from "@/shared/modules";
 import ResponseHandler from "@/error-handler/error-handler";
 import { AxiosResponse } from "axios";
 import storeHelper from "@/store/store-helper";
 import https from "@/plugins/axios";
 import jwt_decode from "jwt-decode";
 import Vue from 'vue';
+import { LoginParameters, LoginResponse } from "@/modules/commands-parameters";
 
 export default class AuthService {
     /**
@@ -106,18 +106,15 @@ export default class AuthService {
      * @param payload email and password
      * @returns true if the logging was successfully done, or false if something happen
      */
-    static async login(payload: LoginModule): Promise<boolean> {
+    static async login(payload: LoginParameters): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${ACCOUNT_CONTROLLER}/authenticate`, {
-            email: payload.email,
-            password: payload.password
-        }).catch(error => {
+        const result = await https.post(`${ACCOUNT_CONTROLLER}/authenticate`, payload).catch(error => {
             isSuccess = ResponseHandler.errorResponseHandler(error);
         });
 
         if (isSuccess) {
-            const apiResponse = (result as AxiosResponse).data as LoginResponseModule;
+            const apiResponse = (result as AxiosResponse).data as LoginResponse;
             Vue.$cookies.set(ACCESS_TOKEN, apiResponse.accessToken);
             Vue.$cookies.set(REFRESH_TOKEN, apiResponse.refreshToken);
             Vue.$cookies.set(EXP_ACCESS_TOKEN, apiResponse.expirationDateAccessToken);

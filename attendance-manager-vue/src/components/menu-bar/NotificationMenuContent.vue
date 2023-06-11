@@ -50,13 +50,13 @@
 </template>
 
 <script lang="ts">
-import { NotificationViewModel } from "@/modules/notification";
 import NotificationService from "@/services/notification.service";
 import { NotificationPriority } from "@/shared/enums";
 import Vue from "vue";
 import MessageComponent from "../shared-components/MessageComponent.vue";
 import moment from "moment";
 import { colors } from "vuetify/lib";
+import { NotificationViewModel } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "NotificationMenuContent",

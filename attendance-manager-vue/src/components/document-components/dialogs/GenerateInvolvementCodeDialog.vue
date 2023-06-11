@@ -12,14 +12,14 @@
           </v-card-title>
           <v-card-text>
             <v-flex>
-                <v-subheader>Expiration time in minutes</v-subheader>
-                <v-slider
-                  v-model="time"
-                  max="60"
-                  min="1"
-                  thumb-label
-                  prepend-icon="mdi-clock-time-four-outline"
-                ></v-slider>
+              <v-subheader>Expiration time in minutes</v-subheader>
+              <v-slider
+                v-model="time"
+                max="60"
+                min="1"
+                thumb-label
+                prepend-icon="mdi-clock-time-four-outline"
+              ></v-slider>
             </v-flex>
             <v-flex v-if="generatedCode !== ''">
               <p v-html="generatedCode" class="pa-2"></p>
@@ -27,11 +27,7 @@
           </v-card-text>
           <v-card-actions>
             <v-layout class="pa-2" justify-center align-content-end row>
-              <v-btn
-                color="black"
-                class="mr-1 white--text"
-                @click="onSubmit"
-              >
+              <v-btn color="black" class="mr-1 white--text" @click="onSubmit">
                 Generate code
               </v-btn>
             </v-layout>
@@ -62,15 +58,15 @@ export default Vue.extend({
       this.$emit("close");
     },
     onSubmit: async function (): Promise<void> {
-      const result = await InvolvementCodeService.createInvolvementCode(
-        this.time,
-        this.attendanceCollectionId
-      );
+      const result = await InvolvementCodeService.createInvolvementCode({
+        minutes: this.time,
+        collectionId: this.attendanceCollectionId,
+      });
 
       if (typeof result !== "undefined") {
         this.generatedCode = `<b><h3>${result.code}</h3></b> (available until ${result.expirationDate})`;
       }
-    }
+    },
   },
 });
 </script>

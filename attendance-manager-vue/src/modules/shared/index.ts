@@ -4,10 +4,3 @@
 export interface TableModule {
     id: number;
 }
-/**
- * Use this interface to remove duplication
- */
-export interface BaseModule {
-    id: number;
-    name: string;
-}

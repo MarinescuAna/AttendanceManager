@@ -176,10 +176,8 @@
 
 <script lang="ts">
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
-import {
-  InvolvementUpdateViewModule,
-  InvolvementViewModule,
-} from "@/modules/document/involvement";
+import { UpdateInvolvementDto } from "@/modules/commands-parameters";
+import { InvolvementViewModule } from "@/modules/view-modules";
 import Vue from "vue";
 import * as XLSX from "xlsx";
 
@@ -200,8 +198,8 @@ export default Vue.extend({
       cells: [] as string[],
       workbook: {} as XLSX.WorkBook,
       selectedSheet: {} as XLSX.WorkSheet,
-      unmatchedStudents: [] as InvolvementUpdateViewModule[],
-      matchedStudents: [] as InvolvementUpdateViewModule[],
+      unmatchedStudents: [] as UpdateInvolvementDto[],
+      matchedStudents: [] as UpdateInvolvementDto[],
     };
   },
   computed: {
@@ -298,7 +296,7 @@ export default Vue.extend({
       }
     },
     /**If the student is not present, then the bonus points cannot be inserted */
-    onPresenceChanged: function (item: InvolvementUpdateViewModule): void {
+    onPresenceChanged: function (item: UpdateInvolvementDto): void {
       if (!item.isPresent) {
         item.bonusPoints = 0;
       }

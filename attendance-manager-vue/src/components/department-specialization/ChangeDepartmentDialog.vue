@@ -21,9 +21,8 @@
 </template>
 
 <script lang="ts">
-import {
-  DepartmentViewModule,
-} from "@/modules/department";
+import { UpdateDepartmentParameters } from "@/modules/commands-parameters";
+import { DepartmentViewModule } from "@/modules/view-modules";
 import storeHelper from "@/store/store-helper";
 
 export default {
@@ -55,10 +54,10 @@ export default {
   methods: {
     /** Save the new name and emit a save event to the parent */
     onSaveName: async function(): Promise<void> {
-      const result = await storeHelper.departmentStore.updateDepartmentName({
-        id: this.department.id,
+      const result = await storeHelper.departmentStore.updateDepartment({
+        departmentId: this.department.id,
         name: this.name,
-      } as DepartmentViewModule);
+      } as UpdateDepartmentParameters);
 
       if (result) {
         this.$emit("save", this.name);

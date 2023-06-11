@@ -113,7 +113,7 @@
 </style>
 <script lang="ts">
 import Vue from "vue";
-import { BadgePercentageViewModule, BadgeViewModule } from "@/modules/document";
+import { BadgePercentageViewModule, BadgeViewModule } from "@/modules/view-modules";
 import { CourseType } from "@/shared/enums";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 

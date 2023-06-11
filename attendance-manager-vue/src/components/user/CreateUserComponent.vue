@@ -149,12 +149,11 @@
     <script lang="ts">
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
-import { CreateUserParameters } from "@/modules/user";
 import storeHelper from "@/store/store-helper";
-import { SpecializationViewModule } from "@/modules/specialization";
-import { DepartmentViewModule } from "@/modules/department";
 import { Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
+import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
+import { InsertUserParameters } from "@/modules/commands-parameters";
 
 export default Vue.extend({
   name: "CreateUserComponent",
@@ -219,7 +218,7 @@ export default Vue.extend({
           role: this.role.toString(),
           year: this.year,
           specializationIds: specializationIds,
-        } as CreateUserParameters,
+        } as InsertUserParameters,
         department!
       );
 

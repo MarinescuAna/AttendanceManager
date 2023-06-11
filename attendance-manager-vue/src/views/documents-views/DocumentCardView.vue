@@ -69,7 +69,6 @@
 }
 </style>
 <script lang="ts">
-import { ReportCardViewModule } from "@/modules/document";
 import ReportCardComponent from "@/components/document-components/ReportCardComponent.vue";
 import Vue from "vue";
 import AuthService from "@/services/auth.service";
@@ -77,6 +76,7 @@ import { Role } from "@/shared/enums";
 import ReportService from "@/services/report.service";
 import { Toastification } from "@/plugins/vue-toastification";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
+import { ReportCardViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "DocumentCardView",

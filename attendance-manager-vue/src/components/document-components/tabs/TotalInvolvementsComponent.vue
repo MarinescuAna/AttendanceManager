@@ -61,8 +61,8 @@ import { totalAttendancesHeader } from "@/components/document-components/TotalAt
 import StudentAttendanceExpandedComponent from "@/components/document-components/StudentAttendanceExpandedComponent.vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
-import { TotalInvolvementViewModule } from "@/modules/document/involvement";
 import InvolvementService from "@/services/involvement.service";
+import { TotalInvolvementViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "TotalAttendancesComponent",

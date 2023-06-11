@@ -1,6 +1,7 @@
-import { CollectionViewModule, ReportViewModule, MembersViewModule, DocumentUpdateModule } from "@/modules/document";
 import { CourseType } from "@/shared/enums";
 import { initializeDocumentState } from ".";
+import { UpdateReportParameters } from "@/modules/commands-parameters";
+import { CollectionDto, MembersDto, ReportViewModule } from "@/modules/view-modules";
 
 // mutations for this store
 export const documentMutations = {
@@ -13,7 +14,7 @@ export const documentMutations = {
     /**
  * Update some information related to the current document
  */
-    _partialCurrentDocumentUpdate(state, payload: { module: DocumentUpdateModule, newCourseName: string }): void {
+    _partialCurrentDocumentUpdate(state, payload: { module: UpdateReportParameters, newCourseName: string }): void {
         state.currentReport.title = payload.module.title;
         state.currentReport.courseId = payload.module.courseId;
         state.currentReport.maxNoLaboratories = payload.module.noLaboratories;
@@ -26,7 +27,7 @@ export const documentMutations = {
     /**
      * Add a documentFile in the current document
     */
-    _addCollection(state, payload: CollectionViewModule): void {
+    _addCollection(state, payload: CollectionDto): void {
         state.currentReport.collections.unshift(payload);
 
         if (payload.courseType == CourseType[CourseType.Laboratory]) {
@@ -55,7 +56,7 @@ export const documentMutations = {
             state.currentReport.noSeminaries--;
         }
     },
-    _addCollaborator(state, payload: MembersViewModule): void {
+    _addCollaborator(state, payload: MembersDto): void {
         state.currentReport.members.push(payload);
     },
     /**

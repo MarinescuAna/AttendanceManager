@@ -55,11 +55,10 @@
     
     <script lang="ts">
 import Vue from "vue";
-import StoreHelper from "@/store/store-helper";
-import { DepartmentViewModule } from "@/modules/department";
 import storeHelper from "@/store/store-helper";
 import { rules } from "@/plugins/vee-validate";
 import { Toastification } from "@/plugins/vue-toastification";
+import { DepartmentViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "CreateSpecializationTab",
@@ -77,10 +76,10 @@ export default Vue.extend({
   },
   methods: {
     async addSpecialization() {
-      const response = await StoreHelper.specializationStore.addSpecialization(
-        this.name,
-        this.department
-      );
+      const response = await storeHelper.specializationStore.addSpecialization({
+        name: this.name,
+        departmentId: this.department,
+      });
 
       if (response) {
         Toastification.success("The specialization was successfully added!");

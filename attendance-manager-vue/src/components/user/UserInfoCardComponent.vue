@@ -23,7 +23,7 @@
   </v-container>
 </template>
   <script lang="ts">
-import { UserViewModule } from "@/modules/user";
+import { UserViewModule } from "@/modules/view-modules";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 

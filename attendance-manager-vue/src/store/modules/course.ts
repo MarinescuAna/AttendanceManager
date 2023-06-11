@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { UpdateCourseParameters } from "@/modules/commands-parameters";
 import { AxiosResponse } from "axios";
 import https from "@/plugins/axios";
 import { COURSE_CONTROLLER } from "@/shared/constants";
-import { CreateCourseParameters } from "@/modules/commands-parameters";
+import { CreateCourseParameters, UpdateCourseParameters } from "@/modules/commands-parameters";
 import { CourseViewModule } from "@/modules/view-modules";
 
 //state type

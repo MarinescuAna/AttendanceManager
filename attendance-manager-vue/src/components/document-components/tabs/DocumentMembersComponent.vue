@@ -30,9 +30,9 @@
 <script lang="ts">
 import Vue from "vue";
 import storeHelper from "@/store/store-helper";
-import { MembersViewModule } from "@/modules/document";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
+import { MembersDto } from "@/modules/view-modules";
 
 export default Vue.extend({
     name: "DocumentMembersComponent",
@@ -54,7 +54,7 @@ export default Vue.extend({
         };
     },
     computed: {
-        members: function (): MembersViewModule[] {
+        members: function (): MembersDto[] {
             return storeHelper.documentStore.report.members;
         },
     },

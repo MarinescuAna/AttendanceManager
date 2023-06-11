@@ -16,7 +16,13 @@ export interface ResponseModule{
     code: string;
 }
 
-
+/**
+ * Use this to call the refresh api
+ */
+export interface TokenModule{
+    token: string;
+    expiration: Date;
+}
 
 
 

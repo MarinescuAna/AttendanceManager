@@ -113,11 +113,11 @@
 </template>
 
 <script lang="ts">
-import { ReportViewModule } from "@/modules/document";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import moment from "moment";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
+import { ReportViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "AboutDocumentComponent",

@@ -1,7 +1,7 @@
-import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
 import { Store } from "vuex";
 import { namespace as userNamespace } from "../modules/user";
-import { DepartmentViewModule } from "@/modules/department";
+import { DepartmentViewModule, UserInformationViewModule, UserViewModule } from "@/modules/view-modules";
+import { InsertUserParameters } from "@/modules/commands-parameters";
 
 export class UserStore {
     private store: Store<any>;
@@ -20,7 +20,7 @@ export class UserStore {
     /**
      * Getter for current user from the store, not from the API
      */
-    public get currentUser(): UserInformationViewModule {
+    public get currentUser(): UserInformationViewModule{
         return this.store.getters[`${userNamespace}/currentUser`];
     }
 
@@ -42,7 +42,7 @@ export class UserStore {
     /**
      * Add a new user only
      */
-    public addUser(payload: CreateUserParameters, department: DepartmentViewModule): Promise<boolean> {
+    public addUser(payload: InsertUserParameters, department: DepartmentViewModule): Promise<boolean> {
         return this.store.dispatch(`${userNamespace}/addUser`, { newUser: payload, department: department });
     }
 

@@ -19,12 +19,12 @@
 </template>
 
 <script lang="ts">
-import { InvolvementViewModule } from "@/modules/document/involvement";
 import Vue from "vue";
 import AttendancePercentagePerDayDiagram from "../diagrams/AttendancePercentagePerDayDiagram.vue";
 import TotalAttendancesDiagram from "../diagrams/TotalAttendancesDiagram.vue";
 import StudentsInterestDiagramComponent from "../diagrams/StudentsInterestDiagramComponent.vue";
 import InvolvementService from "@/services/involvement.service";
+import { InvolvementViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "DocumentDashboardComponent",

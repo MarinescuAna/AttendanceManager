@@ -58,13 +58,13 @@ export default Vue.extend({
   },
   methods: {
     addDepartment: async function (): Promise<void> {
-      const response = await storeHelper.departmentStore.addDepartment(
-        this.department
-      );
+      const response = await storeHelper.departmentStore.addDepartment({
+        name: this.department,
+      });
 
       if (response) {
-       Toastification.success("The department was successfully added!");
-       this.department='';
+        Toastification.success("The department was successfully added!");
+        this.department = "";
       }
     },
   },

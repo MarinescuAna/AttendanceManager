@@ -48,10 +48,10 @@
 </template>
 
 <script lang="ts">
-import { ReportCardViewModule } from "@/modules/document";
 import { ImageSelector } from "@/shared/image";
 import Vue from "vue";
 import moment from "moment";
+import { ReportCardViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "ReportCardsComponent",

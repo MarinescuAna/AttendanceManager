@@ -98,7 +98,7 @@ import AddAttendanceDateDialog from "@/components/document-components/dialogs/Ad
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import UpdateInvolvementsDialog from "@/components/document-components/dialogs/UpdateInvolvementsDialog.vue";
-import { CollectionViewModule } from "@/modules/document";
+import { CollectionDto } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "AttendanceTimelineComponent",
@@ -125,7 +125,7 @@ export default Vue.extend({
           storeHelper.documentStore.report.maxNoSeminaries
       );
     },
-    collections: function (): CollectionViewModule[] {
+    collections: function (): CollectionDto[] {
       return storeHelper.documentStore.report.collections;
     },
     documentId: function (): number {

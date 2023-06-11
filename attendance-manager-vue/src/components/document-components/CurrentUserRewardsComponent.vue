@@ -51,7 +51,7 @@
 import BadgeComponent from "@/components/shared-components/BadgeComponent.vue";
 import Vue from "vue";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
-import { BadgeViewModule } from "@/modules/document";
+import { BadgeViewModule } from "@/modules/view-modules";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 
 export default Vue.extend({

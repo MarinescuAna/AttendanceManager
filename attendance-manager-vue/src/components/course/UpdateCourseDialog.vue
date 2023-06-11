@@ -42,11 +42,11 @@
   
   <script lang="ts">
 import storeHelper from "@/store/store-helper";
-import { CourseViewModule } from "@/modules/view-modules";
-import { SpecializationViewModule } from "@/modules/specialization";
+import { CourseViewModule, SpecializationViewModule } from "@/modules/view-modules";
 import { UpdateCourseParameters } from "@/modules/commands-parameters";
+import Vue from "vue";
 
-export default {
+export default Vue.extend({
   name: "UpdateCourseDialog",
   props: {
     course: {
@@ -105,5 +105,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

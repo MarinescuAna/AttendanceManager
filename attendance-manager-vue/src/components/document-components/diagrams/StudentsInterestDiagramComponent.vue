@@ -42,11 +42,11 @@
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import TitleWithInfoComponent from "@/components/shared-components/TitleWithInfoComponent.vue";
 import BarChartComponent from "@/components/shared-components/charts/BarChartComponent.vue";
-import { InvolvementViewModule } from "@/modules/document/involvement";
 import { CourseType } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
+import { InvolvementViewModule } from "@/modules/view-modules";
 
 interface StudentInterestModule {
   email: string;

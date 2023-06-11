@@ -155,13 +155,13 @@ import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import UseInvolvementCodeDialog from "./UseInvolvementCodeDialog.vue";
 import {
-  InvolvementsUpdateViewModule,
-  InvolvementViewModule,
-} from "@/modules/document/involvement";
+  UpdateInvolvementsParameters,
+} from "@/modules/commands-parameters";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import UploadInvolvementsDialog from "@/components/document-components/dialogs/UploadInvolvementsDialog.vue";
 import moment from "moment";
 import storeHelper from "@/store/store-helper";
+import { InvolvementViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "AddAttendanceDialog",
@@ -325,7 +325,7 @@ export default Vue.extend({
       });
     },
     onUpdateCurrentInvolvements: async function (
-      newInvolvements: InvolvementsUpdateViewModule[]
+      newInvolvements: UpdateInvolvementsParameters[]
     ): Promise<void> {
       this.involvements.forEach((element) => {
         let currentElement = newInvolvements.find(

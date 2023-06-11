@@ -58,9 +58,9 @@
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import storeHelper from "@/store/store-helper";
-import { SpecializationViewModule } from "@/modules/specialization";
 import { CreateCourseParameters } from "@/modules/commands-parameters";
 import { Toastification } from "@/plugins/vue-toastification";
+import { SpecializationViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "CreateCourseComponent",

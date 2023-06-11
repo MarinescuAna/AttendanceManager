@@ -16,6 +16,7 @@
     </v-list>
   </v-menu>
 </template>
+
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({

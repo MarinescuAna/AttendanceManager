@@ -1,7 +1,7 @@
-
-import { ReportViewModule, DocumentUpdateModule, ReportCardViewModule } from "@/modules/document";
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
+import { InsertCollaboratorParameters, UpdateReportParameters, InsertCollectionParameters } from "@/modules/commands-parameters";
+import { ReportCardViewModule, ReportViewModule } from "@/modules/view-modules";
 
 export class DocumentStore {
     private store: Store<any>;
@@ -33,7 +33,7 @@ export class DocumentStore {
     }
 
     /** Use this method to update the document information */
-    public async updateDocument(payload: { module: DocumentUpdateModule, newCourseName: string }): Promise<boolean> {
+    public async updateDocument(payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
         return await this.store.dispatch(`${documentNamespace}/updateDocument`, payload);
     }
 
@@ -49,15 +49,15 @@ export class DocumentStore {
      * Add new teacher as collaborator to a document
      * @payload teacher email
     */
-    public async addCollaborator(payload: string): Promise<boolean> {
+    public async addCollaborator(payload: InsertCollaboratorParameters): Promise<boolean> {
         return await this.store.dispatch(`${documentNamespace}/addCollaborator`, payload);
     }
 
     /**
    * Add a new specialziation only
    */
-    public addCollection(activityTime: string, type: string): Promise<boolean> {
-        return this.store.dispatch(`${documentNamespace}/addCollection`, { activityTime: activityTime, type: type });
+    public addCollection(payload: InsertCollectionParameters): Promise<boolean> {
+        return this.store.dispatch(`${documentNamespace}/addCollection`, payload);
     }
 
     /**

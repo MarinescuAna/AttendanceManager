@@ -364,14 +364,13 @@
 </style>
 
 <script lang="ts">
-import { DepartmentViewModule } from "@/modules/department";
-import { SpecializationViewModule } from "@/modules/specialization";
-import { CreateUserParameters } from "@/modules/user";
 import { Role } from "@/shared/enums";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import * as XLSX from "xlsx";
 import { rules } from "@/plugins/vee-validate";
+import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
+import { InsertUserParameters } from "@/modules/commands-parameters";
 
 export default Vue.extend({
   name: "UploadUserComponent",
@@ -395,7 +394,7 @@ export default Vue.extend({
       selectedSpecializations: [] as number[],
       // Selected specialization if just one specialization can be selected
       selectedSpecialization: 0,
-      users: [] as CreateUserParameters[],
+      users: [] as InsertUserParameters[],
       newRow: false,
       newName: "",
       newCode: "",

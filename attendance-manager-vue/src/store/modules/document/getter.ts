@@ -1,4 +1,5 @@
-import { ReportViewModule } from "@/modules/document";
+import { ReportViewModule } from "@/modules/view-modules";
+
 
 // getters for this store
 export const documentGetter = {

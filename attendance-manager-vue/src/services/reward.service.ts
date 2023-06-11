@@ -1,4 +1,4 @@
-import { BadgeViewModule } from "@/modules/document";
+import { BadgeViewModule } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { REWARD_CONTROLLER } from "@/shared/constants";
 

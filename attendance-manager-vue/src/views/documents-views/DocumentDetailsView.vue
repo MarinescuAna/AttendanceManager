@@ -57,7 +57,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ReportViewModule } from "@/modules/document";
 import AboutDocumentComponent from "@/components/document-components/tabs/AboutDocumentComponent.vue";
 import AttendanceTimelineComponent from "@/components/document-components/tabs/AttendanceTimelineComponent.vue";
 import DocumentMembersComponent from "@/components/document-components/tabs/DocumentMembersComponent.vue";
@@ -68,6 +67,7 @@ import storeHelper from "@/store/store-helper";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import TotalInvolvementsComponent from "@/components/document-components/tabs/TotalInvolvementsComponent.vue";
+import { ReportViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "DocumentDetailsView",
@@ -138,7 +138,7 @@ export default Vue.extend({
       ];
     },
     /** Get document details from the store to display the name or other data */
-    documentInfo: function (): ReportViewModule {
+    documentInfo: function (): ReportViewModule{
       return storeHelper.documentStore.report;
     },
     /** Boolean value for determinate the current user role */

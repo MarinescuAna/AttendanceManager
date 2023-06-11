@@ -71,13 +71,13 @@ export default Vue.extend({
         return;
       }
 
-      const result = await storeHelper.documentStore.addCollaborator(
-        this.email
-      );
+      const result = await storeHelper.documentStore.addCollaborator({
+        email: this.email,
+      });
 
       if (result) {
         this.email = "";
-        Toastification.success("The teacher was added as collaborator!")
+        Toastification.success("The teacher was added as collaborator!");
       }
     },
   },

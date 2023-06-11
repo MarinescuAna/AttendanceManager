@@ -292,15 +292,13 @@
 </style>
 
 <script lang="ts">
-import { CourseViewModule } from "@/modules/view-modules";
-import { SpecializationViewModule } from "@/modules/specialization";
-import { ReportInsertModule } from "@/modules/document";
-import { StudentForCourseViewModule } from "@/modules/user";
+import { CourseViewModule, SpecializationViewModule, StudentForCourseViewModule } from "@/modules/view-modules";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import UserService from "@/services/user.service";
 import { rules } from "@/plugins/vee-validate";
 import ReportService from "@/services/report.service";
+import { InsertReportParameters } from "@/modules/commands-parameters";
 
 export default Vue.extend({
   name: "CreateDocumentView",
@@ -408,7 +406,7 @@ export default Vue.extend({
           studentIds: this.selectedStudents.map((x) => this.students[x].email),
           attendanceImportance: this.attendanceImportance,
           bonusPointsImportance: this.bonusPointImportance,
-        } as ReportInsertModule
+        } as InsertReportParameters
       );
 
       if (response) {

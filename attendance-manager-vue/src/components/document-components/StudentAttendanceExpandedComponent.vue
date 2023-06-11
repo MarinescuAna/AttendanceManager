@@ -97,11 +97,11 @@ import { studentAttendancesHeader } from "./TotalAttendancesHeader";
 import { CourseType, Role } from "@/shared/enums";
 import AuthService from "@/services/auth.service";
 import MessageComponent from "../shared-components/MessageComponent.vue";
-import { InvolvementViewModule } from "@/modules/document/involvement";
 import InvolvementService from "@/services/involvement.service";
 import { Toastification } from "@/plugins/vue-toastification";
 import moment from "moment";
 import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
+import { InvolvementViewModule } from "@/modules/view-modules";
 
 interface ResultsOverview {
   attendances: number;

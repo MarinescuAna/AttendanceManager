@@ -2,19 +2,14 @@
 import https from "@/plugins/axios";
 import { ATTENDANCE_CONTROLLER } from "@/shared/constants";
 import ResponseHandler from "@/error-handler/error-handler";
-import { InvolvementsUpdateViewModule, InvolvementUpdateViewModule, InvolvementViewModule, TotalInvolvementViewModule } from "@/modules/document/involvement";
-
-interface UseAttendanceCodeUpdateModule {
-    code: string;
-    attendanceId: number;
-    attendanceCollectionId: number;
-}
+import { UpdateInvolvementDto, UpdateInvolvementsParameters, UpdateInvolvementByCodeParameters } from "@/modules/commands-parameters";
+import { InvolvementViewModule, TotalInvolvementViewModule } from "@/modules/view-modules";
 
 export default class InvolvementService {
 
     /**Use this method to can get the new involvements update */
-    static getInvolvementChanges(oldInvolvementsList: InvolvementViewModule[], newInvolvementList: InvolvementViewModule[]): InvolvementUpdateViewModule[] {
-        const results: InvolvementUpdateViewModule[] = [];
+    static getInvolvementChanges(oldInvolvementsList: InvolvementViewModule[], newInvolvementList: InvolvementViewModule[]): UpdateInvolvementDto[] {
+        const results: UpdateInvolvementDto[] = [];
 
         oldInvolvementsList.forEach((involvement) => {
             const currentInvolvement = newInvolvementList.find(
@@ -30,7 +25,7 @@ export default class InvolvementService {
                     isPresent: currentInvolvement?.isPresent,
                     userId: currentInvolvement?.email,
                     collectionId: currentInvolvement?.collectionId
-                } as InvolvementUpdateViewModule);
+                } as UpdateInvolvementDto);
             }
         });
 
@@ -58,7 +53,7 @@ export default class InvolvementService {
         return (await https.get(`${ATTENDANCE_CONTROLLER}/involvements?email=${email}&collection_id=${collectionId}&use_code=${useCode}&current_user=${currentUser}&only_present=${onlyPresents}`)).data;
     }
 
-    static async addStudentsAttendances(payload: InvolvementsUpdateViewModule): Promise<boolean> {
+    static async addStudentsAttendances(payload: UpdateInvolvementsParameters): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${ATTENDANCE_CONTROLLER}/update_student_involvement`, payload)
@@ -72,7 +67,7 @@ export default class InvolvementService {
     /**
      * Update the students attendances by code and attendance id
      */
-    static async updateAttendanceByCode(payload: UseAttendanceCodeUpdateModule): Promise<boolean> {
+    static async updateAttendanceByCode(payload: UpdateInvolvementByCodeParameters): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${ATTENDANCE_CONTROLLER}/update_involvement_by_code`, payload)

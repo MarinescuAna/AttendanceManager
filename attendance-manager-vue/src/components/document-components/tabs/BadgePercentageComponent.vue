@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import BadgeComponent from "@/components/shared-components/BadgeComponent.vue";
-import { BadgePercentageViewModule } from "@/modules/document";
+import { BadgePercentageViewModule } from "@/modules/view-modules";
 import BadgeService from "@/services/badge.service";
 import Vue from "vue";
 export default Vue.extend({

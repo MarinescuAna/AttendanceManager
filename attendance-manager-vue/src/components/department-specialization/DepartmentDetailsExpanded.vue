@@ -50,11 +50,10 @@ import Vue from "vue";
 import { EventBus } from "@/main";
 import { EVENT_BUS_RELOAD_ORGANIZATIONS } from "@/shared/constants";
 import ChangeDepartmentDialog from "./ChangeDepartmentDialog.vue";
-import { DepartmentViewModule } from "@/modules/department";
-import { SpecializationViewModule } from "@/modules/specialization";
 import storeHelper from "@/store/store-helper";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import MessageComponent from "../shared-components/MessageComponent.vue";
+import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "DepartmentDetailsExpanded",

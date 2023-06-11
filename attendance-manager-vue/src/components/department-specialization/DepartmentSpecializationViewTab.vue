@@ -29,10 +29,10 @@
   <script lang="ts">
 import Vue from "vue";
 import MessageComponent from "../shared-components/MessageComponent.vue";
-import { DepartmentViewModule } from "@/modules/department";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import storeHelper from "@/store/store-helper";
 import DepartmentDetailsExpanded from "@/components/department-specialization/DepartmentDetailsExpanded.vue";
+import { DepartmentViewModule } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "DepartmentSpecializationViewTable",

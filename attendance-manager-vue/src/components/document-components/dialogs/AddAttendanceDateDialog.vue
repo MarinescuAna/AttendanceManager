@@ -36,6 +36,7 @@ import Vue from "vue";
 import DatePickerComponent from "@/components/shared-components/DatePickerComponent.vue";
 import TimePickerComponent from "@/components/shared-components/TimePickerComponent.vue";
 import storeHelper from "@/store/store-helper";
+import { InsertCollectionParameters } from "@/modules/commands-parameters";
 
 export default Vue.extend({
   name: "AddAttendanceDateDialog",
@@ -78,10 +79,10 @@ export default Vue.extend({
   },
   methods: {
     onSubmit: async function (): Promise<void> {
-      let response = await storeHelper.documentStore.addCollection(
-        `${this.date} ${this.time}`,
-        this.selectedCourseType
-      );
+      let response = await storeHelper.documentStore.addCollection({
+        activityDateTime: `${this.date} ${this.time}`,
+        courseType: this.selectedCourseType,
+      } as InsertCollectionParameters);
 
       if (response) {
         this.$emit("save");

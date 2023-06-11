@@ -1,7 +1,8 @@
-import { ReportViewModule} from "@/modules/document";
+
 import { documentGetter } from "./getter";
 import { documentMutations } from "./mutation";
 import { documentActions } from "./action";
+import { ReportViewModule } from "@/modules/view-modules";
 
 //state type
 interface DocumentState {

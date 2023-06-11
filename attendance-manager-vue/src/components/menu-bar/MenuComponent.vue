@@ -86,11 +86,11 @@ import Vue from "vue";
 import MenuNavigationDrawerContent from "./MenuNavigationDrawerContent.vue";
 import NotificationMenuContent from "./NotificationMenuContent.vue";
 import NotificationService from "@/services/notification.service";
-import { NotificationViewModel } from "@/modules/notification/index";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
 import { EventBus } from "@/main";
 import { Role } from "@/shared/enums";
 import AuthService from "@/services/auth.service";
+import { NotificationViewModel } from "@/modules/view-modules";
 
 export default Vue.extend({
   name: "MenuComponent",

@@ -1,6 +1,6 @@
 import ResponseHandler from "@/error-handler/error-handler";
 import { CreateBadgeParameters } from "@/modules/commands-parameters";
-import { BadgePercentageViewModule, BadgeViewModule } from "@/modules/document";
+import { BadgePercentageViewModule, BadgeViewModule } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { BADGE_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";

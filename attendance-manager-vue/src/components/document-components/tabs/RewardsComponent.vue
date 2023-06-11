@@ -201,7 +201,7 @@ import AuthService from "@/services/auth.service";
 import { BadgeType, CourseType, Role } from "@/shared/enums";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import storeHelper from "@/store/store-helper";
-import { BadgeViewModule } from "@/modules/document";
+import { BadgeViewModule } from "@/modules/view-modules";
 import RewardService from "@/services/reward.service";
 import { rules } from "@/plugins/vee-validate";
 import BadgeComponent from "@/components/shared-components/BadgeComponent.vue";

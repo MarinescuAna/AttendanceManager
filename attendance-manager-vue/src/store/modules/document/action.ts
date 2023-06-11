@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { CollectionViewModule, DocumentUpdateModule } from "@/modules/document";
+import { UpdateReportParameters } from "@/modules/commands-parameters";
+import { CollectionDto } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
@@ -45,7 +46,7 @@ export const documentActions = {
         return isSuccess;
     },
     /** Update some information related to the document */
-    async updateDocument({ commit }, payload: { module: DocumentUpdateModule, newCourseName: string }): Promise<boolean> {
+    async updateDocument({ commit }, payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${DOCUMENT_CONTROLLER}/update_document`, payload.module)
@@ -107,7 +108,7 @@ export const documentActions = {
                 collectionId: (result as AxiosResponse).data,
                 activityTime: payload.activityTime,
                 courseType: payload.type
-            } as CollectionViewModule);
+            } as CollectionDto);
         }
 
         return isSuccess;

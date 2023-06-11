@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { DepartmentViewModule } from "@/modules/department";
-import { CreateUserParameters, UserInformationViewModule, UserViewModule } from "@/modules/user";
+import { InsertUserParameters } from "@/modules/commands-parameters";
+import { DepartmentViewModule, UserInformationViewModule, UserViewModule } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { USER_CONTROLLER } from "@/shared/constants";
 import { Role } from "@/shared/enums";
@@ -94,7 +94,7 @@ const actions = {
     /**
      * Add a new user into the database and initialize the store
      */
-    async addUser({ commit }, payload: {newUser: CreateUserParameters, department: DepartmentViewModule}): Promise<boolean> {
+    async addUser({ commit }, payload: {newUser: InsertUserParameters, department: DepartmentViewModule}): Promise<boolean> {
         let isSuccess = true;
 
         await https.post(`${USER_CONTROLLER}/create_user`, payload.newUser).catch(error => {
