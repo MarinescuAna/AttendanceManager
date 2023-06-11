@@ -9,7 +9,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepar
     /// </summary>
     public sealed class UpdateDepartmentNameCommand : IRequest<bool>
     {
-        public required int DepartmentID { get; init; }
+        public required int DepartmentId { get; init; }
         public required string Name { get; init; }
 
     }
@@ -26,8 +26,8 @@ namespace AttendanceManager.Application.Features.Department.Commands.UpdateDepar
         public async Task<bool> Handle(UpdateDepartmentNameCommand request, CancellationToken cancellationToken)
         {
             //get the department
-            var department = await _unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID == request.DepartmentID)
-                ?? throw new NotFoundException("Department", request.DepartmentID);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(u => u.DepartmentID == request.DepartmentId)
+                ?? throw new NotFoundException("Department", request.DepartmentId);
 
             // check if the name is unique
             if (await _unitOfWork.DepartmentRepository.GetAsync(u => u.Name == request.Name) != null)

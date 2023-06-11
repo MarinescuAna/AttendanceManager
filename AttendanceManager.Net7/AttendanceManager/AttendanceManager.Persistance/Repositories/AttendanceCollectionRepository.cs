@@ -22,18 +22,6 @@ namespace AttendanceManager.Persistance.Repositories
                 .AsNoTracking()
                 .Include(ac => ac.Attendances)
                 .Where(ac => ac.DocumentID == reportId);
-        /// <summary>
-        /// Get the last order inserted by report id and activity type. If this is the first collection added,
-        /// the return value will be 0
-        /// </summary>
-        public int GetLastOrder(int reportId, CourseType type)
-        {
-            var query = dbContext.AttendanceCollections.AsNoTracking()
-                        .Where(ac => ac.DocumentID == reportId)
-                        .Where(ac => ac.CourseType == type);
-
-            return query.Count() > 0 ? query.Max(ac => ac.Order) : 0;   
-        }
         public void DeleteCollectionsByReportId(int reportId)
         {
             var collections = dbContext.AttendanceCollections.Where(c => c.DocumentID == reportId).AsNoTracking();

@@ -46,6 +46,22 @@ namespace AttendanceManager.Application.Profiles
                 .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.UserSpecialization!.Specialization!.Name))
                 .ForMember(d => d.SpecializationId, act => act.MapFrom(d => d.UserSpecialization!.SpecializationID))
                 .ForMember(d => d.ReportsLinked, act => act.MapFrom(d => d.Documents!.Count()));
+
+            //used to get users by year and specialization to create a new report
+            CreateMap<UserSpecialization, Features.User.Queries.GetStudentsForCourses.StudentVm>()
+                .ForMember(d => d.Email, act => act.MapFrom(d => d.UserID))
+                .ForMember(d => d.Fullname, act => act.MapFrom(d => d.User!.FullName));
+
+            //used to get the information about the current user
+            CreateMap<UserSpecialization, Features.User.Queries.GetUserInformationByEmail.SpecializationDto>()
+                .ForMember(d => d.Id, act => act.MapFrom(d => d.SpecializationID))
+                .ForMember(d => d.Name, act => act.MapFrom(d => d.Specialization!.Name));
+
+            //used to get the user by refresh token
+            CreateMap<User, Features.User.Queries.GetUserByRefreshToken.UserByRefreshTokenVm>();
+
+            //used for login
+            CreateMap<User, Features.User.Queries.GetUserByEmail.UserByEmailVm>();
         }
     }
 }

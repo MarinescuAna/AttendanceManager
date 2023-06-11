@@ -5,6 +5,7 @@ using AttendanceManager.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Globalization;
 
 namespace AttendanceManager.Api.Controllers
@@ -20,31 +21,10 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>true/false</returns>
         /// </summary>
         [HttpPost("create_collection")]
-        public async Task<IActionResult> CreateCollectionAsync(string activityTime, string type)
+        public async Task<IActionResult> CreateCollectionAsync([FromBody] CreateCollectionCommand command)
         {
-
-            if (string.IsNullOrWhiteSpace(activityTime) || string.IsNullOrWhiteSpace(type))
-            {
-                return BadRequest(ErrorMessages.BadRequest_CreateCollectionParams_Error);
-            }
-
-            if (!DateTime.TryParseExact(activityTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedActivityTime))
-            {
-                return BadRequest(ErrorMessages.BadRequest_CreateCollectionParams2_Error);
-            }
-
-            if (!Enum.TryParse(type, out CourseType courseType))
-            {
-                return BadRequest(ErrorMessages.BadRequest_CreateCollectionParams3_Error);
-            }
-
-            return Ok(await mediator.Send(new CreateCollectionCommand()
-            {
-                ActivityDateTime = parsedActivityTime,
-                Username = Username,
-                CourseType = courseType
-            }));
-
+            command.Username = Username;
+            return Ok(await mediator.Send(command));
         }
 
         [HttpDelete("delete/{collectionId:int}")]

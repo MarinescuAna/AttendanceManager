@@ -32,18 +32,9 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: true/false</returns>
         /// </summary>
         [HttpPost("create_specialization")]
-        public async Task<IActionResult> CreateSpecialization(int departmentId, string name)
+        public async Task<IActionResult> CreateSpecialization([FromBody] CreateSpecializationCommand command)
         {
-            if (string.IsNullOrEmpty(name) || departmentId < 1)
-            {
-                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
-            }
-
-            return Ok(await mediator.Send(new CreateSpecializationCommand()
-            {
-                DepartmentId= departmentId,
-                Name= name
-            }));
+            return Ok(await mediator.Send(command));
         }
     }
 }

@@ -4,14 +4,15 @@ using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using MediatR;
+using System.Globalization;
 
 namespace AttendanceManager.Application.Features.Collection.Commands.CreateCollection
 {
     public sealed class CreateCollectionCommand : IRequest<int>
     {
-        public required DateTime ActivityDateTime { get; init; }
-        public required CourseType CourseType { get; init; }
-        public required string Username { get; init; }
+        public required string ActivityDateTime { get; init; }
+        public required string CourseType { get; init; }
+        public string? Username { get; set; }
     }
 
     public sealed class CreateCollectionCommandHandler : IRequestHandler<CreateCollectionCommand, int>
@@ -32,12 +33,23 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
         public async Task<int> Handle(CreateCollectionCommand request, CancellationToken cancellationToken)
         {
             var currentReportId = _currentReport.CurrentReportInfo.ReportId;
+
+            if (!DateTime.TryParseExact(request.ActivityDateTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedActivityTime))
+            {
+                throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams2_Error);
+            }
+
+            if (!Enum.TryParse(request.CourseType, out CourseType courseType))
+            {
+                throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams3_Error);
+            }
+
             var attendanceCollection = new Domain.Entities.AttendanceCollection
             {
                 DocumentID = currentReportId,
-                HeldOn = request.ActivityDateTime,
-                CourseType = request.CourseType,
-                Order = _currentReport.LastCollectionOrder[request.CourseType] + 1
+                HeldOn = parsedActivityTime,
+                CourseType = courseType,
+                Order = _currentReport.LastCollectionOrder[courseType] + 1
             };
 
             _unitOfWork.AttendanceCollectionRepository.AddAsync(attendanceCollection);
@@ -49,7 +61,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
 
             //update the singleton
             _currentReport.ReportCollectionTypes.Add(attendanceCollection.AttendanceCollectionID, attendanceCollection.CourseType);
-            _currentReport.LastCollectionOrder[request.CourseType]++;
+            _currentReport.LastCollectionOrder[courseType]++;
 
             // get all the students according to the document data
             var students = _currentReport.Members.Where(s => s.Value.Equals(Role.Student));
@@ -76,7 +88,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             //send notifications to each user 
             var attendances = attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) / 2 ||
                   attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) ?
-                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollection!.DocumentID==_currentReport.CurrentReportInfo.ReportId)
+                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollection!.DocumentID == _currentReport.CurrentReportInfo.ReportId)
                         .Where(a => a.IsPresent) : null;
 
             foreach (var user in students)
@@ -84,7 +96,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 //is the half of the activity
                 if (attendances != null && attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) / 2)
                 {
-                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.AttendanceCollection!.CourseType==attendanceCollection.CourseType);
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.AttendanceCollection!.CourseType == attendanceCollection.CourseType);
                     //user don't have enough attendances
                     if (noAttendancesStudent < attendanceCollection.Order)
                     {

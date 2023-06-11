@@ -37,7 +37,7 @@ namespace AttendanceManager.Api.Controllers
         /// Get all students by specialization and enrollment year
         /// <returns>Success: list with all the students(email and fullname)</returns>
         /// </summary>
-        [HttpGet("students_by_specializationId_enrollmentYear/{year}/{specializationId}")]
+        [HttpGet("students")]
         public async Task<IActionResult> GetStudentsBySpecializationIdEnrollmentYear(int year, int specializationId)
         {
             return Ok(await mediator.Send(new GetStudentsForCoursesQuery()

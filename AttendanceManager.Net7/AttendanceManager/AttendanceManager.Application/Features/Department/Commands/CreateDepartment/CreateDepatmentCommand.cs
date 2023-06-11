@@ -1,7 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
-using AutoMapper;
 using MediatR;
 
 namespace AttendanceManager.Application.Features.Department.Commands.CreateDepartment

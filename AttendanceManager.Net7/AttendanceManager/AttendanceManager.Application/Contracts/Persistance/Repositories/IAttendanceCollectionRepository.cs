@@ -6,7 +6,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
     public interface IAttendanceCollectionRepository : IGenericRepository<AttendanceCollection>
     {
         IQueryable<AttendanceCollection> GetCollectionsByReportId(int reportId);
-        int GetLastOrder(int reportId, CourseType type);
         void UpdateRange(List<AttendanceCollection> entity);
         void DeleteCollectionsByReportId(int reportId);
     }

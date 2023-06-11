@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
-    [Route("api/notification")]
-    [ApiController]
-    [Authorize]
+    [Route("api/notification"), ApiController, Authorize]
     public class NotificationController : BaseController
     {
         public NotificationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
@@ -22,13 +20,13 @@ namespace AttendanceManager.Api.Controllers
             return Ok(await mediator.Send(new GetNotificationsByUserIdQuery() { UserId = UserEmail }));
         }
 
-        [HttpPatch("read_message")]
+        [HttpPatch("read_message/{id:int}")]
         public async Task<IActionResult> ReadMessageAsync(int id)
         {
             return Ok(await mediator.Send(new ReadNotificationByIdCommand() { NotificationId = id }));
         }
 
-        [HttpDelete("delete_notification")]
+        [HttpDelete("delete_notification/{id:int}")]
         public async Task<IActionResult> DeleteNotificationAsync(int id)
         {
             return Ok(await mediator.Send(new DeleteNotificationByIdCommand() { NotificationId = id }));

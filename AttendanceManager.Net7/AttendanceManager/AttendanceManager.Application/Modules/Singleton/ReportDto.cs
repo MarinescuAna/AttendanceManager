@@ -9,14 +9,14 @@ namespace AttendanceManager.Application.Modules.Singleton
         public int EnrollmentYear { get; init; }
         public int SpecializationId { get; init; }
         // UPDATE this when update the report
-        public int MaxNumberOfLectures { get; }
+        public int MaxNumberOfLectures { get; set; }
         // UPDATE this when update the report
-        public int MaxNumberOfLaboratories { get; }
+        public int MaxNumberOfLaboratories { get; set; }
         // UPDATE this when update the report
-        public int MaxNumberOfSeminaries { get; }
-        public string Title { get; }
-        public string CreatedBy { get; }
-        public int NoOfStudents { get; }
+        public int MaxNumberOfSeminaries { get; set; }
+        public string Title { get; set; }
+        public string CreatedBy { get; init; }
+        public int NoOfStudents { get; init; }
 
         public ReportDto(Document report, int noOfStudents)
         {

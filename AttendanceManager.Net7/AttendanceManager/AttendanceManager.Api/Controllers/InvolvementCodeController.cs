@@ -17,14 +17,10 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>return the code and the expiration date</returns>
         /// </summary>
         [HttpPost("create_code")]
-        public async Task<IActionResult> CreateInvolvmentCode(int minutes, int collectionId)
+        public async Task<IActionResult> CreateInvolvmentCode([FromBody] CreateInvolvementCodeCommand command)
         {
-            return Ok(await mediator.Send(new CreateInvolvementCodeCommand()
-            {
-                Minutes = minutes,
-                CollectionId = collectionId,
-                UserId = UserEmail
-            }));
+            command.UserId = UserEmail;
+            return Ok(await mediator.Send(command));
         }
     }
 }

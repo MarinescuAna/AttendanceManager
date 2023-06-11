@@ -11,5 +11,6 @@ namespace AttendanceManager.Application.Contracts.Infrastructure.Singleton
         Dictionary<int, CourseType> ReportCollectionTypes { get; set; }
         Dictionary<string, Role> Members { get; set; }
         void InitializeReport(Document currentReport, List<DocumentMember> members);
+        void UpdateReport(Document newReport);
     }
 }

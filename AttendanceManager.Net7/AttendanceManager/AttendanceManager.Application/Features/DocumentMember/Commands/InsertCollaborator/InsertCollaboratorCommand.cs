@@ -9,7 +9,9 @@ namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertC
     public sealed class InsertCollaboratorCommand : IRequest<MembersVm>
     {
         public required string Email { get; init; }
-        public required string CurrentUsername { get; init; }
+        public string? CurrentUsername { get; set; }
+
+        public string? CurrentEmail { get; set; }
     }
 
     public sealed class InsertCollaboratorCommandHandler : IRequestHandler<InsertCollaboratorCommand, MembersVm>
@@ -29,6 +31,11 @@ namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertC
 
         public async Task<MembersVm> Handle(InsertCollaboratorCommand request, CancellationToken cancellationToken)
         {
+            if (request.Email.Equals(request.CurrentEmail))
+            {
+                throw new BadRequestException(ErrorMessages.BadRequest_InvalidParameters_Collaborator_Error);
+            }
+
             //check if the user exists and if the user is teacher
             var user = await _unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email)
                 ?? throw new NotFoundException("Teacher", request.Email);

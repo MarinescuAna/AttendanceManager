@@ -36,17 +36,12 @@ namespace AttendanceManager.Api.Controllers
         /// Get created document by the id
         /// <returns>Success: information regarding the document with the given id</returns>
         /// </summary>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDocumentById(int? id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetDocumentById(int id)
         {
-            if (id == null)
-            {
-                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
-            }
-
             return Ok(await mediator.Send(new GetReportByIdQuery()
             {
-                Id = (int)id,
+                Id = id,
                 Role = UserRole,
                 UserId = UserEmail
             }));
@@ -68,23 +63,11 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: true/false</returns>
         /// </summary>
         [HttpPost("add_collaborator")]
-        public async Task<IActionResult> AddCollaborator(string email)
+        public async Task<IActionResult> AddCollaborator([FromBody] InsertCollaboratorCommand command)
         {
-            if (string.IsNullOrEmpty(email))
-            {
-                return BadRequest(ErrorMessages.BadRequest_ParametersMissing_Error);
-            }
-
-            if (email.Equals(UserEmail))
-            {
-                return BadRequest(ErrorMessages.BadRequest_InvalidParameters_Collaborator_Error);
-            }
-
-            return Ok(await mediator.Send(new InsertCollaboratorCommand()
-            {
-                Email = email,
-                CurrentUsername = Username
-            }));
+            command.CurrentEmail = UserEmail;
+            command.CurrentUsername = Username;
+            return Ok(await mediator.Send(command));
         }
 
         /// <summary>
@@ -100,7 +83,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpDelete("delete_current_report")]
         public async Task<IActionResult> DeleteDocument()
         {
-            return Ok(await mediator.Send(new DeleteDocumentByIdCommand { }));
+            return Ok(await mediator.Send(new DeleteDocumentByIdCommand()));
         }
 
 

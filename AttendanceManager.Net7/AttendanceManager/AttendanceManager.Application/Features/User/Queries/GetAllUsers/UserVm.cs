@@ -2,7 +2,7 @@
 
 namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
 {
-    public sealed class UserDto
+    public sealed class UserVm
     {
         public required string Fullname { get; set; }
         [JsonPropertyName("id")]

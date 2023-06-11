@@ -46,5 +46,14 @@ namespace AttendanceManager.Infrastructure.Singleton
             Members.Clear();
             ReportCollectionTypes.Clear();
         }
+
+        public void UpdateReport(Document newReport)
+        {
+            CurrentReportInfo.Title=newReport.Title;
+            CurrentReportInfo.MaxNumberOfLectures = newReport.MaxNoLessons;
+            CurrentReportInfo.MaxNumberOfLaboratories=newReport.MaxNoLaboratories;
+            CurrentReportInfo.MaxNumberOfSeminaries=newReport.MaxNoSeminaries;
+
+        }
     }
 }

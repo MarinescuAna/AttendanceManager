@@ -12,7 +12,7 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
     {
         public required int Minutes { get; init; }
         public required int CollectionId { get; init; }
-        public required string UserId { get; init; }
+        public string? UserId { get; set; }
     }
 
     public sealed class CreateInvolvementCodeCommandHandler : IRequestHandler<CreateInvolvementCodeCommand, InvolvementCodeVm>
@@ -72,7 +72,7 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
             {
                 CurrentCollectionId = request.CollectionId,
                 AchievedUserRole = Domain.Enums.Role.Teacher,
-                AchievedUserId = request.UserId,
+                AchievedUserId = request.UserId!,
                 CommitChanges = true
             });
 
