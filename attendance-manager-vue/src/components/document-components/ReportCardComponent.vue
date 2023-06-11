@@ -18,7 +18,7 @@
           </div>
         </v-card-title>
         <v-card-subtitle>
-          <v-icon color="grey" left> mdi-clock </v-icon> Created
+          <v-icon color="grey" left> mdi-clock </v-icon> Last update
           {{ getRelativeTime(card.updatedOn) }}</v-card-subtitle
         >
         <v-divider class="mx-6"></v-divider>

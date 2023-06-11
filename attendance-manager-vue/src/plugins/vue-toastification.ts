@@ -22,7 +22,7 @@ const options = {
   draggablePercent: 0.6,
   showCloseButtonOnHover: false,
   hideProgressBar: true,
-  closeButton: true,
+  closeButton: false,
   icon: true,
   rtl: false
 };

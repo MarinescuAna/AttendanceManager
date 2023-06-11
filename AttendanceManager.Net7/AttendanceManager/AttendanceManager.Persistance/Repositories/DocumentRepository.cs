@@ -30,10 +30,5 @@ namespace AttendanceManager.Persistance.Repositories
             .Include(d => d.Course!.UserSpecialization!.Specialization)
             .Include(m=>m.DocumentMembers)
             .AsNoTracking().Where(expression).ToListAsync();
-
-        public bool CanBeHardDeleted(int documentId) => dbContext.Documents
-                .Include(d => d.AttendanceCollections)
-                .AsNoTracking()
-                .Any(d => d.AttendanceCollections!.Count == 0 && !d.IsDeleted && d.DocumentId == documentId);
     }
 }

@@ -40,19 +40,16 @@ namespace AttendanceManager.Api.Controllers
         /// Soft delete an course
         /// <returns>Success: boolean value</returns>
         /// </summary>
-        [HttpDelete("delete_course/{id}")]
+        [HttpDelete("delete_course/{id:int}")]
         public async Task<IActionResult> DeleteCourse(int id)
         {
             return Ok(await mediator.Send(new DeleteCourseCommand { Id = id }));
         }
-
-        /// <summary>
-        /// Update the course name
-        /// <returns>Success: boolean value</returns>
-        /// </summary>        
+       
         [HttpPatch("update_course")]
         public async Task<IActionResult> UpdateCourse(UpdateCourseNameCommand command)
         {
+            command.UserEmail = UserEmail;
             return Ok(await mediator.Send(command));
         }
     }

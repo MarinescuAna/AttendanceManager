@@ -8,5 +8,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
         IQueryable<AttendanceCollection> GetCollectionsByReportId(int reportId);
         int GetLastOrder(int reportId, CourseType type);
         void UpdateRange(List<AttendanceCollection> entity);
+        void DeleteCollectionsByReportId(int reportId);
     }
 }

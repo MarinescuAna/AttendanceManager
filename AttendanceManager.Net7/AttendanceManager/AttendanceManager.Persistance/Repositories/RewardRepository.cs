@@ -14,5 +14,11 @@ namespace AttendanceManager.Persistance.Repositories
 
         public IQueryable<Reward> GetRewardsAsync(Expression<Func<Reward, bool>> expression)
             => dbContext.Rewards.Include(r=>r.Badge).Where(expression).AsNoTracking();
+        public void DeleteRewardsByReportId(int reportId)
+        {
+            var rewards = dbContext.Rewards.Where(c => c.ReportID == reportId).AsNoTracking();
+
+            dbContext.Rewards.RemoveRange(rewards);
+        }
     }
 }

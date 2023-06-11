@@ -2,6 +2,7 @@
 using AttendanceManager.Application.Contracts.Persistance.Repositories;
 using AttendanceManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
@@ -12,39 +13,13 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
         public async Task<List<Course>> GetTeacherCoursesByEmailAsync(string email)
-            => await dbContext.Courses.Include(s => s.UserSpecialization).Include(s => s.UserSpecialization!.Specialization)
-            .Where(c => c.UserSpecialization!.UserID == email).ToListAsync();
-        public async Task<bool> SoftOrHardDelete(int courseId)
-        {
-            try
-            {
-                var course = await dbContext.Courses.Include(c => c.Documents).FirstOrDefaultAsync(c => c.CourseID == courseId && !c.IsDeleted);
-
-                if (course == null)
-                {
-                    return false;
-                }
-
-                if (course.Documents?.Count > 0)
-                {
-                    course.IsDeleted = true;
-                    course.UpdatedOn = DateTime.Now;
-                    dbContext.Courses.Update(course);
-                }
-                else
-                {
-                    course.Documents = null;
-                    dbContext.Courses.Remove(course);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
-                return false;
-
-            }
-        }
+            => await dbContext.Courses
+                .Include(s => s.UserSpecialization)
+                .Include(s => s.UserSpecialization!.Specialization)
+                .Include(s=>s.Documents)
+                .Where(c => c.UserSpecialization!.UserID == email)
+                .ToListAsync();
+        public override async Task<Course?> GetAsync(Expression<Func<Course, bool>> expression) =>
+          await dbContext.Set<Course>().Include(c=>c.Documents).FirstOrDefaultAsync(expression);
     }
 }

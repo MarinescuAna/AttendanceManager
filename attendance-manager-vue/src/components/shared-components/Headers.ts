@@ -26,16 +26,3 @@ export const UserHeader: HeaderModule[] = [
         value: "role",
     },
 ];
-/**
- * Headers for tabel used to display courses
- */
-export const CoursesHeader: HeaderModule[] = [
-    {
-        text: "Course Name",
-        value: "name",
-    },
-    {
-        text: "Specialization Name",
-        value: "specializationName",
-    }
-];

@@ -14,7 +14,6 @@ export enum Role {
  */
 export enum ManagementDataType {
     Users = 0,
-    Course = 2,
     TotalAttendance = 3,
 }
 

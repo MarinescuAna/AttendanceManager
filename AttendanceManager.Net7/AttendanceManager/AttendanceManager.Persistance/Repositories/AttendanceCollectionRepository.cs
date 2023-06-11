@@ -34,6 +34,12 @@ namespace AttendanceManager.Persistance.Repositories
 
             return query.Count() > 0 ? query.Max(ac => ac.Order) : 0;   
         }
+        public void DeleteCollectionsByReportId(int reportId)
+        {
+            var collections = dbContext.AttendanceCollections.Where(c => c.DocumentID == reportId).AsNoTracking();
+
+            dbContext.AttendanceCollections.RemoveRange(collections);
+        }
         public void UpdateRange(List<AttendanceCollection> entity)
         {
             try

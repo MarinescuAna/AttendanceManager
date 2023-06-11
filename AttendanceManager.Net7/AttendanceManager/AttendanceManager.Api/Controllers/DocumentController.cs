@@ -97,14 +97,10 @@ namespace AttendanceManager.Api.Controllers
             return Ok(await mediator.Send(command));
         }
 
-        /// <summary>
-        /// Delete (soft or hard ) a document
-        /// </summary>
-        /// <returns>Success: true/false</returns>
-        [HttpDelete("delete_document/{id}")]
-        public async Task<IActionResult> DeleteDocument(int id)
+        [HttpDelete("delete_current_report")]
+        public async Task<IActionResult> DeleteDocument()
         {
-            return Ok(await mediator.Send(new DeleteDocumentByIdCommand { DocumentId = id }));
+            return Ok(await mediator.Send(new DeleteDocumentByIdCommand { }));
         }
 
 

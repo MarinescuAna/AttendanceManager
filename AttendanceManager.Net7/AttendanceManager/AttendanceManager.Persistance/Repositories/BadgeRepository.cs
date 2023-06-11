@@ -17,5 +17,12 @@ namespace AttendanceManager.Persistance.Repositories
             .Where(b => b.Rewards.Count(r => r.UserID!.Equals(userEmail) && r.ReportID == reportId) == 0 && b.UserRole.Equals(role))
             .Where(b => b.ReportID == null || (b.ReportID != null && b.ReportID == reportId))
             .ToListAsync();
+
+        public void DeleteCustomBadgesByReportId(int reportId)
+        {
+            var badges = dbContext.Badges.Where(c => c.ReportID == reportId).AsNoTracking();
+
+            dbContext.Badges.RemoveRange(badges);
+        }
     }
 }

@@ -25,6 +25,11 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
             _unitOfWork = unit;
             _mediator = mediator;
             _currentReport= currentReport;
+
+            if (_currentReport.CurrentReportInfo == null)
+            {
+                throw new Exceptions.NotImplementedException(ErrorMessages.NoContentReportBaseMessage);
+            }
         }
 
         public async Task<InvolvementCodeVm> Handle(CreateInvolvementCodeCommand request, CancellationToken cancellationToken)

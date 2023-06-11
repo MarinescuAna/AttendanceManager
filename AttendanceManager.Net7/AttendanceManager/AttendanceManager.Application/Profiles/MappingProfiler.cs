@@ -40,6 +40,12 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<DocumentMember, Features.Document.Queries.GetReportById.MembersDto>()
                 .ForMember(u => u.Name, act => act.MapFrom(d => d.User!.FullName))
                 .ForMember(u => u.Email, act => act.MapFrom(d => d.User!.Email));
+
+            //Used when get courses
+            CreateMap<Course, Features.Course.Queries.GetCoursesQuery.CoursesVm>()
+                .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.UserSpecialization!.Specialization!.Name))
+                .ForMember(d => d.SpecializationId, act => act.MapFrom(d => d.UserSpecialization!.SpecializationID))
+                .ForMember(d => d.ReportsLinked, act => act.MapFrom(d => d.Documents!.Count()));
         }
     }
 }

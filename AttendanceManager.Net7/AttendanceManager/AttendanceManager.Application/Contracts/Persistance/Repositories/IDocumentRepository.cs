@@ -7,6 +7,5 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
     {
         Task<Document?> GetDocumentByIdAsync(int id);
         Task<List<Document>> GetUserDocumentsByExpressionAsync(Expression<Func<Document, bool>> expression);
-        bool CanBeHardDeleted(int documentId);
     }
 }

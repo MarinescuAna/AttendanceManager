@@ -51,7 +51,7 @@
                   return-object
                   prepend-icon="mdi-school"
                   item-text="name"
-                  item-value="id"
+                  item-value="courseId"
                   color="black"
                 ></v-select>
                 <v-layout row class="pa-3">
@@ -292,7 +292,7 @@
 </style>
 
 <script lang="ts">
-import { CourseViewModule } from "@/modules/course";
+import { CourseViewModule } from "@/modules/view-modules";
 import { SpecializationViewModule } from "@/modules/specialization";
 import { ReportInsertModule } from "@/modules/document";
 import { StudentForCourseViewModule } from "@/modules/user";
@@ -371,7 +371,7 @@ export default Vue.extend({
   /** Load the current user informations from the API and also his courses */
   created: async function () {
     await storeHelper.userStore.loadCurrentUserInfo();
-    await storeHelper.courseStore.loadCourses();
+    await storeHelper.courseStore.loadCourses(false);
   },
   methods: {
     /** Use this function to reset the list of students when the specialization or year has changed */
@@ -398,7 +398,7 @@ export default Vue.extend({
     onSubmit: async function (): Promise<void> {
       const response = await ReportService.addReport(
         {
-          courseId: this.selectedCourse.id,
+          courseId: this.selectedCourse.courseId,
           enrollmentYear: this.selectedYear,
           maxNoLaboratories: this.maxNoLaboratories,
           maxNoLessons: this.maxNoLessons,

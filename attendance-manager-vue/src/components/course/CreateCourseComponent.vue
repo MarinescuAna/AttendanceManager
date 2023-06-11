@@ -1,82 +1,80 @@
 <template>
   <v-container>
-    <v-card class="orange lighten-3">
-      <v-card-title class="pa-3">
+    <v-card class="orange_background">
+      <v-card-title class="pa-7">
         <h2>Create new course</h2>
-        <v-spacer></v-spacer>
-        <router-link to="/courses" tag="button"
-          ><v-icon>mdi-close</v-icon></router-link
-        >
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
           <v-form @submit.prevent="handleSubmit(addCourse)">
-            <v-layout column>
-              <validation-provider
-                name="name"
-                v-slot="{ errors }"
-                :rules="rules.required"
-              >
-                <v-text-field
-                  v-model="name"
-                  type="text"
-                  label="Course name"
-                  maxlength="128"
-                  prepend-icon="mdi-pencil"
-                  :error-messages="errors"
-                  required
-                  counter
-                />
-              </validation-provider>
-              <v-select
-                :items="specializations"
-                label="Specializations"
-                v-model="selectedSpecialization"
-                prepend-icon="mdi-file"
-                item-text="name"
-                item-value="id"
-                :disabled="specializations.length == 0"
+            <validation-provider
+              name="name"
+              v-slot="{ errors }"
+              :rules="rules.required"
+            >
+              <v-text-field
+                v-model="name"
+                type="text"
+                label="Course name"
+                maxlength="128"
+                prepend-icon="mdi-pencil"
+                :error-messages="errors"
+                class="pa-6"
+                color="black"
                 required
-              ></v-select>
+                counter
+              />
+            </validation-provider>
+            <v-select
+              :items="specializations"
+              label="Specializations"
+              v-model="selectedSpecialization"
+              prepend-icon="mdi-file"
+              item-text="name"
+              item-value="id"
+              :disabled="specializations.length == 0"
+              class="pa-6"
+              color="black"
+              required
+            ></v-select>
+            <v-row justify="center" class="pa-8">
               <v-btn
-                width="40%"
+                width="50%"
                 @click="addCourse"
                 :disabled="invalid || selectedSpecialization === 0"
                 class="blue-grey lighten-4 pa-3"
                 >Submit</v-btn
-              >
-            </v-layout>
+              ></v-row
+            >
           </v-form>
         </validation-observer>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
-    
-    
-    <script lang="ts">
+      
+      
+<script lang="ts">
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
 import storeHelper from "@/store/store-helper";
-import { CreateCourseModule } from "@/modules/course";
 import { SpecializationViewModule } from "@/modules/specialization";
+import { CreateCourseParameters } from "@/modules/commands-parameters";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
-  name: "CreateCourseView",
+  name: "CreateCourseComponent",
   data() {
     return {
       rules,
-      // Course name
       name: "",
-      // Selected specializations
       selectedSpecialization: 0,
     };
   },
   computed: {
-    // All the specializations
     specializations(): SpecializationViewModule[] {
       return storeHelper.userStore.currentUser.specializations;
-    },
+    }
   },
   methods: {
     /**
@@ -90,10 +88,13 @@ export default Vue.extend({
         specializationName: this.specializations.find(
           (x) => x.id == this.selectedSpecialization
         )!.name,
-      } as CreateCourseModule);
+      } as CreateCourseParameters);
 
       if (response) {
-        this.$router.currentRoute.meta?.onBack();
+        Toastification.success("The course was created!");
+        this.name='';
+        this.selectedSpecialization = 0;
+        this.$emit("save");
       }
     },
     /**
@@ -106,4 +107,4 @@ export default Vue.extend({
   },
 });
 </script>
-      
+        

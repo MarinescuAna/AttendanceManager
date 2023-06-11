@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { CourseViewModule, CreateCourseModule, UpdateCourseModule } from "@/modules/course";
+import { UpdateCourseParameters } from "@/modules/commands-parameters";
 import { AxiosResponse } from "axios";
 import https from "@/plugins/axios";
 import { COURSE_CONTROLLER } from "@/shared/constants";
+import { CreateCourseParameters } from "@/modules/commands-parameters";
+import { CourseViewModule } from "@/modules/view-modules";
 
 //state type
 export interface CourseState {
@@ -47,23 +49,25 @@ const mutations = {
     /**
      * Remove course 
      */
-    _removeCourse(state, courseId: string): void {
+    _removeCourse(state, courseId: number): void {
         state.courses = state.courses.filter(cr => cr.courseId != courseId);
     },
     /**
      * Update course name
      */
-    _updateCourse(state, id: string, name: string): void {
-        state.courses.foreach(cr =>{
-            if(cr.courseId == id){
-                cr.name = name;
+    _updateCourse(state, payload: CourseViewModule): void {
+        state.courses.forEach(cr => {
+            if (cr.courseId == payload.courseId) {
+                cr.name = payload.name;
+                cr.specializationName = payload.specializationName;
+                cr.specializationId = payload.specializationId;
             }
         });
     },
     /**
      * Reset the state with the initial values
      */
-    _resetStore(state): void{
+    _resetStore(state): void {
         Object.assign(state, initialize());
     }
 };
@@ -73,24 +77,24 @@ const actions = {
     /**
      * Reset the state with the initial values
      */
-    resetStore({commit}):void{
+    resetStore({ commit }): void {
         commit('_resetStore');
     },
     /**
      * Load all the courses defined by the current user, not all courses
      */
-    async loadCourses({ commit, state }): Promise<void> {
-        if(state.courses.length !=0){
+    async loadCourses({ commit, state }, reload: boolean): Promise<void> {
+        if (state.courses.length != 0 && !reload) {
             return state.courses;
         }
-        
+
         const courses: CourseViewModule[] = (await https.get(`${COURSE_CONTROLLER}/courses`)).data;
         commit("_courses", courses);
     },
     /**
      * Add a new course
      */
-    async addCourse({ commit }, payload: CreateCourseModule): Promise<boolean> {
+    async addCourse({ commit }, payload: CreateCourseParameters): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${COURSE_CONTROLLER}/create_course`, payload)
@@ -100,7 +104,7 @@ const actions = {
 
         if (isSuccess) {
             commit("_addCourse", {
-                id: (result as AxiosResponse).data,
+                courseId: (result as AxiosResponse).data,
                 name: payload.name,
                 specializationId: payload.specializationId,
                 specializationName: payload.specializationName
@@ -115,7 +119,7 @@ const actions = {
     async removeCourse({ commit }, payload: number): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${COURSE_CONTROLLER}/delete_course/${payload}`)
+        await https.delete(`${COURSE_CONTROLLER}/delete_course/${payload}`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -128,16 +132,22 @@ const actions = {
     /**
      * Update course
      */
-     async updateCourse({ commit }, payload: UpdateCourseModule): Promise<boolean> {
+    async updateCourse({ commit }, payload: { specializationName: string, parameter: UpdateCourseParameters }): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${COURSE_CONTROLLER}/update_Course`, payload)
+        await https.patch(`${COURSE_CONTROLLER}/update_Course`, payload.parameter)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
 
         if (isSuccess) {
-            commit("_updateCourse", payload.courseId, payload.name);
+            commit("_updateCourse", {
+                courseId: payload.parameter.courseId,
+                name: payload.parameter.name,
+                specializationId:
+                    payload.parameter.specializationId,
+                specializationName: payload.specializationName
+            } as CourseViewModule);
         }
         return isSuccess;
     }

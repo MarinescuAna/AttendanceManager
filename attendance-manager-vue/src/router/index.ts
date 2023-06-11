@@ -30,20 +30,7 @@ const routes: Array<RouteConfig> = [
       title: 'Courses',
       requireAuth: true,
       role: [Role.Teacher]
-    },
-    children: [
-      {
-        path: '/create-course',
-        name: 'create-course',
-        component: () => import('../views/courses-views/CreateCourseView.vue'),
-        meta: {
-          onBack: () => { router.push({ name: 'courses' }) },
-          title: 'Create course',
-          requireAuth: true,
-          role: [Role.Teacher]
-        }
-      },
-    ]
+    }
   },
   {
     path: '/users',

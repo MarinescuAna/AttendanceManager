@@ -59,12 +59,11 @@ export const documentActions = {
 
         return isSuccess;
     },
-    /** Delete document (soft or hard) */
-    async deleteDocument({ commit, state }): Promise<boolean> {
-        let isSuccess = true;
-        const documentId = state.currentDocument.documentId;
 
-        await https.delete(`${DOCUMENT_CONTROLLER}/delete_document/${documentId}`)
+    async deleteDocument({ commit }): Promise<boolean> {
+        let isSuccess = true;
+
+        await https.delete(`${DOCUMENT_CONTROLLER}/delete_current_report`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

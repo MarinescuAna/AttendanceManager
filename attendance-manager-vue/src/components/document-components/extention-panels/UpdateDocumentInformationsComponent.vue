@@ -32,7 +32,7 @@
               required
               prepend-icon="mdi-school"
               item-text="name"
-              item-value="id"
+              item-value="courseId"
               color="black"
               return-object
             ></v-select>
@@ -156,7 +156,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { rules } from "@/plugins/vee-validate";
-import { CourseViewModule } from "@/modules/course";
+import { CourseViewModule } from "@/modules/view-modules";
 import storeHelper from "@/store/store-helper";
 import { DocumentUpdateModule } from "@/modules/document";
 import { Toastification } from "@/plugins/vue-toastification";
@@ -171,7 +171,7 @@ export default Vue.extend({
       documentTitle: storeHelper.documentStore.report.title,
       /** Selected course */
       selectedCourse: storeHelper.courseStore.courses.find(
-        (c) => c.id == storeHelper.documentStore.report.courseId
+        (c) => c.courseId == storeHelper.documentStore.report.courseId
       ),
       /** Maximum number of lessons that will be held */
       maxNoLessons: storeHelper.documentStore.report.maxNoLessons,
@@ -204,7 +204,7 @@ export default Vue.extend({
   /** Load the current user informations from the API and also his courses */
   created: async function () {
     await storeHelper.userStore.loadCurrentUserInfo();
-    await storeHelper.courseStore.loadCourses();
+    await storeHelper.courseStore.loadCourses(false);
   },
   methods: {
     /** Update document */
@@ -215,7 +215,7 @@ export default Vue.extend({
 
       const response = await storeHelper.documentStore.updateDocument({
         module: {
-          courseId: this.selectedCourse.id,
+          courseId: this.selectedCourse.courseId,
           noLaboratories: this.maxNoLaboratories,
           noLessons: this.maxNoLessons,
           noSeminaries: this.maxNoSeminaries,

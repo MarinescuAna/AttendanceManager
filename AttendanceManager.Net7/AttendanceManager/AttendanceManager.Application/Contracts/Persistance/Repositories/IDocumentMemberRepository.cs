@@ -7,5 +7,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
     {
         Task<List<DocumentMember>> GetDocumentMembersByDocumentIdAndRoleAsync(int documentId, Role? role);
         void DeleteMembersByDocumentId(int documentId);
+        Task AddRangeAsync(List<DocumentMember> entity);
     }
 }

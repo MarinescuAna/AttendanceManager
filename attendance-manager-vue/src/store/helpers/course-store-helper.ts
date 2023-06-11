@@ -1,7 +1,9 @@
 
-import { CourseViewModule, CreateCourseModule, UpdateCourseModule } from "@/modules/course";
+import { UpdateCourseParameters } from "@/modules/commands-parameters";
 import { Store } from "vuex";
 import { namespace as courseNamespace } from "../modules/course";
+import { CreateCourseParameters } from "@/modules/commands-parameters";
+import { CourseViewModule } from "@/modules/view-modules";
 
 export class CourseStore {
     private store: Store<any>;
@@ -28,14 +30,14 @@ export class CourseStore {
     /**
      * Load all the courses from the API
      */
-    public loadCourses(): Promise<void> {
-        return this.store.dispatch(`${courseNamespace}/loadCourses`);
+    public loadCourses(reload:boolean): Promise<void> {
+        return this.store.dispatch(`${courseNamespace}/loadCourses`,reload);
     }
 
     /**
      * Add a new course
      */
-    public addCourse(payload: CreateCourseModule): Promise<boolean> {
+    public addCourse(payload: CreateCourseParameters): Promise<boolean> {
         return this.store.dispatch(`${courseNamespace}/addCourse`, payload);
     }
 
@@ -49,7 +51,7 @@ export class CourseStore {
     /**
     * Change course name
     */
-    public updateCourse(payload: UpdateCourseModule): Promise<boolean> {
-        return this.store.dispatch(`${courseNamespace}/updateCourse`, payload);
+    public updateCourse(payload: UpdateCourseParameters, specializationName: string): Promise<boolean> {
+        return this.store.dispatch(`${courseNamespace}/updateCourse`, { specializationName: specializationName, parameter: payload });
     }
 }

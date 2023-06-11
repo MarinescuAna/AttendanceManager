@@ -8,7 +8,7 @@ namespace AttendanceManager.Persistance.Repositories
 {
     public class DocumentMemberRepository : GenericRepository<DocumentMember>, IDocumentMemberRepository
     {
-        public DocumentMemberRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext,loggingService)
+        public DocumentMemberRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext, loggingService)
         {
         }
 
@@ -39,6 +39,17 @@ namespace AttendanceManager.Persistance.Repositories
             var members = dbContext.DocumentMembers.AsNoTracking().Where(dm => dm.DocumentID == documentId);
 
             dbContext.RemoveRange(members);
+        }
+        public async Task AddRangeAsync(List<DocumentMember> entity)
+        {
+            try
+            {
+                await dbContext.DocumentMembers.AddRangeAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+            }
         }
     }
 }

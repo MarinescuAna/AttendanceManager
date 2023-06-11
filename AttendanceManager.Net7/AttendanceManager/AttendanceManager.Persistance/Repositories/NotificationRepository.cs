@@ -9,5 +9,16 @@ namespace AttendanceManager.Persistance.Repositories
         public NotificationRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext, loggingService)
         {
         }
+        public async Task AddRangeAsync(IEnumerable<Notification> entity)
+        {
+            try
+            {
+                await dbContext.Notifications.AddRangeAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+            }
+        }
     }
 }

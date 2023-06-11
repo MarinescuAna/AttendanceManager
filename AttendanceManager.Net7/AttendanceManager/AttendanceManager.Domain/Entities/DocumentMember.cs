@@ -9,8 +9,7 @@ namespace AttendanceManager.Domain.Entities
     public class DocumentMember
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DocumentMemberID { get; set; }
+        public required Guid DocumentMemberID { get; set; }
         [ForeignKey("User")]
         [MaxLength(254)]
         public required string UserID { get; set; }

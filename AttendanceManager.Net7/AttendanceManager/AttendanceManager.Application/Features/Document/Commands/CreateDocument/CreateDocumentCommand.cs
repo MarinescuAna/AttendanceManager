@@ -47,19 +47,21 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             };
             // Save document first to can get the id
             _unitOfWork.DocumentRepository.AddAsync(newReport);
-            await _unitOfWork.CommitAsync();
+            if (!await _unitOfWork.CommitAsync())
+            {
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
+            }
 
             // REMEMBER: the teacher that create the document can be access form course, so there is no reason to store it in the DocumentMember table
 
             // insert all the sudents into the document
-            foreach (var user in request.StudentIds)
+            await _unitOfWork.DocumentMemberRepository.AddRangeAsync(request.StudentIds.Select(s => new Domain.Entities.DocumentMember
             {
-                _unitOfWork.DocumentMemberRepository.AddAsync(new Domain.Entities.DocumentMember
-                {
-                    DocumentID = newReport.DocumentId,
-                    UserID = user,
-                });
-            }
+                DocumentMemberID = Guid.NewGuid(),
+                DocumentID = newReport.DocumentId,
+                UserID = s,
+            }).ToList());
+
 
             // Save the members 
             if (!await _unitOfWork.CommitAsync(request.StudentIds.Length))
@@ -68,17 +70,14 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             }
 
             //send notifications to each user 
-            foreach (var user in request.StudentIds)
+            await _unitOfWork.NotificationRepository.AddRangeAsync(request.StudentIds.Select(s => new Domain.Entities.Notification()
             {
-                _unitOfWork.NotificationRepository.AddAsync(new()
-                {
-                    Priority= Domain.Enums.NotificationPriority.Info,
-                    UserID = user,
-                    CreatedOn = DateTime.Now,
-                    IsRead = false,
-                    Message = string.Format(NotificationMessages.CreateReportNotification,newReport.Title,request.Email,newReport.CreatedOn.ToString(Constants.ShortDateFormat)),
-                });
-            }
+                Priority = Domain.Enums.NotificationPriority.Info,
+                UserID = s,
+                CreatedOn = DateTime.Now,
+                IsRead = false,
+                Message = string.Format(NotificationMessages.CreateReportNotification, newReport.Title, request.Email, newReport.CreatedOn.ToString(Constants.ShortDateFormat)),
+            }));
 
             // Save the members 
             if (!await _unitOfWork.CommitAsync(request.StudentIds.Length))
