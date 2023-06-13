@@ -28,6 +28,14 @@ export default Vue.extend({
       required: true,
       default: () => [],
     },
+    yaxis: {
+      type: Boolean,
+      default: false,
+    },
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: function () {
     return {
@@ -35,6 +43,20 @@ export default Vue.extend({
         xaxis: {
           categories: this.labels,
         },
+        plotOptions: {
+          bar: {
+            horizontal: this.horizontal,
+            colors:{
+              
+            }
+          }
+        },
+        yaxis: this.yaxis
+          ? {
+              min: 0,
+              max: 100,
+            }
+          : {},
       },
     };
   },

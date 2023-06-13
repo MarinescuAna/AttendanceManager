@@ -23,6 +23,7 @@
       v-if="chartDataLabels.length != 0"
       :values="chartDataValues"
       :labels="chartDataLabels"
+      :yaxis="true"
       class="move-behind"
     />
     <MessageComponent

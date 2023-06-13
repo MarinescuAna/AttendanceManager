@@ -1,4 +1,4 @@
-import { BadgeType, CourseType, NotificationPriority } from "@/shared/enums";
+import { BadgeType, CourseType, NotificationPriority, Role } from "@/shared/enums";
 
 /**
  * Use this to display a course
@@ -162,4 +162,30 @@ export interface UserViewModule {
  export interface StudentForCourseViewModule{
     email: string;
     fullname: string;
+ }
+
+ /**Used for big dashboard */
+ export interface CourseDashboardViewModule{
+    courseId: number;
+    courseName: string;
+    reports: ReportDashboardDto[];
+ }
+ export interface ReportDashboardDto{
+    reportId: number;
+    reportName: string;
+    percentageAttendances: number[];
+    noAttendancesAchieved: number[];
+    noPointsAchieved: number[];
+    creationYear: number;
+    badges: BadgeDashboardDto[];
+ }
+ export interface BadgeDashboardDto{
+    title: string;
+    description: string;
+    noAchievements: number;
+    percentageAchievements: number;
+    role: Role;
+    imagePath: string;
+    badgeType: number;
+    maxAchievements: number;
  }

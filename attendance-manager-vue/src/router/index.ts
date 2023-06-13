@@ -83,6 +83,16 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../views/DashboardView.vue'),
+    meta: {
+      title: 'Dashboard',
+      requireAuth: true,
+      role: [Role.Teacher]
+    },
+  },
+  {
     path: '/create-user',
     name: 'create-user',
     component: () => import('../views/manage-users-views/CreateUserView.vue'),

@@ -53,6 +53,13 @@ export class MenuItems{
             description: "View all the courses that you created, or create a new course."
         },
         {
+            icon: "mdi-chart-line",
+            title: "Dashboard",
+            route: "dashboard",
+            role: Role.Teacher,
+            description: "An overview to all the courses that you defined."
+        },
+        {
             icon: "mdi-home",
             title: "Home",
             route: "home",

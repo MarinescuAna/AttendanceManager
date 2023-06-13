@@ -1,6 +1,6 @@
 <template>
   <v-flex class="one-row">
-    <h3>{{ title }}</h3>
+    <span :class="h_Text+'-text'">{{ title }}</span>
     <v-tooltip top>
       <template v-slot:activator="{ on, attrs }">
         <v-icon v-bind="attrs" v-on="on" class="ma-1">mdi-alert-circle</v-icon>
@@ -30,6 +30,10 @@ export default Vue.extend({
       type: String,
       required: true,
     },
+    h_Text:{
+      type: String,
+      default: 'h3'
+    }
   },
 });
 </script>
