@@ -24,7 +24,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.UpdateCourseNam
 
         public async Task<bool> Handle(UpdateCourseNameCommand request, CancellationToken cancellationToken)
         {
-            var course = await _unitOfWork.CourseRepository.GetAsync(c => c.CourseID == request.CourseId && !c.IsDeleted)
+            var course = await _unitOfWork.CourseRepository.GetAsync(c => c.CourseID == request.CourseId)
                 ?? throw new NotFoundException("Course", request.CourseId);
             var userSpecialization = await 
                 _unitOfWork.UserSpecializationRepository.GetAsync(c => c.SpecializationID == request.SpecializationId && c.UserID.Equals(request.UserEmail))

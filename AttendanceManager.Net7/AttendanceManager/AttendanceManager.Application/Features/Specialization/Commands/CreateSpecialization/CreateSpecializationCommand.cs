@@ -33,7 +33,6 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             {
                 DepartmentID = request.DepartmentId,
                 Name = request.Name,
-                CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now,
             };
 

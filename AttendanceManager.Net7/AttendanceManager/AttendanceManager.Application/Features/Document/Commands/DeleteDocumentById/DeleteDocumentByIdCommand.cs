@@ -27,7 +27,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumen
             var reportId = (int)(request.ReportId == null ? _currentReport.CurrentReportInfo.ReportId : request.ReportId);
 
             // get the document
-            var document = await _unitOfWork.DocumentRepository.GetAsync(d => d.DocumentId == reportId && !d.IsDeleted);
+            var document = await _unitOfWork.DocumentRepository.GetAsync(d => d.DocumentId == reportId);
 
             if (document == null && request.ReportId != null)
             {

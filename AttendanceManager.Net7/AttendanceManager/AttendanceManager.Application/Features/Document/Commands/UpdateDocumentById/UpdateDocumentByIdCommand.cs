@@ -35,7 +35,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.UpdateDocumen
 
         public async Task<bool> Handle(UpdateDocumentByIdCommand request, CancellationToken cancellationToken)
         {
-            var document = await _unitOfWork.DocumentRepository.GetAsync(d => d.DocumentId == request.DocumentId && !d.IsDeleted)
+            var document = await _unitOfWork.DocumentRepository.GetAsync(d => d.DocumentId == request.DocumentId)
                 ?? throw new NotFoundException("The document can't be found. Please, try again!");
 
             document.UpdatedOn = DateTime.Now;

@@ -36,7 +36,6 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
                 CourseID = request.CourseId,
                 CreatedOn = DateTime.Now,
                 EnrollmentYear = request.EnrollmentYear,
-                IsDeleted = false,
                 MaxNoLaboratories = request.MaxNoLaboratories,
                 MaxNoLessons = request.MaxNoLessons,
                 MaxNoSeminaries = request.MaxNoSeminaries,

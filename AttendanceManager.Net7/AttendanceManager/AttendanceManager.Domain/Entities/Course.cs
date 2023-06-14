@@ -11,10 +11,8 @@ namespace AttendanceManager.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CourseID { get; set; }
-        public bool IsDeleted { get; set; } = false;
         [MaxLength(128)]
         public required string Name { get; set; }
-        public required DateTime CreatedOn { get; set; }
         public required DateTime UpdatedOn { get; set; }
         [ForeignKey("UserSpecialization")]
         public required int UserSpecializationID { get; set; }

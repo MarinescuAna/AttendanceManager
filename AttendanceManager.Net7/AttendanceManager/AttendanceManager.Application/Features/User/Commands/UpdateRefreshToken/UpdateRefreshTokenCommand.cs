@@ -25,7 +25,7 @@ namespace AttendanceManager.Application.Features.User.Commands.UpdateRefreshToke
         public async Task<Unit> Handle(UpdateRefreshTokenCommand request, CancellationToken cancellationToken)
         {
             // Look for the user to be sure that he exists or throw exeception if he dosen't exists
-            var user = await _unitOfWork.UserRepository.GetAsync(u => (u.Email == request.Email) && !u.IsDeleted)
+            var user = await _unitOfWork.UserRepository.GetAsync(u => (u.Email == request.Email))
             ?? throw new NotFoundException("User", request.Email);
 
             user.RefreshToken = request.RefreshToken;

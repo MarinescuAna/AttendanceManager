@@ -10,7 +10,6 @@ namespace AttendanceManager.Domain.Entities
         public int DepartmentID { get; set; }
         [MaxLength(128)]
         public required string Name { get; set; }
-        public required DateTime CreatedOn { get; set; }
         public required DateTime UpdatedOn { get; set; }
 
     }

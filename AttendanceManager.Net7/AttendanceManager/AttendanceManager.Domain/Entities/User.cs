@@ -23,7 +23,6 @@ namespace AttendanceManager.Domain.Entities
         public required DateTime UpdatedOn { get; set; }
         public DateTime? ExpRefreshToken { get; set; }
         public required bool AccountConfirmed { get; set; }
-        public bool IsDeleted { get; set; } = false;
         public ICollection<UserSpecialization>? UserSpecializations { get; set; }
         public ICollection<DocumentMember>? DocumentMembers { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }

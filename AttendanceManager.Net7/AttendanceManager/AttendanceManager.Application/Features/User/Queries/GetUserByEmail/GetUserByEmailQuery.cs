@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserByEmail
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
         public async Task<UserByEmailVm> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
-            => _mapper.Map<UserByEmailVm>(await _unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email && !u.IsDeleted)
+            => _mapper.Map<UserByEmailVm>(await _unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email)
                 ?? throw new NotFoundException(nameof(User), request.Email));
 
     }

@@ -18,7 +18,6 @@ namespace AttendanceManager.Domain.Entities
         public required string UserID { get; set; }
         public required int BonusPoints { get; set; }
         public required bool IsPresent { get; set; }
-        public required DateTime CreatedOn { get; set; }
         public required DateTime UpdatedOn { get; set; }
         public virtual User? User { get; set; }
         public virtual AttendanceCollection? AttendanceCollection { get; set; }

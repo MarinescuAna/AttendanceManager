@@ -27,7 +27,6 @@ namespace AttendanceManager.Application.Features.User.Queries.GetStudentsForCour
             => _mapper.Map<List<StudentVm>>(await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
                 us => us.User!.EnrollmentYear == request.EnrollmentYear &&
                     us.SpecializationID == request.SpecializationId &&
-                    us.User!.Role == Role.Student &&
-                    !us.User.IsDeleted));
+                    us.User!.Role == Role.Student));
     }
 }

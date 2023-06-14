@@ -20,7 +20,6 @@ namespace AttendanceManager.Domain.Entities
         public required DateTime UpdatedOn { get; set; }
         public required int AttendanceImportance { get; set; }
         public required int BonusPointsImportance { get; set; }
-        public bool IsDeleted { get; set; } = false;
         public virtual Course? Course { get; set; }
         public ICollection<AttendanceCollection>? AttendanceCollections { get; set; }
         public ICollection<DocumentMember>? DocumentMembers { get; set; }

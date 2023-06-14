@@ -18,7 +18,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetRefreshTokens
         public Task<string[]?> Handle(GetRefreshTokensQuery request, CancellationToken cancellationToken)
             => Task.FromResult(_unitOfWork.UserRepository.ListAll()
                         .Where(u => !string.IsNullOrEmpty(u.RefreshToken))
-                        .Where(u => !u.IsDeleted && u.ExpRefreshToken < DateTime.Now)
+                        .Where(u => u.ExpRefreshToken < DateTime.Now)
                         .Select(u => u.RefreshToken).ToArray());
     }
 }

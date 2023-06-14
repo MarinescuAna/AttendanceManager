@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserByRefreshTo
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
         public async Task<UserByRefreshTokenVm> Handle(GetUserByRefreshTokenQuery request, CancellationToken cancellationToken)
-            => _mapper.Map<UserByRefreshTokenVm>(await _unitOfWork.UserRepository.GetAsync(u => u.RefreshToken == request.RefreshToken && !u.IsDeleted)
+            => _mapper.Map<UserByRefreshTokenVm>(await _unitOfWork.UserRepository.GetAsync(u => u.RefreshToken == request.RefreshToken)
                 ?? throw new NotFoundException(nameof(User), request.RefreshToken));
     }
 }

@@ -72,7 +72,6 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 _unitOfWork.AttendanceRepository.AddAsync(new Domain.Entities.Attendance
                 {
                     UpdatedOn = DateTime.Now,
-                    CreatedOn = DateTime.Now,
                     AttendanceCollectionID = attendanceCollection.AttendanceCollectionID,
                     BonusPoints = 0,
                     IsPresent = false,

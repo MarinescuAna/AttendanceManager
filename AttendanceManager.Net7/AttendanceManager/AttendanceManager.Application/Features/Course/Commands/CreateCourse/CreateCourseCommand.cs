@@ -23,7 +23,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
         public async Task<int> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
             // Check if the name is unique
-            if (await _unitOfWork.CourseRepository.GetAsync(c => c.UserSpecializationID == request.SpecializationId && c.Name == request.Name && !c.IsDeleted) != null)
+            if (await _unitOfWork.CourseRepository.GetAsync(c => c.UserSpecializationID == request.SpecializationId && c.Name == request.Name) != null)
             {
                 throw new AlreadyExistsException("Course", request.Name);
             }
@@ -32,10 +32,8 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
 
             var newCourse = new Domain.Entities.Course
             {
-                CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now,
                 Name = request.Name,
-                IsDeleted = false,
                 UserSpecializationID = userSpecialization.UserSpecializationID
             };
 

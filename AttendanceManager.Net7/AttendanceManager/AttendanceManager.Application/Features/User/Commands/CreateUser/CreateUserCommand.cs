@@ -32,7 +32,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
         public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             // Check if the user dosen't already have an account
-            if (await _unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email && !u.IsDeleted) != null)
+            if (await _unitOfWork.UserRepository.GetAsync(u => u.Email == request.Email) != null)
             {
                 throw new AlreadyExistsException("User", request.Email);
             }

@@ -15,6 +15,7 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("Document")]
         public required int DocumentID { get; set; }
         public required int Order { get; set; }
+        public string? Title { get; set; }
         public required DateTime HeldOn { get; set; }
         public required CourseType CourseType { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }
