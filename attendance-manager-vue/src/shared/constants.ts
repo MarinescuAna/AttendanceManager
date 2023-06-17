@@ -31,3 +31,5 @@ export const NOTIFICATION_CONTROLLER = "notification";
 
 /**Colors codes */
 export const WARNING_AMBER_DARKEN_4='#FF6F00';
+export const AMBER_DARKEN_4='#FF6F00';
+export const BLUE_DARKEN_4='#0D47A1';

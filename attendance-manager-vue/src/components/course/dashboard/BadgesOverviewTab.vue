@@ -10,6 +10,7 @@
       :title="badge.title"
       :role="badge.role"
       :maxOccurrences="badge.maxAchievements"
+      :color="badge.color"
     />
   </v-layout>
 </template>
@@ -17,6 +18,7 @@
 <script lang="ts">
 import BadgeDashboardComponent from "@/components/shared-components/BadgeDashboardComponent.vue";
 import { BadgeDashboardDto, ReportDashboardDto } from "@/modules/view-modules";
+import { BLUE_DARKEN_4, WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import { Role } from "@/shared/enums";
 import Vue from "vue";
 
@@ -30,6 +32,7 @@ interface TempBadgeDashboardDto {
   imagePath: string;
   role: string;
   maxAchievements: number;
+  color: string;
 }
 
 export default Vue.extend({
@@ -69,6 +72,7 @@ export default Vue.extend({
             badge: badge,
             role: Role[badge.role],
             maxAchievements: badge.maxAchievements,
+            color: badge.role==Role.Student? WARNING_AMBER_DARKEN_4:BLUE_DARKEN_4
           });
         } else {
           oldBadge.occurrences += badge.noAchievements;

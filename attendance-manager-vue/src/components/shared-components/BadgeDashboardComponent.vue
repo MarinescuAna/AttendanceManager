@@ -1,6 +1,6 @@
 <template>
   <v-card width="400px" class="d-flex flex-column align-center ma-2">
-    <v-badge :color="WARNING_AMBER_DARKEN_4" :content="role" bordered bottom overlap>
+    <v-badge :color="color" :content="role" bordered bottom overlap>
       <v-img
         :src="require(`@/assets/images/badges/${imagePath}`)"
         width="200px"
@@ -21,7 +21,7 @@
       :width="15"
       :value="percentage"
       class="ma-5"
-      :color="WARNING_AMBER_DARKEN_4"
+      :color="color"
     >
       {{ percentage }}%
     </v-progress-circular>
@@ -43,8 +43,7 @@
 </style>
   <script lang="ts">
 import Vue from "vue";
-import { Role } from "@/shared/enums";
-import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
+import { AMBER_DARKEN_4 } from "@/shared/constants";
 
 export default Vue.extend({
   name: "BadgeDashboardComponent",
@@ -77,12 +76,10 @@ export default Vue.extend({
       type: Number,
       required: true,
     },
-  },
-  data: function () {
-    return {
-      Role,
-      WARNING_AMBER_DARKEN_4,
-    };
-  },
+    color:{
+      type: String,
+      default: AMBER_DARKEN_4
+    }
+  }
 });
 </script>

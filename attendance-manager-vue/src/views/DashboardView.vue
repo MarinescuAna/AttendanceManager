@@ -45,6 +45,7 @@
               :items="coursesName"
               label="Courses"
               class="ma-2"
+              color="black"
               item-text="name"
               item-value="id"
               outlined
@@ -62,6 +63,7 @@
               :items="coursesName"
               label="Courses"
               class="ma-2"
+              color="black"
               item-text="name"
               item-value="id"
               full-width
