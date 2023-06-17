@@ -1,12 +1,9 @@
 ﻿using AttendanceManager.Application.Features.Collection.Commands.CreateCollection;
 using AttendanceManager.Application.Features.Collection.Commands.DeleteCollectionById;
-using AttendanceManager.Domain.Common;
-using AttendanceManager.Domain.Enums;
+using AttendanceManager.Application.Features.Collection.Commands.UpdateCollectionById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using System.Globalization;
 
 namespace AttendanceManager.Api.Controllers
 {
@@ -24,6 +21,12 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> CreateCollectionAsync([FromBody] CreateCollectionCommand command)
         {
             command.Username = Username;
+            return Ok(await mediator.Send(command));
+        }
+
+        [HttpPatch("update_collection")]
+        public async Task<IActionResult> UpdateCollectionAsync([FromBody] UpdateCollectionByIdCommand command)
+        {
             return Ok(await mediator.Send(command));
         }
 

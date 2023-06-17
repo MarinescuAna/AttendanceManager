@@ -24,14 +24,23 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { VMenu } from 'vuetify/lib/components/VMenu';
+import { VMenu } from "vuetify/lib/components/VMenu";
 
 export default Vue.extend({
   name: "DatePickerComponent",
   data: function () {
     return {
-      selectedDate: null
+      selectedDate: '',
     };
+  },
+  props: {
+    date: {
+      type: String,
+      default: '',
+    },
+  },
+  created: function (): void {
+    this.selectedDate = this.date;
   },
   methods: {
     onSubmit: function (): void {

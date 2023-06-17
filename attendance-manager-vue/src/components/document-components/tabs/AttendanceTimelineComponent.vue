@@ -3,40 +3,63 @@
     <v-layout justify-center class="pa-2">
       <v-flex md5 lg5 v-if="collections.length > 0">
         <div v-if="!isMobile">
-          <v-timeline>
+          <v-timeline align-top dense>
             <v-timeline-item
-              v-for="(item, index) in collections"
+              v-for="item in collections"
               :key="item.collectionId"
-              :class="index % 2 == 0 ? 'text-right' : ''"
               color="black"
+              small
             >
-              <v-btn
-                text
-                @click="
-                  onOpenAttendanceDialog(item.collectionId, item.activityTime)
-                "
-              >
-                {{ item.activityTime.replaceAll("/", ".") }} -
-                {{ item.courseType }}
-              </v-btn>
+              <v-row class="pt-1">
+                <v-col cols="1">
+                  <v-btn icon @click="onOpenAttendanceDialog(item)"
+                    ><v-icon :color="AMBER_DARKEN_4"
+                      >mdi-cursor-default-click</v-icon
+                    >
+                  </v-btn>
+                </v-col>
+                <v-col cols="3">
+                  <strong>{{ item.activityTime.replaceAll("/", ".") }}</strong>
+                </v-col>
+
+                <v-col>
+                  <strong v-if="item.title != '' && item.title != null">{{
+                    item.title
+                  }}</strong>
+                  <strong v-else>{{ item.courseType }}</strong>
+                  <div
+                    class="text-caption"
+                    v-if="item.title != '' && item.title != null"
+                  >
+                    {{ item.courseType }}
+                  </div>
+                </v-col>
+              </v-row>
             </v-timeline-item>
           </v-timeline>
         </div>
         <div v-else>
           <!-- diplay the bullets as a list when the user is on mobile-->
-          <v-list dense>
+          <v-list color="transparent" dense>
             <v-list-item
               v-for="(item, index) in collections"
               :key="item.collectionId"
-              @click="
-                onOpenAttendanceDialog(item.collectionId, item.activityTime)
-              "
+              @click="onOpenAttendanceDialog(item)"
             >
               <v-list-item-content>
                 <v-divider v-if="index != 0" class="mb-2"></v-divider>
                 <v-list-item-title
+                  v-if="item.title != '' || item.title != null"
+                  >{{ item.title }}</v-list-item-title
+                >
+                <v-list-item-title v-else
                   >{{ item.activityTime }} -
                   {{ item.courseType }}</v-list-item-title
+                >
+                <v-list-item-subtitle
+                  v-if="item.title != '' || item.title != null"
+                  >{{ item.activityTime }} -
+                  {{ item.courseType }}</v-list-item-subtitle
                 >
               </v-list-item-content>
             </v-list-item>
@@ -68,8 +91,7 @@
       scrollable
     >
       <UpdateInvolvementsDialog
-        :attendanceCollectionId="selectedCollectionId"
-        :attendanceCollectionDate="selectedCollectionDate"
+        :collection="selectedCollection"
         @close-dialog="updateInvolvementsDialog = false"
       />
     </v-dialog>
@@ -87,7 +109,6 @@
         @save="oncloseAddCollectionDialog"
       />
     </v-dialog>
-
   </v-container>
 </template>
 
@@ -97,6 +118,7 @@ import Vue from "vue";
 import AddAttendanceDateDialog from "@/components/document-components/dialogs/AddAttendanceDateDialog.vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
+import { AMBER_DARKEN_4 } from "@/shared/constants";
 import UpdateInvolvementsDialog from "@/components/document-components/dialogs/UpdateInvolvementsDialog.vue";
 import { CollectionDto } from "@/modules/view-modules";
 
@@ -108,10 +130,10 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      AMBER_DARKEN_4,
       addCollectionDialog: false,
       updateInvolvementsDialog: false,
-      selectedCollectionId: 0,
-      selectedCollectionDate: "",
+      selectedCollection: {},
     };
   },
   computed: {
@@ -142,13 +164,9 @@ export default Vue.extend({
     oncloseAddCollectionDialog: function (): void {
       this.addCollectionDialog = false;
     },
-    onOpenAttendanceDialog: function (
-      collectionId: number,
-      date: string
-    ): void {
+    onOpenAttendanceDialog: function (collection: CollectionDto): void {
       this.updateInvolvementsDialog = true;
-      this.selectedCollectionDate = date;
-      this.selectedCollectionId = collectionId;
+      this.selectedCollection = collection;
     },
   },
 });

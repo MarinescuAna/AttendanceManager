@@ -8,6 +8,6 @@ namespace AttendanceManager.Domain.Entities
         [Key]
         public required string Code { get; set; }
         public required DateTime ExpirationDate { get; set; }
-        public required int AttendanceCollectionId { get; set; }
+        public required int CollectionId { get; set; }
     }
 }

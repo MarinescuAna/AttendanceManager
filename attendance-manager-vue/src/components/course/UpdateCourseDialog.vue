@@ -72,7 +72,6 @@ export default Vue.extend({
       );
     },
   },
-  /** Initialize the department name */
   created: function (): void {
     if (this.course) {
       const specialization = this.specializations.find(

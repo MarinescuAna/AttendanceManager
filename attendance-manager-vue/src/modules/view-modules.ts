@@ -72,6 +72,7 @@ export interface CollectionDto{
     collectionId: number;
     activityTime: string;
     courseType: string;
+    title: string;
 }
 
 /**
@@ -104,6 +105,9 @@ export interface InvolvementViewModule {
     isPresent: boolean;
     updateOn: string;
     email: string;
+    updateBy: string;
+    title: string;
+    heldOn: string;
 }
 
 export interface TotalInvolvementViewModule {

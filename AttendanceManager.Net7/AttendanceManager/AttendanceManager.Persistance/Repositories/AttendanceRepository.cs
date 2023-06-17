@@ -12,11 +12,11 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
 
-        public override IQueryable<Attendance> ListAll() => dbContext.Attendances.Include(a => a.AttendanceCollection).AsNoTracking();
+        public override IQueryable<Attendance> ListAll() => dbContext.Attendances.Include(a => a.Collection).AsNoTracking();
         public override async Task<Attendance?> GetAsync(Expression<Func<Attendance, bool>> expression)
-            => await dbContext.Attendances.Include(a => a.AttendanceCollection).AsNoTracking().FirstOrDefaultAsync(expression);
+            => await dbContext.Attendances.Include(a => a.Collection).AsNoTracking().FirstOrDefaultAsync(expression);
         public IEnumerable<Attendance> GetAttendancesByReportId(int id)
-            => dbContext.Attendances.Include(a => a.AttendanceCollection)
-                .AsNoTracking().Where(a => a.AttendanceCollection!.DocumentID == id).AsEnumerable();
+            => dbContext.Attendances.Include(a => a.Collection)
+                .AsNoTracking().Where(a => a.Collection!.DocumentID == id).AsEnumerable();
     }
 }

@@ -30,10 +30,10 @@ namespace AttendanceManager.Application.Features.Collection.Commands.DeleteColle
         }
         public async Task<bool> Handle(DeleteCollectionByIdCommand request, CancellationToken cancellationToken)
         {
-            var currentCollection = await _unitOfWork.AttendanceCollectionRepository.GetAsync(c=>c.AttendanceCollectionID == request.CollectionId)
+            var currentCollection = await _unitOfWork.CollectionRepository.GetAsync(c=>c.CollectionID == request.CollectionId)
                 ?? throw new NotFoundException("Collection", request.CollectionId);
 
-            _unitOfWork.AttendanceCollectionRepository.Delete(currentCollection);
+            _unitOfWork.CollectionRepository.Delete(currentCollection);
 
             if (!await _unitOfWork.CommitAsync())
             {
@@ -41,7 +41,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.DeleteColle
             }
 
             //update order
-            var collections = _unitOfWork.AttendanceCollectionRepository.ListAll()
+            var collections = _unitOfWork.CollectionRepository.ListAll()
                 .Where(c => c.CourseType.Equals(currentCollection.CourseType))
                 .Where(c => c.DocumentID == _currentReport.CurrentReportInfo.ReportId)
                 .Where(c => c.Order > currentCollection.Order).ToList();
@@ -50,7 +50,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.DeleteColle
             if (collections.Count() > 0)
             {
                 collections.ForEach(c => c.Order--);
-                _unitOfWork.AttendanceCollectionRepository.UpdateRange(collections);
+                _unitOfWork.CollectionRepository.UpdateRange(collections);
 
                 if (!await _unitOfWork.CommitAsync())
                 {

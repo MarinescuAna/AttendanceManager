@@ -29,7 +29,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
 
         public async Task<ReportVm> Handle(GetReportByIdQuery request, CancellationToken cancellationToken)
         {
-            // get current document, which includes AttendanceCollection
+            // get current document, which includes Collection
             var currentDocument = await _unitOfWork.DocumentRepository.GetDocumentByIdAsync(request.Id)
                 ?? throw new NotFoundException("The document cannot be found!");
 
@@ -59,7 +59,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
                 NoSeminaries = _currentReportService.ReportCollectionTypes.Count == 0 ?
                     0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == CourseType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
-                Collections = _mapper.Map<CollectionDto[]>(currentDocument.AttendanceCollections!.OrderBy(d => d.HeldOn)),
+                Collections = _mapper.Map<CollectionDto[]>(currentDocument.Collections!.OrderBy(d => d.HeldOn)),
                 Members = _mapper.Map<MembersDto[]>(request.Role == Role.Teacher ?
                     documentMembers.Where(u => u.User!.Role == Role.Teacher) : documentMembers.Where(u => u.User!.Role == Role.Student)),
                 AttendanceImportance = currentDocument.AttendanceImportance,

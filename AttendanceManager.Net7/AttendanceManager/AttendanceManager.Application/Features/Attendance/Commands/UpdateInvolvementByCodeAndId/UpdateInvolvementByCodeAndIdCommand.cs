@@ -11,7 +11,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
     {
         public required string Code { get; init; }
         public required int AttendanceId { get; init; }
-        public required int AttendanceCollectionId { get; init; }
+        public required int CollectionId { get; init; }
     }
 
     public sealed class UpdateInvolvementByCodeAndIdCommandHandler : IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
@@ -35,7 +35,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
         public async Task<bool> Handle(UpdateInvolvementByCodeAndIdCommand request, CancellationToken cancellationToken)
         {
             // check if the code exists into the database
-            var code = await _unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.AttendanceCollectionId == request.AttendanceCollectionId)
+            var code = await _unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.CollectionId == request.CollectionId)
                 ?? throw new NotFoundException("Code", request.Code);
 
             // check if the code is still valid
@@ -59,7 +59,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
 
             await _mediator.Send(new CreateRewardCommand()
             {
-                CurrentCollectionId = request.AttendanceCollectionId,
+                CurrentCollectionId = request.CollectionId,
                 AchievedUserRole = Domain.Enums.Role.Teacher,
                 AchievedUserId = _currentReport.CurrentReportInfo.CreatedBy,
                 BadgeID=Domain.Enums.BadgeType.FirstCodeUsed,

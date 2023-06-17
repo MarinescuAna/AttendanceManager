@@ -40,13 +40,7 @@ export interface UpdateInvolvementsParameters {
 export interface UpdateInvolvementByCodeParameters {
     code: string;
     attendanceId: number;
-    attendanceCollectionId: number;
-}
-
-/**Used to insert a new collection */
-export interface InsertCollectionParameters {
-    activityDateTime: string;
-    courseType: string;
+    collectionId: number;
 }
 
 /**Used to insert department */
@@ -132,3 +126,18 @@ export interface InsertUserParameters {
     code: string;
     specializationIds: number[];
  }
+
+/**Used to create a new collection */
+export interface InsertCollectionParameters{
+    activityDateTime: string;
+    courseType: string;
+    title: string;
+}
+
+/**Used to updaet a collection */
+export interface UpdateCollectionParameters{
+    activityDateTime: string;
+    courseType: string;
+    title: string;
+    collectionId: number;
+}

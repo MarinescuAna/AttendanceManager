@@ -48,7 +48,7 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
             {
                 Code = code,
                 ExpirationDate = DateTime.Now.AddMinutes(request.Minutes),
-                AttendanceCollectionId = request.CollectionId
+                CollectionId = request.CollectionId
             };
             _unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
 

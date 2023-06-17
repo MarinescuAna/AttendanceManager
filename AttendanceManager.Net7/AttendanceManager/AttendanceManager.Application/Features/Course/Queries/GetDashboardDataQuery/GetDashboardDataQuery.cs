@@ -72,23 +72,23 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
         private int[] CountPoints(Domain.Entities.Document report)
         {
             var result = new int[4];
-            var attendances = report.AttendanceCollections!.SelectMany(s => s.Attendances!).Where(a => a.BonusPoints!=0);
+            var attendances = report.Collections!.SelectMany(s => s.Attendances!).Where(a => a.BonusPoints!=0);
 
             result[0] = attendances.Sum(a => a.BonusPoints);
-            result[1] = attendances.Where(c => c.AttendanceCollection!.CourseType.Equals(CourseType.Lecture)).Sum(a => a.BonusPoints);
-            result[2] = attendances.Where(c => c.AttendanceCollection!.CourseType.Equals(CourseType.Laboratory)).Sum(a => a.BonusPoints);
-            result[3] = attendances.Where(c => c.AttendanceCollection!.CourseType.Equals(CourseType.Seminary)).Sum(a => a.BonusPoints);
+            result[1] = attendances.Where(c => c.Collection!.CourseType.Equals(CourseType.Lecture)).Sum(a => a.BonusPoints);
+            result[2] = attendances.Where(c => c.Collection!.CourseType.Equals(CourseType.Laboratory)).Sum(a => a.BonusPoints);
+            result[3] = attendances.Where(c => c.Collection!.CourseType.Equals(CourseType.Seminary)).Sum(a => a.BonusPoints);
             return result;
         }
         private int[] CountAttendances(Domain.Entities.Document report)
         {
             var result = new int[4];
-            var attendances = report.AttendanceCollections!.SelectMany(s => s.Attendances!).Where(a=>a.IsPresent);
+            var attendances = report.Collections!.SelectMany(s => s.Attendances!).Where(a=>a.IsPresent);
             
             result[0] = attendances.Count();
-            result[1] = attendances.Count(a => a.AttendanceCollection!.CourseType.Equals(CourseType.Lecture));
-            result[2] = attendances.Count(a => a.AttendanceCollection!.CourseType.Equals(CourseType.Laboratory));
-            result[3] = attendances.Count(a => a.AttendanceCollection!.CourseType.Equals(CourseType.Seminary));
+            result[1] = attendances.Count(a => a.Collection!.CourseType.Equals(CourseType.Lecture));
+            result[2] = attendances.Count(a => a.Collection!.CourseType.Equals(CourseType.Laboratory));
+            result[3] = attendances.Count(a => a.Collection!.CourseType.Equals(CourseType.Seminary));
             return result;
         }
         private int GetNoUsersByRole(Domain.Entities.Document report, Role role)

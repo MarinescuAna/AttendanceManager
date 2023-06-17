@@ -45,7 +45,7 @@ import Vue from "vue";
 export default Vue.extend({
   name: "GenerateInvolvementCodeDialog",
   props: {
-    attendanceCollectionId: Number,
+    collectionId: Number,
   },
   data() {
     return {
@@ -60,7 +60,7 @@ export default Vue.extend({
     onSubmit: async function (): Promise<void> {
       const result = await InvolvementCodeService.createInvolvementCode({
         minutes: this.time,
-        collectionId: this.attendanceCollectionId,
+        collectionId: this.collectionId,
       });
 
       if (typeof result !== "undefined") {

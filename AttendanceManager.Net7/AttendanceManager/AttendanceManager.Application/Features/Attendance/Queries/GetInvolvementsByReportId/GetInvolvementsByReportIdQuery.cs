@@ -50,15 +50,15 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetInvolveme
 
                 return studentInvolvments
                     .Where(i => i.UserID.Equals(request.UserEmail))
-                    .Where(i => _currentReport.ReportCollectionTypes!.ContainsKey(i.AttendanceCollectionID))
+                    .Where(i => _currentReport.ReportCollectionTypes!.ContainsKey(i.CollectionID))
                         .Select(i => new InvolvementVm
                         {
                             InvolvementId = i.AttendanceID,
-                            ActivityType = _currentReport.ReportCollectionTypes![i.AttendanceCollectionID],
+                            ActivityType = _currentReport.ReportCollectionTypes![i.CollectionID],
                             BonusPoints = i.BonusPoints,
                             IsPresent = i.IsPresent,
                             Student = request.UseCode ? student!.Code : student!.FullName,
-                            CollectionId = i.AttendanceCollectionID,
+                            CollectionId = i.CollectionID,
                             UpdateOn = i.UpdatedOn.ToString(Constants.ShortDateFormat),
                             Email = request.UseCode ? string.Empty : i.UserID
                         }).ToList();
@@ -72,15 +72,15 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetInvolveme
             {
                 //get all the involvements that have the collection id equal with the passed one
                 involvements = request.OnlyPresent ?
-                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollectionID == request.CollectionId && a.IsPresent) :
-                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollectionID == request.CollectionId);
+                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.CollectionID == request.CollectionId && a.IsPresent) :
+                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.CollectionID == request.CollectionId);
             }
             else
             {
                 //get all the involvements that have the report id equal with the current one
                 involvements = request.OnlyPresent ?
-                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollection!.DocumentID== _currentReport.CurrentReportInfo.ReportId && a.IsPresent).AsQueryable() :
-                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollection!.DocumentID == _currentReport.CurrentReportInfo.ReportId).AsQueryable();
+                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.DocumentID== _currentReport.CurrentReportInfo.ReportId && a.IsPresent).AsQueryable() :
+                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.DocumentID == _currentReport.CurrentReportInfo.ReportId).AsQueryable();
             }
 
             if (involvements.Count() == 0)
@@ -98,11 +98,11 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetInvolveme
                     .Select(i => new InvolvementVm
                     {
                         InvolvementId = i.AttendanceID,
-                        ActivityType = _currentReport.ReportCollectionTypes![i.AttendanceCollectionID],
+                        ActivityType = _currentReport.ReportCollectionTypes![i.CollectionID],
                         BonusPoints = i.BonusPoints,
                         IsPresent = i.IsPresent,
                         Student = request.UseCode ? student.User!.Code : student.User!.FullName,
-                        CollectionId = i.AttendanceCollectionID,
+                        CollectionId = i.CollectionID,
                         UpdateOn = i.UpdatedOn.ToString(Constants.ShortDateFormat),
                         Email = request.UseCode ? string.Empty : i.UserID
                     }));

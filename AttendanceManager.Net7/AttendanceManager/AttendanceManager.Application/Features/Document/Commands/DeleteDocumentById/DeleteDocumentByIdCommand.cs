@@ -45,7 +45,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumen
             _unitOfWork.DocumentMemberRepository.DeleteMembersByDocumentId(reportId);
 
             //delete collections and attedances
-            _unitOfWork.AttendanceCollectionRepository.DeleteCollectionsByReportId(reportId);
+            _unitOfWork.CollectionRepository.DeleteCollectionsByReportId(reportId);
 
             //delete custom badges and rewards
             _unitOfWork.RewardRepository.DeleteRewardsByReportId(reportId);

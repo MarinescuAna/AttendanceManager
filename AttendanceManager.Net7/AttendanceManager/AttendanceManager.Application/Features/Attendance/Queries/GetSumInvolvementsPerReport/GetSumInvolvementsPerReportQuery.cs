@@ -34,16 +34,16 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolv
             {
                 var studentInvolvments = students[i].User!.Attendances!
                         .Where(a => a.IsPresent)
-                        .Where(a => _currentReport.ReportCollectionTypes.ContainsKey(a.AttendanceCollectionID));
+                        .Where(a => _currentReport.ReportCollectionTypes.ContainsKey(a.CollectionID));
                 involvements.Add(new()
                 {
                     UserId = students[i].UserID,
                     UserName = students[i].User!.FullName,
                     Code = students[i].User!.Code,
                     BonusPoints = students[i].User?.Attendances == null ? 0 : studentInvolvments.Sum(a => a.BonusPoints),
-                    CourseAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.AttendanceCollectionID] == CourseType.Lecture),
-                    LaboratoryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.AttendanceCollectionID] == CourseType.Laboratory),
-                    SeminaryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.AttendanceCollectionID] == CourseType.Seminary),
+                    CourseAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == CourseType.Lecture),
+                    LaboratoryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == CourseType.Laboratory),
+                    SeminaryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == CourseType.Seminary),
                 });
             }
 

@@ -32,11 +32,11 @@ namespace AttendanceManager.Infrastructure.Singleton
             LastCollectionOrder = new Dictionary<CourseType, int>();
             foreach (var type in Enum.GetValues(typeof(CourseType)))
             {
-                var collections = currentReport.AttendanceCollections!.Where(ac => ac.CourseType.Equals(type));
+                var collections = currentReport.Collections!.Where(ac => ac.CourseType.Equals(type));
                 LastCollectionOrder.Add((CourseType)type, collections.Count() == 0 ? 0 : collections.Max(ac => ac.Order));
             }
 
-            ReportCollectionTypes = currentReport.AttendanceCollections!.ToDictionary(ac => ac.AttendanceCollectionID, ac => ac.CourseType);
+            ReportCollectionTypes = currentReport.Collections!.ToDictionary(ac => ac.CollectionID, ac => ac.CourseType);
         }
 
         private void CleanReport()

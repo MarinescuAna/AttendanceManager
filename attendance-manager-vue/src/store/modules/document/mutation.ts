@@ -1,6 +1,6 @@
 import { CourseType } from "@/shared/enums";
 import { initializeDocumentState } from ".";
-import { UpdateReportParameters } from "@/modules/commands-parameters";
+import { UpdateCollectionParameters, UpdateReportParameters } from "@/modules/commands-parameters";
 import { CollectionDto, MembersDto, ReportViewModule } from "@/modules/view-modules";
 
 // mutations for this store
@@ -39,6 +39,16 @@ export const documentMutations = {
                 state.currentReport.noSeminaries++;
             }
         }
+    },
+
+    _partialCollectionUpdate(state, payload: UpdateCollectionParameters): void {
+        state.currentReport.collections.forEach(c => {
+            if (c.collectionId == payload.collectionId) {
+                c.activityTime = payload.activityDateTime;
+                c.courseType = payload.courseType;
+                c.title = payload.title;
+            }
+        })
     },
     /** Delete document from the store */
     _deleteDocument(state): void {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { UpdateReportParameters } from "@/modules/commands-parameters";
+import { InsertCollectionParameters, UpdateCollectionParameters, UpdateReportParameters } from "@/modules/commands-parameters";
 import { CollectionDto } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
@@ -94,11 +94,25 @@ export const documentActions = {
 
         return isSuccess;
     },
-    /** Add new attendance collection */
-    async addCollection({ commit }, payload: { activityTime: string, type: string }): Promise<boolean> {
+    async updateCollection({ commit }, payload: UpdateCollectionParameters): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${COLLECTION_CONTROLLER}/create_collection?activityTime=${payload.activityTime}&type=${payload.type}`)
+        await https.patch(`${COLLECTION_CONTROLLER}/update_collection`, payload)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (isSuccess) {
+            commit("_partialCollectionUpdate", payload);
+        }
+
+        return isSuccess;
+    },
+    /** Add new attendance collection */
+    async addCollection({ commit }, payload: InsertCollectionParameters): Promise<boolean> {
+        let isSuccess = true;
+
+        const result = await https.post(`${COLLECTION_CONTROLLER}/create_collection`, payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -106,8 +120,9 @@ export const documentActions = {
         if (isSuccess) {
             commit("_addCollection", {
                 collectionId: (result as AxiosResponse).data,
-                activityTime: payload.activityTime,
-                courseType: payload.type
+                activityTime: payload.activityDateTime,
+                courseType: payload.courseType,
+                title: payload.title
             } as CollectionDto);
         }
 

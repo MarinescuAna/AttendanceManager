@@ -4,11 +4,40 @@
       <v-btn icon @click="onCloseDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-      <v-toolbar-title
-        >Course activities - {{ attendanceCollectionDate }}</v-toolbar-title
+      <v-toolbar-title v-if="collection.title != '' && collection.title != null"
+        >{{ collection.title }} - {{ collection.activityTime }}</v-toolbar-title
       >
+      <v-toolbar-title v-else>{{ collection.activityTime }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <DotsMenuComponent @delete="onDeleteCollection" />
+      <v-menu bottom right offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-dialog
+            v-model="updateDialogOpen"
+            max-width="50%"
+            :fullscreen="isMobile"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item v-bind="attrs" v-on="on">
+                <v-list-item-title>Edit</v-list-item-title>
+              </v-list-item>
+            </template>
+            <UpdateCollectionDialog
+              class="pa-1"
+              :collection="collection"
+              @save="onCollectionChanged"
+              @close="updateDialogOpen = false"
+            />
+          </v-dialog>
+          <v-list-item @click="onDeleteCollection">
+            <v-list-item-title>Delete</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-toolbar>
     <v-layout column>
       <v-btn-toggle class="ma-5" rounded>
@@ -59,7 +88,8 @@
             <tr>
               <th class="text-left">{{ isTeacher ? "Name" : "GDPR" }}</th>
               <th class="text-left" v-if="isTeacher">{{ "Email" }}</th>
-              <th class="text-left">Last modified</th>
+              <th class="text-left">Modified on</th>
+              <th class="text-left">Modified by</th>
               <th class="text-left">Attendance</th>
               <th class="text-left">Bonus Points</th>
             </tr>
@@ -70,6 +100,9 @@
               <td v-if="isTeacher">{{ item.email }}</td>
               <td :title="item.updateOn">
                 {{ getRelativeTime(item.updateOn) }}
+              </td>
+              <td>
+                {{ item.updateBy }}
               </td>
               <td>
                 <v-checkbox
@@ -109,7 +142,7 @@
     >
       <GenerateInvolvementCodeDialog
         class="pa-8"
-        :attendanceCollectionId="attendanceCollectionId"
+        :collectionId="collection.collectionId"
         @close="generateCodeDialog = false"
       />
     </v-dialog>
@@ -122,7 +155,7 @@
     >
       <UseInvolvementCodeDialog
         :attendanceId="currentUserInvolvement?.involvementId"
-        :attendanceCollectionId="attendanceCollectionId"
+        :collectionId="collection.collectionId"
         @close="useCodeDialog = false"
         @save="onUseGeneratedCode"
       />
@@ -148,35 +181,33 @@
 <script lang="ts">
 import InvolvementService from "@/services/involvement.service";
 import Vue from "vue";
-import DotsMenuComponent from "@/components/shared-components/DotsMenuComponent.vue";
 import GenerateInvolvementCodeDialog from "@/components/document-components/dialogs/GenerateInvolvementCodeDialog.vue";
 import { Toastification } from "@/plugins/vue-toastification";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
 import UseInvolvementCodeDialog from "./UseInvolvementCodeDialog.vue";
-import {
-  UpdateInvolvementsParameters,
-} from "@/modules/commands-parameters";
+import { UpdateInvolvementsParameters } from "@/modules/commands-parameters";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import UploadInvolvementsDialog from "@/components/document-components/dialogs/UploadInvolvementsDialog.vue";
 import moment from "moment";
 import storeHelper from "@/store/store-helper";
-import { InvolvementViewModule } from "@/modules/view-modules";
+import { CollectionDto, InvolvementViewModule } from "@/modules/view-modules";
+import UpdateCollectionDialog from "@/components/document-components/dialogs/UpdateCollectionDialog.vue";
 
 export default Vue.extend({
-  name: "AddAttendanceDialog",
+  name: "UpdateInvolvementsDialog",
   components: {
-    DotsMenuComponent,
     GenerateInvolvementCodeDialog,
     UseInvolvementCodeDialog,
     MessageComponent,
     UploadInvolvementsDialog,
+    UpdateCollectionDialog,
   },
   props: {
-    /** The id of the selected attendance collection */
-    attendanceCollectionId: Number,
-    /** The date of the selected attendance collection */
-    attendanceCollectionDate: String,
+    collection: {
+      type: Object as () => CollectionDto,
+      required: true,
+    },
   },
   data: function () {
     return {
@@ -185,6 +216,8 @@ export default Vue.extend({
       involvements: [] as InvolvementViewModule[],
       involvementsCopy: [] as InvolvementViewModule[],
       useCodeDialog: false,
+      updateDialogOpen: false,
+      dialogTitle: "",
     };
   },
   computed: {
@@ -211,6 +244,10 @@ export default Vue.extend({
   created: async function (): Promise<void> {
     //get all the involvements
     this.onReloadAttendances();
+    this.dialogTitle =
+      this.collection.title != "" && this.collection.title != null
+        ? `${this.collection.title} - ${this.collection.activityTime}`
+        : this.collection.activityTime;
   },
   methods: {
     onDeleteCollection: async function (): Promise<void> {
@@ -220,7 +257,7 @@ export default Vue.extend({
         )
       ) {
         const result = await storeHelper.documentStore.deleteCollection(
-          this.attendanceCollectionId
+          this.collection.collectionId
         );
 
         if (result) {
@@ -248,7 +285,7 @@ export default Vue.extend({
       }
 
       this.involvements = await InvolvementService.getInvolvements(
-        this.attendanceCollectionId,
+        this.collection.collectionId,
         "",
         !this.isTeacher,
         false,
@@ -338,6 +375,16 @@ export default Vue.extend({
         }
       });
       this.uploadInvolvementsDialog = false;
+    },
+    onCollectionChanged: function (
+      newTitle: string,
+      newDateTime: string
+    ): void {
+      this.updateDialogOpen = false;
+      this.dialogTitle =
+        newTitle != "" && newTitle != null
+          ? `${newTitle} - ${newDateTime}`
+          : newDateTime;
     },
   },
 });

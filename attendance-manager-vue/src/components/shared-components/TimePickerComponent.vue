@@ -36,8 +36,17 @@ export default Vue.extend({
   name: "TimePickerComponent",
   data: function () {
     return {
-      timeSelected: null,
+      timeSelected: '',
     };
+  },
+  props:{
+    time: {
+      type: String,
+      default: ''
+    }
+  },
+  created: function(): void{
+    this.timeSelected = this.time;
   },
   methods: {
     onSubmit: function (): void {

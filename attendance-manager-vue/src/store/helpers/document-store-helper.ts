@@ -1,6 +1,6 @@
 import { Store } from "vuex";
 import { namespace as documentNamespace } from "../modules/document/index";
-import { InsertCollaboratorParameters, UpdateReportParameters, InsertCollectionParameters } from "@/modules/commands-parameters";
+import { InsertCollaboratorParameters, UpdateReportParameters, InsertCollectionParameters, UpdateCollectionParameters } from "@/modules/commands-parameters";
 import { ReportCardViewModule, ReportViewModule } from "@/modules/view-modules";
 
 export class DocumentStore {
@@ -51,6 +51,10 @@ export class DocumentStore {
     */
     public async addCollaborator(payload: InsertCollaboratorParameters): Promise<boolean> {
         return await this.store.dispatch(`${documentNamespace}/addCollaborator`, payload);
+    }
+
+    public async updateCollection(payload: UpdateCollectionParameters): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/updateCollection`, payload);
     }
 
     /**

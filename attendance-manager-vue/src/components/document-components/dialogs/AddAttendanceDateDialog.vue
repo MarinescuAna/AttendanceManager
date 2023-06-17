@@ -4,6 +4,15 @@
       <span class="text-h5">Add course activity</span>
     </v-card-title>
     <v-card-text>
+      <v-textarea
+        v-model="title"
+        maxlength="128"
+        label="Title"
+        prepend-icon="mdi-format-title"
+        color="black"
+        counter
+        rows="2"
+        />
       <v-layout class="pa-4" wrap>
         <DatePickerComponent @save="getDate" />
         <TimePickerComponent @save="getTime" />
@@ -50,6 +59,7 @@ export default Vue.extend({
       time: null,
       courseType: [] as string[],
       selectedCourseType: "",
+      title: "",
     };
   },
   computed: {
@@ -82,6 +92,7 @@ export default Vue.extend({
       let response = await storeHelper.documentStore.addCollection({
         activityDateTime: `${this.date} ${this.time}`,
         courseType: this.selectedCourseType,
+        title: this.title
       } as InsertCollectionParameters);
 
       if (response) {

@@ -54,7 +54,7 @@ export default Vue.extend({
   name: "UseInvolvementCodeDialog",
   props: {
     attendanceId: Number,
-    attendanceCollectionId: Number
+    collectionId: Number
   },
   data() {
     return {
@@ -71,7 +71,7 @@ export default Vue.extend({
         await InvolvementService.updateAttendanceByCode({
             code: this.code,
             attendanceId: this.attendanceId,
-            attendanceCollectionId: this.attendanceCollectionId
+            collectionId: this.collectionId
         });
 
       if (result) {

@@ -25,7 +25,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
     {
         public readonly IUnitOfWork _unitOfWork;
         public IReportSingleton _currentReport;
-        private IEnumerable<AttendanceCollection>? _collections;
+        private IEnumerable<Domain.Entities.Collection>? _collections;
         private readonly int _currentReportId;
         private CreateRewardCommand? _command;
         public CreateRewardCommandHandler(IUnitOfWork unit, IReportSingleton reportSingleton)
@@ -53,7 +53,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             }
 
             //get all the collections related to the document
-            _collections = _unitOfWork.AttendanceCollectionRepository.GetCollectionsByReportId(_currentReportId).ToImmutableList();
+            _collections = _unitOfWork.CollectionRepository.GetCollectionsByReportId(_currentReportId).ToImmutableList();
 
             if (_collections == null)
             {
@@ -91,7 +91,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
         private IEnumerable<Domain.Entities.Reward> GetAllAchievedBadges(IEnumerable<Domain.Entities.Badge> inactiveBadges)
         {
             var achievedRewards = new List<Domain.Entities.Reward>();
-            var currentCollection = _collections!.FirstOrDefault(ac => ac.AttendanceCollectionID == _command!.CurrentCollectionId);
+            var currentCollection = _collections!.FirstOrDefault(ac => ac.CollectionID == _command!.CurrentCollectionId);
 
             foreach (var badge in inactiveBadges)
             {
@@ -111,7 +111,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
 
             return achievedRewards;
         }
-        private bool IsTeacherBadgeAchieved(Domain.Entities.Badge badge, AttendanceCollection currentCollection)
+        private bool IsTeacherBadgeAchieved(Domain.Entities.Badge badge, Domain.Entities.Collection currentCollection)
         {
             var isEqualsOrGreaterHalfCollection = IsHalfOrMoreHeld(currentCollection!.CourseType) &&
                 GetMaxNumberByCourseType(currentCollection!.CourseType) != 0;
@@ -127,7 +127,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             return badge.BadgeType switch
             {
                 //achieve this when the first involvement code is generated
-                BadgeType.FirstCodeGenerated => FirstCodeGenerated(currentCollection.AttendanceCollectionID),
+                BadgeType.FirstCodeGenerated => FirstCodeGenerated(currentCollection.CollectionID),
                 //achieve this when the first involvement code is used
                 BadgeType.FirstCodeUsed => _command!.BadgeID != null && _command!.BadgeID == BadgeType.FirstCodeUsed,
                 //this badge is received when all the students come to the one activity
@@ -152,7 +152,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 _ => false
             };
         }
-        private bool IsStudentBadgeAchieved(Domain.Entities.Badge badge, AttendanceCollection currentCollection)
+        private bool IsStudentBadgeAchieved(Domain.Entities.Badge badge, Domain.Entities.Collection currentCollection)
         {
             var isEqualsOrGreaterHalfCollection = IsHalfOrMoreHeld(currentCollection!.CourseType) &&
                 GetMaxNumberByCourseType(currentCollection!.CourseType) != 0;
@@ -241,7 +241,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 _ => false
             };
         private bool FirstCodeGenerated(int collectionID)
-            => _unitOfWork.InvolvementCodeRepository.ListAll().Count(c => c.AttendanceCollectionId == collectionID) == 1;
+            => _unitOfWork.InvolvementCodeRepository.ListAll().Count(c => c.CollectionId == collectionID) == 1;
         private int GetBonusPointsAchievedByEmail(CourseType type)
             => _collections!
                 .Where(c => c.CourseType.Equals(type))

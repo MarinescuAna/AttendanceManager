@@ -30,6 +30,7 @@
     {
         public required int CollectionId { get; init; }
         public required string ActivityTime { get; init; }
+        public string? Title { get; init; }
         public required string CourseType { get; init; }
     }
     public sealed class MembersDto

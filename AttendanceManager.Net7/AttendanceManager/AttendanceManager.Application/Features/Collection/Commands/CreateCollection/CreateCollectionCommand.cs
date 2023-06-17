@@ -12,6 +12,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
     {
         public required string ActivityDateTime { get; init; }
         public required string CourseType { get; init; }
+        public string? Title { get; init; }
         public string? Username { get; set; }
     }
 
@@ -34,6 +35,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
         {
             var currentReportId = _currentReport.CurrentReportInfo.ReportId;
 
+            //TODO check date, type
             if (!DateTime.TryParseExact(request.ActivityDateTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedActivityTime))
             {
                 throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams2_Error);
@@ -44,15 +46,16 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams3_Error);
             }
 
-            var attendanceCollection = new Domain.Entities.AttendanceCollection
+            var collection = new Domain.Entities.Collection
             {
                 DocumentID = currentReportId,
                 HeldOn = parsedActivityTime,
+                Title = request.Title,
                 CourseType = courseType,
                 Order = _currentReport.LastCollectionOrder[courseType] + 1
             };
 
-            _unitOfWork.AttendanceCollectionRepository.AddAsync(attendanceCollection);
+            _unitOfWork.CollectionRepository.AddAsync(collection);
 
             if (!await _unitOfWork.CommitAsync())
             {
@@ -60,7 +63,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             }
 
             //update the singleton
-            _currentReport.ReportCollectionTypes.Add(attendanceCollection.AttendanceCollectionID, attendanceCollection.CourseType);
+            _currentReport.ReportCollectionTypes.Add(collection.CollectionID, collection.CourseType);
             _currentReport.LastCollectionOrder[courseType]++;
 
             // get all the students according to the document data
@@ -72,7 +75,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 _unitOfWork.AttendanceRepository.AddAsync(new Domain.Entities.Attendance
                 {
                     UpdatedOn = DateTime.Now,
-                    AttendanceCollectionID = attendanceCollection.AttendanceCollectionID,
+                    CollectionID = collection.CollectionID,
                     BonusPoints = 0,
                     IsPresent = false,
                     UserID = student.Key,
@@ -85,19 +88,19 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             }
 
             //send notifications to each user 
-            var attendances = attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) / 2 ||
-                  attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) ?
-                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.AttendanceCollection!.DocumentID == _currentReport.CurrentReportInfo.ReportId)
+            var attendances = collection.Order == GetMaxNumberByCourseType(collection.CourseType) / 2 ||
+                  collection.Order == GetMaxNumberByCourseType(collection.CourseType) ?
+                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.DocumentID == _currentReport.CurrentReportInfo.ReportId)
                         .Where(a => a.IsPresent) : null;
 
             foreach (var user in students)
             {
                 //is the half of the activity
-                if (attendances != null && attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType) / 2)
+                if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.CourseType) / 2)
                 {
-                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.AttendanceCollection!.CourseType == attendanceCollection.CourseType);
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.Collection!.CourseType == collection.CourseType);
                     //user don't have enough attendances
-                    if (noAttendancesStudent < attendanceCollection.Order)
+                    if (noAttendancesStudent < collection.Order)
                     {
                         _unitOfWork.NotificationRepository.AddAsync(new()
                         {
@@ -106,17 +109,17 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                             CreatedOn = DateTime.Now,
                             IsRead = false,
                             Message = string.Format(NotificationMessages.HalfSemesterNoAttendancesNotification,
-                                _currentReport.CurrentReportInfo.Title, attendanceCollection.CourseType.ToString(),
-                                GetMaxNumberByCourseType(attendanceCollection.CourseType) - noAttendancesStudent, noAttendancesStudent)
+                                _currentReport.CurrentReportInfo.Title, collection.CourseType.ToString(),
+                                GetMaxNumberByCourseType(collection.CourseType) - noAttendancesStudent, noAttendancesStudent)
                         });
 
                     }
                 }
-                else if (attendances != null && attendanceCollection.Order == GetMaxNumberByCourseType(attendanceCollection.CourseType))
+                else if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.CourseType))
                 {
-                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.AttendanceCollection!.CourseType == attendanceCollection.CourseType);
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.Collection!.CourseType == collection.CourseType);
                     //check if this is the last collection and the student don't have enough attendances 
-                    if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(attendanceCollection.CourseType))
+                    if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(collection.CourseType))
                     {
                         _unitOfWork.NotificationRepository.AddAsync(new()
                         {
@@ -125,7 +128,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                             CreatedOn = DateTime.Now,
                             IsRead = false,
                             Message = string.Format(NotificationMessages.LastCollectionNoAttendancesNotification,
-                                _currentReport.CurrentReportInfo.Title, attendanceCollection.CourseType.ToString(), noAttendancesStudent)
+                                _currentReport.CurrentReportInfo.Title, collection.CourseType.ToString(), noAttendancesStudent)
                         });
                     }
                 }
@@ -149,7 +152,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrong_CreateReportNotificationInsert_Error);
             }
 
-            return attendanceCollection.AttendanceCollectionID;
+            return collection.CollectionID;
         }
         private int GetMaxNumberByCourseType(CourseType type)
             => type switch
