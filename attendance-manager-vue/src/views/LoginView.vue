@@ -1,8 +1,14 @@
 
 <template>
   <v-container>
-    <v-row justify="center">
-      <v-card :width="width" class="orange lighten-3">
+    <v-layout align-center column>
+      <v-progress-linear
+        v-if="showLoading"
+        :style="{ width: width }"
+        indeterminate
+        color="black"
+      ></v-progress-linear>
+      <v-card :width="width" class="orange_background custom-no-radius">
         <v-card-title class="pa-7">
           <h2>Sign in</h2>
         </v-card-title>
@@ -20,6 +26,7 @@
                   prepend-icon="mdi-email"
                   :error-messages="errors"
                   :class="padding"
+                  color="black"
                   required
                 />
               </validation-provider>
@@ -37,44 +44,43 @@
                   @click:append="showPassword = !showPassword"
                   :error-messages="errors"
                   required
+                  color="black"
                   :class="padding"
                 />
               </validation-provider>
               <v-row justify="center" class="pa-8">
-                <v-btn
-                  :width="width"
-                  @click="doLogin"
-                  :disabled="invalid"
-                  large
+                <v-btn :width="width" class="dark_button" dark @click="doLogin" :disabled="invalid" large
                   >Sign in</v-btn
                 >
               </v-row>
             </v-form>
           </validation-observer>
         </v-card-text>
-      </v-card></v-row
+      </v-card></v-layout
     >
   </v-container>
 </template>
-
+<style scoped>
+.custom-no-radius {
+  border-radius: 0;
+}
+</style>
 <script lang="ts">
 import Vue from "vue";
 import AuthService from "@/services/auth.service";
 import { EventBus } from "@/main";
 import { EVENT_BUS_ISLOGGED } from "@/shared/constants";
-import {rules} from "@/plugins/vee-validate";
+import { rules } from "@/plugins/vee-validate";
 
 export default Vue.extend({
   name: "LoginView",
   data() {
     return {
       rules,
-      // Boolean for hidding or displaying the password
       showPassword: false,
-      // Password
       password: "",
-      // Email
       email: "",
+      showLoading: false,
     };
   },
   computed: {
@@ -84,18 +90,23 @@ export default Vue.extend({
     width(): string {
       switch (this.$vuetify.breakpoint.name) {
         case "sm":
-        case "md": return "75%";
-        case "xs": return "100%";
-        default: return "50%";
+        case "md":
+          return "75%";
+        case "xs":
+          return "100%";
+        default:
+          return "50%";
       }
     },
     /**
      * Get the padding value according to the device type
      */
-     padding(): string {
+    padding(): string {
       switch (this.$vuetify.breakpoint.name) {
-        case "xs": return "pa-0";
-        default: return "pa-6";
+        case "xs":
+          return "pa-0";
+        default:
+          return "pa-6";
       }
     },
   },
@@ -104,6 +115,7 @@ export default Vue.extend({
      * Use this method for login: if the login is done, update the navbar and redirect to home page
      */
     async doLogin() {
+      this.showLoading = true;
       const response = await AuthService.login({
         email: this.email,
         password: this.password,
@@ -111,8 +123,9 @@ export default Vue.extend({
 
       if (response) {
         EventBus.$emit(EVENT_BUS_ISLOGGED);
-        this.$router.push({name:'home'});
+        this.$router.push({ name: "home" });
       }
+      this.showLoading = false;
     },
   },
 });

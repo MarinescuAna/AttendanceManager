@@ -11,7 +11,7 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        orange_background:colors.orange.lighten2,
+        orange_background:colors.orange.lighten3,
         blue_grey:colors.blueGrey.lighten4, 
         dark_button: '#000000',
         light_button: colors.orange.lighten3
