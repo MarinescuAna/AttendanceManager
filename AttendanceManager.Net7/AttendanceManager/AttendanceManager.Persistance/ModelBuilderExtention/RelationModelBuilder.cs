@@ -14,12 +14,6 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                 .WithMany(u => u.Attendances)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // remove the onCascade behavior for DocumentMember table 
-            modelBuilder.Entity<DocumentMember>()
-                .HasOne(dm => dm.User)
-                .WithMany(u => u.DocumentMembers)
-                .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

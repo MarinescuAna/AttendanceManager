@@ -28,7 +28,7 @@ namespace AttendanceManager.Persistance.Repositories
         public async Task<List<Document>> GetUserDocumentsByExpressionAsync(Expression<Func<Document, bool>> expression)
             => await dbContext.Documents
             .Include(d => d.Course!.UserSpecialization!.Specialization)
-            .Include(m=>m.DocumentMembers)
+            .Include(m=>m.Members)
             .AsNoTracking().Where(expression).ToListAsync();
     }
 }

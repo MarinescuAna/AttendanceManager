@@ -23,7 +23,7 @@ namespace AttendanceManager.Persistance.Repositories
            => await dbContext.Courses
                 .Include(s => s.UserSpecialization)
                 .Include(s => s.Documents)
-                    .ThenInclude(s=>s.DocumentMembers)
+                    .ThenInclude(s=>s.Members)
                         .ThenInclude(m=>m.User)
                 .Include(s => s.Documents)
                     .ThenInclude(s => s.Collections)

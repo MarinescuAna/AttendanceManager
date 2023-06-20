@@ -54,9 +54,9 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             // REMEMBER: the teacher that create the document can be access form course, so there is no reason to store it in the DocumentMember table
 
             // insert all the sudents into the document
-            await _unitOfWork.DocumentMemberRepository.AddRangeAsync(request.StudentIds.Select(s => new Domain.Entities.DocumentMember
+            await _unitOfWork.MemberRepository.AddRangeAsync(request.StudentIds.Select(s => new Domain.Entities.Member
             {
-                DocumentMemberID = Guid.NewGuid(),
+                MemberID = Guid.NewGuid(),
                 DocumentID = newReport.DocumentId,
                 UserID = s,
             }).ToList());

@@ -37,7 +37,7 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<Collection, Features.Document.Queries.GetReportById.CollectionDto>()
                 .ForMember(a => a.CollectionId, act => act.MapFrom(ac => ac.CollectionID))
                 .ForMember(a => a.ActivityTime, act => act.MapFrom(ac => ac.HeldOn.ToString(Constants.ShortDateFormat)));
-            CreateMap<DocumentMember, Features.Document.Queries.GetReportById.MembersDto>()
+            CreateMap<Member, Features.Document.Queries.GetReportById.MembersDto>()
                 .ForMember(u => u.Name, act => act.MapFrom(d => d.User!.FullName))
                 .ForMember(u => u.Email, act => act.MapFrom(d => d.User!.Email));
 

@@ -23,7 +23,7 @@ namespace AttendanceManager.Domain.Entities
         public bool IsArchived { get; set; } = false;
         public virtual Course? Course { get; set; }
         public ICollection<Collection>? Collections { get; set; }
-        public ICollection<DocumentMember>? DocumentMembers { get; set; }
+        public ICollection<Member>? Members { get; set; }
 
     }
 }

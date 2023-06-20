@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceManager.Persistance.Repositories
 {
-    public class DocumentMemberRepository : GenericRepository<DocumentMember>, IDocumentMemberRepository
+    public class MemberRepository : GenericRepository<Member>, IMemberRepository
     {
-        public DocumentMemberRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext, loggingService)
+        public MemberRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext, loggingService)
         {
         }
 
@@ -17,34 +17,34 @@ namespace AttendanceManager.Persistance.Repositories
         /// all the members of the document are returned
         /// Includes: User object and User Attendances object list
         /// </summary>
-        /// <param name="documentId">the id of the document</param>
+        /// <param name="reportId">the id of the document</param>
         /// <returns>List of document member class</returns>
-        public async Task<List<DocumentMember>> GetDocumentMembersByDocumentIdAndRoleAsync(int documentId, Role? role)
+        public async Task<List<Member>> GetMembersByReportIdAndRoleAsync(int reportId, Role? role)
             => role == null ?
-            await dbContext.DocumentMembers
+            await dbContext.Members
             .Include(u => u.User)
             .Include(dm => dm.User!.Attendances)
             .AsNoTracking()
-            .Where(dm => dm.DocumentID == documentId)
+            .Where(dm => dm.DocumentID == reportId)
             .ToListAsync() :
-        await dbContext.DocumentMembers
+        await dbContext.Members
             .Include(u => u.User)
             .Include(dm => dm.User!.Attendances)
             .AsNoTracking()
-            .Where(dm => dm.User!.Role == role && dm.DocumentID == documentId)
+            .Where(dm => dm.User!.Role == role && dm.DocumentID == reportId)
             .ToListAsync();
 
-        public void DeleteMembersByDocumentId(int documentId)
+        public void DeleteMembersByReportId(int reportId)
         {
-            var members = dbContext.DocumentMembers.AsNoTracking().Where(dm => dm.DocumentID == documentId);
+            var members = dbContext.Members.AsNoTracking().Where(dm => dm.DocumentID == reportId);
 
             dbContext.RemoveRange(members);
         }
-        public async Task AddRangeAsync(List<DocumentMember> entity)
+        public async Task AddRangeAsync(List<Member> entity)
         {
             try
             {
-                await dbContext.DocumentMembers.AddRangeAsync(entity);
+                await dbContext.Members.AddRangeAsync(entity);
             }
             catch (Exception ex)
             {

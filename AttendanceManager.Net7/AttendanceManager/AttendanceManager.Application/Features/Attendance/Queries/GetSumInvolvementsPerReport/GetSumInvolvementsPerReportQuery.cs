@@ -26,7 +26,7 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolv
 
         public async Task<List<InvolvementsSumVm>> Handle(GetSumInvolvementsPerReportQuery request, CancellationToken cancellationToken)
         {
-            var students = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(_currentReport.CurrentReportInfo.ReportId, Role.Student);
+            var students = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(_currentReport.CurrentReportInfo.ReportId, Role.Student);
             var involvements = new List<InvolvementsSumVm>();
 
             // the user contains the attendances, but those are also from other document, so we will get only the attendances related to the collections from dictionary

@@ -92,7 +92,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
             return result;
         }
         private int GetNoUsersByRole(Domain.Entities.Document report, Role role)
-            => report.DocumentMembers!.Count(d => d.User!.Role.Equals(role));
+            => report.Members!.Count(d => d.User!.Role.Equals(role));
         private float[] GetPercentageAttendances(int[] countedAttendances, Domain.Entities.Document report)
         {
             var result = new float[4];

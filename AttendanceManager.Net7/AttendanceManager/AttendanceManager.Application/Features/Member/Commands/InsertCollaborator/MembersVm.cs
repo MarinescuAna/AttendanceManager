@@ -1,4 +1,4 @@
-﻿namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaborator
+﻿namespace AttendanceManager.Application.Features.Member.Commands.InsertCollaborator
 {
     public sealed class MembersVm
     {

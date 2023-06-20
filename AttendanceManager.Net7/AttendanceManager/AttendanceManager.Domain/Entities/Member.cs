@@ -6,10 +6,10 @@ namespace AttendanceManager.Domain.Entities
     /// <summary>
     /// No need to inherit EntityBase  
     /// </summary>
-    public class DocumentMember
+    public class Member
     {
         [Key]
-        public required Guid DocumentMemberID { get; set; }
+        public required Guid MemberID { get; set; }
         [ForeignKey("User")]
         [MaxLength(254)]
         public required string UserID { get; set; }

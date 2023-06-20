@@ -13,7 +13,7 @@ namespace AttendanceManager.Infrastructure.Singleton
         public Dictionary<int, CourseType> ReportCollectionTypes { get; set; } = new Dictionary<int, CourseType>();
         public ReportDto CurrentReportInfo { get; set; }
         public Dictionary<string, Role> Members { get; set; } = new Dictionary<string, Role>();
-        public void InitializeReport(Document currentReport, List<DocumentMember> members)
+        public void InitializeReport(Document currentReport, List<Member> members)
         {
             if (currentReport == null)
             {

@@ -3,8 +3,7 @@ using AttendanceManager.Application.Features.Document.Commands.DeleteDocumentByI
 using AttendanceManager.Application.Features.Document.Commands.UpdateDocumentById;
 using AttendanceManager.Application.Features.Document.Queries.GetCreatedDocumentsByEmail;
 using AttendanceManager.Application.Features.Document.Queries.GetReportById;
-using AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaborator;
-using AttendanceManager.Domain.Common;
+using AttendanceManager.Application.Features.Member.Commands.InsertCollaborator;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

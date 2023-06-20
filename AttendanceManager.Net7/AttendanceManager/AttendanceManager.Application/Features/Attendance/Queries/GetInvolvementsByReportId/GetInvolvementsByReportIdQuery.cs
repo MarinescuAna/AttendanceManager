@@ -89,7 +89,7 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetInvolveme
             }
 
             //get all the students enrolled into the current report
-            var reportStudents = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(_currentReport.CurrentReportInfo.ReportId, Role.Student);
+            var reportStudents = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(_currentReport.CurrentReportInfo.ReportId, Role.Student);
 
             foreach (var student in reportStudents)
             {

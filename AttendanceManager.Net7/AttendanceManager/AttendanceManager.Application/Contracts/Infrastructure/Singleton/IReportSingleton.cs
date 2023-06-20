@@ -10,7 +10,7 @@ namespace AttendanceManager.Application.Contracts.Infrastructure.Singleton
         Dictionary<CourseType, int> LastCollectionOrder { get; set; }
         Dictionary<int, CourseType> ReportCollectionTypes { get; set; }
         Dictionary<string, Role> Members { get; set; }
-        void InitializeReport(Document currentReport, List<DocumentMember> members);
+        void InitializeReport(Document currentReport, List<Member> members);
         void UpdateReport(Document newReport);
     }
 }

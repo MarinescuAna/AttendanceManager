@@ -34,9 +34,9 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
                 ?? throw new NotFoundException("The document cannot be found!");
 
             //get the current document
-            var test = _unitOfWork.DocumentMemberRepository.ListAll().Where(d=>d.DocumentID==request.Id);
-            var documentMembers = await _unitOfWork.DocumentMemberRepository.GetDocumentMembersByDocumentIdAndRoleAsync(request.Id, null);
-            _currentReportService.InitializeReport(currentDocument!,documentMembers);
+            var test = _unitOfWork.MemberRepository.ListAll().Where(d=>d.DocumentID==request.Id);
+            var members = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(request.Id, null);
+            _currentReportService.InitializeReport(currentDocument!,members);
 
             return new ReportVm
             {
@@ -61,10 +61,10 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
                 Collections = _mapper.Map<CollectionDto[]>(currentDocument.Collections!.OrderBy(d => d.HeldOn)),
                 Members = _mapper.Map<MembersDto[]>(request.Role == Role.Teacher ?
-                    documentMembers.Where(u => u.User!.Role == Role.Teacher) : documentMembers.Where(u => u.User!.Role == Role.Student)),
+                    members.Where(u => u.User!.Role == Role.Teacher) : members.Where(u => u.User!.Role == Role.Student)),
                 AttendanceImportance = currentDocument.AttendanceImportance,
                 BonusPointsImportance = currentDocument.BonusPointsImportance,
-                NumberOfStudents = documentMembers.Count(u => u.User!.Role == Role.Student),
+                NumberOfStudents = members.Count(u => u.User!.Role == Role.Student),
                 IsCreator = request.Role == Role.Student ? false : currentDocument.Course!.UserSpecialization!.UserID.Equals(request.UserId)
             };
         }

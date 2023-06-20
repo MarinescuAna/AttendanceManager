@@ -4,7 +4,7 @@ using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertCollaborator
+namespace AttendanceManager.Application.Features.Member.Commands.InsertCollaborator
 {
     public sealed class InsertCollaboratorCommand : IRequest<MembersVm>
     {
@@ -46,15 +46,15 @@ namespace AttendanceManager.Application.Features.DocumentMember.Commands.InsertC
             }
 
             //check if the user is already memeber
-            if (await _unitOfWork.DocumentMemberRepository.GetAsync(m => m.UserID.Equals(request.Email) && m.DocumentID == _currentReport.CurrentReportInfo.ReportId) != null)
+            if (await _unitOfWork.MemberRepository.GetAsync(m => m.UserID.Equals(request.Email) && m.DocumentID == _currentReport.CurrentReportInfo.ReportId) != null)
             {
                 throw new AlreadyExistsException(ErrorMessages.AlreadyExists_CollaboratorInsert_Error);
             }
 
             // add the new teacher as collaborator
-            _unitOfWork.DocumentMemberRepository.AddAsync(new Domain.Entities.DocumentMember
+            _unitOfWork.MemberRepository.AddAsync(new Domain.Entities.Member
             {
-                DocumentMemberID = Guid.NewGuid(),
+                MemberID = Guid.NewGuid(),
                 DocumentID = _currentReport.CurrentReportInfo.ReportId,
                 UserID = request.Email
             });

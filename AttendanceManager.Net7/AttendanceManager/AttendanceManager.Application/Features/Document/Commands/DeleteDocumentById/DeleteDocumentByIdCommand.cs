@@ -42,7 +42,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumen
             }
 
             //delete document members
-            _unitOfWork.DocumentMemberRepository.DeleteMembersByDocumentId(reportId);
+            _unitOfWork.MemberRepository.DeleteMembersByReportId(reportId);
 
             //delete collections and attedances
             _unitOfWork.CollectionRepository.DeleteCollectionsByReportId(reportId);
