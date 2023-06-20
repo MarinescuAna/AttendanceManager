@@ -42,8 +42,8 @@ namespace AttendanceManager.Application.Features.Collection.Commands.DeleteColle
 
             //update order
             var collections = _unitOfWork.CollectionRepository.ListAll()
-                .Where(c => c.CourseType.Equals(currentCollection.CourseType))
-                .Where(c => c.DocumentID == _currentReport.CurrentReportInfo.ReportId)
+                .Where(c => c.ActivityType.Equals(currentCollection.ActivityType))
+                .Where(c => c.ReportID == _currentReport.CurrentReportInfo.ReportId)
                 .Where(c => c.Order > currentCollection.Order).ToList();
 
             //decrement all the collections and update the database
@@ -59,7 +59,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.DeleteColle
             }
 
             //update currentReport
-            _currentReport.LastCollectionOrder[currentCollection.CourseType]--;
+            _currentReport.LastCollectionOrder[currentCollection.ActivityType]--;
             return true;
         }
     }

@@ -45,7 +45,7 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<Course, Features.Course.Queries.GetCoursesQuery.CoursesVm>()
                 .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.UserSpecialization!.Specialization!.Name))
                 .ForMember(d => d.SpecializationId, act => act.MapFrom(d => d.UserSpecialization!.SpecializationID))
-                .ForMember(d => d.ReportsLinked, act => act.MapFrom(d => d.Documents!.Count()));
+                .ForMember(d => d.ReportsLinked, act => act.MapFrom(d => d.Reports!.Count()));
 
             //used to get users by year and specialization to create a new report
             CreateMap<UserSpecialization, Features.User.Queries.GetStudentsForCourses.StudentVm>()

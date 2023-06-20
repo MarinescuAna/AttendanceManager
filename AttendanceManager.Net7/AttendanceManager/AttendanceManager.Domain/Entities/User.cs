@@ -13,7 +13,7 @@ namespace AttendanceManager.Domain.Entities
         public required Role Role { get; set; }
         [MaxLength(64)]
         public string? Password { get; set; }
-        public int EnrollmentYear { get; set; } = 0;
+        public int Year { get; set; } = 0;
         // This code represents the unique code that will appear instead of names for students 
         [MaxLength(8)]
         public required string Code { get; set; }

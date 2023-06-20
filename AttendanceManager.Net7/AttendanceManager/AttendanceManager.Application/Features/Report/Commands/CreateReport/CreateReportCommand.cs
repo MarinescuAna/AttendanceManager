@@ -3,9 +3,9 @@ using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Document.Commands.CreateDocument
+namespace AttendanceManager.Application.Features.Report.Commands.CreateReport
 {
-    public sealed class CreateDocumentCommand : IRequest<InsertDocumentVm>
+    public sealed class CreateReportCommand : IRequest<ReportVm>
     {
         public required string Title { get; init; }
         public required int EnrollmentYear { get; init; }
@@ -21,17 +21,17 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
 
     }
 
-    public sealed class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, InsertDocumentVm>
+    public sealed class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, ReportVm>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateDocumentCommandHandler(IUnitOfWork unit)
+        public CreateReportCommandHandler(IUnitOfWork unit)
         {
             _unitOfWork = unit;
         }
 
-        public async Task<InsertDocumentVm> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<ReportVm> Handle(CreateReportCommand request, CancellationToken cancellationToken)
         {
-            var newReport = new Domain.Entities.Document
+            var newReport = new Domain.Entities.Report
             {
                 CourseID = request.CourseId,
                 CreatedOn = DateTime.Now,
@@ -44,20 +44,20 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
                 AttendanceImportance = request.AttendanceImportance,
                 BonusPointsImportance = request.BonusPointsImportance
             };
-            // Save document first to can get the id
-            _unitOfWork.DocumentRepository.AddAsync(newReport);
+            // Save report first to can get the id
+            _unitOfWork.ReportRepository.AddAsync(newReport);
             if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
-            // REMEMBER: the teacher that create the document can be access form course, so there is no reason to store it in the DocumentMember table
+            // REMEMBER: the teacher that create the report can be access form course, so there is no reason to store it in the Member table
 
-            // insert all the sudents into the document
+            // insert all the sudents into the report
             await _unitOfWork.MemberRepository.AddRangeAsync(request.StudentIds.Select(s => new Domain.Entities.Member
             {
                 MemberID = Guid.NewGuid(),
-                DocumentID = newReport.DocumentId,
+                ReportID = newReport.ReportID,
                 UserID = s,
             }).ToList());
 
@@ -87,7 +87,7 @@ namespace AttendanceManager.Application.Features.Document.Commands.CreateDocumen
             return new()
             {
                 UpdatedOn = newReport.UpdatedOn.ToString(Constants.ShortDateFormat),
-                DocumentId = newReport.DocumentId
+                DocumentId = newReport.ReportID
             };
         }
     }

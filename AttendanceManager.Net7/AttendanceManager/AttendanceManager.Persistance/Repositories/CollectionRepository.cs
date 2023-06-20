@@ -21,10 +21,10 @@ namespace AttendanceManager.Persistance.Repositories
             => dbContext.Collections
                 .AsNoTracking()
                 .Include(ac => ac.Attendances)
-                .Where(ac => ac.DocumentID == reportId);
+                .Where(ac => ac.ReportID == reportId);
         public void DeleteCollectionsByReportId(int reportId)
         {
-            var collections = dbContext.Collections.Where(c => c.DocumentID == reportId).AsNoTracking();
+            var collections = dbContext.Collections.Where(c => c.ReportID == reportId).AsNoTracking();
 
             dbContext.Collections.RemoveRange(collections);
         }

@@ -79,8 +79,8 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetInvolveme
             {
                 //get all the involvements that have the report id equal with the current one
                 involvements = request.OnlyPresent ?
-                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.DocumentID== _currentReport.CurrentReportInfo.ReportId && a.IsPresent).AsQueryable() :
-                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.DocumentID == _currentReport.CurrentReportInfo.ReportId).AsQueryable();
+                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.ReportID== _currentReport.CurrentReportInfo.ReportId && a.IsPresent).AsQueryable() :
+                    _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.ReportID == _currentReport.CurrentReportInfo.ReportId).AsQueryable();
             }
 
             if (involvements.Count() == 0)

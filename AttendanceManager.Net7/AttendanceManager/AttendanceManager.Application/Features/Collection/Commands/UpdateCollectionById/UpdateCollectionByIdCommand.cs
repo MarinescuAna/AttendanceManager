@@ -41,12 +41,12 @@ namespace AttendanceManager.Application.Features.Collection.Commands.UpdateColle
                 throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams2_Error);
             }
 
-            if (!Enum.TryParse(request.CourseType, out CourseType courseType))
+            if (!Enum.TryParse(request.CourseType, out ActivityType courseType))
             {
                 throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams3_Error);
             }
 
-            oldCollection.CourseType = courseType;
+            oldCollection.ActivityType = courseType;
             oldCollection.HeldOn = parsedActivityTime;
             oldCollection.Title = request.Title;
 
@@ -55,7 +55,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.UpdateColle
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
-            if (!oldCollection.CourseType.Equals(courseType))
+            if (!oldCollection.ActivityType.Equals(courseType))
             {
                 _currentReport.ReportCollectionTypes[request.CollectionId] = courseType;
             }

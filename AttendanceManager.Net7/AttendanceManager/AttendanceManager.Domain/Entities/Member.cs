@@ -13,8 +13,8 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("User")]
         [MaxLength(254)]
         public required string UserID { get; set; }
-        [ForeignKey("Document")]
-        public required int DocumentID { get; set; }
+        [ForeignKey("Report")]
+        public required int ReportID { get; set; }
         public virtual User? User { get; set; }
     }
 }

@@ -4,13 +4,13 @@ using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumentById
+namespace AttendanceManager.Application.Features.Report.Commands.DeleteDocumentById
 {
-    public sealed class DeleteDocumentByIdCommand : IRequest<bool>
+    public sealed class DeleteReportByIdCommand : IRequest<bool>
     {
         public int? ReportId { get; init; }
     }
-    public sealed class DeleteDocumentByIdCommandHandler : IRequestHandler<DeleteDocumentByIdCommand, bool>
+    public sealed class DeleteDocumentByIdCommandHandler : IRequestHandler<DeleteReportByIdCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReportSingleton _currentReport;
@@ -19,29 +19,29 @@ namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumen
             _unitOfWork = unit;
             _currentReport = reportSingleton;
 
-            //don't check if the current document dosen't exist, because is ok to not
+            //don't check if the current report dosen't exist, because is ok to not
         }
 
-        public async Task<bool> Handle(DeleteDocumentByIdCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteReportByIdCommand request, CancellationToken cancellationToken)
         {
             var reportId = (int)(request.ReportId == null ? _currentReport.CurrentReportInfo.ReportId : request.ReportId);
 
-            // get the document
-            var document = await _unitOfWork.DocumentRepository.GetAsync(d => d.DocumentId == reportId);
+            // get the report
+            var report = await _unitOfWork.ReportRepository.GetAsync(d => d.ReportID == reportId);
 
-            if (document == null && request.ReportId != null)
+            if (report == null && request.ReportId != null)
             {
                 //this is deleted
                 return true;
             }
 
-            if (document == null && request.ReportId == null)
+            if (report == null && request.ReportId == null)
             {
-                //this is deleted from current document section
-                throw new NotFoundException("The document was not found, so it cannot be deleted.");
+                //this is deleted from current report section
+                throw new NotFoundException("The report was not found, so it cannot be deleted.");
             }
 
-            //delete document members
+            //delete members
             _unitOfWork.MemberRepository.DeleteMembersByReportId(reportId);
 
             //delete collections and attedances
@@ -51,8 +51,8 @@ namespace AttendanceManager.Application.Features.Document.Commands.DeleteDocumen
             _unitOfWork.RewardRepository.DeleteRewardsByReportId(reportId);
             _unitOfWork.BadgeRepository.DeleteCustomBadgesByReportId(reportId);
 
-            //delete document
-            _unitOfWork.DocumentRepository.Delete(document!);
+            //delete report
+            _unitOfWork.ReportRepository.Delete(report!);
 
             if (!await _unitOfWork.CommitAsync())
             {

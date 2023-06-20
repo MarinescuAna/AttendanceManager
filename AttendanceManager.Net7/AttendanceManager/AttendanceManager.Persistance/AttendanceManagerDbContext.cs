@@ -19,7 +19,7 @@ namespace AttendanceManager.Persistance
         public DbSet<Department> Departments { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Document> Documents { get; set; }
+        public DbSet<Report> Reports { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Collection> Collections { get; set; }

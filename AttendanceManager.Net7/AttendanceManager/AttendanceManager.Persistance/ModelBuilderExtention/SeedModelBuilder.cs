@@ -18,7 +18,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    Password = adminConfiguration!.Password,
                    Code = adminConfiguration!.Code,
                    CreatedOn = DateTime.Now,
-                   EnrollmentYear = DateTime.Now.Year,
+                   Year = DateTime.Now.Year,
                    UpdatedOn = DateTime.Now,
                    Role = Domain.Enums.Role.Admin,
                    FullName = adminConfiguration!.Fullname,

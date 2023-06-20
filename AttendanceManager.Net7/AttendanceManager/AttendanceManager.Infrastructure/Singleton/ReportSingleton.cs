@@ -8,12 +8,12 @@ namespace AttendanceManager.Infrastructure.Singleton
     public class ReportSingleton : IReportSingleton
     {
         // UPDATE this each time when you add a new collection into this report!!
-        public Dictionary<CourseType, int> LastCollectionOrder { get; set; } = new Dictionary<CourseType, int>();
+        public Dictionary<ActivityType, int> LastCollectionOrder { get; set; } = new Dictionary<ActivityType, int>();
         // UPDATE this each time when you add a new collection into this report!!
-        public Dictionary<int, CourseType> ReportCollectionTypes { get; set; } = new Dictionary<int, CourseType>();
+        public Dictionary<int, ActivityType> ReportCollectionTypes { get; set; } = new Dictionary<int, ActivityType>();
         public ReportDto CurrentReportInfo { get; set; }
         public Dictionary<string, Role> Members { get; set; } = new Dictionary<string, Role>();
-        public void InitializeReport(Document currentReport, List<Member> members)
+        public void InitializeReport(Report currentReport, List<Member> members)
         {
             if (currentReport == null)
             {
@@ -29,14 +29,14 @@ namespace AttendanceManager.Infrastructure.Singleton
 
             Members = members.ToDictionary(k => k.UserID, v => v.User!.Role);
 
-            LastCollectionOrder = new Dictionary<CourseType, int>();
-            foreach (var type in Enum.GetValues(typeof(CourseType)))
+            LastCollectionOrder = new Dictionary<ActivityType, int>();
+            foreach (var type in Enum.GetValues(typeof(ActivityType)))
             {
-                var collections = currentReport.Collections!.Where(ac => ac.CourseType.Equals(type));
-                LastCollectionOrder.Add((CourseType)type, collections.Count() == 0 ? 0 : collections.Max(ac => ac.Order));
+                var collections = currentReport.Collections!.Where(ac => ac.ActivityType.Equals(type));
+                LastCollectionOrder.Add((ActivityType)type, collections.Count() == 0 ? 0 : collections.Max(ac => ac.Order));
             }
 
-            ReportCollectionTypes = currentReport.Collections!.ToDictionary(ac => ac.CollectionID, ac => ac.CourseType);
+            ReportCollectionTypes = currentReport.Collections!.ToDictionary(ac => ac.CollectionID, ac => ac.ActivityType);
         }
 
         private void CleanReport()
@@ -47,7 +47,7 @@ namespace AttendanceManager.Infrastructure.Singleton
             ReportCollectionTypes.Clear();
         }
 
-        public void UpdateReport(Document newReport)
+        public void UpdateReport(Report newReport)
         {
             CurrentReportInfo.Title=newReport.Title;
             CurrentReportInfo.MaxNumberOfLectures = newReport.MaxNoLessons;

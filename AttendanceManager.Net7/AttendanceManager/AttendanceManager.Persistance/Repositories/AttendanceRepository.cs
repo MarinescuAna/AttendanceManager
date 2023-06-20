@@ -17,6 +17,6 @@ namespace AttendanceManager.Persistance.Repositories
             => await dbContext.Attendances.Include(a => a.Collection).AsNoTracking().FirstOrDefaultAsync(expression);
         public IEnumerable<Attendance> GetAttendancesByReportId(int id)
             => dbContext.Attendances.Include(a => a.Collection)
-                .AsNoTracking().Where(a => a.Collection!.DocumentID == id).AsEnumerable();
+                .AsNoTracking().Where(a => a.Collection!.ReportID == id).AsEnumerable();
     }
 }

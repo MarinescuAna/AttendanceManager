@@ -15,7 +15,7 @@ namespace AttendanceManager.Persistance.UOW
         private readonly IUserRepository? _userRepository;
         private readonly IUserSpecializationRepository? _userSpecializationRepository;
         private readonly IMemberRepository? _memberRepository;
-        private readonly IDocumentRepository? _documentRepository;
+        private readonly IReportRepository? _reportRepository;
         private readonly ICollectionRepository? _collectionRepository;
         private readonly IAttendanceRepository? _attendanceRepository;
         private readonly IInvolvementCodeRepository? _involvementCodeRepository;
@@ -55,9 +55,9 @@ namespace AttendanceManager.Persistance.UOW
         {
             get => _memberRepository ?? new MemberRepository(_dbContext,_loggingSerivce);
         }
-        public IDocumentRepository DocumentRepository
+        public IReportRepository ReportRepository
         {
-            get => _documentRepository ?? new DocumentRepository(_dbContext, _loggingSerivce);
+            get => _reportRepository ?? new ReportRepository(_dbContext, _loggingSerivce);
         }
         public ICourseRepository CourseRepository
         {

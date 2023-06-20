@@ -1,6 +1,6 @@
 ﻿namespace AttendanceManager.Domain.Enums
 {
-    public enum CourseType
+    public enum ActivityType
     {
         Lecture = 1,
         Laboratory = 2,

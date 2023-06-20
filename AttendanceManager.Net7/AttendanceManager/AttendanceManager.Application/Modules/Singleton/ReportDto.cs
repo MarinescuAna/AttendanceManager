@@ -18,9 +18,9 @@ namespace AttendanceManager.Application.Modules.Singleton
         public string CreatedBy { get; init; }
         public int NoOfStudents { get; init; }
 
-        public ReportDto(Document report, int noOfStudents)
+        public ReportDto(Report report, int noOfStudents)
         {
-            ReportId = report.DocumentId;
+            ReportId = report.ReportID;
             EnrollmentYear = report.EnrollmentYear;
             SpecializationId = report.Course!.UserSpecialization!.SpecializationID;
             Title= report.Title;

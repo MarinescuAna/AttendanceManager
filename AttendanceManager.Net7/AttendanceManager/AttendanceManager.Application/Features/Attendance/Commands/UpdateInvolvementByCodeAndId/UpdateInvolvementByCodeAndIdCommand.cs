@@ -35,7 +35,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
         public async Task<bool> Handle(UpdateInvolvementByCodeAndIdCommand request, CancellationToken cancellationToken)
         {
             // check if the code exists into the database
-            var code = await _unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.CollectionId == request.CollectionId)
+            var code = await _unitOfWork.InvolvementCodeRepository.GetAsync(c => c.Code.Equals(request.Code) && c.CollectionID == request.CollectionId)
                 ?? throw new NotFoundException("Code", request.Code);
 
             // check if the code is still valid

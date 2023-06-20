@@ -12,7 +12,7 @@ namespace AttendanceManager.Application.Contracts.Persistance.UnitOfWork
         IUserRepository UserRepository { get; }
         IUserSpecializationRepository UserSpecializationRepository { get; }
         IMemberRepository MemberRepository { get; }
-        IDocumentRepository DocumentRepository { get; }
+        IReportRepository ReportRepository { get; }
         IInvolvementCodeRepository InvolvementCodeRepository { get; }
         IRewardRepository RewardRepository { get; }
         IBadgeRepository BadgeRepository { get; }

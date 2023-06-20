@@ -39,7 +39,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
                     DepartmentId = department!.DepartmentID,
                     DepartmentName = department!.Name,
                     Email = userData.Email,
-                    Year = userData.EnrollmentYear,
+                    Year = userData.Year,
                     Fullname = userData.FullName,
                     Role = userData.Role.ToString(),
                     Updated = userData.UpdatedOn.ToString(Constants.DateFormat)

@@ -25,7 +25,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetStudentsForCour
 
         public async Task<List<StudentVm>> Handle(GetStudentsForCoursesQuery request, CancellationToken cancellationToken)
             => _mapper.Map<List<StudentVm>>(await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
-                us => us.User!.EnrollmentYear == request.EnrollmentYear &&
+                us => us.User!.Year == request.EnrollmentYear &&
                     us.SpecializationID == request.SpecializationId &&
                     us.User!.Role == Role.Student));
     }

@@ -46,7 +46,7 @@ namespace AttendanceManager.Application.Features.Member.Commands.InsertCollabora
             }
 
             //check if the user is already memeber
-            if (await _unitOfWork.MemberRepository.GetAsync(m => m.UserID.Equals(request.Email) && m.DocumentID == _currentReport.CurrentReportInfo.ReportId) != null)
+            if (await _unitOfWork.MemberRepository.GetAsync(m => m.UserID.Equals(request.Email) && m.ReportID == _currentReport.CurrentReportInfo.ReportId) != null)
             {
                 throw new AlreadyExistsException(ErrorMessages.AlreadyExists_CollaboratorInsert_Error);
             }
@@ -55,7 +55,7 @@ namespace AttendanceManager.Application.Features.Member.Commands.InsertCollabora
             _unitOfWork.MemberRepository.AddAsync(new Domain.Entities.Member
             {
                 MemberID = Guid.NewGuid(),
-                DocumentID = _currentReport.CurrentReportInfo.ReportId,
+                ReportID = _currentReport.CurrentReportInfo.ReportId,
                 UserID = request.Email
             });
 

@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AttendanceManager.Domain.Entities
 {
-    public class Document
+    public class Report
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DocumentId { get; set; }
+        public int ReportID { get; set; }
         [MaxLength(128)]
         public required string Title { get; set; }
         public required int EnrollmentYear { get; set; }

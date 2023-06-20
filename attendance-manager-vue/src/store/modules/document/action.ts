@@ -49,7 +49,7 @@ export const documentActions = {
     async updateDocument({ commit }, payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${DOCUMENT_CONTROLLER}/update_document`, payload.module)
+        await https.patch(`${DOCUMENT_CONTROLLER}/update_report`, payload.module)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

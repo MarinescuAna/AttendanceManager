@@ -19,7 +19,7 @@ namespace AttendanceManager.Domain.Entities
         public Role UserRole { get; set; }
         //Those to fields are used only for custom badges!!
         public int? ReportID { get; set; }
-        public CourseType? CourseType { get; set; }
+        public ActivityType? CourseType { get; set; }
         public int? MaxNumber { get; set;}
         public ICollection<Reward>? Rewards { get; set; }
 

@@ -41,17 +41,17 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams2_Error);
             }
 
-            if (!Enum.TryParse(request.CourseType, out CourseType courseType))
+            if (!Enum.TryParse(request.CourseType, out ActivityType courseType))
             {
                 throw new BadRequestException(ErrorMessages.BadRequest_CreateCollectionParams3_Error);
             }
 
             var collection = new Domain.Entities.Collection
             {
-                DocumentID = currentReportId,
+                ReportID = currentReportId,
                 HeldOn = parsedActivityTime,
                 Title = request.Title,
-                CourseType = courseType,
+                ActivityType = courseType,
                 Order = _currentReport.LastCollectionOrder[courseType] + 1
             };
 
@@ -63,7 +63,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             }
 
             //update the singleton
-            _currentReport.ReportCollectionTypes.Add(collection.CollectionID, collection.CourseType);
+            _currentReport.ReportCollectionTypes.Add(collection.CollectionID, collection.ActivityType);
             _currentReport.LastCollectionOrder[courseType]++;
 
             // get all the students according to the document data
@@ -88,17 +88,17 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             }
 
             //send notifications to each user 
-            var attendances = collection.Order == GetMaxNumberByCourseType(collection.CourseType) / 2 ||
-                  collection.Order == GetMaxNumberByCourseType(collection.CourseType) ?
-                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.DocumentID == _currentReport.CurrentReportInfo.ReportId)
+            var attendances = collection.Order == GetMaxNumberByCourseType(collection.ActivityType) / 2 ||
+                  collection.Order == GetMaxNumberByCourseType(collection.ActivityType) ?
+                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.ReportID == _currentReport.CurrentReportInfo.ReportId)
                         .Where(a => a.IsPresent) : null;
 
             foreach (var user in students)
             {
                 //is the half of the activity
-                if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.CourseType) / 2)
+                if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.ActivityType) / 2)
                 {
-                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.Collection!.CourseType == collection.CourseType);
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.Collection!.ActivityType == collection.ActivityType);
                     //user don't have enough attendances
                     if (noAttendancesStudent < collection.Order)
                     {
@@ -109,17 +109,17 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                             CreatedOn = DateTime.Now,
                             IsRead = false,
                             Message = string.Format(NotificationMessages.HalfSemesterNoAttendancesNotification,
-                                _currentReport.CurrentReportInfo.Title, collection.CourseType.ToString(),
-                                GetMaxNumberByCourseType(collection.CourseType) - noAttendancesStudent, noAttendancesStudent)
+                                _currentReport.CurrentReportInfo.Title, collection.ActivityType.ToString(),
+                                GetMaxNumberByCourseType(collection.ActivityType) - noAttendancesStudent, noAttendancesStudent)
                         });
 
                     }
                 }
-                else if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.CourseType))
+                else if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.ActivityType))
                 {
-                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.Collection!.CourseType == collection.CourseType);
+                    var noAttendancesStudent = attendances.Count(a => a.UserID.Equals(user.Key) && a.Collection!.ActivityType == collection.ActivityType);
                     //check if this is the last collection and the student don't have enough attendances 
-                    if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(collection.CourseType))
+                    if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(collection.ActivityType))
                     {
                         _unitOfWork.NotificationRepository.AddAsync(new()
                         {
@@ -128,7 +128,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                             CreatedOn = DateTime.Now,
                             IsRead = false,
                             Message = string.Format(NotificationMessages.LastCollectionNoAttendancesNotification,
-                                _currentReport.CurrentReportInfo.Title, collection.CourseType.ToString(), noAttendancesStudent)
+                                _currentReport.CurrentReportInfo.Title, collection.ActivityType.ToString(), noAttendancesStudent)
                         });
                     }
                 }
@@ -154,12 +154,12 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
 
             return collection.CollectionID;
         }
-        private int GetMaxNumberByCourseType(CourseType type)
+        private int GetMaxNumberByCourseType(ActivityType type)
             => type switch
             {
-                CourseType.Laboratory => _currentReport.CurrentReportInfo.MaxNumberOfLaboratories,
-                CourseType.Seminary => _currentReport.CurrentReportInfo.MaxNumberOfSeminaries,
-                CourseType.Lecture => _currentReport.CurrentReportInfo.MaxNumberOfLectures,
+                ActivityType.Laboratory => _currentReport.CurrentReportInfo.MaxNumberOfLaboratories,
+                ActivityType.Seminary => _currentReport.CurrentReportInfo.MaxNumberOfSeminaries,
+                ActivityType.Lecture => _currentReport.CurrentReportInfo.MaxNumberOfLectures,
                 _ => 0
             };
     }

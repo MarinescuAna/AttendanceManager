@@ -25,18 +25,18 @@ namespace AttendanceManager.Persistance.Repositories
             .Include(u => u.User)
             .Include(dm => dm.User!.Attendances)
             .AsNoTracking()
-            .Where(dm => dm.DocumentID == reportId)
+            .Where(dm => dm.ReportID == reportId)
             .ToListAsync() :
         await dbContext.Members
             .Include(u => u.User)
             .Include(dm => dm.User!.Attendances)
             .AsNoTracking()
-            .Where(dm => dm.User!.Role == role && dm.DocumentID == reportId)
+            .Where(dm => dm.User!.Role == role && dm.ReportID == reportId)
             .ToListAsync();
 
         public void DeleteMembersByReportId(int reportId)
         {
-            var members = dbContext.Members.AsNoTracking().Where(dm => dm.DocumentID == reportId);
+            var members = dbContext.Members.AsNoTracking().Where(dm => dm.ReportID == reportId);
 
             dbContext.RemoveRange(members);
         }

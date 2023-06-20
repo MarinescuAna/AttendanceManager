@@ -7,10 +7,10 @@ namespace AttendanceManager.Application.Contracts.Infrastructure.Singleton
     public interface IReportSingleton
     {
         ReportDto CurrentReportInfo { get; set; }
-        Dictionary<CourseType, int> LastCollectionOrder { get; set; }
-        Dictionary<int, CourseType> ReportCollectionTypes { get; set; }
+        Dictionary<ActivityType, int> LastCollectionOrder { get; set; }
+        Dictionary<int, ActivityType> ReportCollectionTypes { get; set; }
         Dictionary<string, Role> Members { get; set; }
-        void InitializeReport(Document currentReport, List<Member> members);
-        void UpdateReport(Document newReport);
+        void InitializeReport(Report currentReport, List<Member> members);
+        void UpdateReport(Report newReport);
     }
 }

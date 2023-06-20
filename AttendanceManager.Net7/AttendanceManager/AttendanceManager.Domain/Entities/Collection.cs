@@ -12,13 +12,13 @@ namespace AttendanceManager.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CollectionID { get; set; }
-        [ForeignKey("Document")]
-        public required int DocumentID { get; set; }
+        [ForeignKey("Report")]
+        public required int ReportID { get; set; }
         public required int Order { get; set; }
         [MaxLength(128)]
         public string? Title { get; set; }
         public required DateTime HeldOn { get; set; }
-        public required CourseType CourseType { get; set; }
+        public required ActivityType ActivityType { get; set; }
         public ICollection<Attendance>? Attendances { get; set; }
     }
 }

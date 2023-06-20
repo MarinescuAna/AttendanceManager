@@ -30,11 +30,11 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
         public async Task<ReportVm> Handle(GetReportByIdQuery request, CancellationToken cancellationToken)
         {
             // get current document, which includes Collection
-            var currentDocument = await _unitOfWork.DocumentRepository.GetDocumentByIdAsync(request.Id)
+            var currentDocument = await _unitOfWork.ReportRepository.GetReportByIdAsync(request.Id)
                 ?? throw new NotFoundException("The document cannot be found!");
 
             //get the current document
-            var test = _unitOfWork.MemberRepository.ListAll().Where(d=>d.DocumentID==request.Id);
+            var test = _unitOfWork.MemberRepository.ListAll().Where(d=>d.ReportID==request.Id);
             var members = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(request.Id, null);
             _currentReportService.InitializeReport(currentDocument!,members);
 
@@ -43,7 +43,7 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
                 CourseId = currentDocument!.CourseID,
                 CourseName = currentDocument.Course!.Name,
                 CreationDate = currentDocument.CreatedOn.ToString(Constants.DateFormat),
-                ReportId = currentDocument.DocumentId,
+                ReportId = currentDocument.ReportID,
                 EnrollmentYear = currentDocument.EnrollmentYear,
                 MaxNoLaboratories = currentDocument.MaxNoLaboratories,
                 MaxNoLessons = currentDocument.MaxNoLessons,
@@ -53,11 +53,11 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
                 Title = currentDocument.Title,
                 UpdatedOn = currentDocument.UpdatedOn.ToString(Constants.DateFormat),
                 NoLaboratories = _currentReportService.ReportCollectionTypes.Count == 0 ?
-                    0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == CourseType.Laboratory).Count(),
+                    0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Laboratory).Count(),
                 NoLessons = _currentReportService.ReportCollectionTypes.Count == 0 ?
-                    0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == CourseType.Lecture).Count(),
+                    0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Lecture).Count(),
                 NoSeminaries = _currentReportService.ReportCollectionTypes.Count == 0 ?
-                    0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == CourseType.Seminary).Count(),
+                    0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Seminary).Count(),
                 CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
                 Collections = _mapper.Map<CollectionDto[]>(currentDocument.Collections!.OrderBy(d => d.HeldOn)),
                 Members = _mapper.Map<MembersDto[]>(request.Role == Role.Teacher ?

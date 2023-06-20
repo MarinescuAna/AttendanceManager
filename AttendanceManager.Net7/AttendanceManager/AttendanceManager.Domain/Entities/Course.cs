@@ -17,6 +17,6 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("UserSpecialization")]
         public required int UserSpecializationID { get; set; }
         public virtual UserSpecialization? UserSpecialization { get; set; }
-        public ICollection<Document>? Documents { get; set; }
+        public ICollection<Report>? Reports { get; set; }
     }
 }

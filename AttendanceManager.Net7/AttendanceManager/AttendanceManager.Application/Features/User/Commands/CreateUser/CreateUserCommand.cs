@@ -41,7 +41,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             var newUser = new Domain.Entities.User
             {
                 Email = request.Email,
-                EnrollmentYear = request.Year,
+                Year = request.Year,
                 FullName = request.Fullname,
                 Code = request.Code,
                 Role = Enum.Parse<Role>(request.Role),

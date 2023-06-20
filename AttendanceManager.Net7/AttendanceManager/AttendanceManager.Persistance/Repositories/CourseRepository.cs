@@ -16,16 +16,16 @@ namespace AttendanceManager.Persistance.Repositories
             => await dbContext.Courses
                 .Include(s => s.UserSpecialization)
                 .Include(s => s.UserSpecialization!.Specialization)
-                .Include(s=>s.Documents)
+                .Include(s=>s.Reports)
                 .Where(c => c.UserSpecialization!.UserID == email)
                 .ToListAsync();
         public async Task<List<Course>> GetCoursesForDashboardAsync(string email)
            => await dbContext.Courses
                 .Include(s => s.UserSpecialization)
-                .Include(s => s.Documents)
+                .Include(s => s.Reports)
                     .ThenInclude(s=>s.Members)
                         .ThenInclude(m=>m.User)
-                .Include(s => s.Documents)
+                .Include(s => s.Reports)
                     .ThenInclude(s => s.Collections)
                         .ThenInclude(a => a.Attendances)
                 .AsNoTracking()
@@ -33,6 +33,6 @@ namespace AttendanceManager.Persistance.Repositories
                 .ToListAsync();
             
         public override async Task<Course?> GetAsync(Expression<Func<Course, bool>> expression) =>
-          await dbContext.Set<Course>().Include(c=>c.Documents).FirstOrDefaultAsync(expression);
+          await dbContext.Set<Course>().Include(c=>c.Reports).FirstOrDefaultAsync(expression);
     }
 }

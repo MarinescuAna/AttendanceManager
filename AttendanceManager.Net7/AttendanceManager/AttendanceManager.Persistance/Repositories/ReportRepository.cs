@@ -6,27 +6,27 @@ using System.Linq.Expressions;
 
 namespace AttendanceManager.Persistance.Repositories
 {
-    public class DocumentRepository : GenericRepository<Document>, IDocumentRepository
+    public class ReportRepository : GenericRepository<Report>, IReportRepository
     {
-        public DocumentRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext,loggingService)
+        public ReportRepository(AttendanceManagerDbContext dbContext, ILoggingService loggingService) : base(dbContext,loggingService)
         {
         }
 
         /// <summary>
         /// The result will contain the Specialization, Course and UserSpecialization
         /// </summary>
-        public async Task<Document?> GetDocumentByIdAsync(int id)
-            => await dbContext.Documents
+        public async Task<Report?> GetReportByIdAsync(int id)
+            => await dbContext.Reports
             .Include(d=>d.Collections)
             .Include(d=>d.Course!.UserSpecialization!.Specialization)
             .Include(d=>d.Course!.UserSpecialization!.User)
-            .FirstOrDefaultAsync(u => u.DocumentId == id);
+            .FirstOrDefaultAsync(u => u.ReportID == id);
 
         /// <summary>
         /// The list will contain the Specialization, Course and UserSpecialization
         /// </summary>
-        public async Task<List<Document>> GetUserDocumentsByExpressionAsync(Expression<Func<Document, bool>> expression)
-            => await dbContext.Documents
+        public async Task<List<Report>> GetUserReportsByExpressionAsync(Expression<Func<Report, bool>> expression)
+            => await dbContext.Reports
             .Include(d => d.Course!.UserSpecialization!.Specialization)
             .Include(m=>m.Members)
             .AsNoTracking().Where(expression).ToListAsync();

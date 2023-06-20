@@ -35,7 +35,7 @@ namespace AttendanceManager.Application.Features.Badge.Commands.InsertCustomBadg
         }
         public async Task<RewardVm> Handle(InsertCustomBadgeCommand request, CancellationToken cancellationToken)
         {
-            if (!Enum.TryParse(request.BadgeType, out BadgeType badgeType ) || !Enum.TryParse(request.Type, out CourseType courseType))
+            if (!Enum.TryParse(request.BadgeType, out BadgeType badgeType ) || !Enum.TryParse(request.Type, out ActivityType courseType))
             {
                 throw new BadRequestException(ErrorMessages.BadRequest_InvalidParameters_ConversionFaild_Error);
             }
