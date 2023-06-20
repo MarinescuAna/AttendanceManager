@@ -21,7 +21,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: list with all courses</returns>
         [HttpGet("courses")]
-        public async Task<IActionResult> GetCourses()
+        public async Task<IActionResult> GetCoursesAsync()
         {
             return Ok(await mediator.Send(new GetCoursesQuery() { Email = UserEmail } ));
         }
@@ -31,7 +31,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: the id of the new course</returns>
         [HttpPost("create_course")]
-        public async Task<IActionResult> CreateCourse(CreateCourseCommand createCourseCommand)
+        public async Task<IActionResult> CreateCourseAsync(CreateCourseCommand createCourseCommand)
         {
             createCourseCommand.Email = UserEmail;
             return Ok(await mediator.Send(createCourseCommand));
@@ -42,20 +42,20 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: boolean value</returns>
         /// </summary>
         [HttpDelete("delete_course/{id:int}")]
-        public async Task<IActionResult> DeleteCourse(int id)
+        public async Task<IActionResult> DeleteCourseAsync(int id)
         {
             return Ok(await mediator.Send(new DeleteCourseCommand { Id = id }));
         }
        
         [HttpPatch("update_course")]
-        public async Task<IActionResult> UpdateCourse(UpdateCourseNameCommand command)
+        public async Task<IActionResult> UpdateCourseAsync(UpdateCourseNameCommand command)
         {
             command.UserEmail = UserEmail;
             return Ok(await mediator.Send(command));
         }
 
         [HttpGet("dashboard")]
-        public async Task<IActionResult> GetDashboardData()
+        public async Task<IActionResult> GetDashboardDataAsync()
         {
             return Ok(await mediator.Send(new GetDashboardDataQuery() { CurrentUserEmail = UserEmail }));
         }

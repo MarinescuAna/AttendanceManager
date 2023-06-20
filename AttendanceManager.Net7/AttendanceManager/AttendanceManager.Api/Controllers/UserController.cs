@@ -18,7 +18,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: ok</returns>
         [HttpPost("create_user")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand userCommand)
+        public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand userCommand)
         {
             return Ok(await mediator.Send(userCommand));
         }
@@ -28,7 +28,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: list with all the users</returns>
         /// </summary>
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsersAsync()
         {
             return Ok(await mediator.Send(new GetAllUsersQuery()));
         }
@@ -38,7 +38,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: list with all the students(email and fullname)</returns>
         /// </summary>
         [HttpGet("students")]
-        public async Task<IActionResult> GetStudentsBySpecializationIdEnrollmentYear(int year, int specializationId)
+        public async Task<IActionResult> GetStudentsBySpecializationIdEnrollmentYearAsync(int year, int specializationId)
         {
             return Ok(await mediator.Send(new GetStudentsForCoursesQuery()
             {
@@ -52,7 +52,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: user information</returns>
         /// </summary>
         [HttpGet("current_user_info")]
-        public async Task<IActionResult> GetCurrentUserInfo()
+        public async Task<IActionResult> GetCurrentUserInfoAsync()
         {
             return Ok(await mediator.Send(new GetUserInformationByEmailQuery() { Email = UserEmail }));
         }

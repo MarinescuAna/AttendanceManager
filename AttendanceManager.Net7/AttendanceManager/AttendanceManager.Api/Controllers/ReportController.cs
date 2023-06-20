@@ -1,7 +1,7 @@
-﻿using AttendanceManager.Application.Features.Document.Queries.GetReportById;
+﻿using AttendanceManager.Application.Features.Report.Queries.GetReportById;
 using AttendanceManager.Application.Features.Member.Commands.InsertCollaborator;
 using AttendanceManager.Application.Features.Report.Commands.CreateReport;
-using AttendanceManager.Application.Features.Report.Commands.DeleteDocumentById;
+using AttendanceManager.Application.Features.Report.Commands.DeleteReportById;
 using AttendanceManager.Application.Features.Report.Commands.UpdateReportById;
 using AttendanceManager.Application.Features.Report.Queries.GetReports;
 using MediatR;
@@ -17,12 +17,8 @@ namespace AttendanceManager.Api.Controllers
         {
         }
 
-        /// <summary>
-        /// Get all documents according to the user email and role
-        /// <returns>Success: the list with all created documents by the current user</returns>
-        /// </summary>
         [HttpGet("reports")]
-        public async Task<IActionResult> GetReports()
+        public async Task<IActionResult> GetReportsAsync()
         {
             return Ok(await mediator.Send(new GetReportsQuery()
             {
@@ -32,7 +28,7 @@ namespace AttendanceManager.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetReportById(int id)
+        public async Task<IActionResult> GetReportByIdAsync(int id)
         {
             return Ok(await mediator.Send(new GetReportByIdQuery()
             {
@@ -50,7 +46,7 @@ namespace AttendanceManager.Api.Controllers
         }
 
         [HttpPost("add_collaborator")]
-        public async Task<IActionResult> AddCollaborator([FromBody] InsertCollaboratorCommand command)
+        public async Task<IActionResult> AddCollaboratorAsync([FromBody] InsertCollaboratorCommand command)
         {
             command.CurrentEmail = UserEmail;
             command.CurrentUsername = Username;
@@ -58,13 +54,13 @@ namespace AttendanceManager.Api.Controllers
         }
 
         [HttpPatch("update_report")]
-        public async Task<IActionResult> UpdateReport([FromBody] UpdateReportByIdCommand command)
+        public async Task<IActionResult> UpdateReportAsync([FromBody] UpdateReportByIdCommand command)
         {
             return Ok(await mediator.Send(command));
         }
 
         [HttpDelete("delete_current_report")]
-        public async Task<IActionResult> DeleteReport()
+        public async Task<IActionResult> DeleteReportAsync()
         {
             return Ok(await mediator.Send(new DeleteReportByIdCommand()));
         }

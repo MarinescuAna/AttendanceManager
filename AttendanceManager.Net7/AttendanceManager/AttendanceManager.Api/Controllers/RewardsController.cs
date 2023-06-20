@@ -13,7 +13,7 @@ namespace AttendanceManager.Api.Controllers
         }
 
         [HttpGet("rewards")]
-        public async Task<IActionResult> GetRewardsByReportId()
+        public async Task<IActionResult> GetRewardsByReportIdAsync()
         {
             return Ok(await mediator.Send(new GetAllRewardsByUserIdReportIdQuery() { Email = UserEmail, Role = UserRole }));
         }

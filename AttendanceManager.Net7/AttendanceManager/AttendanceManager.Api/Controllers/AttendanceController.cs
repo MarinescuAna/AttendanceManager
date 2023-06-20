@@ -29,7 +29,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: list with all involvements</returns>
         [HttpGet("involvements")]
-        public async Task<IActionResult> GetInvolvementsForDocument(string? email, int? collection_id, bool use_code = false, bool current_user = false, bool only_present=false)
+        public async Task<IActionResult> GetInvolvementsForReportAsync(string? email, int? collection_id, bool use_code = false, bool current_user = false, bool only_present=false)
         {
             if((!string.IsNullOrEmpty(email) || current_user) && collection_id != -1)
             {
@@ -60,7 +60,7 @@ namespace AttendanceManager.Api.Controllers
         /// Get for each user, the total involvements 
         /// </summary>
         [HttpGet("total_involvements")]
-        public async Task<IActionResult> GetTotalInvolvements()
+        public async Task<IActionResult> GetTotalInvolvementsAsync()
         {
             if (!Enum.Equals(UserRole, Role.Teacher))
             {
@@ -75,7 +75,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: true/false</returns>
         [HttpPatch("update_student_involvement")]
-        public async Task<IActionResult> UpdateStudentsInvolvement([FromBody] UpdateStudentsInvolvementCommand command)
+        public async Task<IActionResult> UpdateStudentsInvolvementAsync([FromBody] UpdateStudentsInvolvementCommand command)
         {
             if (command.Involvements.Length == 0)
             {
@@ -92,7 +92,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: true/false</returns>
         [HttpPatch("update_involvement_by_code")]
-        public async Task<IActionResult> UpdateAttendanceByCode([FromBody] UpdateInvolvementByCodeAndIdCommand command)
+        public async Task<IActionResult> UpdateAttendanceByCodeAsync([FromBody] UpdateInvolvementByCodeAndIdCommand command)
         {
             return Ok(await mediator.Send(command));
         }

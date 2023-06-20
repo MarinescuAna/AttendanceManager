@@ -54,7 +54,7 @@ namespace AttendanceManager.Infrastructure.Authentication
             };
         }
 
-        public async Task<GenericToken> GenerateRefreshToken()
+        public async Task<GenericToken> GenerateRefreshTokenAsync()
         {
             var refreshTokens = await _mediator.Send(new GetRefreshTokensQuery());
             var newRefreshToken = string.Empty;

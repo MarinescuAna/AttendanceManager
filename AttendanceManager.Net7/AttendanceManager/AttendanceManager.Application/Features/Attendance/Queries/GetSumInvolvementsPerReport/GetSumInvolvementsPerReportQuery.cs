@@ -29,7 +29,7 @@ namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolv
             var students = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(_currentReport.CurrentReportInfo.ReportId, Role.Student);
             var involvements = new List<InvolvementsSumVm>();
 
-            // the user contains the attendances, but those are also from other document, so we will get only the attendances related to the collections from dictionary
+            // the user contains the attendances, but those are also from other report, so we will get only the attendances related to the collections from dictionary
             for (var i = 0; i < students.Count; i++)
             {
                 var studentInvolvments = students[i].User!.Attendances!

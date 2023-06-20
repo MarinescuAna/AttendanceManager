@@ -66,7 +66,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             _currentReport.ReportCollectionTypes.Add(collection.CollectionID, collection.ActivityType);
             _currentReport.LastCollectionOrder[courseType]++;
 
-            // get all the students according to the document data
+            // get all the students according to the report data
             var students = _currentReport.Members.Where(s => s.Value.Equals(Role.Student));
 
             // add each student as not present and with 0 bonus points

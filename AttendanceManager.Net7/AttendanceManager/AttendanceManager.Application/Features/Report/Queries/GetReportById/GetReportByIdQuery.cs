@@ -6,7 +6,7 @@ using AttendanceManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
+namespace AttendanceManager.Application.Features.Report.Queries.GetReportById
 {
     public sealed class GetReportByIdQuery : IRequest<ReportVm>
     {
@@ -15,12 +15,12 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
         public required string UserId { get; init; }
     }
 
-    public sealed class GetDocumentByIdQueryHandler : IRequestHandler<GetReportByIdQuery, ReportVm>
+    public sealed class GetReportByIdQueryHandler : IRequestHandler<GetReportByIdQuery, ReportVm>
     {
         private readonly IReportSingleton _currentReportService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public GetDocumentByIdQueryHandler(IUnitOfWork unit, IMapper mapper, IReportSingleton currentReportService)
+        public GetReportByIdQueryHandler(IUnitOfWork unit, IMapper mapper, IReportSingleton currentReportService)
         {
             _mapper = mapper;
             _unitOfWork = unit;
@@ -29,43 +29,43 @@ namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
 
         public async Task<ReportVm> Handle(GetReportByIdQuery request, CancellationToken cancellationToken)
         {
-            // get current document, which includes Collection
-            var currentDocument = await _unitOfWork.ReportRepository.GetReportByIdAsync(request.Id)
-                ?? throw new NotFoundException("The document cannot be found!");
+            // get current report, which includes Collection
+            var currentReport = await _unitOfWork.ReportRepository.GetReportByIdAsync(request.Id)
+                ?? throw new NotFoundException("The report cannot be found!");
 
-            //get the current document
+            //get the current report
             var test = _unitOfWork.MemberRepository.ListAll().Where(d=>d.ReportID==request.Id);
             var members = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(request.Id, null);
-            _currentReportService.InitializeReport(currentDocument!,members);
+            _currentReportService.InitializeReport(currentReport!,members);
 
             return new ReportVm
             {
-                CourseId = currentDocument!.CourseID,
-                CourseName = currentDocument.Course!.Name,
-                CreationDate = currentDocument.CreatedOn.ToString(Constants.DateFormat),
-                ReportId = currentDocument.ReportID,
-                EnrollmentYear = currentDocument.EnrollmentYear,
-                MaxNoLaboratories = currentDocument.MaxNoLaboratories,
-                MaxNoLessons = currentDocument.MaxNoLessons,
-                MaxNoSeminaries = currentDocument.MaxNoSeminaries,
-                SpecializationId = currentDocument.Course!.UserSpecializationID,
-                SpecializationName = currentDocument.Course!.UserSpecialization!.Specialization!.Name,
-                Title = currentDocument.Title,
-                UpdatedOn = currentDocument.UpdatedOn.ToString(Constants.DateFormat),
+                CourseId = currentReport!.CourseID,
+                CourseName = currentReport.Course!.Name,
+                CreationDate = currentReport.CreatedOn.ToString(Constants.DateFormat),
+                ReportId = currentReport.ReportID,
+                EnrollmentYear = currentReport.EnrollmentYear,
+                MaxNoLaboratories = currentReport.MaxNoLaboratories,
+                MaxNoLessons = currentReport.MaxNoLessons,
+                MaxNoSeminaries = currentReport.MaxNoSeminaries,
+                SpecializationId = currentReport.Course!.UserSpecializationID,
+                SpecializationName = currentReport.Course!.UserSpecialization!.Specialization!.Name,
+                Title = currentReport.Title,
+                UpdatedOn = currentReport.UpdatedOn.ToString(Constants.DateFormat),
                 NoLaboratories = _currentReportService.ReportCollectionTypes.Count == 0 ?
                     0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Laboratory).Count(),
                 NoLessons = _currentReportService.ReportCollectionTypes.Count == 0 ?
                     0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Lecture).Count(),
                 NoSeminaries = _currentReportService.ReportCollectionTypes.Count == 0 ?
                     0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Seminary).Count(),
-                CreatedBy = currentDocument.Course!.UserSpecialization!.User!.FullName,
-                Collections = _mapper.Map<CollectionDto[]>(currentDocument.Collections!.OrderBy(d => d.HeldOn)),
+                CreatedBy = currentReport.Course!.UserSpecialization!.User!.FullName,
+                Collections = _mapper.Map<CollectionDto[]>(currentReport.Collections!.OrderBy(d => d.HeldOn)),
                 Members = _mapper.Map<MembersDto[]>(request.Role == Role.Teacher ?
                     members.Where(u => u.User!.Role == Role.Teacher) : members.Where(u => u.User!.Role == Role.Student)),
-                AttendanceImportance = currentDocument.AttendanceImportance,
-                BonusPointsImportance = currentDocument.BonusPointsImportance,
+                AttendanceImportance = currentReport.AttendanceImportance,
+                BonusPointsImportance = currentReport.BonusPointsImportance,
                 NumberOfStudents = members.Count(u => u.User!.Role == Role.Student),
-                IsCreator = request.Role == Role.Student ? false : currentDocument.Course!.UserSpecialization!.UserID.Equals(request.UserId)
+                IsCreator = request.Role == Role.Student ? false : currentReport.Course!.UserSpecialization!.UserID.Equals(request.UserId)
             };
         }
     }

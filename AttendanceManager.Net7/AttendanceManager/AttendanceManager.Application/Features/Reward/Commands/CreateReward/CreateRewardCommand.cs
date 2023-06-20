@@ -52,7 +52,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 return true;
             }
 
-            //get all the collections related to the document
+            //get all the collections related to the report
             _collections = _unitOfWork.CollectionRepository.GetCollectionsByReportId(_currentReportId).ToImmutableList();
 
             if (_collections == null)

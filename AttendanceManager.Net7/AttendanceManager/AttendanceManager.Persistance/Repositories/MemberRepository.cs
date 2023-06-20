@@ -13,12 +13,10 @@ namespace AttendanceManager.Persistance.Repositories
         }
 
         /// <summary>
-        /// This is a list with all the members of a given document. The role of the student can be passed as parameter, or can be null and in this case
-        /// all the members of the document are returned
+        /// This is a list with all the members of a given report. The role of the student can be passed as parameter, or can be null and in this case
+        /// all the members of the report are returned
         /// Includes: User object and User Attendances object list
         /// </summary>
-        /// <param name="reportId">the id of the document</param>
-        /// <returns>List of document member class</returns>
         public async Task<List<Member>> GetMembersByReportIdAndRoleAsync(int reportId, Role? role)
             => role == null ?
             await dbContext.Members

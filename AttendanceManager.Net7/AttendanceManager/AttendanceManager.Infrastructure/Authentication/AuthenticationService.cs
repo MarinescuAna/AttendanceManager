@@ -44,7 +44,7 @@ namespace AttendanceManager.Infrastructure.Authentication
             if (string.IsNullOrEmpty(result.RefreshToken) || DateTime.Now.CompareTo(result.ExpRefreshToken) >= 0)
             {
                 // Generate refresh token
-                var refreshToken = await _jwtService.GenerateRefreshToken();
+                var refreshToken = await _jwtService.GenerateRefreshTokenAsync();
                 await _mediator.Send(new UpdateRefreshTokenCommand
                 {
                     Email = request.Email,

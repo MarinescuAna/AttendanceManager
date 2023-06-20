@@ -1,6 +1,6 @@
 ﻿using AttendanceManager.Application.Contracts.Persistance.UnitOfWork;
 using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Application.Features.Report.Commands.DeleteDocumentById;
+using AttendanceManager.Application.Features.Report.Commands.DeleteReportById;
 using AttendanceManager.Domain.Common;
 using MediatR;
 
@@ -30,12 +30,12 @@ namespace AttendanceManager.Application.Features.Course.Commands.DeleteCourse
             var currentCourse = await _unitOfWork.CourseRepository.GetAsync(c => c.CourseID == request.Id) ??
                 throw new NotFoundException("Course", request.Id);
 
-            //delete all those documents manualy because there are to many entities related to it
-            var documentsLinked = currentCourse.Reports!;
+            //delete all those reports manualy because there are to many entities related to it
+            var reportsLinked = currentCourse.Reports!;
             currentCourse.Reports = null;
 
-            //get document members
-            foreach (var doc in documentsLinked)
+            //get members
+            foreach (var doc in reportsLinked)
             {
                 await _mediator.Send(new DeleteReportByIdCommand() { ReportId = doc.ReportID });
             }

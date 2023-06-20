@@ -22,7 +22,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: list with all the specializations without any filter</returns>
         /// </summary>
         [HttpGet("specializations")]
-        public async Task<IActionResult> GetSpecializations()
+        public async Task<IActionResult> GetSpecializationsAsync()
         {
             return Ok(await mediator.Send(new GetSpecializationsQuery()));
         }
@@ -32,7 +32,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: true/false</returns>
         /// </summary>
         [HttpPost("create_specialization")]
-        public async Task<IActionResult> CreateSpecialization([FromBody] CreateSpecializationCommand command)
+        public async Task<IActionResult> CreateSpecializationAsync([FromBody] CreateSpecializationCommand command)
         {
             return Ok(await mediator.Send(command));
         }

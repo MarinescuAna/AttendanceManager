@@ -31,7 +31,7 @@ namespace AttendanceManager.Api.Controllers
         }
 
         [HttpDelete("delete/{collectionId:int}")]
-        public async Task<IActionResult> DeleteCollection(int collectionId)
+        public async Task<IActionResult> DeleteCollectionAsync(int collectionId)
         {
             return Ok(await mediator.Send(new DeleteCollectionByIdCommand() { CollectionId = collectionId }));
         }

@@ -17,7 +17,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>return the code and the expiration date</returns>
         /// </summary>
         [HttpPost("create_code")]
-        public async Task<IActionResult> CreateInvolvmentCode([FromBody] CreateInvolvementCodeCommand command)
+        public async Task<IActionResult> CreateInvolvmentCodeAsync([FromBody] CreateInvolvementCodeCommand command)
         {
             command.UserId = UserEmail;
             return Ok(await mediator.Send(command));

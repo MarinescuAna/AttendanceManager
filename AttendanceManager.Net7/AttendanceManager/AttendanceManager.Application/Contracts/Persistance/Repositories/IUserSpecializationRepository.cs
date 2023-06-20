@@ -5,6 +5,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
     public interface IUserSpecializationRepository : IGenericRepository<UserSpecialization>
     {
-        Task<List<UserSpecialization>> GetUserSpecializationsByExpression(Expression<Func<UserSpecialization, bool>> expression);
+        Task<List<UserSpecialization>> GetUserSpecializationsByExpressionAsync(Expression<Func<UserSpecialization, bool>> expression);
     }
 }

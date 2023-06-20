@@ -22,7 +22,7 @@
 
     public static class ErrorMessages
     {
-        public static readonly string AlreadyExists_CollaboratorInsert_Error = "The teacher is already a member of this document!";
+        public static readonly string AlreadyExists_CollaboratorInsert_Error = "The teacher is already a member of this report!";
         public static readonly string AlreadyExists_BadgeInsert_Error = "There is already a badge defined for this activity, you can't add more!";
 
         public static readonly string BadRequest_CollaboratorInsert_Error = "You can add only teachers as collaborators! This user ({0}) is a student.";
@@ -45,7 +45,7 @@
         public readonly static string SomethingWentWrong_NotificationDelete_Error = "Something went wrong and the notification wasn't been deleted. Please try again!";
         public readonly static string SomethingWentWrong_NotificationUpdate_Error = "Something went wrong and the notification wasn't been set as read. Please try again!";
         public readonly static string SomethingWentWrong_NotificationInsert_Error = "Something went wrong when the notification was sent. The user(s) wasn't(weren't) informed about your changes.";
-        public readonly static string SomethingWentWrong_CreateReportNotificationInsert_Error = "Something went wrong and the notifications weren't sent, but the document was successfully created. The users weren't informed about this new report.";
+        public readonly static string SomethingWentWrong_CreateReportNotificationInsert_Error = "Something went wrong and the notifications weren't sent, but the report was successfully created. The users weren't informed about this new report.";
         public readonly static string SomethingWentWrong_CollectionsNotAvailableError = "Something went wrong and no collection was found for this report. Try again later!";
         public static readonly string SomethingWentWrongGenericMessage = "Something went wrong when the command was executed! See log files for more details or try again.";
         public static readonly string SomethingWentWrongBadgesGenericMessage = "Something went wrong during the rewards process! See log files for more details or try again.";

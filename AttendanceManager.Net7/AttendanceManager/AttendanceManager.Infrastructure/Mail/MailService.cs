@@ -17,7 +17,7 @@ namespace AttendanceManager.Infrastructure.Mail
             _mailSettings = options.Value;
         }
 
-        public async Task<bool> SendEmail(Message message, CancellationToken ct = default)
+        public async Task<bool> SendEmailAsync(Message message, CancellationToken ct = default)
         {
             // Create the message that will be sent
             var mailMessage = CreateMessage(message);

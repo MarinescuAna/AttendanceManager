@@ -35,7 +35,7 @@ namespace AttendanceManager.Api.Controllers
         /// <param name="request"></param>
         /// <returns>Success: new access token</returns>
         [HttpPost("refresh-access-token")]
-        public async Task<IActionResult> RefreshAccessToken(string refreshToken)
+        public async Task<IActionResult> RefreshAccessTokenAsync(string refreshToken)
         {
             var user = await mediator.Send(new GetUserByRefreshTokenQuery { RefreshToken = refreshToken});
 

@@ -5,8 +5,8 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
 {
     public interface IMemberRepository : IGenericRepository<Member>
     {
-        Task<List<Member>> GetMembersByReportIdAndRoleAsync(int documentId, Role? role);
-        void DeleteMembersByReportId(int documentId);
+        Task<List<Member>> GetMembersByReportIdAndRoleAsync(int reportId, Role? role);
+        void DeleteMembersByReportId(int reportId);
         Task AddRangeAsync(List<Member> entity);
     }
 }

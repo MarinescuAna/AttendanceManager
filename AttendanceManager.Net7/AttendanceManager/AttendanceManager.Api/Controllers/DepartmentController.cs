@@ -23,7 +23,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: list with all the departments without any filter</returns>
         /// </summary>
         [HttpGet("departments")]
-        public async Task<IActionResult> GetDepartments()
+        public async Task<IActionResult> GetDepartmentsAsync()
         {
             return Ok(await mediator.Send(new GetDepartmentQuery()));
         }
@@ -33,7 +33,7 @@ namespace AttendanceManager.Api.Controllers
         /// <returns>Success: the id of the new department added</returns>
         /// </summary>
         [HttpPost("create_department")]
-        public async Task<IActionResult> CreateDepartment([FromBody] CreateDepatmentCommand command)
+        public async Task<IActionResult> CreateDepartmentAsync([FromBody] CreateDepatmentCommand command)
         {
             return Ok(await mediator.Send(command));
         }
@@ -43,7 +43,7 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: true/false</returns>
         [HttpPatch("update_department")]
-        public async Task<IActionResult> UpdateDepartmentName([FromBody] UpdateDepartmentNameCommand command)
+        public async Task<IActionResult> UpdateDepartmentNameAsync([FromBody] UpdateDepartmentNameCommand command)
         {
             return Ok(await mediator.Send(command));
         }

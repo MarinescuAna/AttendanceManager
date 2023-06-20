@@ -20,7 +20,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetAllUsers
         public async Task<List<UserVm>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var departments = _unitOfWork.DepartmentRepository.ListAll();
-            var userSpecializations = await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(
+            var userSpecializations = await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpressionAsync(
                 us => us.User!.Role != Role.Admin);
 
             return userSpecializations.GroupBy(us => us.UserID).Select(user =>

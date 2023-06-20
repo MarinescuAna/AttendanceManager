@@ -22,7 +22,7 @@ namespace AttendanceManager.Application.Features.User.Queries.GetUserInformation
 
         public async Task<UserVm> Handle(GetUserInformationByEmailQuery request, CancellationToken cancellationToken)
         {
-            var userSpecializations = await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpression(u => u.UserID == request.Email)
+            var userSpecializations = await _unitOfWork.UserSpecializationRepository.GetUserSpecializationsByExpressionAsync(u => u.UserID == request.Email)
                 ?? throw new NotFoundException(nameof(User), request.Email);
 
             var specializations = _mapper.Map<SpecializationDto[]>(userSpecializations);

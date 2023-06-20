@@ -4,17 +4,17 @@ using AttendanceManager.Application.Exceptions;
 using AttendanceManager.Domain.Common;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Report.Commands.DeleteDocumentById
+namespace AttendanceManager.Application.Features.Report.Commands.DeleteReportById
 {
     public sealed class DeleteReportByIdCommand : IRequest<bool>
     {
         public int? ReportId { get; init; }
     }
-    public sealed class DeleteDocumentByIdCommandHandler : IRequestHandler<DeleteReportByIdCommand, bool>
+    public sealed class DeleteReportByIdCommandHandler : IRequestHandler<DeleteReportByIdCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReportSingleton _currentReport;
-        public DeleteDocumentByIdCommandHandler(IUnitOfWork unit, IReportSingleton reportSingleton)
+        public DeleteReportByIdCommandHandler(IUnitOfWork unit, IReportSingleton reportSingleton)
         {
             _unitOfWork = unit;
             _currentReport = reportSingleton;

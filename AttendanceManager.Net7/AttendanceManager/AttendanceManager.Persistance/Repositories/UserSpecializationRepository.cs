@@ -12,7 +12,7 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
 
-        public async Task<List<UserSpecialization>> GetUserSpecializationsByExpression(Expression<Func<UserSpecialization, bool>> expression)
+        public async Task<List<UserSpecialization>> GetUserSpecializationsByExpressionAsync(Expression<Func<UserSpecialization, bool>> expression)
             => await dbContext.UserSpecializations.Include(u => u.User).Include(s => s.Specialization).AsNoTracking().Where(expression).ToListAsync();
     }
 }

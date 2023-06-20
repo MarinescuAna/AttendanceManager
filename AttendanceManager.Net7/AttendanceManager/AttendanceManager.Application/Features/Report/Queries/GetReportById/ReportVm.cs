@@ -1,4 +1,4 @@
-﻿namespace AttendanceManager.Application.Features.Document.Queries.GetReportById
+﻿namespace AttendanceManager.Application.Features.Report.Queries.GetReportById
 {
     public sealed class ReportVm
     {
