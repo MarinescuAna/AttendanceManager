@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { InsertCollectionParameters, UpdateCollectionParameters, UpdateReportParameters } from "@/modules/commands-parameters";
+import { InsertCollaboratorParameters, InsertCollectionParameters, UpdateCollectionParameters, UpdateReportParameters } from "@/modules/commands-parameters";
 import { CollectionDto } from "@/modules/view-modules";
 import https from "@/plugins/axios";
 import { COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
@@ -29,12 +29,10 @@ export const documentActions = {
         return isFail;
     },
     /** Add new collaborator teacher */
-    async addCollaborator({ commit }, payload: string): Promise<boolean> {
+    async addCollaborator({ commit }, payload: InsertCollaboratorParameters): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator?email=${payload}`, {
-            email: payload
-        })
+        const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator`,payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
