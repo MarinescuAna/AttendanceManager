@@ -83,6 +83,7 @@ namespace AttendanceManager.Api.Controllers
             }
 
             command.CurrentUserEmail = UserEmail;
+            command.CurrentUserName = Username;
 
             return Ok(await mediator.Send(command));
         }
@@ -94,6 +95,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpPatch("update_involvement_by_code")]
         public async Task<IActionResult> UpdateAttendanceByCodeAsync([FromBody] UpdateInvolvementByCodeAndIdCommand command)
         {
+            command.CurrentUserName = Username;
             return Ok(await mediator.Send(command));
         }
     }

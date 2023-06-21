@@ -12,7 +12,7 @@ namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateStud
     {
         public required InvolvementVm[] Involvements { get; init; }
         public string? CurrentUserEmail { get; set; }
-
+        public string? CurrentUserName { get; set; }
     }
 
     public sealed class UpdateStudentsInvolvementCommandHandler : IRequestHandler<UpdateStudentsInvolvementCommand, bool>
@@ -43,6 +43,7 @@ namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateStud
                     oldStudent.IsPresent = student.IsPresent;
                     oldStudent.UpdatedOn = DateTime.Now;
                     oldStudent.BonusPoints = student.BonusPoints;
+                    oldStudent.UpdateBy = request.CurrentUserName;
 
                     _unitOfWork.InvolvementRepository.Update(oldStudent);
                 }

@@ -59,7 +59,10 @@ namespace AttendanceManager.Application.Features.Involvement.Queries.GetInvolvem
                             Student = request.UseCode ? student!.Code : student!.FullName,
                             CollectionId = i.CollectionID,
                             UpdateOn = i.UpdatedOn.ToString(Constants.ShortDateFormat),
-                            Email = request.UseCode ? string.Empty : i.UserID
+                            UpdateBy = i.UpdateBy,
+                            Email = request.UseCode ? string.Empty : i.UserID,
+                            HeldOn = i.Collection!.HeldOn.ToString(Constants.ShortDateFormat),
+                            Title = i.Collection!.Title
                         }).ToList();
             }
 
@@ -103,7 +106,10 @@ namespace AttendanceManager.Application.Features.Involvement.Queries.GetInvolvem
                         Student = request.UseCode ? student.User!.Code : student.User!.FullName,
                         CollectionId = i.CollectionID,
                         UpdateOn = i.UpdatedOn.ToString(Constants.ShortDateFormat),
-                        Email = request.UseCode ? string.Empty : i.UserID
+                        Email = request.UseCode ? string.Empty : i.UserID,
+                        UpdateBy = i.UpdateBy,
+                        Title = i.Collection!.Title,
+                        HeldOn = i.Collection!.HeldOn.ToString(Constants.ShortDateFormat)
                     }));
             }
 

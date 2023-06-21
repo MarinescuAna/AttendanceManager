@@ -21,15 +21,17 @@
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left black--text text-md-h6">Last Update</th>
+              <th class="text-left black--text text-md-h6">Collection</th>
               <th class="text-left black--text text-md-h6">Attendance</th>
               <th class="text-left black--text text-md-h6">Bonus Points</th>
               <th class="text-left black--text text-md-h6">Activity Type</th>
+              <th class="text-left black--text text-md-h6">Updated on</th>
+              <th class="text-left black--text text-md-h6">Updated by</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in involvements" :key="item.involvementId">
-              <td :title="item.updateOn">{{ getRelativeTime(item.updateOn) }}</td>
+              <td>{{ item.title!=null && item.title!=''? `${item.title}(${item.heldOn})`: item.heldOn }}</td>
               <td>
                 <v-simple-checkbox
                   v-model="item.isPresent"
@@ -47,6 +49,8 @@
                 <span v-else>{{ item.bonusPoints }}</span>
               </td>
               <td>{{ getActivityTypeName(item.activityType) }}</td>
+              <td :title="item.updateOn">{{ getRelativeTime(item.updateOn) }}</td>
+            <td>{{ item.updateBy }}</td>
             </tr>
           </tbody>
         </template>

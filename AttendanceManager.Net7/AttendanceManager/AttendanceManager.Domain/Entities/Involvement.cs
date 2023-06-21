@@ -16,7 +16,7 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("User")]
         [MaxLength(254)]
         public required string UserID { get; set; }
-        public string? UpdateBy { get; set; }
+        public required string UpdateBy { get; set; }
         public required int BonusPoints { get; set; }
         public required bool IsPresent { get; set; }
         public required DateTime UpdatedOn { get; set; }

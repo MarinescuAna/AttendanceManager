@@ -12,6 +12,7 @@ namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateInvo
         public required string Code { get; init; }
         public required int AttendanceId { get; init; }
         public required int CollectionId { get; init; }
+        public string? CurrentUserName { get; set; }
     }
 
     public sealed class UpdateInvolvementByCodeAndIdCommandHandler : IRequestHandler<UpdateInvolvementByCodeAndIdCommand, bool>
@@ -50,6 +51,9 @@ namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateInvo
 
             //update the involvement
             attendance.IsPresent = true;
+            attendance.UpdateBy = request.CurrentUserName;
+            attendance.UpdatedOn = DateTime.Now;
+
             _unitOfWork.InvolvementRepository.Update(attendance);
 
             if (!await _unitOfWork.CommitAsync())
