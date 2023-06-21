@@ -69,6 +69,14 @@
         </v-btn>
         <v-btn
           class="blue-grey lighten-2"
+          @click="onSelectAllUsers"
+          v-if="isTeacher"
+          >{{
+            allUsersAreChecked ? "Unselect all users" : "Select all users"
+          }}</v-btn
+        >
+        <v-btn
+          class="blue-grey lighten-2"
           @click="onSaveInvolvements"
           title="Save changes."
           :disabled="!saveChanges"
@@ -221,6 +229,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    allUsersAreChecked: function (): boolean {
+      return this.involvements.filter((i) => !i.isPresent).length == 0;
+    },
     isMobile: function (): boolean {
       return this.$vuetify.breakpoint.xs;
     },
@@ -316,6 +327,15 @@ export default Vue.extend({
       } else {
         this.$emit("close-dialog");
       }
+    },
+    onSelectAllUsers: function (): void {
+      const areAllUserSelected = this.allUsersAreChecked;
+      this.involvements.forEach((inv) => {
+        inv.isPresent = !areAllUserSelected;
+        if (areAllUserSelected) {
+          inv.bonusPoints = 0;
+        }
+      });
     },
     onSaveInvolvements: async function (): Promise<void> {
       //get all the involvements that was updated
