@@ -43,7 +43,7 @@ namespace AttendanceManager.Application.Features.Badge.Commands.InsertCustomBadg
             var newBadge = new Domain.Entities.Badge()
             {
                 BadgeType = badgeType,
-                CourseType = courseType,
+                ActivityType = courseType,
                 Description = string.Format(badgeType == BadgeType.CustomAttendanceAchieved ?
                     Constants.CustomAttendanceDescription : Constants.CustomBonusPointsDescription, request.MaxNumber, request.Type.ToString()),
                 MaxNumber = request.MaxNumber,
@@ -85,7 +85,7 @@ namespace AttendanceManager.Application.Features.Badge.Commands.InsertCustomBadg
                 Title = newBadge.Title,
                 IsCustom = true,
                 IsActive = false,
-                ActivityType = newBadge.CourseType,
+                ActivityType = newBadge.ActivityType,
                 RewardId = null
             };
         }

@@ -79,6 +79,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                     BonusPoints = 0,
                     IsPresent = false,
                     UserID = student.Key,
+                    UpdateBy = request.Username
                 });
             }
 

@@ -133,8 +133,8 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 //this badge is received when all the students come to the one activity
                 //check if all the students came to the lecture
                 BadgeType.FullClass => currentCollection.Involvements!.Count(a => a.IsPresent) == _currentReport.CurrentReportInfo.NoOfStudents,
-                BadgeType.CustomAttendanceAchieved => GetAttendancesAchievedByEmail((ActivityType)badge.CourseType!) >= badge.MaxNumber,
-                BadgeType.CustomBonusPointAchieved => GetBonusPointsAchievedByEmail((ActivityType)badge.CourseType!) >= badge.MaxNumber,
+                BadgeType.CustomAttendanceAchieved => GetAttendancesAchievedByEmail((ActivityType)badge.ActivityType!) >= badge.MaxNumber,
+                BadgeType.CustomBonusPointAchieved => GetBonusPointsAchievedByEmail((ActivityType)badge.ActivityType!) >= badge.MaxNumber,
                 //more than half of the students come to the last laboratory
                 BadgeType.SayByeLaboratory => isLastCollection && currentCollection.ActivityType.Equals(ActivityType.Laboratory) &&
                     currentCollection!.Involvements!.Count(a => a.IsPresent) >= GetMaxNumberByCourseType(ActivityType.Laboratory),

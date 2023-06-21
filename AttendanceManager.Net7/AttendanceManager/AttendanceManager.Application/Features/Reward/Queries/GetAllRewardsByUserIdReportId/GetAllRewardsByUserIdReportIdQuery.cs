@@ -52,7 +52,7 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
                         ImagePath = badge.ImagePath!,
                         IsActive = false,
                         MaxNumber = badge.MaxNumber,
-                        ActivityType = badge.CourseType,
+                        ActivityType = badge.ActivityType,
                         RewardId = null,
                         Title = badge.Title!,
                         Description = badge.Description!,
