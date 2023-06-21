@@ -9,7 +9,6 @@ namespace AttendanceManager.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int NotificationID { get; set; }
-        [ForeignKey("User")]
         [MaxLength(254)]
         public required string UserID { get; set; }
         [MaxLength(254)]

@@ -16,5 +16,6 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("Report")]
         public required int ReportID { get; set; }
         public virtual User? User { get; set; }
+        public virtual Report? Report { get; set; }
     }
 }

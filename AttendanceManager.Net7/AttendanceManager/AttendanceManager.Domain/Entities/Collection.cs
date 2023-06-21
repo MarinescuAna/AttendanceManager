@@ -19,6 +19,7 @@ namespace AttendanceManager.Domain.Entities
         public string? Title { get; set; }
         public required DateTime HeldOn { get; set; }
         public required ActivityType ActivityType { get; set; }
+        public virtual Report? Report { get; set; }
         public ICollection<Involvement>? Involvements { get; set; }
     }
 }
