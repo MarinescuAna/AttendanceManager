@@ -88,7 +88,19 @@ const actions = {
         }
 
         const courses: CourseViewModule[] = (await https.get(`${COURSE_CONTROLLER}/courses`)).data;
-        commit("_courses", courses);
+
+        //sort courses by name
+        const sortedCourses = courses.sort((course1, course2) => {
+            if (course1.name < course2.name) {
+                return -1;
+            }
+            if (course1.name > course2.name) {
+                return 1;
+            }
+            return 0;
+        });
+
+        commit("_courses", sortedCourses);
     },
     /**
      * Add a new course

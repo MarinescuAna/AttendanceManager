@@ -9,6 +9,7 @@ export interface CourseViewModule {
     specializationId:number;
     specializationName:string;
     reportsLinked: number;
+    updatedOn: string;
  }
 
  /**Used to display the badges percentage for teachers */

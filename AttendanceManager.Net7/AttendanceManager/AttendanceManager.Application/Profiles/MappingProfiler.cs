@@ -25,7 +25,6 @@ namespace AttendanceManager.Application.Profiles
                 .ForMember(d => d.Title, act => act.MapFrom(b => b.Badge!.Title))
                 .ForMember(d => d.BadgeType, act => act.MapFrom(b => b.Badge!.BadgeType))
                 .ForMember(d => d.MaxNumber, act => act.MapFrom(b => b.Badge!.MaxNumber))
-                .ForMember(d => d.ActivityType, act => act.MapFrom(b => b.Badge!.CourseType))
                 .ForMember(d => d.RewardId, act => act.MapFrom(r => r.RewardID))
                 .ForMember(d => d.Description, act => act.MapFrom(r => r.Badge!.Description))
                 .ForMember(d => d.IsActive, act => act.MapFrom(_ => true));
@@ -45,7 +44,8 @@ namespace AttendanceManager.Application.Profiles
             CreateMap<Course, Features.Course.Queries.GetCoursesQuery.CoursesVm>()
                 .ForMember(d => d.SpecializationName, act => act.MapFrom(d => d.UserSpecialization!.Specialization!.Name))
                 .ForMember(d => d.SpecializationId, act => act.MapFrom(d => d.UserSpecialization!.SpecializationID))
-                .ForMember(d => d.ReportsLinked, act => act.MapFrom(d => d.Reports!.Count()));
+                .ForMember(d => d.ReportsLinked, act => act.MapFrom(d => d.Reports!.Count()))
+                .ForMember(d=>d.UpdatedOn, act => act.MapFrom(d=>d.UpdatedOn.ToString(Constants.ShortDateFormat)));
 
             //used to get users by year and specialization to create a new report
             CreateMap<UserSpecialization, Features.User.Queries.GetStudentsForCourses.StudentVm>()

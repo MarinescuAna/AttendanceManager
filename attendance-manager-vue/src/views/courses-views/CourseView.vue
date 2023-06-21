@@ -26,6 +26,7 @@
                     Specialization name
                   </th>
                   <th class="text-left black--text text-h6">Reports linked</th>
+                  <th class="text-left black--text text-h6">Last update</th>
                   <th></th>
                 </tr>
               </thead>
@@ -34,6 +35,7 @@
                   <td>{{ item.name }}</td>
                   <td>{{ item.specializationName }}</td>
                   <td>{{ item.reportsLinked }}</td>
+                  <td>{{ getRelativeTime(item.updatedOn) }}</td>
                   <td>
                     <v-menu bottom right offset-y>
                       <template v-slot:activator="{ on, attrs }">
@@ -103,6 +105,7 @@ import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import { Toastification } from "@/plugins/vue-toastification";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
 import UpdateCourseDialog from "@/components/course/UpdateCourseDialog.vue";
+import moment from "moment";
 
 export default Vue.extend({
   name: "CourseView",
@@ -145,6 +148,9 @@ export default Vue.extend({
           Toastification.success(`The course ${course.name} was deleted!`);
         }
       }
+    },
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
     },
     onReload: async function (): Promise<void> {
       await storeHelper.courseStore.loadCourses(true);
