@@ -4,7 +4,7 @@ using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolvementsPerReport
+namespace AttendanceManager.Application.Features.Involvement.Queries.GetSumInvolvementsPerReport
 {
     public sealed class GetSumInvolvementsPerReportQuery : IRequest<List<InvolvementsSumVm>>
     {

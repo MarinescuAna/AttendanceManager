@@ -6,11 +6,11 @@ using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStudentsInvolvement
+namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateStudentsInvolvement
 {
     public sealed class UpdateStudentsInvolvementCommand : IRequest<bool>
     {
-        public required StudentInvolvementVm[] Involvements { get; init; }
+        public required InvolvementVm[] Involvements { get; init; }
         public string? CurrentUserEmail { get; set; }
 
     }
@@ -34,17 +34,17 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateStude
 
         public async Task<bool> Handle(UpdateStudentsInvolvementCommand request, CancellationToken cancellationToken)
         {
-            var attendances = _unitOfWork.AttendanceRepository.GetAttendancesByReportId(_currentReport.CurrentReportInfo.ReportId);
+            var involvements = _unitOfWork.InvolvementRepository.GetInvolvementsByReportId(_currentReport.CurrentReportInfo.ReportId);
             foreach (var student in request.Involvements)
             {
-                var oldStudent = attendances.FirstOrDefault(a => a.AttendanceID == student.InvolvementId);
+                var oldStudent = involvements.FirstOrDefault(a => a.InvolvementID == student.InvolvementId);
                 if (oldStudent != null)
                 {
                     oldStudent.IsPresent = student.IsPresent;
                     oldStudent.UpdatedOn = DateTime.Now;
                     oldStudent.BonusPoints = student.BonusPoints;
 
-                    _unitOfWork.AttendanceRepository.Update(oldStudent);
+                    _unitOfWork.InvolvementRepository.Update(oldStudent);
                 }
             }
 

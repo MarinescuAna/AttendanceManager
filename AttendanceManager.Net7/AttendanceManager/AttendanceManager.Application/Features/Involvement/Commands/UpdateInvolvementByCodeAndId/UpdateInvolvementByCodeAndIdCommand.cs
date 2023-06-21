@@ -5,7 +5,7 @@ using AttendanceManager.Application.Features.Reward.Commands.CreateReward;
 using AttendanceManager.Domain.Common;
 using MediatR;
 
-namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvementByCodeAndId
+namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateInvolvementByCodeAndId
 {
     public sealed class UpdateInvolvementByCodeAndIdCommand : IRequest<bool>
     {
@@ -44,15 +44,15 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
                 throw new SomethingWentWrongException("The code has expired!");
             }
 
-            // get the attendance
-            var attendance = await _unitOfWork.AttendanceRepository.GetAsync(a => a.AttendanceID.Equals(request.AttendanceId))
-                ?? throw new NotFoundException("Attendance", request.AttendanceId);
+            // get the involvement
+            var attendance = await _unitOfWork.InvolvementRepository.GetAsync(a => a.InvolvementID.Equals(request.AttendanceId))
+                ?? throw new NotFoundException("Involvement", request.AttendanceId);
 
-            //update the attendance
+            //update the involvement
             attendance.IsPresent = true;
-            _unitOfWork.AttendanceRepository.Update(attendance);
+            _unitOfWork.InvolvementRepository.Update(attendance);
 
-            if(!await _unitOfWork.CommitAsync())
+            if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
@@ -62,7 +62,7 @@ namespace AttendanceManager.Application.Features.Attendance.Commands.UpdateInvol
                 CurrentCollectionId = request.CollectionId,
                 AchievedUserRole = Domain.Enums.Role.Teacher,
                 AchievedUserId = _currentReport.CurrentReportInfo.CreatedBy,
-                BadgeID=Domain.Enums.BadgeType.FirstCodeUsed,
+                BadgeID = Domain.Enums.BadgeType.FirstCodeUsed,
                 CommitChanges = true
             });
 

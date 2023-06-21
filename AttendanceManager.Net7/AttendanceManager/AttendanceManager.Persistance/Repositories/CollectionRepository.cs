@@ -20,7 +20,7 @@ namespace AttendanceManager.Persistance.Repositories
         public IQueryable<Collection> GetCollectionsByReportId(int reportId)
             => dbContext.Collections
                 .AsNoTracking()
-                .Include(ac => ac.Attendances)
+                .Include(ac => ac.Involvements)
                 .Where(ac => ac.ReportID == reportId);
         public void DeleteCollectionsByReportId(int reportId)
         {

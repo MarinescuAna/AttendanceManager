@@ -9,7 +9,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
         {
 
             // remove the onCascade behavior for Attendance table 
-            modelBuilder.Entity<Attendance>()
+            modelBuilder.Entity<Involvement>()
                 .HasOne(a => a.User)
                 .WithMany(u => u.Attendances)
                 .OnDelete(DeleteBehavior.Restrict);

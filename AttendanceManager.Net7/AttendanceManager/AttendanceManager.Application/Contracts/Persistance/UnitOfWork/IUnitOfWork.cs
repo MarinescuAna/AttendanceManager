@@ -4,7 +4,7 @@ namespace AttendanceManager.Application.Contracts.Persistance.UnitOfWork
 {
     public interface IUnitOfWork
     {
-        public IAttendanceRepository AttendanceRepository { get; }
+        public IInvolvementRepository InvolvementRepository { get; }
         public ICollectionRepository CollectionRepository { get; }
         ICourseRepository CourseRepository { get; }
         IDepartmentRepository DepartmentRepository { get; }

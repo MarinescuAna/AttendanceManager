@@ -72,7 +72,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             // add each student as not present and with 0 bonus points
             foreach (var student in students)
             {
-                _unitOfWork.AttendanceRepository.AddAsync(new Domain.Entities.Attendance
+                _unitOfWork.InvolvementRepository.AddAsync(new Domain.Entities.Involvement
                 {
                     UpdatedOn = DateTime.Now,
                     CollectionID = collection.CollectionID,
@@ -90,7 +90,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
             //send notifications to each user 
             var attendances = collection.Order == GetMaxNumberByCourseType(collection.ActivityType) / 2 ||
                   collection.Order == GetMaxNumberByCourseType(collection.ActivityType) ?
-                  _unitOfWork.AttendanceRepository.ListAll().Where(a => a.Collection!.ReportID == _currentReport.CurrentReportInfo.ReportId)
+                  _unitOfWork.InvolvementRepository.ListAll().Where(a => a.Collection!.ReportID == _currentReport.CurrentReportInfo.ReportId)
                         .Where(a => a.IsPresent) : null;
 
             foreach (var user in students)

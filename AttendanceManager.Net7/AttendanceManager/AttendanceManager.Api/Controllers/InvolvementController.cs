@@ -1,8 +1,8 @@
 ﻿using AttendanceManager.Application.Exceptions;
-using AttendanceManager.Application.Features.Attendance.Commands.UpdateInvolvementByCodeAndId;
-using AttendanceManager.Application.Features.Attendance.Commands.UpdateStudentsInvolvement;
-using AttendanceManager.Application.Features.Attendance.Queries.GetInvolvementsByReportId;
-using AttendanceManager.Application.Features.Attendance.Queries.GetSumInvolvementsPerReport;
+using AttendanceManager.Application.Features.Involvement.Commands.UpdateInvolvementByCodeAndId;
+using AttendanceManager.Application.Features.Involvement.Commands.UpdateStudentsInvolvement;
+using AttendanceManager.Application.Features.Involvement.Queries.GetInvolvementsByReportId;
+using AttendanceManager.Application.Features.Involvement.Queries.GetSumInvolvementsPerReport;
 using AttendanceManager.Domain.Common;
 using AttendanceManager.Domain.Enums;
 using MediatR;
@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManager.Api.Controllers
 {
-    [Route("api/attendance"), ApiController, Authorize]
-    public class AttendanceController : BaseController
+    [Route("api/involvement"), ApiController, Authorize]
+    public class InvolvementController : BaseController
     {
-        public AttendanceController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
+        public InvolvementController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : base(mediator, httpContextAccessor)
         {
         }
 

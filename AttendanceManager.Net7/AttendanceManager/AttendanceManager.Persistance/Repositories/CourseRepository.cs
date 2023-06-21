@@ -27,7 +27,7 @@ namespace AttendanceManager.Persistance.Repositories
                         .ThenInclude(m=>m.User)
                 .Include(s => s.Reports)
                     .ThenInclude(s => s.Collections)
-                        .ThenInclude(a => a.Attendances)
+                        .ThenInclude(a => a.Involvements)
                 .AsNoTracking()
                 .Where(d=>d.UserSpecialization!.UserID.Equals(email))
                 .ToListAsync();

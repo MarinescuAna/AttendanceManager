@@ -72,7 +72,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
         private int[] CountPoints(Domain.Entities.Report report)
         {
             var result = new int[4];
-            var attendances = report.Collections!.SelectMany(s => s.Attendances!).Where(a => a.BonusPoints!=0);
+            var attendances = report.Collections!.SelectMany(s => s.Involvements!).Where(a => a.BonusPoints!=0);
 
             result[0] = attendances.Sum(a => a.BonusPoints);
             result[1] = attendances.Where(c => c.Collection!.ActivityType.Equals(ActivityType.Lecture)).Sum(a => a.BonusPoints);
@@ -83,7 +83,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
         private int[] CountAttendances(Domain.Entities.Report report)
         {
             var result = new int[4];
-            var attendances = report.Collections!.SelectMany(s => s.Attendances!).Where(a=>a.IsPresent);
+            var attendances = report.Collections!.SelectMany(s => s.Involvements!).Where(a=>a.IsPresent);
             
             result[0] = attendances.Count();
             result[1] = attendances.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Lecture));

@@ -6,11 +6,11 @@ namespace AttendanceManager.Domain.Entities
     /// <summary>
     /// Attendances related to each student
     /// </summary>
-    public class Attendance
+    public class Involvement
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AttendanceID { get; set; }
+        public int InvolvementID { get; set; }
         [ForeignKey("Collection")]
         public required int CollectionID { get; set; }
         [ForeignKey("User")]
