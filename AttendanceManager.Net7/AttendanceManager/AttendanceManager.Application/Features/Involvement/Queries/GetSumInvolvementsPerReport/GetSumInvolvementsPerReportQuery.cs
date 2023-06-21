@@ -32,7 +32,7 @@ namespace AttendanceManager.Application.Features.Involvement.Queries.GetSumInvol
             // the user contains the attendances, but those are also from other report, so we will get only the attendances related to the collections from dictionary
             for (var i = 0; i < students.Count; i++)
             {
-                var studentInvolvments = students[i].User!.Attendances!
+                var studentInvolvments = students[i].User!.Involvements!
                         .Where(a => a.IsPresent)
                         .Where(a => _currentReport.ReportCollectionTypes.ContainsKey(a.CollectionID));
                 involvements.Add(new()
@@ -40,10 +40,10 @@ namespace AttendanceManager.Application.Features.Involvement.Queries.GetSumInvol
                     UserId = students[i].UserID,
                     UserName = students[i].User!.FullName,
                     Code = students[i].User!.Code,
-                    BonusPoints = students[i].User?.Attendances == null ? 0 : studentInvolvments.Sum(a => a.BonusPoints),
-                    CourseAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == ActivityType.Lecture),
-                    LaboratoryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == ActivityType.Laboratory),
-                    SeminaryAttendances = students[i].User?.Attendances == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == ActivityType.Seminary),
+                    BonusPoints = students[i].User?.Involvements == null ? 0 : studentInvolvments.Sum(a => a.BonusPoints),
+                    CourseAttendances = students[i].User?.Involvements == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == ActivityType.Lecture),
+                    LaboratoryAttendances = students[i].User?.Involvements == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == ActivityType.Laboratory),
+                    SeminaryAttendances = students[i].User?.Involvements == null ? 0 : studentInvolvments.Count(a => _currentReport.ReportCollectionTypes[a.CollectionID] == ActivityType.Seminary),
                 });
             }
 

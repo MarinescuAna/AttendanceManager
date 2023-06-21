@@ -21,13 +21,13 @@ namespace AttendanceManager.Persistance.Repositories
             => role == null ?
             await dbContext.Members
             .Include(u => u.User)
-            .Include(dm => dm.User!.Attendances)
+            .Include(dm => dm.User!.Involvements)
             .AsNoTracking()
             .Where(dm => dm.ReportID == reportId)
             .ToListAsync() :
         await dbContext.Members
             .Include(u => u.User)
-            .Include(dm => dm.User!.Attendances)
+            .Include(dm => dm.User!.Involvements)
             .AsNoTracking()
             .Where(dm => dm.User!.Role == role && dm.ReportID == reportId)
             .ToListAsync();
