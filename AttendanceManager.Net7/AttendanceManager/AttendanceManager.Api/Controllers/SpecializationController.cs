@@ -1,6 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization;
 using AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations;
-using AttendanceManager.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

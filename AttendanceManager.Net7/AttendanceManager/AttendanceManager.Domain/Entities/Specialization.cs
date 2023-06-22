@@ -14,5 +14,6 @@ namespace AttendanceManager.Domain.Entities
         [ForeignKey("Department")]
         public required int DepartmentID { get; set; }
         public virtual Department? Department { get; set; }
+        public virtual ICollection<UserSpecialization>? UserSpecializations { get; set; }
     }
 }

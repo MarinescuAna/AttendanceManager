@@ -16,7 +16,9 @@ namespace AttendanceManager.Application.Profiles
 
             //Used to get specializations with the departmentId
             CreateMap<Specialization, Features.Specialization.Queries.GetSpecializations.SpecializationVm>()
-             .ForMember(d => d.Id, act => act.MapFrom(d => d.SpecializationID));
+             .ForMember(d => d.Id, act => act.MapFrom(d => d.SpecializationID))
+             .ForMember(d => d.UpdatedOn, act => act.MapFrom(d => d.UpdatedOn.ToString(Constants.ShortDateFormat)))
+             .ForMember(d => d.UsersLinked, act => act.MapFrom(d => d.UserSpecializations!.Count()));
 
             // Used for involvement codes when we create an involvement code and return something that is not void or null
             CreateMap<InvolvementCode, Features.InvolvementCode.Commands.CreateInvolvementCode.InvolvementCodeVm>();

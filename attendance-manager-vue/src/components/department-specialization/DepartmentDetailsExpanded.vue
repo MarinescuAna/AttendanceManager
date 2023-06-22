@@ -21,14 +21,15 @@
     <v-divider></v-divider>
     <v-card-text>
       <v-row justify="center" v-if="specializations.length > 0">
-        <v-col>
+        <v-col lg="4" md="4">
           <h4>Specializations:</h4>
         </v-col>
         <v-col>
           <v-list-item-group>
             <v-list-item v-for="child in specializations" :key="child.id">
               <v-list-item-content>
-                <v-list-item-title>{{ child.name }}</v-list-item-title>
+                <v-list-item-title>{{ child.name }} ({{ child.usersLinked }} users)</v-list-item-title>
+                <v-list-item-subtitle>Last update: {{ getRelativeTime(child.updatedOn) }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -54,6 +55,7 @@ import storeHelper from "@/store/store-helper";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import MessageComponent from "../shared-components/MessageComponent.vue";
 import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
+import moment from "moment";
 
 export default Vue.extend({
   name: "DepartmentDetailsExpanded",
@@ -93,5 +95,10 @@ export default Vue.extend({
       EventBus.$off(EVENT_BUS_RELOAD_ORGANIZATIONS);
     });
   },
+  methods:{
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
+  }
 });
 </script>
