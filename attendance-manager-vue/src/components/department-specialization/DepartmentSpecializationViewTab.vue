@@ -50,6 +50,16 @@ export default Vue.extend({
           value: "name",
           class: "text-left black--text text-h6",
         },
+        {
+          text: "Linked specializations",
+          value: "linkedSpecializations",
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Last update",
+          value: "updatedOn",
+          class: "text-left black--text text-h6",
+        },
       ],
     };
   },

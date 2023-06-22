@@ -84,6 +84,8 @@ export interface DepartmentViewModule
 {
     id: number
     name: string;
+    updatedOn: string;
+    linkedSpecializations: number;
 }
 
 /** Use this view in order to get the documents for the cards */

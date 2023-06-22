@@ -11,6 +11,6 @@ namespace AttendanceManager.Domain.Entities
         [MaxLength(128)]
         public required string Name { get; set; }
         public required DateTime UpdatedOn { get; set; }
-
+        public ICollection<Specialization>? Specializations { get; set; }
     }
 }

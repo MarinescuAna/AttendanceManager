@@ -10,7 +10,9 @@ namespace AttendanceManager.Application.Profiles
         {
             //Used to get departments
             CreateMap<Department, Features.Department.Queries.GetDepartments.DepartmentVm>()
-                .ForMember(d => d.Id, act => act.MapFrom(d => d.DepartmentID));
+                .ForMember(d => d.Id, act => act.MapFrom(d => d.DepartmentID))
+                .ForMember(d => d.UpdatedOn, act => act.MapFrom(d => d.UpdatedOn.ToString(Constants.ShortDateFormat)))
+                .ForMember(d => d.LinkedSpecializations, act => act.MapFrom(d=>d.Specializations!.Count()));
 
             //Used to get specializations with the departmentId
             CreateMap<Specialization, Features.Specialization.Queries.GetSpecializations.SpecializationVm>()

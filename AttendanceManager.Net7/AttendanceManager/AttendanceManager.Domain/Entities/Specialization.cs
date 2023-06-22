@@ -11,6 +11,8 @@ namespace AttendanceManager.Domain.Entities
         [MaxLength(128)]
         public required string Name { get; set; }
         public required DateTime UpdatedOn { get; set; }
+        [ForeignKey("Department")]
         public required int DepartmentID { get; set; }
+        public virtual Department? Department { get; set; }
     }
 }
