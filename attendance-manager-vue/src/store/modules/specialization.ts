@@ -47,6 +47,9 @@ const mutations: MutationTree<SpecializationState> = {
     _addSpecialization(state, payload: SpecializationViewModule): void {
         state.specializations.push(payload);
     },
+    _deleteSpecialization(state, payload: number): void{
+        state.specializations = state.specializations.filter(s=>s.id!=payload);
+    },
     /**
      * Reset the state with the initial values
      */
@@ -65,6 +68,20 @@ const actions: ActionTree<SpecializationState, RootState> = {
             const specializations: SpecializationViewModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
             commit("_specializations", specializations);
         }
+    },
+    async deleteSpecialization({ commit }, payload: number): Promise<boolean> {
+        let isSuccess = true;
+
+        await https.delete(`${SPECIALIZATION_CONTROLLER}/delete/${payload}`)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (isSuccess) {
+            commit("_deleteSpecialization",payload);
+        }
+
+        return isSuccess;
     },
     /**
      * Add a new specialization into the database and initialize the store

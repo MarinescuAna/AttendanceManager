@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Specialization.Commands.CreateSpecialization;
+using AttendanceManager.Application.Features.Specialization.Commands.DeleteSpecialization;
 using AttendanceManager.Application.Features.Specialization.Queries.GetSpecializations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +35,12 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> CreateSpecializationAsync([FromBody] CreateSpecializationCommand command)
         {
             return Ok(await mediator.Send(command));
+        }
+
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeleteSpecializationAsync(int id)
+        {
+            return Ok(await mediator.Send(new DeleteSpecializationCommand() { SpecializationId = id }));
         }
     }
 }

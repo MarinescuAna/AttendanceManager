@@ -25,7 +25,9 @@ export class SpecializationStore {
     public loadSpecializations(): void{
         this.store.dispatch(`${specializationNamespace}/loadSpecializations`);
     }
-
+    public async deleteSpecialization(id: number): Promise<boolean>{
+        return this.store.dispatch(`${specializationNamespace}/deleteSpecialization`,id);
+    }
     /**
      * Add a new specialziation only
      * @test

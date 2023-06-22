@@ -31,6 +31,9 @@
                 <v-list-item-title>{{ child.name }} ({{ child.usersLinked }} users)</v-list-item-title>
                 <v-list-item-subtitle>Last update: {{ getRelativeTime(child.updatedOn) }}</v-list-item-subtitle>
               </v-list-item-content>
+              <v-list-item-action v-if="child.usersLinked==0">
+                <v-btn @click="onDelete(child.id)" icon><v-icon>mdi-delete</v-icon></v-btn>
+              </v-list-item-action>
             </v-list-item>
           </v-list-item-group>
         </v-col>
@@ -56,6 +59,7 @@ import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import MessageComponent from "../shared-components/MessageComponent.vue";
 import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
 import moment from "moment";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
   name: "DepartmentDetailsExpanded",
@@ -96,6 +100,13 @@ export default Vue.extend({
     });
   },
   methods:{
+    onDelete: async function(id: number): Promise<void> {
+      const result = await storeHelper.specializationStore.deleteSpecialization(id);
+
+      if(result){
+        Toastification.success("The specialization was successfully deleted!");
+      }
+    },
     getRelativeTime(updateOn: string) {
       return moment(new Date(updateOn)).fromNow();
     },
