@@ -30,15 +30,15 @@ export class DepartmentStore {
     /**
      * Add a new departments in db and store
      */
-    public addDepartment(payload: InsertDepartmentParameters): Promise<boolean> {
-        return this.store.dispatch(`${departmentNamespace}/addDepartment`, payload);
+    public async addDepartment(payload: InsertDepartmentParameters): Promise<boolean> {
+        return await this.store.dispatch(`${departmentNamespace}/addDepartment`, payload);
     }
 
     /**
     * Change department name from db and store
     */
-    public updateDepartment(payload: UpdateDepartmentParameters): Promise<boolean> {
-        return this.store.dispatch(`${departmentNamespace}/updateDepartment`, payload);
+    public async updateDepartment(payload: UpdateDepartmentParameters): Promise<boolean> {
+        return await this.store.dispatch(`${departmentNamespace}/updateDepartment`, payload);
     }
 
     /**

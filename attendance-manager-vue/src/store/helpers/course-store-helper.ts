@@ -29,28 +29,28 @@ export class CourseStore {
     /**
      * Load all the courses from the API
      */
-    public loadCourses(reload:boolean): Promise<void> {
-        return this.store.dispatch(`${courseNamespace}/loadCourses`,reload);
+    public async loadCourses(reload:boolean): Promise<void> {
+        return await this.store.dispatch(`${courseNamespace}/loadCourses`,reload);
     }
 
     /**
      * Add a new course
      */
-    public addCourse(payload: CreateCourseParameters): Promise<boolean> {
-        return this.store.dispatch(`${courseNamespace}/addCourse`, payload);
+    public async addCourse(payload: CreateCourseParameters): Promise<boolean> {
+        return await this.store.dispatch(`${courseNamespace}/addCourse`, payload);
     }
 
     /**
      * Remove course
      */
-    public removeCourse(courseId: number): Promise<boolean> {
-        return this.store.dispatch(`${courseNamespace}/removeCourse`, courseId);
+    public async removeCourse(courseId: number): Promise<boolean> {
+        return await this.store.dispatch(`${courseNamespace}/removeCourse`, courseId);
     }
 
     /**
     * Change course name
     */
-    public updateCourse(payload: UpdateCourseParameters, specializationName: string): Promise<boolean> {
-        return this.store.dispatch(`${courseNamespace}/updateCourse`, { specializationName: specializationName, parameter: payload });
+    public async updateCourse(payload: UpdateCourseParameters, specializationName: string): Promise<boolean> {
+        return await this.store.dispatch(`${courseNamespace}/updateCourse`, { specializationName: specializationName, parameter: payload });
     }
 }

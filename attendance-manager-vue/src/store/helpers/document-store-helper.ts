@@ -60,8 +60,8 @@ export class DocumentStore {
     /**
    * Add a new specialziation only
    */
-    public addCollection(payload: InsertCollectionParameters): Promise<boolean> {
-        return this.store.dispatch(`${documentNamespace}/addCollection`, payload);
+    public async addCollection(payload: InsertCollectionParameters): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/addCollection`, payload);
     }
 
     /**

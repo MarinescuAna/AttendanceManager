@@ -32,8 +32,8 @@ export class SpecializationStore {
      * Add a new specialziation only
      * @test
      */
-    public addSpecialization(payload: InsertSpecializationParameters): Promise<boolean> {
-        return this.store.dispatch(`${specializationNamespace}/addSpecialization`,payload);
+    public async addSpecialization(payload: InsertSpecializationParameters): Promise<boolean> {
+        return await this.store.dispatch(`${specializationNamespace}/addSpecialization`,payload);
     }
 
     /**

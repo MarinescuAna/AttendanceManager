@@ -42,8 +42,8 @@ export class UserStore {
     /**
      * Add a new user only
      */
-    public addUser(payload: InsertUserParameters, department: DepartmentViewModule): Promise<boolean> {
-        return this.store.dispatch(`${userNamespace}/addUser`, { newUser: payload, department: department });
+    public async addUser(payload: InsertUserParameters, department: DepartmentViewModule): Promise<boolean> {
+        return await this.store.dispatch(`${userNamespace}/addUser`, { newUser: payload, department: department });
     }
 
     /**
