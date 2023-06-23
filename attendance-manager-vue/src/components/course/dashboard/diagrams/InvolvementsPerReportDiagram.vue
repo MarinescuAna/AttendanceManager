@@ -21,6 +21,7 @@
       item-value="id"
       return-object
       attach
+      color="black"
       outlined
       filled
     ></v-select>

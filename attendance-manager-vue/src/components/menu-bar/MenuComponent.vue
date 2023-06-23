@@ -58,7 +58,7 @@
     <!--navigation drawer-->
     <v-navigation-drawer
       v-model="drawerActivator"
-      class="blue_grey navigation-drawer-style"
+      class="blue_grey_4 navigation-drawer-style"
       absolute
       temporary
       width="auto"

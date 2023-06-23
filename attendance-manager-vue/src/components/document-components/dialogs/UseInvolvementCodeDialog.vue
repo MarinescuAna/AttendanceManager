@@ -21,6 +21,7 @@
                 label="Enter the code"
                 :error-messages="errors"
                 maxlength="8"
+                color="black"
                 minlength="6"
                 prepend-icon="mdi-lock"
               ></v-text-field>
@@ -29,8 +30,7 @@
           <v-card-actions>
             <v-layout class="pa-2" justify-center row>
               <v-btn
-                color="black"
-                class="mr-1 white--text"
+                class="mr-1 dark_button white--text"
                 :disabled="invalid"
                 @click="onSubmit"
               >

@@ -14,7 +14,7 @@
     <v-tabs-items v-model="currentTab" class="pa-3 custom-remove-background">
       <v-tab-item>
         <div v-if="courses.length != 0">
-          <v-btn class="dark_button ma-6" @click="onReload" dark>
+          <v-btn class="dark_button white--text ma-6" @click="onReload">
             <v-icon>mdi-reload</v-icon> Reload courses
           </v-btn>
           <v-simple-table>

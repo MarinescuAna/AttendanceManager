@@ -17,6 +17,7 @@
       :items="activityTypes"
       label="Activity type"
       class="ma-2"
+      color="black"
       item-text="name"
       item-value="id"
       attach

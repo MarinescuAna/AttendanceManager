@@ -21,9 +21,9 @@ export const DEPARTMENT_CONTROLLER = "department";
 export const SPECIALIZATION_CONTROLLER = "specialization";
 export const USER_CONTROLLER = "user";
 export const COURSE_CONTROLLER = "course";
-export const DOCUMENT_CONTROLLER = "report";
+export const REPORT_CONTROLLER = "report";
 export const COLLECTION_CONTROLLER = "collection";
-export const ATTENDANCE_CONTROLLER = "involvement";
+export const INVOLVEMENT_CONTROLLER = "involvement";
 export const INVOLVEMENT_CODE_CONTROLLER = "involvement_code";
 export const REWARD_CONTROLLER = "reward";
 export const BADGE_CONTROLLER = "badge";
@@ -31,5 +31,6 @@ export const NOTIFICATION_CONTROLLER = "notification";
 
 /**Colors codes */
 export const WARNING_AMBER_DARKEN_4='#FF6F00';
+export const WARNING_BACKGROUND_AMBER_LIGHTEN_5='#FFF8E1';
 export const AMBER_DARKEN_4='#FF6F00';
 export const BLUE_DARKEN_4='#0D47A1';

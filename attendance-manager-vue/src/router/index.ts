@@ -113,17 +113,6 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-
-    path: '/unauthorized',
-    name: 'unauthorized',
-    component: () => import('../views/routing-views/UnauthorizedView.vue'),
-    meta: {
-      title: 'Unauthorized',
-      requireAuth: false,
-      role: [Role.All]
-    },
-  },
-  {
     // NotFound route
     // WARNING: DO NOT add any new route after this route, because it will never be matched!!!
     path: '/:pathMatch(.*)',
@@ -155,8 +144,6 @@ router.beforeEach(async (to, from, next) => {
     } else {
       if (to.meta?.role.filter(role=> Role[role] == (tokenData as TokenData).role.toString()).length>0) {
         next();
-      } else {
-        next({ name: 'unauthorized' });
       }
     }
   } else {

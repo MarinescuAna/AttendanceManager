@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-toolbar class="blue-grey lighten-4" max-height="60px">
+    <v-toolbar class="blue_grey_4" max-height="60px">
       <v-btn icon @click="onCloseDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -42,7 +42,7 @@
     <v-layout column>
       <v-btn-toggle class="ma-5" rounded>
         <v-btn
-          class="blue-grey lighten-2"
+          class="blue_grey_button"
           @click="uploadInvolvementsDialog = true"
           v-if="isTeacher"
         >
@@ -50,7 +50,7 @@
           <div v-else>Upload involvements</div>
         </v-btn>
         <v-btn
-          class="blue-grey lighten-2"
+          class="blue_grey_button"
           @click="generateCodeDialog = true"
           title="Share this code with the students that are members of this report to let them enter their attendance."
           v-if="isTeacher"
@@ -59,7 +59,7 @@
           <div v-else>Generate code</div>
         </v-btn>
         <v-btn
-          class="blue-grey lighten-2"
+          class="blue_grey_button"
           @click="useCodeDialog = true"
           title="Use the code provided by your teacher to confirm your attendance."
           :disabled="currentUserInvolvement?.isPresent"
@@ -68,7 +68,7 @@
           Use code
         </v-btn>
         <v-btn
-          class="blue-grey lighten-2"
+          class="blue_grey_button"
           @click="onSelectAllUsers"
           v-if="isTeacher"
           >{{
@@ -76,7 +76,7 @@
           }}</v-btn
         >
         <v-btn
-          class="blue-grey lighten-2"
+          class="blue_grey_button"
           @click="onSaveInvolvements"
           title="Save changes."
           :disabled="!saveChanges"
@@ -84,7 +84,7 @@
         >
           <v-icon>mdi-floppy</v-icon>
         </v-btn>
-        <v-btn class="blue-grey lighten-2" @click="onReloadAttendances">
+        <v-btn class="blue_grey_button" @click="onReloadAttendances">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-btn-toggle>
@@ -114,6 +114,7 @@
               </td>
               <td>
                 <v-checkbox
+                  color="black"
                   v-model="item.isPresent"
                   :disabled="!isTeacher"
                   @change="onPresenceChanged(item)"

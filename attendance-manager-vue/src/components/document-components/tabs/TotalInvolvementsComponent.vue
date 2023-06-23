@@ -15,7 +15,11 @@
           clearable
         >
         </v-autocomplete>
-        <v-btn class="blue-grey lighten-2 ma-5" @click="loadInvolvements" icon>
+        <v-btn
+          class="dark_button white--text ma-5"
+          @click="loadInvolvements"
+          icon
+        >
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-flex>
@@ -57,7 +61,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { totalAttendancesHeader } from "@/components/document-components/TotalAttendancesHeader";
 import StudentAttendanceExpandedComponent from "@/components/document-components/StudentAttendanceExpandedComponent.vue";
 import AuthService from "@/services/auth.service";
 import { Role } from "@/shared/enums";
@@ -72,7 +75,45 @@ export default Vue.extend({
   data() {
     return {
       search: "",
-      totalAttendancesHeader,
+      totalAttendancesHeader: [
+        {
+          text: "Code",
+          value: "code",
+          align: "start",
+          filterable: false,
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Fullname",
+          value: "userName",
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Email",
+          value: "userId",
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Lecture Attendances",
+          value: "courseAttendances",
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Laboratory Attendances",
+          value: "laboratoryAttendances",
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Seminary Attendances",
+          value: "seminaryAttendances",
+          class: "text-left black--text text-h6",
+        },
+        {
+          text: "Bonus Points",
+          value: "bonusPoints",
+          class: "text-left black--text text-h6",
+        },
+      ],
       // Elements that are currently expanded
       expanded: [],
       involvements: [] as TotalInvolvementViewModule[],

@@ -3,7 +3,7 @@ import ResponseHandler from "@/error-handler/error-handler";
 import { InsertCollaboratorParameters, InsertCollectionParameters, UpdateCollectionParameters, UpdateReportParameters } from "@/modules/commands-parameters";
 import { CollectionDto } from "@/modules/view-modules";
 import https from "@/plugins/axios";
-import { COLLECTION_CONTROLLER, DOCUMENT_CONTROLLER } from "@/shared/constants";
+import { COLLECTION_CONTROLLER, REPORT_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 // actions for this store
@@ -20,7 +20,7 @@ export const documentActions = {
         let isFail = false;
 
         //load the document details and update the store
-        const response = await https.get(`${DOCUMENT_CONTROLLER}/${payload}`)
+        const response = await https.get(`${REPORT_CONTROLLER}/${payload}`)
             .catch(error => isFail = ResponseHandler.errorResponseHandler(error));
 
         if (!isFail) {
@@ -32,7 +32,7 @@ export const documentActions = {
     async addCollaborator({ commit }, payload: InsertCollaboratorParameters): Promise<boolean> {
         let isSuccess = true;
 
-        const result = await https.post(`${DOCUMENT_CONTROLLER}/add_collaborator`,payload)
+        const result = await https.post(`${REPORT_CONTROLLER}/add_collaborator`,payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -47,7 +47,7 @@ export const documentActions = {
     async updateDocument({ commit }, payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${DOCUMENT_CONTROLLER}/update_report`, payload.module)
+        await https.patch(`${REPORT_CONTROLLER}/update_report`, payload.module)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -62,7 +62,7 @@ export const documentActions = {
     async deleteDocument({ commit }): Promise<boolean> {
         let isSuccess = true;
 
-        await https.delete(`${DOCUMENT_CONTROLLER}/delete_current_report`)
+        await https.delete(`${REPORT_CONTROLLER}/delete_current_report`)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

@@ -15,6 +15,7 @@
         label="Select time"
         prepend-icon="mdi-clock-time-four-outline"
         v-bind="attrs"
+        color="black"
         v-on="on"
         readonly
       ></v-text-field>
@@ -24,6 +25,7 @@
       format="24hr"
       @click:minute="onSubmit"
       full-width
+      color="black"
     ></v-time-picker>
   </v-menu>
 </template>

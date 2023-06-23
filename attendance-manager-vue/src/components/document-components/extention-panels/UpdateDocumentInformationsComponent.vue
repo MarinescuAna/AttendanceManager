@@ -137,8 +137,7 @@
           </v-layout>
           <v-layout row align-center column="4">
             <v-btn
-              class="white--text ma-2"
-              color="black"
+              class="dark_button white--text ma-2"
               @click="onSubmit"
               :disabled="
                 invalid || !selectedCourse || computeImportancePercentage != 100

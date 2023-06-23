@@ -22,8 +22,7 @@
           </validation-provider>
           <v-row justify="center" class="pa-8">
             <v-btn
-              class="white--text"
-              color="black"
+              class="dark_button white--text"
               @click="doSubmit"
               :disabled="invalid"
               >Add new collaborator</v-btn

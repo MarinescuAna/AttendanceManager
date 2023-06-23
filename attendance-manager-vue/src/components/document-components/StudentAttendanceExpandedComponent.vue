@@ -3,7 +3,7 @@
     <v-flex>
       <v-btn-toggle class="ma-2" rounded>
         <v-btn
-          class="blue-grey lighten-2"
+          class="blue_grey_button"
           title="Save changes."
           :disabled="!saveChanges"
           @click="onSave"
@@ -11,7 +11,7 @@
         >
           <v-icon>mdi-floppy</v-icon>
         </v-btn>
-        <v-btn class="blue-grey lighten-2" @click="onLoadData">
+        <v-btn class="blue_grey_button" @click="onLoadData">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-btn-toggle>
@@ -31,7 +31,13 @@
           </thead>
           <tbody>
             <tr v-for="item in involvements" :key="item.involvementId">
-              <td>{{ item.title!=null && item.title!=''? `${item.title}(${item.heldOn})`: item.heldOn }}</td>
+              <td>
+                {{
+                  item.title != null && item.title != ""
+                    ? `${item.title}(${item.heldOn})`
+                    : item.heldOn
+                }}
+              </td>
               <td>
                 <v-simple-checkbox
                   v-model="item.isPresent"
@@ -49,8 +55,10 @@
                 <span v-else>{{ item.bonusPoints }}</span>
               </td>
               <td>{{ getActivityTypeName(item.activityType) }}</td>
-              <td :title="item.updateOn">{{ getRelativeTime(item.updateOn) }}</td>
-            <td>{{ item.updateBy }}</td>
+              <td :title="item.updateOn">
+                {{ getRelativeTime(item.updateOn) }}
+              </td>
+              <td>{{ item.updateBy }}</td>
             </tr>
           </tbody>
         </template>
@@ -97,14 +105,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { studentAttendancesHeader } from "./TotalAttendancesHeader";
 import { CourseType, Role } from "@/shared/enums";
 import AuthService from "@/services/auth.service";
 import MessageComponent from "../shared-components/MessageComponent.vue";
 import InvolvementService from "@/services/involvement.service";
 import { Toastification } from "@/plugins/vue-toastification";
 import moment from "moment";
-import {WARNING_AMBER_DARKEN_4} from "@/shared/constants";
+import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import { InvolvementViewModule } from "@/modules/view-modules";
 
 interface ResultsOverview {
@@ -124,7 +131,6 @@ export default Vue.extend({
   data: function () {
     return {
       WARNING_AMBER_DARKEN_4,
-      studentAttendancesHeader,
       resultsOverview: {},
       involvements: [] as InvolvementViewModule[],
       involvementsInit: [] as InvolvementViewModule[],

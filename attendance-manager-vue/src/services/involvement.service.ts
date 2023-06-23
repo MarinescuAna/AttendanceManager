@@ -1,6 +1,6 @@
 
 import https from "@/plugins/axios";
-import { ATTENDANCE_CONTROLLER } from "@/shared/constants";
+import { INVOLVEMENT_CONTROLLER } from "@/shared/constants";
 import ResponseHandler from "@/error-handler/error-handler";
 import { UpdateInvolvementDto, UpdateInvolvementsParameters, UpdateInvolvementByCodeParameters } from "@/modules/commands-parameters";
 import { InvolvementViewModule, TotalInvolvementViewModule } from "@/modules/view-modules";
@@ -46,17 +46,17 @@ export default class InvolvementService {
     }
 
     static async getInvolvementsTotal(): Promise<TotalInvolvementViewModule[]> {
-        return (await https.get(`${ATTENDANCE_CONTROLLER}/total_involvements`)).data;
+        return (await https.get(`${INVOLVEMENT_CONTROLLER}/total_involvements`)).data;
     }
 
     static async getInvolvements(collectionId: number, email: string, useCode: boolean, currentUser: boolean, onlyPresents: boolean): Promise<InvolvementViewModule[]> {
-        return (await https.get(`${ATTENDANCE_CONTROLLER}/involvements?email=${email}&collection_id=${collectionId}&use_code=${useCode}&current_user=${currentUser}&only_present=${onlyPresents}`)).data;
+        return (await https.get(`${INVOLVEMENT_CONTROLLER}/involvements?email=${email}&collection_id=${collectionId}&use_code=${useCode}&current_user=${currentUser}&only_present=${onlyPresents}`)).data;
     }
 
     static async addStudentsAttendances(payload: UpdateInvolvementsParameters): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${ATTENDANCE_CONTROLLER}/update_student_involvement`, payload)
+        await https.patch(`${INVOLVEMENT_CONTROLLER}/update_student_involvement`, payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });
@@ -70,7 +70,7 @@ export default class InvolvementService {
     static async updateAttendanceByCode(payload: UpdateInvolvementByCodeParameters): Promise<boolean> {
         let isSuccess = true;
 
-        await https.patch(`${ATTENDANCE_CONTROLLER}/update_involvement_by_code`, payload)
+        await https.patch(`${INVOLVEMENT_CONTROLLER}/update_involvement_by_code`, payload)
             .catch(error => {
                 isSuccess = ResponseHandler.errorResponseHandler(error);
             });

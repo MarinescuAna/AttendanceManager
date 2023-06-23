@@ -27,10 +27,10 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="blue darken-1" text @click="$emit('close')"> Close </v-btn>
+      <v-btn color="dark_button white--text" width="30%" @click="$emit('close')"> Close </v-btn>
       <v-btn
-        color="blue darken-1"
-        text
+        color="dark_button white--text"
+        width="30%"
         @click="onSubmit"
         :disabled="date === '' || time === null || selectedCourseType === ''"
       >

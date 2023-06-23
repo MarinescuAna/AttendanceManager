@@ -2,7 +2,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-card width="50%" class="orange lighten-3">
+      <v-card width="50%" class="orange_background">
         <v-card-title class="pa-7">
           <h2>Create single user</h2>
         </v-card-title>
@@ -21,6 +21,7 @@
                   label="Fullname"
                   v-model="fullname"
                   counter
+                  color="black"
                   maxlength="128"
                   prepend-icon="mdi-account"
                   :error-messages="errors"
@@ -37,6 +38,7 @@
                   label="Email"
                   v-model="email"
                   counter
+                  color="black"
                   maxlength="254"
                   prepend-icon="mdi-email"
                   :error-messages="errors"
@@ -51,16 +53,32 @@
                 @change="onFillSpecializations"
                 class="pa-6"
                 item-text="name"
+                color="black"
                 item-value="id"
                 ref="departmentRef"
                 required
               ></v-select>
+              <div class="ml-6">
+                <label class=""><v-icon>mdi-pencil</v-icon> Role</label>
+                <v-radio-group
+                  v-model="role"
+                  color="black"
+                  class="ml-6"
+                  @change="onResetSpecializationSelector"
+                >
+                  <v-row>
+                    <v-radio class="ma-4" label="Student" :value="1"></v-radio>
+                    <v-radio class="ma-4" label="Teacher" :value="2"></v-radio>
+                  </v-row>
+                </v-radio-group>
+              </div>
               <v-select
                 :items="specializations"
                 label="Specializations"
                 v-model="selectedSpecializations"
                 prepend-icon="mdi-file"
                 class="pa-6"
+                color="black"
                 item-text="name"
                 item-value="id"
                 :disabled="specializations.length == 0"
@@ -77,6 +95,7 @@
                 v-model="selectedSpecialization"
                 prepend-icon="mdi-file"
                 class="pa-6"
+                color="black"
                 item-text="name"
                 item-value="id"
                 :disabled="specializations.length == 0"
@@ -87,13 +106,14 @@
                 <v-col cols="6">
                   <validation-provider
                     :rules="rules.required"
-                    name="GDPR code"
+                    name="GDPR"
                     v-slot="{ errors }"
                   >
                     <v-text-field
-                      label="GDPR Code"
+                      label="GDPR"
                       v-model="code"
                       counter
+                      color="black"
                       maxlength="32"
                       prepend-icon="mdi-account"
                       :error-messages="errors"
@@ -105,29 +125,20 @@
                 <v-col cols="6">
                   <v-select
                     :items="years"
-                    label="Enrollment year"
+                    :label="role == 2 ? 'Employment year' : 'Enrollment year'"
                     v-model="year"
                     required
+                    color="black"
                     prepend-icon="mdi-school"
                     class="pa-6"
                   ></v-select>
                 </v-col>
               </v-row>
-              <v-container class="ml-3">
-                <label class=""><v-icon>mdi-pencil</v-icon> Role</label>
-                <v-radio-group
-                  v-model="role"
-                  class="ml-4"
-                  @change="onResetSpecializationSelector"
-                >
-                  <v-radio label="Student" :value="1"></v-radio>
-                  <v-radio label="Teacher" :value="2"></v-radio>
-                </v-radio-group>
-              </v-container>
               <v-row justify="center" class="pa-8">
                 <v-btn
                   width="50%"
                   @click="onSubmit"
+                  class="dark_button white--text"
                   :disabled="
                     invalid ||
                     (selectedSpecializations.length === 0 && role === 2) ||
@@ -152,7 +163,10 @@ import { rules } from "@/plugins/vee-validate";
 import storeHelper from "@/store/store-helper";
 import { Role } from "@/shared/enums";
 import { Toastification } from "@/plugins/vue-toastification";
-import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
+import {
+  DepartmentViewModule,
+  SpecializationViewModule,
+} from "@/modules/view-modules";
 import { InsertUserParameters } from "@/modules/commands-parameters";
 
 export default Vue.extend({
@@ -160,15 +174,11 @@ export default Vue.extend({
   data() {
     return {
       rules,
-      // Email
       email: "",
-      //Fullname
       fullname: "",
-      //GDPR code
       code: "",
       //user's role; Default value is 1 => student
       role: 1,
-      // Enroll year
       year: 0,
       // All the specializations
       specializations: [] as SpecializationViewModule[],
@@ -187,17 +197,11 @@ export default Vue.extend({
         (new Date().getFullYear() - i).toString()
       );
     },
-    /**
-     * All departments
-     */
     departments(): DepartmentViewModule[] {
       return storeHelper.departmentStore.departments;
     },
   },
   methods: {
-    /**
-     * Use this method to add a new user then inform the admin about the process
-     */
     async onSubmit(): Promise<void> {
       let specializationIds: number[] = [];
       if (this.role == Role.Teacher) {
@@ -229,11 +233,6 @@ export default Vue.extend({
         this.$router.push({ name: "users" });
       }
     },
-
-    /**
-     * Get the list with all specializations by department id
-     * @param selectedDepartment
-     */
     onFillSpecializations(selectedDepartment: number): void {
       this.specializations =
         storeHelper.specializationStore.specializations.filter(
@@ -241,10 +240,6 @@ export default Vue.extend({
         );
       this.selectedSpecializations = [];
     },
-
-    /**
-     * Reset specialization v-selector when the role is changed
-     */
     onResetSpecializationSelector(): void {
       this.selectedSpecializations = [];
     },

@@ -29,7 +29,7 @@
       </template>
     </v-toolbar>
 
-    <v-tabs-items v-model="selectedTab" class="blue-grey lighten-5" touchless>
+    <v-tabs-items v-model="selectedTab" class="blue_grey_5" touchless>
       <v-tab-item>
         <AttendanceTimelineComponent />
       </v-tab-item>

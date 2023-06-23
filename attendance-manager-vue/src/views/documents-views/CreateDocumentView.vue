@@ -156,8 +156,7 @@
               <v-layout row align-end column="4">
                 <v-flex class="my-3 mr-4" align-self-end>
                   <v-btn
-                    class="white--text"
-                    color="black"
+                    class="dark_button white--text"
                     @click="currentStep = 2"
                     :disabled="
                       invalid ||
@@ -200,19 +199,15 @@
             </v-layout>
             <v-layout row align-end column="4" class="my-3 mr-4">
               <v-flex>
-                <v-btn
-                  class="white--text"
-                  color="black"
-                  @click="currentStep = 1"
-                >
+                <v-btn class="dark_button white--text" @click="currentStep = 1">
                   <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
                 <v-btn
-                  class="white--text"
-                  color="black"
+                  class="dark_button white--text"
                   @click="step3Actions"
                   :disabled="
-                    Object.keys(selectedSpecialization).length === 0 || selectedYear === 0
+                    Object.keys(selectedSpecialization).length === 0 ||
+                    selectedYear === 0
                   "
                 >
                   <v-icon>mdi-arrow-right</v-icon>
@@ -269,8 +264,7 @@
                   <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
                 <v-btn
-                  class="white--text"
-                  color="black"
+                  class="dark_button white--text"
                   @click="onSubmit"
                   :disabled="selectedStudents.length == 0"
                 >
@@ -292,7 +286,11 @@
 </style>
 
 <script lang="ts">
-import { CourseViewModule, SpecializationViewModule, StudentForCourseViewModule } from "@/modules/view-modules";
+import {
+  CourseViewModule,
+  SpecializationViewModule,
+  StudentForCourseViewModule,
+} from "@/modules/view-modules";
 import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import UserService from "@/services/user.service";
@@ -394,20 +392,18 @@ export default Vue.extend({
     },
     /** Create the new document according to the selected data, and if any error occures, redirect the user to the created documents list */
     onSubmit: async function (): Promise<void> {
-      const response = await ReportService.addReport(
-        {
-          courseId: this.selectedCourse.courseId,
-          enrollmentYear: this.selectedYear,
-          maxNoLaboratories: this.maxNoLaboratories,
-          maxNoLessons: this.maxNoLessons,
-          maxNoSeminaries: this.maxNoSeminaries,
-          title: this.documentTitle,
-          specializationId: this.selectedSpecialization.id,
-          studentIds: this.selectedStudents.map((x) => this.students[x].email),
-          attendanceImportance: this.attendanceImportance,
-          bonusPointsImportance: this.bonusPointImportance,
-        } as InsertReportParameters
-      );
+      const response = await ReportService.addReport({
+        courseId: this.selectedCourse.courseId,
+        enrollmentYear: this.selectedYear,
+        maxNoLaboratories: this.maxNoLaboratories,
+        maxNoLessons: this.maxNoLessons,
+        maxNoSeminaries: this.maxNoSeminaries,
+        title: this.documentTitle,
+        specializationId: this.selectedSpecialization.id,
+        studentIds: this.selectedStudents.map((x) => this.students[x].email),
+        attendanceImportance: this.attendanceImportance,
+        bonusPointsImportance: this.bonusPointImportance,
+      } as InsertReportParameters);
 
       if (response) {
         this.$router.push({ name: "documents" });

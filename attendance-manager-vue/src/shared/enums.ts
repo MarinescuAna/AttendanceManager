@@ -9,14 +9,6 @@ export enum Role {
     All = 4
 }
 
-/**
- * Use this enum for showing the data in the tabel management component
- */
-export enum ManagementDataType {
-    Users = 0,
-    TotalAttendance = 3,
-}
-
 export enum CourseType {
     None = 0,
     Lecture = 1,

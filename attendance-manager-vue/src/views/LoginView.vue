@@ -49,7 +49,7 @@
                 />
               </validation-provider>
               <v-row justify="center" class="pa-8">
-                <v-btn :width="width" class="dark_button" dark @click="doLogin" :disabled="invalid" large
+                <v-btn :width="width" class="dark_button white--text" @click="doLogin" :disabled="invalid" large
                   >Sign in</v-btn
                 >
               </v-row>

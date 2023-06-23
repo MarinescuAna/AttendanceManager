@@ -42,7 +42,7 @@
                 width="50%"
                 @click="addCourse"
                 :disabled="invalid || selectedSpecialization === 0"
-                class="blue-grey lighten-4 pa-3"
+                class="dark_button white--text pa-3"
                 >Submit</v-btn
               ></v-row
             >

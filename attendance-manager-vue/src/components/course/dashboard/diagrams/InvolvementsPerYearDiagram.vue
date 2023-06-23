@@ -19,6 +19,7 @@
       class="ma-2"
       item-text="name"
       item-value="id"
+      color="black"
       return-object
       attach
       outlined

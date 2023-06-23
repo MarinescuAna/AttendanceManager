@@ -14,10 +14,11 @@
         prepend-icon="mdi-calendar"
         v-bind="attrs"
         v-on="on"
+        color="black"
         readonly
       ></v-text-field>
     </template>
-    <v-date-picker v-model="selectedDate" @input="onSubmit" no-title scrollable>
+    <v-date-picker v-model="selectedDate" @input="onSubmit" color="black" no-title scrollable>
     </v-date-picker>
   </v-menu>
 </template>

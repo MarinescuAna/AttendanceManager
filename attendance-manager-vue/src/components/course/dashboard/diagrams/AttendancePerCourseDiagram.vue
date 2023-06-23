@@ -20,6 +20,7 @@
       item-text="name"
       item-value="id"
       return-object
+      color="black"
       attach
       outlined
       filled
@@ -38,6 +39,7 @@
       v-model="selectedActivityType"
       :items="activityTypes"
       label="Activity type"
+      color="black"
       class="ma-2"
       item-text="name"
       item-value="id"

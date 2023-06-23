@@ -319,8 +319,7 @@
             <v-layout column="4" class="my-3 mr-4" row align-end>
               <v-flex>
                 <v-btn
-                  class="white--text mx-1"
-                  color="black"
+                  class="dark_button white--text mx-1"
                   @click="currentStep = 2"
                 >
                   <v-icon>mdi-arrow-left</v-icon>

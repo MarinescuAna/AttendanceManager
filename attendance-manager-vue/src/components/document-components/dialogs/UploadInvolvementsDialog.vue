@@ -66,12 +66,11 @@
         </div>
         <v-layout row align-end column="4" class="my-3 mr-4">
           <v-flex>
-            <v-btn class="white--text" color="black" @click="currentStep = 1">
+            <v-btn class="dark_button white--text" @click="currentStep = 1">
               <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
             <v-btn
-              class="white--text"
-              color="black"
+              class="dark_button white--text"
               @click="onMatchedData"
               :disabled="endingCell == '' || startingCell == ''"
             >
@@ -155,18 +154,13 @@
         </v-simple-table>
         <v-layout row align-end column="4" class="my-3 mr-4">
           <v-flex>
-            <v-btn class="white--text" color="black" @click="currentStep = 2">
+            <v-btn class="dark_button white--text" @click="currentStep = 2">
               <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
-            <v-btn
-              color="success"
-              @click="onClose(true, false)"
-            >
+            <v-btn color="success" @click="onClose(true, false)">
               Update involvements
             </v-btn>
-            <v-btn color="red" @click="onClose(false, true)">
-              Discard
-            </v-btn>
+            <v-btn color="red" @click="onClose(false, true)"> Discard </v-btn>
           </v-flex>
         </v-layout>
       </v-stepper-content>

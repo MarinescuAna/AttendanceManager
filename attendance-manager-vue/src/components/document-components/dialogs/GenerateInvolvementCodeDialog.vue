@@ -17,6 +17,7 @@
                 v-model="time"
                 max="60"
                 min="1"
+                color="black"
                 thumb-label
                 prepend-icon="mdi-clock-time-four-outline"
               ></v-slider>
@@ -27,7 +28,7 @@
           </v-card-text>
           <v-card-actions>
             <v-layout class="pa-2" justify-center align-content-end row>
-              <v-btn color="black" class="mr-1 white--text" @click="onSubmit">
+              <v-btn class="mr-1 dark_button white--text" @click="onSubmit">
                 Generate code
               </v-btn>
             </v-layout>
