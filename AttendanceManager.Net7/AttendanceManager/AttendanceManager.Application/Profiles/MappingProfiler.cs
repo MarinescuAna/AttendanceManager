@@ -39,6 +39,7 @@ namespace AttendanceManager.Application.Profiles
             //Used when we get info about a report
             CreateMap<Collection, Features.Report.Queries.GetReportById.CollectionDto>()
                 .ForMember(a => a.CollectionId, act => act.MapFrom(ac => ac.CollectionID))
+                .ForMember(a=>a.CourseType, act => act.MapFrom(ac=>ac.ActivityType))
                 .ForMember(a => a.ActivityTime, act => act.MapFrom(ac => ac.HeldOn.ToString(Constants.ShortDateFormat)));
             CreateMap<Member, Features.Report.Queries.GetReportById.MembersDto>()
                 .ForMember(u => u.Name, act => act.MapFrom(d => d.User!.FullName))

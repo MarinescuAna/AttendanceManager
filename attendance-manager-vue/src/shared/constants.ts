@@ -34,3 +34,8 @@ export const WARNING_AMBER_DARKEN_4='#FF6F00';
 export const WARNING_BACKGROUND_AMBER_LIGHTEN_5='#FFF8E1';
 export const AMBER_DARKEN_4='#FF6F00';
 export const BLUE_DARKEN_4='#0D47A1';
+
+export const LABORATORY_COLOR='#BBDEFB';
+export const SEMINARY_COLOR='#FFE0B2';
+export const LECTURE_COLOR='#FFCDD2';
+export const NONE_COLOR='#CFD8DC';

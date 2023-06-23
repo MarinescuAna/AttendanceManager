@@ -3,38 +3,38 @@
     <v-layout justify-center class="pa-2">
       <v-flex md5 lg5 v-if="collections.length > 0">
         <div v-if="!isMobile">
-          <v-timeline align-top dense>
+          <v-timeline large>
             <v-timeline-item
               v-for="item in collections"
               :key="item.collectionId"
-              color="black"
+              :color="getColorByType(item.courseType)"
               small
             >
-              <v-row class="pt-1">
-                <v-col cols="1">
-                  <v-btn icon @click="onOpenAttendanceDialog(item)"
-                    ><v-icon :color="AMBER_DARKEN_4"
-                      >mdi-cursor-default-click</v-icon
-                    >
-                  </v-btn>
-                </v-col>
-                <v-col cols="3">
-                  <strong>{{ item.activityTime.replaceAll("/", ".") }}</strong>
-                </v-col>
-
-                <v-col>
-                  <strong v-if="item.title != '' && item.title != null">{{
+              <template v-slot:opposite>
+                <span>{{ item.activityTime.replaceAll("/", ".") }}</span>
+              </template>
+              <v-card
+                class="elevation-2"
+                :color="getColorByType(item.courseType)"
+                min-width="200px"
+              >
+                <v-card-title>
+                  <span v-if="item.title != '' && item.title != null">{{
                     item.title
-                  }}</strong>
-                  <strong v-else>{{ item.courseType }}</strong>
-                  <div
-                    class="text-caption"
-                    v-if="item.title != '' && item.title != null"
-                  >
-                    {{ item.courseType }}
-                  </div>
-                </v-col>
-              </v-row>
+                  }}</span>
+                  <span v-else>{{ item.courseType }}</span>
+                </v-card-title>
+                <v-card-subtitle v-if="item.title != '' && item.title != null">
+                  {{ item.courseType }}
+                </v-card-subtitle>
+                <v-card-actions
+                  ><v-btn
+                    @click="onOpenAttendanceDialog(item)"
+                    outlined
+                    >Involvements
+                  </v-btn></v-card-actions
+                >
+              </v-card>
             </v-timeline-item>
           </v-timeline>
         </div>
@@ -117,8 +117,14 @@ import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import AddAttendanceDateDialog from "@/components/document-components/dialogs/AddAttendanceDateDialog.vue";
 import AuthService from "@/services/auth.service";
-import { Role } from "@/shared/enums";
-import { AMBER_DARKEN_4 } from "@/shared/constants";
+import { CourseType, Role } from "@/shared/enums";
+import {
+  AMBER_DARKEN_4,
+  LABORATORY_COLOR,
+  LECTURE_COLOR,
+  NONE_COLOR,
+  SEMINARY_COLOR,
+} from "@/shared/constants";
 import UpdateInvolvementsDialog from "@/components/document-components/dialogs/UpdateInvolvementsDialog.vue";
 import { CollectionDto } from "@/modules/view-modules";
 
@@ -167,6 +173,17 @@ export default Vue.extend({
     onOpenAttendanceDialog: function (collection: CollectionDto): void {
       this.updateInvolvementsDialog = true;
       this.selectedCollection = collection;
+    },
+    getColorByType: function (activityType: string): string {
+      if (activityType == CourseType[1]) {
+        return LECTURE_COLOR;
+      } else if (activityType == CourseType[2]) {
+        return LABORATORY_COLOR;
+      } else if (activityType == CourseType[3]) {
+        return SEMINARY_COLOR;
+      } else {
+        return NONE_COLOR;
+      }
     },
   },
 });
