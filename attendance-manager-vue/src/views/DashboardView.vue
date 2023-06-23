@@ -170,7 +170,7 @@ export default Vue.extend({
     // Fetch data with a timeout of 30 seconds
     const fetchDataWithTimeout = async () => {
       try {
-        this.courses = await CourseService.getDashboard();
+        this.courses = await CourseService.getDashboardAsync();
         this.isFetchSuccessful = true;
       } catch (error) {
         Toastification.simpleError("An error occurred during data fetching.");

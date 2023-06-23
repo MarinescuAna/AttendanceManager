@@ -63,13 +63,13 @@ const actions: ActionTree<SpecializationState, RootState> = {
     /**
      * Load all the specializations
      */
-    async loadSpecializations({ commit, state }): Promise<void> {
+    async loadSpecializationsAsync({ commit, state }): Promise<void> {
         if (state.specializations.length == 0) {
             const specializations: SpecializationViewModule[] = (await https.get(`${SPECIALIZATION_CONTROLLER}/specializations`)).data;
             commit("_specializations", specializations);
         }
     },
-    async deleteSpecialization({ commit }, payload: number): Promise<boolean> {
+    async deleteSpecializationAsync({ commit }, payload: number): Promise<boolean> {
         let isSuccess = true;
 
         await https.delete(`${SPECIALIZATION_CONTROLLER}/delete/${payload}`)
@@ -86,7 +86,7 @@ const actions: ActionTree<SpecializationState, RootState> = {
     /**
      * Add a new specialization into the database and initialize the store
      */
-    async addSpecialization({ commit }, payload: InsertSpecializationParameters): Promise<boolean> {
+    async addSpecializationAsync({ commit }, payload: InsertSpecializationParameters): Promise<boolean> {
 
         let isSuccess = true;
 

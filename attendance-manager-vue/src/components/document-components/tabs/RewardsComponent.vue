@@ -59,7 +59,7 @@
                 <v-card-title>Create badge</v-card-title>
                 <v-card-text>
                   <validation-observer v-slot="{ handleSubmit, invalid }">
-                    <v-form @submit.prevent="handleSubmit(onCreateBadge)">
+                    <v-form @submit.prevent="handleSubmit(onCreateBadgeAsync)">
                       <v-layout column align-center>
                         <validation-provider
                           name="title"
@@ -157,7 +157,7 @@
                         </div>
                         <v-btn
                           width="50%"
-                          @click="onCreateBadge"
+                          @click="onCreateBadgeAsync"
                           :disabled="
                             invalid ||
                             selectedNumber < 1 ||
@@ -322,8 +322,8 @@ export default Vue.extend({
           return 0;
       }
     },
-    onCreateBadge: async function (): Promise<void> {
-      const result = await BadgeService.createBadge({
+    onCreateBadgeAsync: async function (): Promise<void> {
+      const result = await BadgeService.createBadgeAsync({
         maxNumber: this.selectedNumber,
         badgeType: BadgeType[this.selectedBadge.id],
         title: this.title,

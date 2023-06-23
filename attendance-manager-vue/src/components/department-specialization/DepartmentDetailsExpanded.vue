@@ -50,7 +50,7 @@
                 >
               </v-list-item-content>
               <v-list-item-action v-if="child.usersLinked == 0">
-                <v-btn @click="onDelete(child.id)" icon
+                <v-btn @click="onDeleteAsync(child.id)" icon
                   ><v-icon>mdi-delete</v-icon></v-btn
                 >
               </v-list-item-action>
@@ -120,7 +120,7 @@ export default Vue.extend({
     // Fetch data with a timeout of 30 seconds
     const fetchDataWithTimeout = async () => {
       try {
-        await storeHelper.specializationStore.loadSpecializations();
+        await storeHelper.specializationStore.loadSpecializationsAsync();
         this.isFetchSuccessful = true;
       } catch (error) {
         Toastification.simpleError("An error occurred during data fetching.");
@@ -147,8 +147,8 @@ export default Vue.extend({
     });
   },
   methods: {
-    onDelete: async function (id: number): Promise<void> {
-      const result = await storeHelper.specializationStore.deleteSpecialization(
+    onDeleteAsync: async function (id: number): Promise<void> {
+      const result = await storeHelper.specializationStore.deleteSpecializationAsync(
         id
       );
 

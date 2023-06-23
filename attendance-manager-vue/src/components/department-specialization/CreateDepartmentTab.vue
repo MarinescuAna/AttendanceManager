@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
-          <v-form @submit.prevent="handleSubmit(addDepartment)">
+          <v-form @submit.prevent="handleSubmit(addDepartmentAsync)">
             <validation-provider
               name="department name"
               v-slot="{ errors }"
@@ -28,7 +28,7 @@
             <v-row justify="center" class="pa-8">
               <v-btn
                 width="50%"
-                @click="addDepartment"
+                @click="addDepartmentAsync"
                 :disabled="invalid"
                 large
                 class="dark_button white--text"
@@ -57,8 +57,8 @@ export default Vue.extend({
     };
   },
   methods: {
-    addDepartment: async function (): Promise<void> {
-      const response = await storeHelper.departmentStore.addDepartment({
+    addDepartmentAsync: async function (): Promise<void> {
+      const response = await storeHelper.departmentStore.addDepartmentAsync({
         name: this.department,
       });
 

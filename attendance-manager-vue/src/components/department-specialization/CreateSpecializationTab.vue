@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
-          <v-form @submit.prevent="handleSubmit(addSpecialization)">
+          <v-form @submit.prevent="handleSubmit(addSpecializationAsync)">
             <validation-provider
               name="specialization name"
               v-slot="{ errors }"
@@ -38,7 +38,7 @@
             <v-row justify="center" class="pa-8">
               <v-btn
                 width="50%"
-                @click="addSpecialization"
+                @click="addSpecializationAsync"
                 :disabled="invalid || department === 0"
                 large
                 class="dark_button white--text"
@@ -75,8 +75,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    async addSpecialization() {
-      const response = await storeHelper.specializationStore.addSpecialization({
+    async addSpecializationAsync() {
+      const response = await storeHelper.specializationStore.addSpecializationAsync({
         name: this.name,
         departmentId: this.department,
       });

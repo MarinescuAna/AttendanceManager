@@ -16,7 +16,7 @@
       </v-autocomplete>
       <v-btn
         class="dark_button white--text ma-5"
-        @click="loadInvolvements"
+        @click="loadInvolvementsAsync"
         icon
       >
         <v-icon>mdi-cached</v-icon>
@@ -138,7 +138,7 @@ export default Vue.extend({
       // Fetch data with a timeout of 30 seconds
       const fetchDataWithTimeout = async () => {
         try {
-          await this.loadInvolvements();
+          await this.loadInvolvementsAsync();
           this.isFetchSuccessful = true;
         } catch (error) {
           Toastification.simpleError("An error occurred during data fetching.");
@@ -174,8 +174,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    loadInvolvements: async function (): Promise<void> {
-      this.involvements = await InvolvementService.getInvolvementsTotal();
+    loadInvolvementsAsync: async function (): Promise<void> {
+      this.involvements = await InvolvementService.getInvolvementsTotalAsync();
     },
   },
 });

@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <validation-observer v-slot="{ handleSubmit, invalid }">
-          <v-form @submit.prevent="handleSubmit(addCourse)">
+          <v-form @submit.prevent="handleSubmit(addCourseAsync)">
             <validation-provider
               name="name"
               v-slot="{ errors }"
@@ -40,7 +40,7 @@
             <v-row justify="center" class="pa-8">
               <v-btn
                 width="50%"
-                @click="addCourse"
+                @click="addCourseAsync"
                 :disabled="invalid || selectedSpecialization === 0"
                 class="dark_button white--text pa-3"
                 >Submit</v-btn
@@ -81,8 +81,8 @@ export default Vue.extend({
      * Use this method for adding a new specialization
      * Success: reset the form and reload the treeview
      */
-    async addCourse() {
-      const response = await storeHelper.courseStore.addCourse({
+    async addCourseAsync() {
+      const response = await storeHelper.courseStore.addCourseAsync({
         name: this.name,
         specializationId: this.selectedSpecialization,
         specializationName: this.specializations.find(

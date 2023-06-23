@@ -7,7 +7,7 @@
         >
         <v-expansion-panel-content>
           <v-layout justify-center class="ma-3">
-            <v-btn color="error" width="100%" @click="onDeleteDocument"
+            <v-btn color="error" width="100%" @click="onDeleteDocumentAsync"
               >Delete</v-btn
             >
           </v-layout>
@@ -37,13 +37,13 @@ export default Vue.extend({
   },
   methods: {
     /** Delete the document */
-    onDeleteDocument: async function (): Promise<void> {
+    onDeleteDocumentAsync: async function (): Promise<void> {
       if (
         confirm(
           "Are you sure that you want to delete this report? The process cannot be reverted!"
         )
       ) {
-        const result = await storeHelper.documentStore.deleteDocument();
+        const result = await storeHelper.documentStore.deleteReportAsync();
 
         if (result) {
           Toastification.success("The report was successfully deleted!");

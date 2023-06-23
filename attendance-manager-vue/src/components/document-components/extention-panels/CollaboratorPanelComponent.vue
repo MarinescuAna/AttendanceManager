@@ -5,7 +5,7 @@
     >
     <v-expansion-panel-content>
       <validation-observer v-slot="{ handleSubmit, invalid }">
-        <v-form @submit.prevent="handleSubmit(doSubmit)">
+        <v-form @submit.prevent="handleSubmit(doSubmitAsync)">
           <validation-provider
             :rules="rules.email"
             name="email"
@@ -23,7 +23,7 @@
           <v-row justify="center" class="pa-8">
             <v-btn
               class="dark_button white--text"
-              @click="doSubmit"
+              @click="doSubmitAsync"
               :disabled="invalid"
               >Add new collaborator</v-btn
             >
@@ -62,7 +62,7 @@ export default Vue.extend({
     /**
      * Save the new collaborator
      */
-    doSubmit: async function (): Promise<void> {
+    doSubmitAsync: async function (): Promise<void> {
       if (this.email === this.currentUserEmail) {
         Toastification.simpleError(
           "You are already a member of this document!"
@@ -70,7 +70,7 @@ export default Vue.extend({
         return;
       }
 
-      const result = await storeHelper.documentStore.addCollaborator({
+      const result = await storeHelper.documentStore.addCollaboratorAsync({
         email: this.email,
       });
 

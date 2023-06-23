@@ -36,7 +36,7 @@
       <v-row justify="center" class="pa-8">
         <v-btn
           color="dark_button white--text"
-          @click="onUpdate"
+          @click="onUpdateAsync"
           :disabled="
             date === collection.activityTime.split(' ')[0] &&
             time === collection.activityTime.split(' ')[1] &&
@@ -105,8 +105,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    onUpdate: async function(): Promise<void>{
-        const result = await storeHelper.documentStore.updateCollection({
+    onUpdateAsync: async function(): Promise<void>{
+        const result = await storeHelper.documentStore.updateCollectionAsync({
             activityDateTime: `${this.date} ${this.time}`,
             courseType: this.collectionActivityType,
             collectionId: this.collection.collectionId,

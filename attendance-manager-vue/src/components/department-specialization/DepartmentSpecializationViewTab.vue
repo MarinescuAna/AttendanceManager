@@ -15,7 +15,7 @@
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon
           color="black"
-          @click="onDeleteDepartment(item.id)"
+          @click="onDeleteDepartmentAsync(item.id)"
           v-if="item.linkedSpecializations == 0"
         >
           mdi-delete {{ item.id }}
@@ -97,8 +97,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    onDeleteDepartment: async function (id: number): Promise<void> {
-      const result = await storeHelper.departmentStore.deleteDepartment(id);
+    onDeleteDepartmentAsync: async function (id: number): Promise<void> {
+      const result = await storeHelper.departmentStore.deleteDepartmentAsync(id);
 
       if (result) {
         Toastification.success("The department was successfully deleted!");

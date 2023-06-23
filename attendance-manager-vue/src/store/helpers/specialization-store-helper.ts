@@ -22,18 +22,18 @@ export class SpecializationStore {
      * Load all the specializations by the departmentId from the API(if it's needed) and update the store
      * @test
      */
-    public async loadSpecializations(): Promise<void>{
-       await this.store.dispatch(`${specializationNamespace}/loadSpecializations`);
+    public async loadSpecializationsAsync(): Promise<void>{
+       await this.store.dispatch(`${specializationNamespace}/loadSpecializationsAsync`);
     }
-    public async deleteSpecialization(id: number): Promise<boolean>{
-        return this.store.dispatch(`${specializationNamespace}/deleteSpecialization`,id);
+    public async deleteSpecializationAsync(id: number): Promise<boolean>{
+        return this.store.dispatch(`${specializationNamespace}/deleteSpecializationAsync`,id);
     }
     /**
      * Add a new specialziation only
      * @test
      */
-    public async addSpecialization(payload: InsertSpecializationParameters): Promise<boolean> {
-        return await this.store.dispatch(`${specializationNamespace}/addSpecialization`,payload);
+    public async addSpecializationAsync(payload: InsertSpecializationParameters): Promise<boolean> {
+        return await this.store.dispatch(`${specializationNamespace}/addSpecializationAsync`,payload);
     }
 
     /**

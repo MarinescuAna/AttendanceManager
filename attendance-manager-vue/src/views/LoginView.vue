@@ -14,7 +14,7 @@
         </v-card-title>
         <v-card-text>
           <validation-observer v-slot="{ handleSubmit, invalid }">
-            <v-form @submit.prevent="handleSubmit(doLogin)">
+            <v-form @submit.prevent="handleSubmit(doLoginAsync)">
               <validation-provider
                 :rules="rules.email"
                 name="email"
@@ -49,7 +49,7 @@
                 />
               </validation-provider>
               <v-row justify="center" class="pa-8">
-                <v-btn :width="width" class="dark_button white--text" @click="doLogin" :disabled="invalid" large
+                <v-btn :width="width" class="dark_button white--text" @click="doLoginAsync" :disabled="invalid" large
                   >Sign in</v-btn
                 >
               </v-row>
@@ -114,9 +114,9 @@ export default Vue.extend({
     /**
      * Use this method for login: if the login is done, update the navbar and redirect to home page
      */
-    async doLogin() {
+    doLoginAsync: async function(): Promise<void> {
       this.showLoading = true;
-      const response = await AuthService.login({
+      const response = await AuthService.loginAsync({
         email: this.email,
         password: this.password,
       });

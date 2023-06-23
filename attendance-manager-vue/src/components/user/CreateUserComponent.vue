@@ -11,7 +11,7 @@
             ref="observer"
             v-slot="{ handleSubmit, invalid }"
           >
-            <v-form @submit.prevent="handleSubmit(onSubmit)">
+            <v-form @submit.prevent="handleSubmit(onSubmitAsync)">
               <validation-provider
                 :rules="rules.required"
                 name="fullname"
@@ -137,7 +137,7 @@
               <v-row justify="center" class="pa-8">
                 <v-btn
                   width="50%"
-                  @click="onSubmit"
+                  @click="onSubmitAsync"
                   class="dark_button white--text"
                   :disabled="
                     invalid ||
@@ -202,7 +202,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    async onSubmit(): Promise<void> {
+    onSubmitAsync: async function(): Promise<void> {
       let specializationIds: number[] = [];
       if (this.role == Role.Teacher) {
         specializationIds = this.selectedSpecializations;
@@ -214,7 +214,7 @@ export default Vue.extend({
         (d) => d.id == this.specializations[0].departmentId
       );
 
-      const response = await storeHelper.userStore.addUser(
+      const response = await storeHelper.userStore.addUserAsync(
         {
           fullname: this.fullname,
           code: this.code,
@@ -233,14 +233,14 @@ export default Vue.extend({
         this.$router.push({ name: "users" });
       }
     },
-    onFillSpecializations(selectedDepartment: number): void {
+    onFillSpecializations: function(selectedDepartment: number): void {
       this.specializations =
         storeHelper.specializationStore.specializations.filter(
           (specialization) => specialization.departmentId == selectedDepartment
         );
       this.selectedSpecializations = [];
     },
-    onResetSpecializationSelector(): void {
+    onResetSpecializationSelector: function(): void {
       this.selectedSpecializations = [];
     },
   },

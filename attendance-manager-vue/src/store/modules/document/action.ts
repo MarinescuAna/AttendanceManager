@@ -12,7 +12,7 @@ export const documentActions = {
      * Update the currentDocument from the state only if the currentDocument is null or if the new documentID is different from the current one
      * @param payload documentId
      */
-    async loadCurrentReport({ commit, state }, payload: string): Promise<boolean> {
+    async loadCurrentReportAsync({ commit, state }, payload: string): Promise<boolean> {
 
         if (Object.keys(state.currentReport).length > 0) {
             return true;
@@ -29,7 +29,7 @@ export const documentActions = {
         return isFail;
     },
     /** Add new collaborator teacher */
-    async addCollaborator({ commit }, payload: InsertCollaboratorParameters): Promise<boolean> {
+    async addCollaboratorAsync({ commit }, payload: InsertCollaboratorParameters): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${REPORT_CONTROLLER}/add_collaborator`,payload)
@@ -44,7 +44,7 @@ export const documentActions = {
         return isSuccess;
     },
     /** Update some information related to the document */
-    async updateDocument({ commit }, payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
+    async updateDocumentAsync({ commit }, payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${REPORT_CONTROLLER}/update_report`, payload.module)
@@ -59,7 +59,7 @@ export const documentActions = {
         return isSuccess;
     },
 
-    async deleteDocument({ commit }): Promise<boolean> {
+    async deleteDocumentAsync({ commit }): Promise<boolean> {
         let isSuccess = true;
 
         await https.delete(`${REPORT_CONTROLLER}/delete_current_report`)
@@ -78,7 +78,7 @@ export const documentActions = {
      * 2.remove the collection from store
      * 3.update document details regarding the courses held by now
      */
-    async deleteCollection({ commit }, collectionId: number): Promise<boolean> {
+    async deleteCollectionAsync({ commit }, collectionId: number): Promise<boolean> {
         let isSuccess = true;
 
         await https.delete(`${COLLECTION_CONTROLLER}/delete/${collectionId}`)
@@ -92,7 +92,7 @@ export const documentActions = {
 
         return isSuccess;
     },
-    async updateCollection({ commit }, payload: UpdateCollectionParameters): Promise<boolean> {
+    async updateCollectionAsync({ commit }, payload: UpdateCollectionParameters): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${COLLECTION_CONTROLLER}/update_collection`, payload)
@@ -107,7 +107,7 @@ export const documentActions = {
         return isSuccess;
     },
     /** Add new attendance collection */
-    async addCollection({ commit }, payload: InsertCollectionParameters): Promise<boolean> {
+    async addCollectionAsync({ commit }, payload: InsertCollectionParameters): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${COLLECTION_CONTROLLER}/create_collection`, payload)

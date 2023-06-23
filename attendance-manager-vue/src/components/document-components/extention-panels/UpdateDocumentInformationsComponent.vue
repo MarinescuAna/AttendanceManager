@@ -5,7 +5,7 @@
     >
     <v-expansion-panel-content>
       <validation-observer ref="observer" v-slot="{ invalid, handleSubmit }">
-        <v-form @submit.prevent="handleSubmit(onSubmit)">
+        <v-form @submit.prevent="handleSubmit(onSubmitAsync)">
           <v-layout column>
             <validation-provider
               name="document title"
@@ -138,7 +138,7 @@
           <v-layout row align-center column="4">
             <v-btn
               class="dark_button white--text ma-2"
-              @click="onSubmit"
+              @click="onSubmitAsync"
               :disabled="
                 invalid || !selectedCourse || computeImportancePercentage != 100
               "
@@ -202,17 +202,17 @@ export default Vue.extend({
   },
   /** Load the current user informations from the API and also his courses */
   created: async function () {
-    await storeHelper.userStore.loadCurrentUserInfo();
-    await storeHelper.courseStore.loadCourses(false);
+    await storeHelper.userStore.loadCurrentUserInfoAsync();
+    await storeHelper.courseStore.loadCoursesAsync(false);
   },
   methods: {
     /** Update document */
-    onSubmit: async function (): Promise<void> {
+    onSubmitAsync: async function (): Promise<void> {
       if (!this.selectedCourse) {
         return;
       }
 
-      const response = await storeHelper.documentStore.updateDocument({
+      const response = await storeHelper.documentStore.updateReportAsync({
         module: {
           courseId: this.selectedCourse.courseId,
           noLaboratories: this.maxNoLaboratories,

@@ -20,25 +20,25 @@ export class DepartmentStore {
     /**
      * Load all the departments from the API
      */
-    public async loadDepartments(): Promise<void> {
-        await this.store.dispatch(`${departmentNamespace}/loadDepartments`);
+    public async loadDepartmentsAsync(): Promise<void> {
+        await this.store.dispatch(`${departmentNamespace}/loadDepartmentsAsync`);
     }
-    public async deleteDepartment(id: number): Promise<boolean>{
-        return this.store.dispatch(`${departmentNamespace}/deleteDepartment`,id);
+    public async deleteDepartmentAsync(id: number): Promise<boolean>{
+        return this.store.dispatch(`${departmentNamespace}/deleteDepartmentAsync`,id);
     }
 
     /**
      * Add a new departments in db and store
      */
-    public async addDepartment(payload: InsertDepartmentParameters): Promise<boolean> {
-        return await this.store.dispatch(`${departmentNamespace}/addDepartment`, payload);
+    public async addDepartmentAsync(payload: InsertDepartmentParameters): Promise<boolean> {
+        return await this.store.dispatch(`${departmentNamespace}/addDepartmentAsync`, payload);
     }
 
     /**
     * Change department name from db and store
     */
-    public async updateDepartment(payload: UpdateDepartmentParameters): Promise<boolean> {
-        return await this.store.dispatch(`${departmentNamespace}/updateDepartment`, payload);
+    public async updateDepartmentAsync(payload: UpdateDepartmentParameters): Promise<boolean> {
+        return await this.store.dispatch(`${departmentNamespace}/updateDepartmentAsync`, payload);
     }
 
     /**

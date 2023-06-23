@@ -30,7 +30,7 @@
       <v-row justify="center" class="pa-8">
         <v-btn
           color="dark_button white--text"
-          @click="onSave"
+          @click="onSaveAsync"
           :disabled="!isValid"
         >
           Update course
@@ -85,12 +85,12 @@ export default Vue.extend({
   },
   methods: {
     /** Save the new name and emit a save event to the parent */
-    onSave: async function (): Promise<void> {
+    onSaveAsync: async function (): Promise<void> {
       const specialization = this.specializations.find(
         (c) => c.id == this.selectedSpecialization
       )!;
       
-      const result = await storeHelper.courseStore.updateCourse(
+      const result = await storeHelper.courseStore.updateCourseAsync(
         {
           courseId: this.course.courseId,
           name: this.name,

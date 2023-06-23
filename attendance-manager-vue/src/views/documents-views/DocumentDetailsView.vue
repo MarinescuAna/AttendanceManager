@@ -161,7 +161,7 @@ export default Vue.extend({
    * */
   created: async function () {
     if (typeof this.$route.params.id !== "undefined" || this.documentInfo) {
-      const response = await storeHelper.documentStore.loadCurrentReport(
+      const response = await storeHelper.documentStore.loadCurrentReportAsync(
         this.$route.params.id
       );
 

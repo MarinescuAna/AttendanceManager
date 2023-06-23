@@ -24,7 +24,7 @@
           </v-layout>
         </div>
         <div v-else-if="courses.length != 0">
-          <v-btn class="dark_button white--text ma-6" @click="onReload">
+          <v-btn class="dark_button white--text ma-6" @click="onReloadAsync">
             <v-icon>mdi-reload</v-icon> Reload courses
           </v-btn>
           <v-simple-table>
@@ -72,7 +72,7 @@
                           />
                         </v-dialog>
 
-                        <v-list-item @click="onDeleteCourse(item)">
+                        <v-list-item @click="onDeleteCourseAsync(item)">
                           <v-list-item-title>Delete</v-list-item-title>
                         </v-list-item>
                       </v-list>
@@ -146,8 +146,8 @@ export default Vue.extend({
     // Fetch data with a timeout of 30 seconds
     const fetchDataWithTimeout = async () => {
       try {
-        await storeHelper.courseStore.loadCourses(false);
-        await storeHelper.userStore.loadCurrentUserInfo();
+        await storeHelper.courseStore.loadCoursesAsync(false);
+        await storeHelper.userStore.loadCurrentUserInfoAsync();
         this.isFetchSuccessful = true;
       } catch (error) {
         Toastification.simpleError("An error occurred during data fetching.");
@@ -168,13 +168,13 @@ export default Vue.extend({
     }, 30000);
   },
   methods: {
-    onDeleteCourse: async function (course: CourseViewModule): Promise<void> {
+    onDeleteCourseAsync: async function (course: CourseViewModule): Promise<void> {
       if (
         confirm(
           "Are you sure that you want to delete this course? There must be some reports defined and all of those will also be deleted."
         )
       ) {
-        const result = await storeHelper.courseStore.removeCourse(
+        const result = await storeHelper.courseStore.removeCourseAsync(
           course.courseId
         );
 
@@ -186,8 +186,8 @@ export default Vue.extend({
     getRelativeTime(updateOn: string) {
       return moment(new Date(updateOn)).fromNow();
     },
-    onReload: async function (): Promise<void> {
-      await storeHelper.courseStore.loadCourses(true);
+    onReloadAsync: async function (): Promise<void> {
+      await storeHelper.courseStore.loadCoursesAsync(true);
     },
   },
 });

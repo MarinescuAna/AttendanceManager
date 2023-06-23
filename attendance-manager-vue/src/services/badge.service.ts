@@ -6,7 +6,7 @@ import { BADGE_CONTROLLER } from "@/shared/constants";
 import { AxiosResponse } from "axios";
 
 export default class BadgeService {
-    static async createBadge(parameters: CreateBadgeParameters): Promise<BadgeViewModule> {
+    static async createBadgeAsync(parameters: CreateBadgeParameters): Promise<BadgeViewModule> {
         let isSuccess = true;
         const response = await https.post(`${BADGE_CONTROLLER}/create_badge`, parameters)
             .catch(error => {

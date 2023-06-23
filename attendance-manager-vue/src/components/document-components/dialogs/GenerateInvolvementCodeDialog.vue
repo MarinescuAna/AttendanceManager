@@ -1,7 +1,7 @@
 <template>
   <v-card class="pa-4">
     <validation-observer v-slot="{ handleSubmit }">
-      <v-form @submit.prevent="handleSubmit(onSubmit)">
+      <v-form @submit.prevent="handleSubmit(onSubmitAsync)">
         <v-layout column class="pa-2">
           <v-card-title>
             <p>Generate involvement code</p>
@@ -28,7 +28,7 @@
           </v-card-text>
           <v-card-actions>
             <v-layout class="pa-2" justify-center align-content-end row>
-              <v-btn class="mr-1 dark_button white--text" @click="onSubmit">
+              <v-btn class="mr-1 dark_button white--text" @click="onSubmitAsync">
                 Generate code
               </v-btn>
             </v-layout>
@@ -58,8 +58,8 @@ export default Vue.extend({
     onClose: function (): void {
       this.$emit("close");
     },
-    onSubmit: async function (): Promise<void> {
-      const result = await InvolvementCodeService.createInvolvementCode({
+    onSubmitAsync: async function (): Promise<void> {
+      const result = await InvolvementCodeService.createInvolvementCodeAsync({
         minutes: this.time,
         collectionId: this.collectionId,
       });

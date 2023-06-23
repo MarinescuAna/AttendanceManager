@@ -94,8 +94,8 @@ export default Vue.extend({
     // Fetch data with a timeout of 30 seconds
     const fetchDataWithTimeout = async () => {
       try {
-        await storeHelper.userStore.loadUsers();
-        await storeHelper.specializationStore.loadSpecializations();
+        await storeHelper.userStore.loadUsersAsync();
+        await storeHelper.specializationStore.loadSpecializationsAsync();
         this.isFetchSuccessful = true;
       } catch (error) {
         Toastification.simpleError("An error occurred during data fetching.");

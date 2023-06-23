@@ -47,7 +47,7 @@ export default Vue.extend({
     // Fetch data with a timeout of 30 seconds
     const fetchDataWithTimeout = async () => {
       try {
-        this.involvements = await InvolvementService.getInvolvements(
+        this.involvements = await InvolvementService.getInvolvementsAsync(
           -1,
           "",
           false,

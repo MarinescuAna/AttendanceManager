@@ -45,15 +45,15 @@ export default class InvolvementService {
         return false;
     }
 
-    static async getInvolvementsTotal(): Promise<TotalInvolvementViewModule[]> {
+    static async getInvolvementsTotalAsync(): Promise<TotalInvolvementViewModule[]> {
         return (await https.get(`${INVOLVEMENT_CONTROLLER}/total_involvements`)).data;
     }
 
-    static async getInvolvements(collectionId: number, email: string, useCode: boolean, currentUser: boolean, onlyPresents: boolean): Promise<InvolvementViewModule[]> {
+    static async getInvolvementsAsync(collectionId: number, email: string, useCode: boolean, currentUser: boolean, onlyPresents: boolean): Promise<InvolvementViewModule[]> {
         return (await https.get(`${INVOLVEMENT_CONTROLLER}/involvements?email=${email}&collection_id=${collectionId}&use_code=${useCode}&current_user=${currentUser}&only_present=${onlyPresents}`)).data;
     }
 
-    static async addStudentsAttendances(payload: UpdateInvolvementsParameters): Promise<boolean> {
+    static async addStudentsAttendancesAsync(payload: UpdateInvolvementsParameters): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${INVOLVEMENT_CONTROLLER}/update_student_involvement`, payload)
@@ -67,7 +67,7 @@ export default class InvolvementService {
     /**
      * Update the students attendances by code and attendance id
      */
-    static async updateAttendanceByCode(payload: UpdateInvolvementByCodeParameters): Promise<boolean> {
+    static async updateAttendanceByCodeAsync(payload: UpdateInvolvementByCodeParameters): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${INVOLVEMENT_CONTROLLER}/update_involvement_by_code`, payload)

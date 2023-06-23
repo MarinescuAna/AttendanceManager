@@ -1,7 +1,7 @@
 <template>
   <v-card class="pa-4">
     <validation-observer v-slot="{ handleSubmit, invalid }">
-      <v-form @submit.prevent="handleSubmit(onSubmit)">
+      <v-form @submit.prevent="handleSubmit(onSubmitAsync)">
         <v-layout column class="pa-2">
           <v-card-title>
             <p>Use involvement code</p>
@@ -32,7 +32,7 @@
               <v-btn
                 class="mr-1 dark_button white--text"
                 :disabled="invalid"
-                @click="onSubmit"
+                @click="onSubmitAsync"
               >
                 Submit
               </v-btn>
@@ -66,9 +66,9 @@ export default Vue.extend({
     onClose: function (): void {
       this.$emit("close");
     },
-    onSubmit: async function (): Promise<void> {
+    onSubmitAsync: async function (): Promise<void> {
       const result =
-        await InvolvementService.updateAttendanceByCode({
+        await InvolvementService.updateAttendanceByCodeAsync({
             code: this.code,
             attendanceId: this.attendanceId,
             collectionId: this.collectionId

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar class="blue_grey_4" max-height="60px">
-      <v-btn icon @click="onCloseDialog">
+      <v-btn icon @click="onCloseDialogAsync">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-toolbar-title v-if="collection.title != '' && collection.title != null"
@@ -33,7 +33,7 @@
               @close="updateDialogOpen = false"
             />
           </v-dialog>
-          <v-list-item @click="onDeleteCollection">
+          <v-list-item @click="onDeleteCollectionAsync">
             <v-list-item-title>Delete</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -77,14 +77,14 @@
         >
         <v-btn
           class="blue_grey_button"
-          @click="onSaveInvolvements"
+          @click="onSaveInvolvementsAsync"
           title="Save changes."
           :disabled="!saveChanges"
           v-if="isTeacher"
         >
           <v-icon>mdi-floppy</v-icon>
         </v-btn>
-        <v-btn class="blue_grey_button" @click="onReloadAttendances">
+        <v-btn class="blue_grey_button" @click="onReloadAttendancesAsync">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-btn-toggle>
@@ -179,7 +179,7 @@
     >
       <UploadInvolvementsDialog
         :currentInvolvements="involvementsCopy"
-        @update="onUpdateCurrentInvolvements"
+        @update="onUpdateCurrentInvolvementsAsync"
         class="pa-6"
         @close="uploadInvolvementsDialog = false"
       />
@@ -255,20 +255,20 @@ export default Vue.extend({
   },
   created: async function (): Promise<void> {
     //get all the involvements
-    this.onReloadAttendances();
+    this.onReloadAttendancesAsync();
     this.dialogTitle =
       this.collection.title != "" && this.collection.title != null
         ? `${this.collection.title} - ${this.collection.activityTime}`
         : this.collection.activityTime;
   },
   methods: {
-    onDeleteCollection: async function (): Promise<void> {
+    onDeleteCollectionAsync: async function (): Promise<void> {
       if (
         confirm(
           "Are you sure that you want to delete this collection? All the involvements will be deleted as well, but the badges received by now will remain."
         )
       ) {
-        const result = await storeHelper.documentStore.deleteCollection(
+        const result = await storeHelper.documentStore.deleteCollectionAsync(
           this.collection.collectionId
         );
 
@@ -290,13 +290,13 @@ export default Vue.extend({
     /**
      * Reload only the attendances and bonus points
      */
-    onReloadAttendances: async function (): Promise<void> {
+    onReloadAttendancesAsync: async function (): Promise<void> {
       if (this.involvements.length != 0) {
         this.involvements = [];
         this.involvementsCopy = [];
       }
 
-      this.involvements = await InvolvementService.getInvolvements(
+      this.involvements = await InvolvementService.getInvolvementsAsync(
         this.collection.collectionId,
         "",
         !this.isTeacher,
@@ -310,7 +310,7 @@ export default Vue.extend({
     /**
      * Before closing the dialog, save the changes in case that are
      */
-    onCloseDialog: async function (): Promise<void> {
+    onCloseDialogAsync: async function (): Promise<void> {
       if (!this.isTeacher) {
         // only the teacher can update all the attendances
         this.$emit("close-dialog");
@@ -338,7 +338,7 @@ export default Vue.extend({
         }
       });
     },
-    onSaveInvolvements: async function (): Promise<void> {
+    onSaveInvolvementsAsync: async function (): Promise<void> {
       //get all the involvements that was updated
       const studentsChanged = InvolvementService.getInvolvementChanges(
         this.involvementsCopy,
@@ -346,7 +346,7 @@ export default Vue.extend({
       );
 
       if (studentsChanged.length !== 0) {
-        const response = await InvolvementService.addStudentsAttendances({
+        const response = await InvolvementService.addStudentsAttendancesAsync({
           involvements: studentsChanged,
         });
 
@@ -382,7 +382,7 @@ export default Vue.extend({
         }
       });
     },
-    onUpdateCurrentInvolvements: async function (
+    onUpdateCurrentInvolvementsAsync: async function (
       newInvolvements: UpdateInvolvementsParameters[]
     ): Promise<void> {
       this.involvements.forEach((element) => {

@@ -31,7 +31,7 @@
       <v-btn
         color="dark_button white--text"
         width="30%"
-        @click="onSubmit"
+        @click="onSubmitAsync"
         :disabled="date === '' || time === null || selectedCourseType === ''"
       >
         Save
@@ -88,8 +88,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    onSubmit: async function (): Promise<void> {
-      let response = await storeHelper.documentStore.addCollection({
+    onSubmitAsync: async function (): Promise<void> {
+      let response = await storeHelper.documentStore.addCollectionAsync({
         activityDateTime: `${this.date} ${this.time}`,
         courseType: this.selectedCourseType,
         title: this.title

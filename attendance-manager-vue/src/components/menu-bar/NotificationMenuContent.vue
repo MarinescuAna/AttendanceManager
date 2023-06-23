@@ -5,7 +5,7 @@
       <v-list-item
         v-for="notification in notifications"
         :key="notification.notificationId"
-        @click="onRead(notification)"
+        @click="onReadAsync(notification)"
         :style="
           !notification.isRead
             ? { 'background-color': getBackgroundColor(notification.priority) }
@@ -33,7 +33,7 @@
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn @click.stop="onDelete(notification.notificationId)" icon>
+          <v-btn @click.stop="onDeleteAsync(notification.notificationId)" icon>
             <v-icon color="red">mdi-close</v-icon>
           </v-btn>
         </v-list-item-action>
@@ -104,7 +104,7 @@ export default Vue.extend({
       }
       return iconColor;
     },
-    onRead: async function (
+    onReadAsync: async function (
       notification: NotificationViewModel
     ): Promise<void> {
       if (!notification.isRead) {
@@ -116,7 +116,7 @@ export default Vue.extend({
         }
       }
     },
-    onDelete: async function (notificationId: number): Promise<void> {
+    onDeleteAsync: async function (notificationId: number): Promise<void> {
       const result = await NotificationService.removeMessageAsync(
         notificationId
       );

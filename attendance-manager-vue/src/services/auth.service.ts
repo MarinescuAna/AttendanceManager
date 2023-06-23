@@ -106,7 +106,7 @@ export default class AuthService {
      * @param payload email and password
      * @returns true if the logging was successfully done, or false if something happen
      */
-    static async login(payload: LoginParameters): Promise<boolean> {
+    static async loginAsync(payload: LoginParameters): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${ACCOUNT_CONTROLLER}/authenticate`, payload).catch(error => {

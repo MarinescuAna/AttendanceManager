@@ -16,12 +16,12 @@
           class="blue_grey_button"
           title="Save changes."
           :disabled="!saveChanges"
-          @click="onSave"
+          @click="onSaveAsync"
           v-if="isTeacher"
         >
           <v-icon>mdi-floppy</v-icon>
         </v-btn>
-        <v-btn class="blue_grey_button" @click="onLoadData">
+        <v-btn class="blue_grey_button" @click="onLoadDataAsync">
           <v-icon>mdi-cached</v-icon>
         </v-btn>
       </v-btn-toggle>
@@ -165,7 +165,7 @@ export default Vue.extend({
     // Fetch data with a timeout of 30 seconds
     const fetchDataWithTimeout = async () => {
       try {
-        await this.onLoadData();
+        await this.onLoadDataAsync();
         this.isFetchSuccessful = true;
       } catch (error) {
         Toastification.simpleError("An error occurred during data fetching.");
@@ -213,9 +213,9 @@ export default Vue.extend({
     getActivityTypeName: function (type: number): string {
       return CourseType[type].toString();
     },
-    onLoadData: async function (): Promise<void> {
+    onLoadDataAsync: async function (): Promise<void> {
       //get involvements
-      this.involvements = await InvolvementService.getInvolvements(
+      this.involvements = await InvolvementService.getInvolvementsAsync(
         -1,
         this.isTeacher ? this.userId : "",
         false,
@@ -231,7 +231,7 @@ export default Vue.extend({
       //compute the data for the second table
       this.getTotalInvolvements();
     },
-    onSave: async function (): Promise<void> {
+    onSaveAsync: async function (): Promise<void> {
       //get all the involvements that was updated
       const studentsChanged = InvolvementService.getInvolvementChanges(
         this.involvementsInit,
@@ -239,7 +239,7 @@ export default Vue.extend({
       );
 
       if (studentsChanged.length !== 0) {
-        const response = await InvolvementService.addStudentsAttendances({
+        const response = await InvolvementService.addStudentsAttendancesAsync({
           involvements: studentsChanged,
         });
 

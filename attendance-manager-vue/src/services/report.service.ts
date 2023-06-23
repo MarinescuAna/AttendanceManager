@@ -5,11 +5,11 @@ import https from "@/plugins/axios";
 import { REPORT_CONTROLLER } from "@/shared/constants";
 
 export default class ReportService {
-    static async getReports(): Promise<ReportCardViewModule[]> {
+    static async getReportsAsync(): Promise<ReportCardViewModule[]> {
         return (await https.get(`${REPORT_CONTROLLER}/reports`)).data;
     }
 
-    static async addReport(parameters: InsertReportParameters): Promise<boolean> {
+    static async addReportAsync(parameters: InsertReportParameters): Promise<boolean> {
         let isSuccess = true;
         await https.post(`${REPORT_CONTROLLER}/create_report`, parameters)
             .catch(error => {

@@ -16,7 +16,7 @@ export default class InvolvementCodeService {
      * @param payload number of minutes
      * @returns undefinde if some errors occured or the new generated code and its expiration date
      */
-    static async createInvolvementCode(payload: InsertInvolvementCodeParameters): Promise<undefined | InvolvementCodeInsertModule> {
+    static async createInvolvementCodeAsync(payload: InsertInvolvementCodeParameters): Promise<undefined | InvolvementCodeInsertModule> {
         let isSuccess = true;
 
         const result = await https.post(`${INVOLVEMENT_CODE_CONTROLLER}/create_code`,payload)

@@ -204,7 +204,7 @@
                 </v-btn>
                 <v-btn
                   class="dark_button white--text"
-                  @click="step3Actions"
+                  @click="step3ActionsAsync"
                   :disabled="
                     Object.keys(selectedSpecialization).length === 0 ||
                     selectedYear === 0
@@ -265,7 +265,7 @@
                 </v-btn>
                 <v-btn
                   class="dark_button white--text"
-                  @click="onSubmit"
+                  @click="onSubmitAsync"
                   :disabled="selectedStudents.length == 0"
                 >
                   Create involvement report
@@ -366,8 +366,8 @@ export default Vue.extend({
   },
   /** Load the current user informations from the API and also his courses */
   created: async function () {
-    await storeHelper.userStore.loadCurrentUserInfo();
-    await storeHelper.courseStore.loadCourses(false);
+    await storeHelper.userStore.loadCurrentUserInfoAsync();
+    await storeHelper.courseStore.loadCoursesAsync(false);
   },
   methods: {
     /** Use this function to reset the list of students when the specialization or year has changed */
@@ -379,10 +379,10 @@ export default Vue.extend({
       }
     },
     /** Use this function to load the list of students when we go to the last step */
-    step3Actions: async function (): Promise<void> {
+    step3ActionsAsync: async function (): Promise<void> {
       if (this.generateStudentsList) {
         this.students =
-          await UserService.getStudentsBySpecializationIdEnrollmentYear(
+          await UserService.getStudentsBySpecializationIdEnrollmentYearAsync(
             this.selectedYear,
             this.selectedSpecialization.id
           );
@@ -391,8 +391,8 @@ export default Vue.extend({
       this.currentStep = 3;
     },
     /** Create the new document according to the selected data, and if any error occures, redirect the user to the created documents list */
-    onSubmit: async function (): Promise<void> {
-      const response = await ReportService.addReport({
+    onSubmitAsync: async function (): Promise<void> {
+      const response = await ReportService.addReportAsync({
         courseId: this.selectedCourse.courseId,
         enrollmentYear: this.selectedYear,
         maxNoLaboratories: this.maxNoLaboratories,

@@ -71,7 +71,7 @@ const actions = {
     /**
      * Load all the departments and the specializations from the API and initialize the store
      */
-    async loadDepartments({ commit, state }): Promise<void> {
+    async loadDepartmentsAsync({ commit, state }): Promise<void> {
         if (state.departments.length == 0) {
             const departments: DepartmentViewModule[] = (await https.get(`${DEPARTMENT_CONTROLLER}/departments`)).data;
             commit("_departments", departments);
@@ -80,7 +80,7 @@ const actions = {
     /**
      * Add a new department into the database and initialize the store
      */
-    async addDepartment({ commit }, payload: InsertDepartmentParameters): Promise<boolean> {
+    async addDepartmentAsync({ commit }, payload: InsertDepartmentParameters): Promise<boolean> {
         let isSuccess = true;
 
         // get the id of the new department
@@ -100,7 +100,7 @@ const actions = {
     /**
      * Update department name in db and store
      */
-    async updateDepartment({ commit }, payload: UpdateDepartmentParameters): Promise<boolean> {
+    async updateDepartmentAsync({ commit }, payload: UpdateDepartmentParameters): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${DEPARTMENT_CONTROLLER}/update_department`,payload)
@@ -114,7 +114,7 @@ const actions = {
 
         return isSuccess;
     },
-    async deleteDepartment({ commit }, payload: number): Promise<boolean> {
+    async deleteDepartmentAsync({ commit }, payload: number): Promise<boolean> {
         let isSuccess = true;
 
         await https.delete(`${DEPARTMENT_CONTROLLER}/delete/${payload}`)

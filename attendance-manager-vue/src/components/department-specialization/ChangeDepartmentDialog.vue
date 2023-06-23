@@ -12,7 +12,7 @@
     </v-card-text>
     <v-card-actions class="ma-3">
       <v-row justify="center" class="pa-8">
-      <v-btn color="dark_button white--text" @click="onSaveName" :disabled="isValid">
+      <v-btn color="dark_button white--text" @click="onSaveNameAsync" :disabled="isValid">
         Save
       </v-btn>
       </v-row>
@@ -53,8 +53,8 @@ export default {
   },
   methods: {
     /** Save the new name and emit a save event to the parent */
-    onSaveName: async function(): Promise<void> {
-      const result = await storeHelper.departmentStore.updateDepartment({
+    onSaveNameAsync: async function(): Promise<void> {
+      const result = await storeHelper.departmentStore.updateDepartmentAsync({
         departmentId: this.department.id,
         name: this.name,
       } as UpdateDepartmentParameters);

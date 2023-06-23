@@ -27,23 +27,23 @@ export class UserStore {
     /**
      * Load all the users from the API
      */
-    public async loadUsers(): Promise<void> {
-       await this.store.dispatch(`${userNamespace}/loadUsers`);
+    public async loadUsersAsync(): Promise<void> {
+       await this.store.dispatch(`${userNamespace}/loadUsersAsync`);
     }
 
     /**
      * Load all the users from the API
      * @todo remove this
      */
-    public async loadCurrentUserInfo(): Promise<void> {
-        await this.store.dispatch(`${userNamespace}/loadCurrentUserInfo`);
+    public async loadCurrentUserInfoAsync(): Promise<void> {
+        await this.store.dispatch(`${userNamespace}/loadCurrentUserInfoAsync`);
     }
 
     /**
      * Add a new user only
      */
-    public async addUser(payload: InsertUserParameters, department: DepartmentViewModule): Promise<boolean> {
-        return await this.store.dispatch(`${userNamespace}/addUser`, { newUser: payload, department: department });
+    public async addUserAsync(payload: InsertUserParameters, department: DepartmentViewModule): Promise<boolean> {
+        return await this.store.dispatch(`${userNamespace}/addUserAsync`, { newUser: payload, department: department });
     }
 
     /**

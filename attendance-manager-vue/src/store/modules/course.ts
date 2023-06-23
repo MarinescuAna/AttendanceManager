@@ -82,7 +82,7 @@ const actions = {
     /**
      * Load all the courses defined by the current user, not all courses
      */
-    async loadCourses({ commit, state }, reload: boolean): Promise<void> {
+    async loadCoursesAsync({ commit, state }, reload: boolean): Promise<void> {
         if (state.courses.length != 0 && !reload) {
             return state.courses;
         }
@@ -105,7 +105,7 @@ const actions = {
     /**
      * Add a new course
      */
-    async addCourse({ commit }, payload: CreateCourseParameters): Promise<boolean> {
+    async addCourseAsync({ commit }, payload: CreateCourseParameters): Promise<boolean> {
         let isSuccess = true;
 
         const result = await https.post(`${COURSE_CONTROLLER}/create_course`, payload)
@@ -127,7 +127,7 @@ const actions = {
     /**
      * Remove a course
      */
-    async removeCourse({ commit }, payload: number): Promise<boolean> {
+    async removeCourseAsync({ commit }, payload: number): Promise<boolean> {
         let isSuccess = true;
 
         await https.delete(`${COURSE_CONTROLLER}/delete_course/${payload}`)
@@ -143,7 +143,7 @@ const actions = {
     /**
      * Update course
      */
-    async updateCourse({ commit }, payload: { specializationName: string, parameter: UpdateCourseParameters }): Promise<boolean> {
+    async updateCourseAsync({ commit }, payload: { specializationName: string, parameter: UpdateCourseParameters }): Promise<boolean> {
         let isSuccess = true;
 
         await https.patch(`${COURSE_CONTROLLER}/update_Course`, payload.parameter)

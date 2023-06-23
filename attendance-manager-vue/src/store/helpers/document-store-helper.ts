@@ -28,40 +28,40 @@ export class DocumentStore {
      * Load the current document from the API and update the store
      * @payload documentId
     */
-    public async loadCurrentReport(payload: string): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/loadCurrentReport`, payload);
+    public async loadCurrentReportAsync(payload: string): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/loadCurrentReportAsync`, payload);
     }
 
     /** Use this method to update the document information */
-    public async updateDocument(payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/updateDocument`, payload);
+    public async updateReportAsync(payload: { module: UpdateReportParameters, newCourseName: string }): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/updateDocumentAsync`, payload);
     }
 
     /** Delete document */
-    public async deleteDocument(): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/deleteDocument`);
+    public async deleteReportAsync(): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/deleteDocumentAsync`);
     }
-    public async deleteCollection(collectionId: number): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/deleteCollection`, collectionId);
+    public async deleteCollectionAsync(collectionId: number): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/deleteCollectionAsync`, collectionId);
     }
 
     /**
      * Add new teacher as collaborator to a document
      * @payload teacher email
     */
-    public async addCollaborator(payload: InsertCollaboratorParameters): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/addCollaborator`, payload);
+    public async addCollaboratorAsync(payload: InsertCollaboratorParameters): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/addCollaboratorAsync`, payload);
     }
 
-    public async updateCollection(payload: UpdateCollectionParameters): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/updateCollection`, payload);
+    public async updateCollectionAsync(payload: UpdateCollectionParameters): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/updateCollectionAsync`, payload);
     }
 
     /**
    * Add a new specialziation only
    */
-    public async addCollection(payload: InsertCollectionParameters): Promise<boolean> {
-        return await this.store.dispatch(`${documentNamespace}/addCollection`, payload);
+    public async addCollectionAsync(payload: InsertCollectionParameters): Promise<boolean> {
+        return await this.store.dispatch(`${documentNamespace}/addCollectionAsync`, payload);
     }
 
     /**

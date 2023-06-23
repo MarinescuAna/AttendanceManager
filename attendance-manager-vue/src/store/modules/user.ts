@@ -73,7 +73,7 @@ const actions = {
     /**
      * Load all the users from the API and initialize the store
      */
-    async loadUsers({ commit, state }): Promise<void> {
+    async loadUsersAsync({ commit, state }): Promise<void> {
         if (state.users.length == 0) {
             const users: UserViewModule[] = (await https.get(`${USER_CONTROLLER}/users`)).data;
             commit("_users", users);
@@ -83,7 +83,7 @@ const actions = {
      * Load current user information
      * @todo remove the id
      */
-    async loadCurrentUserInfo({ commit, state }): Promise<void> {
+    async loadCurrentUserInfoAsync({ commit, state }): Promise<void> {
         if (state.currentUser != null) {
             return state.currentUser;
         }
@@ -94,7 +94,7 @@ const actions = {
     /**
      * Add a new user into the database and initialize the store
      */
-    async addUser({ commit }, payload: {newUser: InsertUserParameters, department: DepartmentViewModule}): Promise<boolean> {
+    async addUserAsync({ commit }, payload: {newUser: InsertUserParameters, department: DepartmentViewModule}): Promise<boolean> {
         let isSuccess = true;
 
         await https.post(`${USER_CONTROLLER}/create_user`, payload.newUser).catch(error => {

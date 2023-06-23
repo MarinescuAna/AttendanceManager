@@ -44,8 +44,8 @@ export default Vue.extend({
     };
   },
   async created() {
-    await storeHelper.departmentStore.loadDepartments();
-    await storeHelper.specializationStore.loadSpecializations();
+    await storeHelper.departmentStore.loadDepartmentsAsync();
+    await storeHelper.specializationStore.loadSpecializationsAsync();
   },
 });
 </script>
