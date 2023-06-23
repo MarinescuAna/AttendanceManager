@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="orange_background">
+    <v-card>
       <v-card-title class="pa-7">
         <h4>Create new specialization</h4>
       </v-card-title>

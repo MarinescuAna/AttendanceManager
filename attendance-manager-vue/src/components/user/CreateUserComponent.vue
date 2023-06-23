@@ -2,7 +2,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-card width="50%" class="orange_background">
+      <v-card width="50%">
         <v-card-title class="pa-7">
           <h2>Create single user</h2>
         </v-card-title>
@@ -67,8 +67,8 @@
                   @change="onResetSpecializationSelector"
                 >
                   <v-row>
-                    <v-radio class="ma-4" label="Student" :value="1"></v-radio>
-                    <v-radio class="ma-4" label="Teacher" :value="2"></v-radio>
+                    <v-radio class="ma-4" color="black" label="Student" :value="1"></v-radio>
+                    <v-radio class="ma-4" color="black" label="Teacher" :value="2"></v-radio>
                   </v-row>
                 </v-radio-group>
               </div>

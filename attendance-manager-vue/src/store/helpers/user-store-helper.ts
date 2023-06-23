@@ -27,16 +27,16 @@ export class UserStore {
     /**
      * Load all the users from the API
      */
-    public loadUsers(): void {
-        this.store.dispatch(`${userNamespace}/loadUsers`);
+    public async loadUsers(): Promise<void> {
+       await this.store.dispatch(`${userNamespace}/loadUsers`);
     }
 
     /**
      * Load all the users from the API
      * @todo remove this
      */
-    public loadCurrentUserInfo(): void {
-        this.store.dispatch(`${userNamespace}/loadCurrentUserInfo`);
+    public async loadCurrentUserInfo(): Promise<void> {
+        await this.store.dispatch(`${userNamespace}/loadCurrentUserInfo`);
     }
 
     /**

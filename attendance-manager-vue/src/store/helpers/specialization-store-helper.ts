@@ -22,8 +22,8 @@ export class SpecializationStore {
      * Load all the specializations by the departmentId from the API(if it's needed) and update the store
      * @test
      */
-    public loadSpecializations(): void{
-        this.store.dispatch(`${specializationNamespace}/loadSpecializations`);
+    public async loadSpecializations(): Promise<void>{
+       await this.store.dispatch(`${specializationNamespace}/loadSpecializations`);
     }
     public async deleteSpecialization(id: number): Promise<boolean>{
         return this.store.dispatch(`${specializationNamespace}/deleteSpecialization`,id);

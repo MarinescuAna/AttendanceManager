@@ -1,5 +1,15 @@
 <template>
-  <v-layout class="ma-2" column>
+  <div v-if="isLoading">
+    <v-layout justify-center>
+      <v-progress-circular
+        :size="100"
+        :width="8"
+        color="black"
+        indeterminate
+      ></v-progress-circular>
+    </v-layout>
+  </div>
+  <v-layout class="ma-2" column v-else>
     <div v-if="isTeacher">
       <v-tabs
         v-model="currentTab"
@@ -207,6 +217,7 @@ import { rules } from "@/plugins/vee-validate";
 import BadgeComponent from "@/components/shared-components/BadgeComponent.vue";
 import BadgeService from "@/services/badge.service";
 import BadgePercentageComponent from "./BadgePercentageComponent.vue";
+import { Toastification } from "@/plugins/vue-toastification";
 
 interface BadgeDto {
   id: number;
@@ -229,14 +240,17 @@ export default Vue.extend({
       selectedCourseType: "",
       selectedNumber: 0,
       maxPossibleNumber: 0,
+      // Add a flag to track if data fetching is successful
+      isFetchSuccessful: false,
+      isLoading: true,
     };
   },
   components: {
     MessageComponent,
     CurrentUserRewardsComponent,
     BadgeComponent,
-    BadgePercentageComponent
-},
+    BadgePercentageComponent,
+  },
   computed: {
     isTeacher: function (): boolean {
       return AuthService.getDataFromToken()?.role == Role[2];
@@ -252,7 +266,29 @@ export default Vue.extend({
     },
   },
   created: async function (): Promise<void> {
-    this.rewards = await RewardService.getRewardsByReportIdAsync();
+    // Fetch data with a timeout of 30 seconds
+    const fetchDataWithTimeout = async () => {
+      try {
+        this.rewards = await RewardService.getRewardsByReportIdAsync();
+        this.isFetchSuccessful = true;
+      } catch (error) {
+        Toastification.simpleError("An error occurred during data fetching.");
+      } finally {
+        this.isLoading = false;
+      }
+    };
+
+    // Start fetching data
+    fetchDataWithTimeout();
+
+    // Set a timeout to hide the loader if data is not fetched
+    setTimeout(() => {
+      if (!this.isFetchSuccessful) {
+        this.isLoading = false;
+        Toastification.simpleError("Data fetching timeout");
+      }
+    }, 30000);
+
     this.badges = [
       {
         id: BadgeType.CustomAttendanceAchieved,

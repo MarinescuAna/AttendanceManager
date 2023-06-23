@@ -1,5 +1,15 @@
 <template>
-  <v-container>
+  <div v-if="isLoading">
+    <v-layout justify-center>
+      <v-progress-circular
+        :size="100"
+        :width="8"
+        color="black"
+        indeterminate
+      ></v-progress-circular>
+    </v-layout>
+  </div>
+  <v-container v-else>
     <v-card-title>
       <span class="text-h5 ma-4"> {{ department.name }}</span>
       <v-spacer></v-spacer>
@@ -28,11 +38,21 @@
           <v-list-item-group>
             <v-list-item v-for="child in specializations" :key="child.id">
               <v-list-item-content>
-                <v-list-item-title>{{ child.name }} ({{ child.usersLinked }} users)</v-list-item-title>
-                <v-list-item-subtitle>Last update: {{ getRelativeTime(child.updatedOn) }}</v-list-item-subtitle>
+                <v-list-item-title
+                  >{{ child.name }} ({{
+                    child.usersLinked
+                  }}
+                  users)</v-list-item-title
+                >
+                <v-list-item-subtitle
+                  >Last update:
+                  {{ getRelativeTime(child.updatedOn) }}</v-list-item-subtitle
+                >
               </v-list-item-content>
-              <v-list-item-action v-if="child.usersLinked==0">
-                <v-btn @click="onDelete(child.id)" icon><v-icon>mdi-delete</v-icon></v-btn>
+              <v-list-item-action v-if="child.usersLinked == 0">
+                <v-btn @click="onDelete(child.id)" icon
+                  ><v-icon>mdi-delete</v-icon></v-btn
+                >
               </v-list-item-action>
             </v-list-item>
           </v-list-item-group>
@@ -57,7 +77,10 @@ import ChangeDepartmentDialog from "./ChangeDepartmentDialog.vue";
 import storeHelper from "@/store/store-helper";
 import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import MessageComponent from "../shared-components/MessageComponent.vue";
-import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
+import {
+  DepartmentViewModule,
+  SpecializationViewModule,
+} from "@/modules/view-modules";
 import moment from "moment";
 import { Toastification } from "@/plugins/vue-toastification";
 
@@ -76,6 +99,9 @@ export default Vue.extend({
     return {
       WARNING_AMBER_DARKEN_4,
       dialog: false,
+      // Add a flag to track if data fetching is successful
+      isFetchSuccessful: false,
+      isLoading: true,
     };
   },
   computed: {
@@ -91,7 +117,28 @@ export default Vue.extend({
   },
   /** Load the specializations form the API */
   created: async function () {
-    await storeHelper.specializationStore.loadSpecializations();
+    // Fetch data with a timeout of 30 seconds
+    const fetchDataWithTimeout = async () => {
+      try {
+        await storeHelper.specializationStore.loadSpecializations();
+        this.isFetchSuccessful = true;
+      } catch (error) {
+        Toastification.simpleError("An error occurred during data fetching.");
+      } finally {
+        this.isLoading = false;
+      }
+    };
+
+    // Start fetching data
+    fetchDataWithTimeout();
+
+    // Set a timeout to hide the loader if data is not fetched
+    setTimeout(() => {
+      if (!this.isFetchSuccessful) {
+        this.isLoading = false;
+        Toastification.simpleError("Data fetching timeout");
+      }
+    }, 30000);
   },
   /** Emit an event using EventBus in order to update the treeview whenever the user add a new department or specialization */
   mounted: function () {
@@ -99,17 +146,19 @@ export default Vue.extend({
       EventBus.$off(EVENT_BUS_RELOAD_ORGANIZATIONS);
     });
   },
-  methods:{
-    onDelete: async function(id: number): Promise<void> {
-      const result = await storeHelper.specializationStore.deleteSpecialization(id);
+  methods: {
+    onDelete: async function (id: number): Promise<void> {
+      const result = await storeHelper.specializationStore.deleteSpecialization(
+        id
+      );
 
-      if(result){
+      if (result) {
         Toastification.success("The specialization was successfully deleted!");
       }
     },
     getRelativeTime(updateOn: string) {
       return moment(new Date(updateOn)).fromNow();
     },
-  }
+  },
 });
 </script>

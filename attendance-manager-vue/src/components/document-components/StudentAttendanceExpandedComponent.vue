@@ -1,5 +1,15 @@
 <template>
-  <v-layout column class="ma-3">
+  <div v-if="isLoading">
+    <v-layout justify-center>
+      <v-progress-circular
+        :size="100"
+        :width="8"
+        color="black"
+        indeterminate
+      ></v-progress-circular>
+    </v-layout>
+  </div>
+  <v-layout v-else column class="ma-3">
     <v-flex>
       <v-btn-toggle class="ma-2" rounded>
         <v-btn
@@ -134,6 +144,9 @@ export default Vue.extend({
       resultsOverview: {},
       involvements: [] as InvolvementViewModule[],
       involvementsInit: [] as InvolvementViewModule[],
+      // Add a flag to track if data fetching is successful
+      isFetchSuccessful: false,
+      isLoading: true,
     };
   },
   computed: {
@@ -149,7 +162,28 @@ export default Vue.extend({
     },
   },
   created: async function (): Promise<void> {
-    await this.onLoadData();
+    // Fetch data with a timeout of 30 seconds
+    const fetchDataWithTimeout = async () => {
+      try {
+        await this.onLoadData();
+        this.isFetchSuccessful = true;
+      } catch (error) {
+        Toastification.simpleError("An error occurred during data fetching.");
+      } finally {
+        this.isLoading = false;
+      }
+    };
+
+    // Start fetching data
+    fetchDataWithTimeout();
+
+    // Set a timeout to hide the loader if data is not fetched
+    setTimeout(() => {
+      if (!this.isFetchSuccessful) {
+        this.isLoading = false;
+        Toastification.simpleError("Data fetching timeout");
+      }
+    }, 30000);
   },
   methods: {
     getRelativeTime(updateOn: string) {

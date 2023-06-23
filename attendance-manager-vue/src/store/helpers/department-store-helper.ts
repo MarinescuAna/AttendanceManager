@@ -20,8 +20,8 @@ export class DepartmentStore {
     /**
      * Load all the departments from the API
      */
-    public loadDepartments(): void {
-        this.store.dispatch(`${departmentNamespace}/loadDepartments`);
+    public async loadDepartments(): Promise<void> {
+        await this.store.dispatch(`${departmentNamespace}/loadDepartments`);
     }
     public async deleteDepartment(id: number): Promise<boolean>{
         return this.store.dispatch(`${departmentNamespace}/deleteDepartment`,id);

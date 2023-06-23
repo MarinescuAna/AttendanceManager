@@ -13,7 +13,17 @@
 
     <v-tabs-items v-model="currentTab" class="pa-3 custom-remove-background">
       <v-tab-item>
-        <div v-if="courses.length != 0">
+        <div v-if="isLoading">
+          <v-layout justify-center>
+            <v-progress-circular
+              :size="100"
+              :width="8"
+              color="black"
+              indeterminate
+            ></v-progress-circular>
+          </v-layout>
+        </div>
+        <div v-else-if="courses.length != 0">
           <v-btn class="dark_button white--text ma-6" @click="onReload">
             <v-icon>mdi-reload</v-icon> Reload courses
           </v-btn>
@@ -119,6 +129,9 @@ export default Vue.extend({
       WARNING_AMBER_DARKEN_4,
       currentTab: 0,
       updateDialog: false,
+      // Add a flag to track if data fetching is successful
+      isFetchSuccessful: false,
+      isLoading: true,
     };
   },
   computed: {
@@ -130,8 +143,29 @@ export default Vue.extend({
     },
   },
   created: async function () {
-    await storeHelper.courseStore.loadCourses(false);
-    await storeHelper.userStore.loadCurrentUserInfo();
+    // Fetch data with a timeout of 30 seconds
+    const fetchDataWithTimeout = async () => {
+      try {
+        await storeHelper.courseStore.loadCourses(false);
+        await storeHelper.userStore.loadCurrentUserInfo();
+        this.isFetchSuccessful = true;
+      } catch (error) {
+        Toastification.simpleError("An error occurred during data fetching.");
+      } finally {
+        this.isLoading = false;
+      }
+    };
+
+    // Start fetching data
+    fetchDataWithTimeout();
+
+    // Set a timeout to hide the loader if data is not fetched
+    setTimeout(() => {
+      if (!this.isFetchSuccessful) {
+        this.isLoading = false;
+        Toastification.simpleError("Data fetching timeout");
+      }
+    }, 30000);
   },
   methods: {
     onDeleteCourse: async function (course: CourseViewModule): Promise<void> {

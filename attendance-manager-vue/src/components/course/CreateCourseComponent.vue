@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="orange_background">
+    <v-card>
       <v-card-title class="pa-7">
         <h2>Create new course</h2>
       </v-card-title>
