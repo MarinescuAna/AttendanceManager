@@ -55,6 +55,9 @@ const mutations = {
             }
         });
     },
+    _deleteDepartment(state, payload: number): void{
+        state.departments = state.departments.filter(s=>s.id!=payload);  
+    },
     /**
      * Reset the state with the initial values
      */
@@ -107,6 +110,20 @@ const actions = {
 
         if (isSuccess) {
             commit("_updateDepartmentName", payload);
+        }
+
+        return isSuccess;
+    },
+    async deleteDepartment({ commit }, payload: number): Promise<boolean> {
+        let isSuccess = true;
+
+        await https.delete(`${DEPARTMENT_CONTROLLER}/delete/${payload}`)
+            .catch(error => {
+                isSuccess = ResponseHandler.errorResponseHandler(error);
+            });
+
+        if (isSuccess) {
+            commit("_deleteDepartment",payload);
         }
 
         return isSuccess;

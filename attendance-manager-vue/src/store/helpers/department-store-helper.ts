@@ -23,6 +23,9 @@ export class DepartmentStore {
     public loadDepartments(): void {
         this.store.dispatch(`${departmentNamespace}/loadDepartments`);
     }
+    public async deleteDepartment(id: number): Promise<boolean>{
+        return this.store.dispatch(`${departmentNamespace}/deleteDepartment`,id);
+    }
 
     /**
      * Add a new departments in db and store

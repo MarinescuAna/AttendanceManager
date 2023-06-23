@@ -1,4 +1,5 @@
 ﻿using AttendanceManager.Application.Features.Department.Commands.CreateDepartment;
+using AttendanceManager.Application.Features.Department.Commands.DeleteDepartment;
 using AttendanceManager.Application.Features.Department.Commands.UpdateDepartmentName;
 using AttendanceManager.Application.Features.Department.Queries.GetDepartments;
 using MediatR;
@@ -46,6 +47,11 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> UpdateDepartmentNameAsync([FromBody] UpdateDepartmentNameCommand command)
         {
             return Ok(await mediator.Send(command));
+        }
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeleteDepartmentAsync(int id)
+        {
+            return Ok(await mediator.Send(new DeleteDepartmentCommand() { DepartmentId = id }));
         }
     }
 }
