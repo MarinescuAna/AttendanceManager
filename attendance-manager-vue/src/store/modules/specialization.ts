@@ -101,6 +101,8 @@ const actions: ActionTree<SpecializationState, RootState> = {
                 id: (result as AxiosResponse).data,
                 name: payload.name,
                 departmentId: payload.departmentId,
+                usersLinked: 0,
+                updatedOn: (new Date()).toString()
             } as SpecializationViewModule);
         }
         return isSuccess;

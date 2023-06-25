@@ -92,7 +92,9 @@ const actions = {
         if (isSuccess) {
             commit("_addDepartment", {
                 id: (result as AxiosResponse).data,
-                name: payload.name
+                name: payload.name,
+                linkedSpecializations: 0,
+                updatedOn: (new Date()).toString()
             } as DepartmentViewModule);
         }
         return isSuccess;
