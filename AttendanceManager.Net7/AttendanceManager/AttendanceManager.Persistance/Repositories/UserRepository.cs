@@ -11,6 +11,16 @@ namespace AttendanceManager.Persistance.Repositories
         {
         }
 
-
+        public async Task AddRangeAsync(List<User> entities)
+        {
+            try
+            {
+                await dbContext.Users.AddRangeAsync(entities);
+            }
+            catch (Exception ex)
+            {
+                loggingService.LogException(ex, System.Reflection.MethodBase.GetCurrentMethod()?.Name);
+            }
+        }
     }
 }

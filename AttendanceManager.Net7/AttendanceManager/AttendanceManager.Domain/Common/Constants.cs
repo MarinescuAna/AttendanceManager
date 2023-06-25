@@ -52,7 +52,7 @@
         public static readonly string SomethingWentWrongNotificationsGenericMessage = "Something went wrong during the notification process! See log files for more details or try again.";
         public static readonly string SomethingWentWrongInserAttendancesMessage = "Something went wrong when the involvements was added! See log files to more details or try again.";
         public static readonly string SomethingWentWrongInsertBadgeMessage = "Something went wrong when the rewards was added. See the log files for more details!";
-        public static readonly string SomethingWentWrongEmailSendMessage = "Something went wrong and the user will not receive any email, but the account was created. Please contact him and give him the credentials.";
+        public static readonly string SomethingWentWrongEmailSendMessage = "Something went wrong and the user(s) will not receive any email, but the account(s) was/were created.";
     }
 
     public static class NotificationMessages

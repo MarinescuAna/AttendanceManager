@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ResponseHandler from "@/error-handler/error-handler";
-import { InsertUserParameters } from "@/modules/commands-parameters";
+import { InsertMultipleUsersParameters, InsertUserParameters } from "@/modules/commands-parameters";
 import { DepartmentViewModule, UserInformationViewModule, UserViewModule } from "@/modules/view-modules";
 import https from "@/plugins/axios";
+import { Toastification } from "@/plugins/vue-toastification";
 import { USER_CONTROLLER } from "@/shared/constants";
 import { Role } from "@/shared/enums";
+import { AxiosResponse } from "axios";
 
 
 //state type
@@ -113,6 +115,34 @@ const actions = {
                 role: Role[payload.newUser.role],
                 specializationIds: payload.newUser.specializationIds
             } as UserViewModule);
+        }
+        return isSuccess;
+    },
+    async addMultipleUsersAsync({ commit }, payload: {users: InsertMultipleUsersParameters, department: DepartmentViewModule}): Promise<boolean> {
+        let isSuccess = true;
+
+        const result = await https.post(`${USER_CONTROLLER}/create_users`, payload.users).catch(error => {
+            isSuccess = ResponseHandler.errorResponseHandler(error);
+        });
+
+        if (isSuccess) {
+            payload.users.users.forEach(user =>{
+                commit("_addUser", {
+                    departmentId: payload.department.id,
+                    departmentName: payload.department.name,
+                    accountConfirmed: false,
+                    code: user.code,
+                    year: user.year,
+                    fullname: user.fullname,
+                    id: user.email,
+                    role: Role[user.role],
+                    specializationIds: user.specializationIds
+                } as UserViewModule);
+            });
+
+            if((result as AxiosResponse).data!=0){
+                Toastification.info("Not all the user received the email, but they were inserted into the system, successfully!");
+            }
         }
         return isSuccess;
     },

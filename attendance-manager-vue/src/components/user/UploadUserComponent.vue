@@ -49,7 +49,7 @@
           </v-layout>
           <v-layout wrap>
             <label class="my-3"
-              >Select the column/row which contains the users name</label
+              >Select the column which contains the users name</label
             >
             <v-select
               color="black"
@@ -73,7 +73,7 @@
           </v-layout>
           <v-layout wrap>
             <label class="my-3"
-              >Select the column/row which contains the users email</label
+              >Select the column which contains the users email</label
             >
             <v-select
               color="black"
@@ -95,7 +95,7 @@
           </v-layout>
           <v-layout wrap>
             <label class="my-3"
-              >Select the column/row which contains the users GDPR code</label
+              >Select the column which contains the users GDPR code</label
             >
             <v-select
               color="black"
@@ -189,7 +189,7 @@
           >Add new raw</v-btn
         >
         <validation-observer ref="observer" v-slot="{ handleSubmit }">
-          <v-form @submit.prevent="handleSubmit(onSaveUsers)">
+          <v-form @submit.prevent="handleSubmit(onSaveUsersAsync)">
             <v-simple-table class="ma-2">
               <template v-slot:default>
                 <thead>
@@ -324,7 +324,7 @@
                 >
                   <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
-                <v-btn @click="onSaveUsers" class="mx-1" color="success">
+                <v-btn @click="onSaveUsersAsync" class="mx-1" color="success">
                   Save
                 </v-btn>
                 <v-btn class="mx-1" color="red"> Discard </v-btn>
@@ -368,8 +368,12 @@ import storeHelper from "@/store/store-helper";
 import Vue from "vue";
 import * as XLSX from "xlsx";
 import { rules } from "@/plugins/vee-validate";
-import { DepartmentViewModule, SpecializationViewModule } from "@/modules/view-modules";
+import {
+  DepartmentViewModule,
+  SpecializationViewModule,
+} from "@/modules/view-modules";
 import { InsertUserParameters } from "@/modules/commands-parameters";
+import { Toastification } from "@/plugins/vue-toastification";
 
 export default Vue.extend({
   name: "UploadUserComponent",
@@ -420,10 +424,21 @@ export default Vue.extend({
     },
   },
   methods: {
-    onSaveUsers: function (): void {
-        this.$nextTick(() => {
-        this.$refs.observer.$emit("validate");
-      });
+    onSaveUsersAsync: async function (): Promise<void> {
+      const department = storeHelper.departmentStore.departments.find(
+        (d) => d.id == this.specializations[0].departmentId
+      );
+      const result = await storeHelper.userStore.addMultipleUsersAsync(
+        {
+          users: this.users,
+        },
+        department!
+      );
+
+      if (result) {
+        Toastification.info("The users were created!");
+        this.$router.push({ name: "users" });
+      }
     },
     onDeleteNewItem: function (): void {
       this.newRow = false;

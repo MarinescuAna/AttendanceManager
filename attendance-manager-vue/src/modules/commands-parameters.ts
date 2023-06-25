@@ -127,6 +127,10 @@ export interface InsertUserParameters {
     specializationIds: number[];
  }
 
+export interface InsertMultipleUsersParameters{
+    users: InsertUserParameters[];
+}
+
 /**Used to create a new collection */
 export interface InsertCollectionParameters{
     activityDateTime: string;

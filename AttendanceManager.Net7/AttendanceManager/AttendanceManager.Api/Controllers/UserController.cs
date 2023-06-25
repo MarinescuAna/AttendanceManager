@@ -1,4 +1,5 @@
-﻿using AttendanceManager.Application.Features.User.Commands.CreateUser;
+﻿using AttendanceManager.Application.Features.User.Commands.CreateMultipleUsers;
+using AttendanceManager.Application.Features.User.Commands.CreateUser;
 using AttendanceManager.Application.Features.User.Queries.GetAllUsers;
 using AttendanceManager.Application.Features.User.Queries.GetStudentsForCourses;
 using AttendanceManager.Application.Features.User.Queries.GetUserInformationByEmail;
@@ -21,6 +22,11 @@ namespace AttendanceManager.Api.Controllers
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand userCommand)
         {
             return Ok(await mediator.Send(userCommand));
+        }
+        [HttpPost("create_users")]
+        public async Task<IActionResult> CreateUsersAsync([FromBody] CreateMultipleUsersCommand command)
+        {
+            return Ok(await mediator.Send(command));
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 import { Store } from "vuex";
 import { namespace as userNamespace } from "../modules/user";
 import { DepartmentViewModule, UserInformationViewModule, UserViewModule } from "@/modules/view-modules";
-import { InsertUserParameters } from "@/modules/commands-parameters";
+import { InsertMultipleUsersParameters, InsertUserParameters } from "@/modules/commands-parameters";
 
 export class UserStore {
     private store: Store<any>;
@@ -44,6 +44,10 @@ export class UserStore {
      */
     public async addUserAsync(payload: InsertUserParameters, department: DepartmentViewModule): Promise<boolean> {
         return await this.store.dispatch(`${userNamespace}/addUserAsync`, { newUser: payload, department: department });
+    }
+
+    public async addMultipleUsersAsync(payload: InsertMultipleUsersParameters, department: DepartmentViewModule): Promise<boolean> {
+        return await this.store.dispatch(`${userNamespace}/addMultipleUsersAsync`, { users: payload, department: department });
     }
 
     /**

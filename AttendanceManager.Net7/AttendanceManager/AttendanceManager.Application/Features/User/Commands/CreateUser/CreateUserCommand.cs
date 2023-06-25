@@ -45,7 +45,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
                 FullName = request.Fullname,
                 Code = request.Code,
                 Role = Enum.Parse<Role>(request.Role),
-                Password = GeneratePassword(),
+                Password = PasswordGenerator.GeneratePassword(),
                 AccountConfirmed = false,
                 CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now,
@@ -67,12 +67,11 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             var message = new Message(newUser.Email, Constants.Subject, string.Format(Constants.Body, newUser.FullName, newUser.Email, newUser.Password), newUser.FullName);
             if (!await _mailService.SendEmailAsync(message, new CancellationToken()))
             {
-                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
+                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongEmailSendMessage);
             }
 
             return Unit.Value;
         }
-        private static string GeneratePassword() => new(Enumerable.Repeat(Constants.CharsString, Constants.PasswordLength).Select(s => s[new Random().Next(s.Length)]).ToArray());
 
     }
 }
