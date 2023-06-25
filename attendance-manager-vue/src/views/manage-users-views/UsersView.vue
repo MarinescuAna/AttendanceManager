@@ -24,6 +24,9 @@
           <v-toolbar-title class="font-weight-bold">Users</v-toolbar-title>
         </v-toolbar>
       </template>
+      <template v-slot:[`item.updated`]="{ item }">
+        {{ getRelativeTime(item.updated) }}
+      </template>
       <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">
           <UserInfoCardComponent :item="item" />
@@ -50,6 +53,7 @@ import { WARNING_AMBER_DARKEN_4 } from "@/shared/constants";
 import UserInfoCardComponent from "@/components/user/UserInfoCardComponent.vue";
 import { Toastification } from "@/plugins/vue-toastification";
 import MessageComponent from "@/components/shared-components/MessageComponent.vue";
+import moment from "moment";
 
 export default Vue.extend({
   name: "UsersView",
@@ -81,6 +85,11 @@ export default Vue.extend({
           value: "role",
           class: "text-left black--text text-h6",
         },
+        {
+          text: "Last update",
+          value: "updated",
+          class: "text-left black--text text-h6",
+        }
       ],
     };
   },
@@ -115,5 +124,10 @@ export default Vue.extend({
       }
     }, 30000);
   },
+  methods:{
+    getRelativeTime(updateOn: string) {
+      return moment(new Date(updateOn)).fromNow();
+    },
+  }
 });
 </script>

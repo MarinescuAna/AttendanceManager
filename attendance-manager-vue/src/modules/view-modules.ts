@@ -165,6 +165,8 @@ export interface UserViewModule {
     year: number;
     code: string;
     specializationIds: number[];
+    created: string;
+    updated: string;
  }
 
  /**Used when create the report */

@@ -16,6 +16,7 @@
     <v-container class="mt-2">
       <p><strong>Email: </strong>{{ item.id }}</p>
       <p><strong>Role: </strong>{{ item.role }}</p>
+      <p><strong>Creared on: </strong>{{ item.created }}</p>
       <p><strong>Department: </strong>{{ item.departmentName }}</p>
       <p><strong>{{item.role==Role[2]?'Employment year':'Enrollment year'}}: </strong>{{ item.year }}</p>
       <p><strong>Specialization:</strong></p>
