@@ -9,7 +9,7 @@
       >
       <v-toolbar-title v-else>{{ collection.activityTime }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu bottom right offset-y>
+      <v-menu bottom right offset-y v-if="isTeacher">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
