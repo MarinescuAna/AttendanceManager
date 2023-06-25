@@ -80,9 +80,9 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 });
             }
 
-            if (achievedRewards.Count() > 0 && _command.CommitChanges && !await _unitOfWork.CommitAsync())
+            if (achievedRewards.Count() > 0 && _command.CommitChanges)
             {
-                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongInsertBadgeMessage);
+                await _unitOfWork.CommitAsync();
             }
 
             return achievedRewards.Count() > 0;
