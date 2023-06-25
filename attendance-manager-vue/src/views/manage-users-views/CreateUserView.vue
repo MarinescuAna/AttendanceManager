@@ -40,7 +40,7 @@ export default Vue.extend({
   components: {CreateUserComponent, UploadUserComponent},
   data() {
     return {
-      currentTab: 1,
+      currentTab: 0,
     };
   },
   async created() {
