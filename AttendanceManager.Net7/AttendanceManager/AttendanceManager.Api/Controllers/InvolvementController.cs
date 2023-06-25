@@ -29,9 +29,9 @@ namespace AttendanceManager.Api.Controllers
         /// </summary>
         /// <returns>Success: list with all involvements</returns>
         [HttpGet("involvements")]
-        public async Task<IActionResult> GetInvolvementsForReportAsync(string? email, int? collection_id, bool use_code = false, bool current_user = false, bool only_present=false)
+        public async Task<IActionResult> GetInvolvementsForReportAsync(string? email, int? collection_id, bool use_code = false, bool current_user = false, bool only_present = false)
         {
-            if((!string.IsNullOrEmpty(email) || current_user) && collection_id != -1)
+            if ((!string.IsNullOrEmpty(email) || current_user) && collection_id != -1)
             {
                 throw new BadRequestException(ErrorMessages.BadRequest_InvalidParameters_EmailCollection_Error);
             }
@@ -95,7 +95,7 @@ namespace AttendanceManager.Api.Controllers
         [HttpPatch("update_involvement_by_code")]
         public async Task<IActionResult> UpdateAttendanceByCodeAsync([FromBody] UpdateInvolvementByCodeAndIdCommand command)
         {
-            command.CurrentUserName = Username;
+            command.CurrentUserName = UserRole == Role.Student ? GDPR : Username;
             return Ok(await mediator.Send(command));
         }
     }

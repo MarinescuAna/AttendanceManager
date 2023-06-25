@@ -34,6 +34,18 @@ namespace AttendanceManager.Api.Controllers
                 return result;
             }
         }
+        protected string GDPR
+        {
+            get
+            {
+                var result = string.Empty;
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    result = HttpContext.User.FindFirstValue(Constants.Claim_Name_Code)!;
+                }
+                return result;
+            }
+        }
         protected Role UserRole
         {
             get
