@@ -105,7 +105,7 @@
               <v-row justify="center">
                 <v-col cols="6">
                   <validation-provider
-                    :rules="rules.required"
+                    :rules="rules.length_8"
                     name="GDPR"
                     v-slot="{ errors }"
                   >
@@ -114,7 +114,7 @@
                       v-model="code"
                       counter
                       color="black"
-                      maxlength="32"
+                      maxlength="8"
                       prepend-icon="mdi-account"
                       :error-messages="errors"
                       class="pa-6"

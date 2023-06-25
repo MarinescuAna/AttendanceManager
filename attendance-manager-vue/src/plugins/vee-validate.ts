@@ -16,6 +16,10 @@ export const rules = {
         required: true,
         between: [0,30]
     },
+    length_8: {
+        required: true,
+        length: [8]
+    },
     between_0_100: {
         required: true,
         between: [0,100]
