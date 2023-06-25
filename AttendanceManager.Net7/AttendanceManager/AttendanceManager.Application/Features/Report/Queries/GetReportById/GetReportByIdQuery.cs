@@ -59,7 +59,7 @@ namespace AttendanceManager.Application.Features.Report.Queries.GetReportById
                 NoSeminaries = _currentReportService.ReportCollectionTypes.Count == 0 ?
                     0 : _currentReportService.ReportCollectionTypes.Where(ca => ca.Value == ActivityType.Seminary).Count(),
                 CreatedBy = currentReport.Course!.UserSpecialization!.User!.FullName,
-                Collections = _mapper.Map<CollectionDto[]>(currentReport.Collections!.OrderBy(d => d.HeldOn)),
+                Collections = _mapper.Map<CollectionDto[]>(currentReport.Collections!.OrderByDescending(d => d.HeldOn)),
                 Members = _mapper.Map<MembersDto[]>(request.Role == Role.Teacher ?
                     members.Where(u => u.User!.Role == Role.Teacher) : members.Where(u => u.User!.Role == Role.Student)),
                 AttendanceImportance = currentReport.AttendanceImportance,
