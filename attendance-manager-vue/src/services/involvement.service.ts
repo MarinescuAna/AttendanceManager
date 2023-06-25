@@ -65,7 +65,7 @@ export default class InvolvementService {
     }
 
     /**
-     * Update the students attendances by code and attendance id
+     * Update the students attendance by code and attendance id
      */
     static async updateAttendanceByCodeAsync(payload: UpdateInvolvementByCodeParameters): Promise<boolean> {
         let isSuccess = true;

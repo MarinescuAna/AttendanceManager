@@ -7,7 +7,7 @@
   />
   <v-layout column v-else-if="isMobile">
     <TitleWithInfoComponent :title="TITLE" :description="DESCRIPTION" h_Text="2"/>
-    <BarChartComponent :values="chartDataValues" :labels="chartDataLables" :horizontal="true" class="move-behind"/>
+    <BarChartComponent :values="chartDataValues" :labels="chartDataLables" class="move-behind"/>
   </v-layout>
   <v-layout column v-else>
     <h2>{{ TITLE }}</h2>
@@ -20,7 +20,7 @@
           width="150px"
         ></v-img>
       </div>
-      <BarChartComponent :values="chartDataValues" :labels="chartDataLables" :horizontal="true" class="move-behind"/>
+      <BarChartComponent :values="chartDataValues" :labels="chartDataLables" class="move-behind"/>
     </v-flex>
   </v-layout>
 </template>

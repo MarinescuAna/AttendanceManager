@@ -80,7 +80,7 @@
             <tr>
               <th class="text-left black--text text-md-h6">Activity Type</th>
               <th class="text-left black--text text-md-h6">
-                Total attendances
+                Total attendance
               </th>
               <th class="text-left black--text text-md-h6">Total points</th>
             </tr>
@@ -245,7 +245,7 @@ export default Vue.extend({
 
         if (!response) {
           Toastification.simpleError(
-            "Something went wrong and not all the attendances was saved"
+            "Something went wrong and not all the involvements was saved"
           );
         } else {
           this.involvementsInit = this.involvements;

@@ -129,10 +129,10 @@ export default Vue.extend({
         return `The current diagram displays the percentage of attendance for each report defined for ${this.courseTitle}`;
       }
       if (this.computeNoAttendances) {
-        return `The current diagram displays the number of attendances for each report defined for ${this.courseTitle}`;
+        return `The current diagram displays the number of attendance for each report defined for ${this.courseTitle}`;
       }
       if (this.computePoints) {
-        return `The current diagram displays the number of points acumulated for each report defined for ${this.courseTitle}`;
+        return `The current diagram displays the number of points accumulated for each report defined for ${this.courseTitle}`;
       }
 
       return `Something went wrong and we have no description`;
@@ -142,10 +142,10 @@ export default Vue.extend({
         return `Percentage of attendance for each report defined for ${this.courseTitle}`;
       }
       if (this.computeNoAttendances) {
-        return `Number of attendances for each report defined for ${this.courseTitle}`;
+        return `Number of attendance for each report defined for ${this.courseTitle}`;
       }
       if (this.computePoints) {
-        return `Number of points acumulated for each report defined for ${this.courseTitle}`;
+        return `Number of points accumulated for each report defined for ${this.courseTitle}`;
       }
 
       return `Something went wrong and we have no title`;
@@ -155,10 +155,10 @@ export default Vue.extend({
         return `There is no report and we cannot compute the diagram for percentage of attendance for each report for ${this.courseTitle}`;
       }
       if (this.computeNoAttendances) {
-        return `There is no report and we cannot compute the diagram for number of attendances for each report for ${this.courseTitle}`;
+        return `There is no report and we cannot compute the diagram for number of attendance for each report for ${this.courseTitle}`;
       }
       if (this.computePoints) {
-        return `There is no report and we cannot compute the diagram for number of points acumulated for each report for ${this.courseTitle}`;
+        return `There is no report and we cannot compute the diagram for number of points accumulated for each report for ${this.courseTitle}`;
       }
 
       return `Something went wrong and we have no error message`;
@@ -185,11 +185,11 @@ export default Vue.extend({
 
       if (this.computePercentage) {
         result = this._dataDiagram();
-        name = "Percentage of attendances(%)";
+        name = "Percentage of attendance(%)";
       }
       if (this.computeNoAttendances) {
         result = this._dataDiagram();
-        name = "Number of attendances";
+        name = "Number of attendance";
       }
       if (this.computePoints) {
         name = "Bonus points";

@@ -288,7 +288,7 @@ export default Vue.extend({
       }
     },
     /**
-     * Reload only the attendances and bonus points
+     * Reload only the attendance and bonus points
      */
     onReloadAttendancesAsync: async function (): Promise<void> {
       if (this.involvements.length != 0) {
@@ -312,7 +312,7 @@ export default Vue.extend({
      */
     onCloseDialogAsync: async function (): Promise<void> {
       if (!this.isTeacher) {
-        // only the teacher can update all the attendances
+        // only the teacher can update all the attendance
         this.$emit("close-dialog");
         return;
       }
@@ -352,7 +352,7 @@ export default Vue.extend({
 
         if (!response) {
           Toastification.simpleError(
-            "Something went wrong and not all the attendances was saved"
+            "Something went wrong and not all the attendance was saved"
           );
         } else {
           this.involvementsCopy = this.involvements;
@@ -363,7 +363,7 @@ export default Vue.extend({
       }
     },
     /**
-     * Update the attendances after the student use the code
+     * Update the attendance after the student use the code
      */
     onUseGeneratedCode: function (): void {
       this.useCodeDialog = false;

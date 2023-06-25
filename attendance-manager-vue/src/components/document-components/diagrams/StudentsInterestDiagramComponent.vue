@@ -2,7 +2,7 @@
   <v-layout column>
     <TitleWithInfoComponent
       title="Students interest regarding the selected activity type"
-      description="Percentage of each student's interest related to a course(this is related to the students that are members of the document): calculate a weighted average of the attendances and bonus points, where the attendances and bonus points are weighted by their relative importance(this means that we will add new fields at the created document, where the teacher should be forced to add the percentage of the importance of attendances and bonus points):
+      description="Percentage of each student's interest related to a course(this is related to the students that are members of the document): calculate a weighted average of the attendance and bonus points, where the attendance and bonus points are weighted by their relative importance(this means that we will add new fields at the created document, where the teacher should be forced to add the percentage of the importance of attendance and bonus points):
 <strong>Weighted_average=(% * attendance)+(% * bonus_points)</strong>. This average will be then divided by the total possible score of the course <strong>Percentage = (weighted_average/total_possible_score) * 100</strong>.
 "
     />
@@ -137,8 +137,8 @@ export default Vue.extend({
      * Data related to students interest
      * NOTE:
      * Students interest is computed like this:
-     *   - calculate a weighted average of the attendances and bonus points,
-     *   where the attendances and bonus points are weighted by their relative importance (the fields requiered when the document is created)
+     *   - calculate a weighted average of the attendance and bonus points,
+     *   where the attendance and bonus points are weighted by their relative importance (the fields requiered when the document is created)
      *   - Weighted_average=(% * attendance)+(% * bonus_points)
      *   - This average will be then divided by the total possible score of the course
      *   - Percentage = (weighted_average/total_possible_score) * 100
@@ -172,7 +172,7 @@ export default Vue.extend({
       }, {});
 
       let maxBonusPoints = 0;
-      //for each student, compute the number of attendances and the sum of bonus points for the activity
+      //for each student, compute the number of attendance and the sum of bonus points for the activity
       //and compute the weighted_average=(% * attendance)+(% * bonus_points)
       for (var email in involvementsGrouped) {
         const computedBonusPointsSum = involvementsGrouped[email].reduce(

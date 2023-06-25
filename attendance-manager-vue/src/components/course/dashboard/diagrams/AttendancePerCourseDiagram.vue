@@ -99,11 +99,11 @@ export default Vue.extend({
     return {
       WARNING_AMBER_DARKEN_4,
       DESCRIPTION: this.computePercentage
-        ? "The diagram shows the percentage of attendances for each course."
-        : "The diagram shows the number of attendances for each course.",
+        ? "The diagram shows the percentage of  for each course."
+        : "The diagram shows the number of attendance for each course.",
       TITLE: this.computePercentage
         ? "Percentage of attendance per course"
-        : "Total attendances per course",
+        : "Total attendance per course",
       chartDataLables: [] as string[],
       chartDataValues: {},
       selectedActivityType: CourseType.None,
@@ -128,7 +128,7 @@ export default Vue.extend({
       const result = this._countReports();
       const name = this.computePercentage
         ? "Attendnace percentage(%)"
-        : "Number of attendances";
+        : "Number of attendance";
 
       if (result != null) {
         this.chartDataLables = result.labels;

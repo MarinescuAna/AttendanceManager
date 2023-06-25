@@ -92,7 +92,7 @@
             <v-layout row class="pa-3">
               <v-flex xs12 md4>
                 <validation-provider
-                  name="attendances weight"
+                  name="attendance weight"
                   v-slot="{ errors }"
                   :rules="rules.between_0_100"
                 >
@@ -180,7 +180,7 @@ export default Vue.extend({
       /** Maximum number of seminaries that will be held */
       maxNoSeminaries:
         storeHelper.documentStore.report.maxNoSeminaries,
-      /** The percentage of importance for attendances */
+      /** The percentage of importance for attendance */
       attendanceImportance:
         storeHelper.documentStore.report.attendanceImportance,
       /** The percentage of importance for bonus points */

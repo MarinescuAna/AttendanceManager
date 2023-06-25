@@ -121,17 +121,17 @@ export default Vue.extend({
     },
     descriptionText: function (): string {
       if (this.computeNoAttendances) {
-        return `The current diagram displays the number of attendances per year for ${this.courseTitle}`;
+        return `The current diagram displays the number of attendance per year for ${this.courseTitle}`;
       }
       if (this.computePoints) {
-        return `The current diagram displays the number of points acumulated per year for ${this.courseTitle}`;
+        return `The current diagram displays the number of points accumulated per year for ${this.courseTitle}`;
       }
 
       return `Something went wrong and we have no description`;
     },
     titleText: function (): string {
       if (this.computeNoAttendances) {
-        return `Number of attendances per year for ${this.courseTitle}`;
+        return `Number of attendance per year for ${this.courseTitle}`;
       }
       if (this.computePoints) {
         return `Number of points acumulated per year for ${this.courseTitle}`;
@@ -141,10 +141,10 @@ export default Vue.extend({
     },
     errorText: function (): string {
       if (this.computeNoAttendances) {
-        return `There is no report and we cannot compute the diagram for number of attendances per year for ${this.courseTitle}`;
+        return `There is no report and we cannot compute the diagram for number of attendance per year for ${this.courseTitle}`;
       }
       if (this.computePoints) {
-        return `There is no report and we cannot compute the diagram for number of points acumulated per year for ${this.courseTitle}`;
+        return `There is no report and we cannot compute the diagram for number of points accumulated per year for ${this.courseTitle}`;
       }
 
       return `Something went wrong and we have no error message`;
@@ -171,7 +171,7 @@ export default Vue.extend({
 
       if (this.computeNoAttendances) {
         result = this._dataDiagram();
-        name = "Number of attendances";
+        name = "Number of attendance";
       }
       if (this.computePoints) {
         result = this._dataDiagram();

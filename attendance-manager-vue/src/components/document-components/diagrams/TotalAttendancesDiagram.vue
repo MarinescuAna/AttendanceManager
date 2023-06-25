@@ -1,8 +1,8 @@
 <template>
   <v-layout column>
     <TitleWithInfoComponent
-      title="Total attendances acumulated by each student for selected activity"
-      description="The diagram consists into all the attendances acumulated by each students, grouped by the total attendance."
+      title="Total attendance accumulated by each student for selected activity"
+      description="The diagram consists into all the attendance accumulated by each students, grouped by the total attendance."
     />
     <v-select
       @change="onSelectionChanged"
@@ -101,7 +101,7 @@ export default Vue.extend({
         ];
       }
     },
-    /**Count all the attendances per each student and group them by values */
+    /**Count all the attendance per each student and group them by values */
     _computeTotalAttendances: function (type: CourseType): {
       labels: string[];
       values: number[];

@@ -110,7 +110,7 @@
                 <v-layout row class="pa-3">
                   <v-flex xs12 md4>
                     <validation-provider
-                      name="attendances importance percentage"
+                      name="attendance importance percentage"
                       v-slot="{ errors }"
                       :rules="rules.between_0_100"
                     >
@@ -326,7 +326,7 @@ export default Vue.extend({
       students: [] as StudentForCourseViewModule[],
       /** Array of selected students from the list above */
       selectedStudents: [] as number[],
-      /** The percentage of importance for attendances */
+      /** The percentage of importance for attendance */
       attendanceImportance: 0,
       /** The percentage of importance for bonus points */
       bonusPointImportance: 0,
