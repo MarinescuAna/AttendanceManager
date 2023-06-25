@@ -118,7 +118,9 @@ const actions = {
                 courseId: (result as AxiosResponse).data,
                 name: payload.name,
                 specializationId: payload.specializationId,
-                specializationName: payload.specializationName
+                specializationName: payload.specializationName,
+                reportsLinked: 0,
+                updatedOn: (new Date()).toString()
             } as CourseViewModule);
         }
 
@@ -157,7 +159,7 @@ const actions = {
                 name: payload.parameter.name,
                 specializationId:
                     payload.parameter.specializationId,
-                specializationName: payload.specializationName
+                specializationName: payload.specializationName,
             } as CourseViewModule);
         }
         return isSuccess;
