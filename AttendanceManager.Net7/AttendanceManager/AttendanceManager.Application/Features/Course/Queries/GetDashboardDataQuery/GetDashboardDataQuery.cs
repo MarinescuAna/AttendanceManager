@@ -29,15 +29,17 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
                 foreach (var doc in course.Reports)
                 {
                     var countedAttendances = CountAttendances(doc);
+                    var members = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(doc.ReportID, null);
+
                     reports.Add(new ReportDto()
                     {
                         CreationYear = doc.CreatedOn.Year,
-                        PercentageAttendances = GetPercentageAttendances(countedAttendances, doc),
+                        PercentageAttendances = GetPercentageAttendances(countedAttendances, doc, members),
                         ReportId = doc.ReportID,
                         ReportName = doc.Title,
                         NoAttendancesAchieved = countedAttendances,
                         NoPointsAchieved = CountPoints(doc),
-                        Badges = await GetBadgesAsync(doc)
+                        Badges = await GetBadgesAsync(doc, members)
                     });
                 }
                 result.Add(new()
@@ -49,7 +51,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
             }
             return result;
         }
-        private async Task<BadgesDto[]> GetBadgesAsync(Domain.Entities.Report report)
+        private async Task<BadgesDto[]> GetBadgesAsync(Domain.Entities.Report report, List<Domain.Entities.Member> members)
         {
             var badges = await _unitOfWork.BadgeRepository.GetBadgesForReportAsync(report.ReportID);
             return badges.Where(b=>!b.BadgeType.Equals(BadgeType.CustomAttendanceAchieved)&& !b.BadgeType.Equals(BadgeType.CustomBonusPointAchieved))
@@ -57,18 +59,18 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
                     {
                         Description = b.Description!,
                         NoAchievements = b.Rewards.Count(r => r.ReportID == report.ReportID),
-                        PercentageAchievements = GetPercentageByType(report, b),
+                        PercentageAchievements = GetPercentageByType(report, b, members),
                         Role = b.UserRole,
                         Title = b.Title!,
                         BadgeType = (int)b.BadgeType,
                         ImagePath = b.ImagePath!,
-                        MaxAchievements = (b.UserRole.Equals(Role.Teacher) ? 1 : 0) + GetNoUsersByRole(report, b.UserRole)
+                        MaxAchievements = (b.UserRole.Equals(Role.Teacher) ? 1 : 0) + members.Count(u=>u.User!.Role == b.UserRole)
                 }).ToArray();
         }
         //add current user
-        private float GetPercentageByType(Domain.Entities.Report report, Domain.Entities.Badge badge) =>
+        private float GetPercentageByType(Domain.Entities.Report report, Domain.Entities.Badge badge, List<Domain.Entities.Member> members) =>
             badge.Rewards.Count() == 0 ? 0 : (float)badge.Rewards.Count(r => r.ReportID == report.ReportID) / 
-                ((badge.UserRole.Equals(Role.Teacher) ? 1 : 0) + GetNoUsersByRole(report, badge.UserRole)) * 100;
+                ((badge.UserRole.Equals(Role.Teacher) ? 1 : 0) + members.Count(u => u.User!.Role == badge.UserRole)) * 100;
         private int[] CountPoints(Domain.Entities.Report report)
         {
             var result = new int[4];
@@ -91,13 +93,11 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
             result[3] = attendances.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Seminary));
             return result;
         }
-        private int GetNoUsersByRole(Domain.Entities.Report report, Role role)
-            => report.Members!.Count(d => d.User!.Role.Equals(role));
-        private float[] GetPercentageAttendances(int[] countedAttendances, Domain.Entities.Report report)
+        private float[] GetPercentageAttendances(int[] countedAttendances, Domain.Entities.Report report, List<Domain.Entities.Member> members)
         {
             var result = new float[4];
-            var noUsers = GetNoUsersByRole(report, Role.Student);
-            result[0] = (float)countedAttendances[0] / ((report.MaxNoLaboratories + report.MaxNoLessons + report.MaxNoSeminaries) * noUsers) * 100;
+            var noUsers = members.Count(u=>u.User!.Role == Role.Student);
+            result[0] = noUsers == 0 ? 0 : (float)countedAttendances[0] / ((report.MaxNoLaboratories + report.MaxNoLessons + report.MaxNoSeminaries) * noUsers) * 100;
             result[1] = report.MaxNoLessons == 0 || noUsers == 0? 0 : (float)countedAttendances[1] / (report.MaxNoLessons * noUsers) * 100;
             result[2] = report.MaxNoLaboratories == 0 || noUsers == 0 ? 0 : (float)countedAttendances[2] / (report.MaxNoLaboratories * noUsers) * 100;
             result[3] = report.MaxNoSeminaries == 0 || noUsers == 0 ? 0 : (float)countedAttendances[3] / (report.MaxNoSeminaries * noUsers) * 100;
