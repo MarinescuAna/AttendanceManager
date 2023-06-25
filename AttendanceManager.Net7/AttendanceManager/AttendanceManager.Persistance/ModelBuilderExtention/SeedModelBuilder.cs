@@ -32,7 +32,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID=1,
                    Title = "Met your teacher",
                    ImagePath = "first_attendance.jpg",
-                   Description = "Achieve this badge by getting the first attendance to any of the available activities.",
+                   Description = "Achieve this badge by getting the first attendance at any of the available activities.",
                    BadgeType = Domain.Enums.BadgeType.FirstAttendance,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -44,7 +44,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID = 2,
                    Title = "Half-master of theory",
                    ImagePath = "lessons_50.jpg",
-                   Description = "Achieve this badge by getting half of the attendance to lecture.",
+                   Description = "Achieve this badge by getting half of the attendance at lecture.",
                    BadgeType = Domain.Enums.BadgeType.LecturesAttendances50,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -56,7 +56,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID = 3,
                    Title = "Half-master of practice",
                    ImagePath = "laboratory_50.jpg",
-                   Description = "Achieve this badge by getting half of the attendance to laboratory.",
+                   Description = "Achieve this badge by getting half of the attendance at laboratory.",
                    BadgeType = Domain.Enums.BadgeType.LaboratoriesAttendances50,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -68,7 +68,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID= 4,
                    Title = "Half-master of seminaries",
                    ImagePath = "seminary_50.jpg",
-                   Description = "Achieve this badge by getting half of the attendance to seminary.",
+                   Description = "Achieve this badge by getting half of the attendance at seminary.",
                    BadgeType = Domain.Enums.BadgeType.SeminariesAttendances50,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -81,7 +81,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeType = Domain.Enums.BadgeType.LastAttendance,
                    Title = "First goodbye!",
                    ImagePath = "last_attendance.jpg",
-                   Description = "Achieve this badge by getting the last attendance to any of the available activities.",
+                   Description = "Achieve this badge by getting the last attendance at any of the available activities.",
                    UserRole = Domain.Enums.Role.Student
                }
             );
@@ -92,7 +92,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID= 6,
                    Title = "Master of theory",
                    ImagePath = "complete_lecture.jpg",
-                   Description = "Achieve this badge by getting all the attendance to lecture.",
+                   Description = "Achieve this badge by getting all the attendance at lecture.",
                    BadgeType = Domain.Enums.BadgeType.LecturesAttendancesComplete,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -104,7 +104,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID= 7,
                    Title = "Master of practice",
                    ImagePath = "complete_laboratory.jpg",
-                   Description = "Achieve this badge by getting all the attendance to laboratory.",
+                   Description = "Achieve this badge by getting all the attendance at laboratory.",
                    BadgeType = Domain.Enums.BadgeType.LaboratoriesAttendancesComplete,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -116,7 +116,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID= 8,
                    Title = "Master of seminaries",
                    ImagePath = "complete_seminary.jpg",
-                   Description = "Achieve this badge by getting all the attendance to seminary.",
+                   Description = "Achieve this badge by getting all the attendance at seminary.",
                    BadgeType = Domain.Enums.BadgeType.SeminariesAttendancesComplete,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -128,7 +128,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID= 9,
                    Title = "First bonus",
                    ImagePath = "first_point.jpg",
-                   Description = "Achieve this badge by getting the first bonus point to any of the available activities.",
+                   Description = "Achieve this badge by getting the first bonus point at any of the available activities.",
                    BadgeType = Domain.Enums.BadgeType.FirstBonus,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -140,7 +140,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                    BadgeID= 10,
                    Title = "Smart owl",
                    ImagePath = "smart_owl.jpg",
-                   Description = "Achieve this badge by having the greater point of any of the available activities.",
+                   Description = "Achieve this badge by having the greater point at any of the available activities.",
                    BadgeType = Domain.Enums.BadgeType.SmartOwl,
                    UserRole = Domain.Enums.Role.Student
                }
@@ -210,7 +210,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                new Badge
                {
                    BadgeID = 16,
-                   Title = "Good bye laboratory",
+                   Title = "Goodbye laboratory",
                    ImagePath = "last_laboratory.jpg",
                    Description = "Achieve this badge at the last laboratory if more than half of the students are present.",
                    BadgeType = Domain.Enums.BadgeType.SayByeLaboratory,
@@ -222,7 +222,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                new Badge
                {
                    BadgeID = 17,
-                   Title = "Good bye lecture",
+                   Title = "Goodbye lecture",
                    ImagePath = "last_lecture.jpg",
                    Description = "Achieve this badge at the last lecture if more than half of the students are present.",
                    BadgeType = Domain.Enums.BadgeType.SayByeLecture,
@@ -235,7 +235,7 @@ namespace AttendanceManager.Persistance.ModelBuilderExtention
                new Badge
                {
                    BadgeID = 18,
-                   Title = "Good bye seminary",
+                   Title = "Goodbye seminary",
                    ImagePath = "last_seminary.jpg",
                    Description = "Achieve this badge at the last seminary if more than half of the students are present.",
                    BadgeType = Domain.Enums.BadgeType.SayByeSeminary,
