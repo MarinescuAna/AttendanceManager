@@ -118,7 +118,7 @@
                         v-model="attendanceImportance"
                         type="number"
                         label="The percentage of attandance weight"
-                        prepend-icon="mdi-numeric"
+                        prepend-icon="mdi-percent"
                         :error-messages="errors"
                         color="black"
                         required
@@ -135,7 +135,7 @@
                         v-model="bonusPointImportance"
                         type="number"
                         label="The percentage of bonus points weight"
-                        prepend-icon="mdi-numeric"
+                        prepend-icon="mdi-percent"
                         :error-messages="errors"
                         color="black"
                         required
