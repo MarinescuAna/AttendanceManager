@@ -96,6 +96,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
 
             foreach (var user in students)
             {
+                var isNotificationSent = false;
                 //is the half of the activity
                 if (attendances != null && collection.Order == GetMaxNumberByCourseType(collection.ActivityType) / 2)
                 {
@@ -103,6 +104,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                     //user don't have enough attendances
                     if (noAttendancesStudent < collection.Order)
                     {
+                        isNotificationSent = true;
                         _unitOfWork.NotificationRepository.AddAsync(new()
                         {
                             Priority = Domain.Enums.NotificationPriority.Alert,
@@ -122,6 +124,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                     //check if this is the last collection and the student don't have enough attendances 
                     if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(collection.ActivityType))
                     {
+                        isNotificationSent = true;
                         _unitOfWork.NotificationRepository.AddAsync(new()
                         {
                             Priority = Domain.Enums.NotificationPriority.Alert,
@@ -133,7 +136,8 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                         });
                     }
                 }
-                else
+
+                if(!isNotificationSent)
                 {
                     //notification: a new collection was added
                     _unitOfWork.NotificationRepository.AddAsync(new()
