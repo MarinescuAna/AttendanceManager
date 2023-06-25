@@ -23,7 +23,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
             var courses = await _unitOfWork.CourseRepository.GetCoursesForDashboardAsync(request.CurrentUserEmail);
             var result = new List<CourseVm>();
 
-            foreach (var course in courses)
+            foreach (var course in courses.Where(c=>c.Reports.Count!=0))
             {
                 var reports = new List<ReportDto>();
                 foreach (var doc in course.Reports)
