@@ -24,7 +24,7 @@ namespace AttendanceManager.Application.Features.Notification.Commands.CreateNot
 
         public async Task<bool> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
-            _unitOfWork.NotificationRepository.AddAsync(new()
+            await _unitOfWork.NotificationRepository.AddAsync(new()
             {
                 Priority= request.Priority,
                 UserID = request.UserEmail,
