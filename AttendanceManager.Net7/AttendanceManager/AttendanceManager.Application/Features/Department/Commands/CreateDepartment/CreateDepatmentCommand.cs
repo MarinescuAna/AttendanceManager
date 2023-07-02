@@ -37,7 +37,7 @@ namespace AttendanceManager.Application.Features.Department.Commands.CreateDepar
             };
 
             // Add new department or throw exception if something happen
-            _unitOfWork.DepartmentRepository.AddAsync(newDepartment);
+            await _unitOfWork.DepartmentRepository.AddAsync(newDepartment);
             if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);

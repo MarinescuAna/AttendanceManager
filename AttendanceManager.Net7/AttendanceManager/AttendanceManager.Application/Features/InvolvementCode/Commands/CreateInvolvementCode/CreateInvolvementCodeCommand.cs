@@ -50,7 +50,7 @@ namespace AttendanceManager.Application.Features.InvolvementCode.Commands.Create
                 ExpirationDate = DateTime.Now.AddMinutes(request.Minutes),
                 CollectionID = request.CollectionId
             };
-            _unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
+            await _unitOfWork.InvolvementCodeRepository.AddAsync(newCode);
 
             foreach (var student in _currentReport.Members.Where(m => m.Value == Domain.Enums.Role.Student))
             {

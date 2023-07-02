@@ -17,7 +17,7 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
         public required string AchievedUserId { get; init; }
         public required Role AchievedUserRole { get; init; }
         public int CurrentCollectionId { get; init; }
-        public BadgeType? BadgeID { get; init; } = null;
+        public BadgeType? BadgeType { get; init; } = null;
 
         public bool CommitChanges { get; init; } = true;
     }
@@ -68,8 +68,8 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
             {
                 var badge = inactiveBadges.Find(b => b.BadgeID == reward.BadgeID);
 
-                _unitOfWork.RewardRepository.AddAsync(reward);
-                _unitOfWork.NotificationRepository.AddAsync(new()
+                await _unitOfWork.RewardRepository.AddAsync(reward);
+                await _unitOfWork.NotificationRepository.AddAsync(new()
                 {
                     CreatedOn = DateTime.Now,
                     IsRead = false,
@@ -113,10 +113,9 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
         }
         private bool IsTeacherBadgeAchieved(Domain.Entities.Badge badge, Domain.Entities.Collection currentCollection)
         {
-            var isEqualsOrGreaterHalfCollection = IsHalfOrMoreHeld(currentCollection!.ActivityType) &&
-                GetMaxNumberByCourseType(currentCollection!.ActivityType) != 0;
-            var isLastCollection = GetMaxNumberByCourseType(currentCollection.ActivityType) != 0 &&
-                GetMaxNumberByCourseType(currentCollection.ActivityType) == currentCollection.Order;
+            var maxNoOfClasses = GetMaxNumberByCourseType(currentCollection!.ActivityType);
+            var isEqualsOrGreaterHalfCollection = IsHalfOrMoreHeld(currentCollection!.ActivityType) && maxNoOfClasses != 0;
+            var isLastCollection = maxNoOfClasses != 0 && maxNoOfClasses == currentCollection.Order;
             var studentsAttendances = new Dictionary<string, int>();
 
             if (isEqualsOrGreaterHalfCollection && (badge.BadgeType.Equals(BadgeType.GoodTeacher) || badge.BadgeType.Equals(BadgeType.BestTeacher)))
@@ -129,26 +128,24 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 //achieve this when the first involvement code is generated
                 BadgeType.FirstCodeGenerated => FirstCodeGenerated(currentCollection.CollectionID),
                 //achieve this when the first involvement code is used
-                BadgeType.FirstCodeUsed => _command!.BadgeID != null && _command!.BadgeID == BadgeType.FirstCodeUsed,
+                BadgeType.FirstCodeUsed => _command!.BadgeType != null && _command!.BadgeType == BadgeType.FirstCodeUsed,
                 //this badge is received when all the students come to the one activity
                 //check if all the students came to the lecture
                 BadgeType.FullClass => currentCollection.Involvements!.Count(a => a.IsPresent) == _currentReport.CurrentReportInfo.NoOfStudents,
-                BadgeType.CustomAttendanceAchieved => GetAttendancesAchievedByEmail((ActivityType)badge.ActivityType!) >= badge.MaxNumber,
-                BadgeType.CustomBonusPointAchieved => GetBonusPointsAchievedByEmail((ActivityType)badge.ActivityType!) >= badge.MaxNumber,
                 //more than half of the students come to the last laboratory
                 BadgeType.SayByeLaboratory => isLastCollection && currentCollection.ActivityType.Equals(ActivityType.Laboratory) &&
-                    currentCollection!.Involvements!.Count(a => a.IsPresent) >= GetMaxNumberByCourseType(ActivityType.Laboratory),
+                    currentCollection!.Involvements!.Count(a => a.IsPresent) >= maxNoOfClasses,
                 //more than half of the students come to the last lecture
                 BadgeType.SayByeLecture => isLastCollection && currentCollection.ActivityType.Equals(ActivityType.Lecture) &&
-                    currentCollection!.Involvements!.Count(a => a.IsPresent) >= GetMaxNumberByCourseType(ActivityType.Lecture),
+                    currentCollection!.Involvements!.Count(a => a.IsPresent) >= maxNoOfClasses,
                 //more than half of the students come to the seminary
                 BadgeType.SayByeSeminary => isLastCollection && currentCollection.ActivityType.Equals(ActivityType.Seminary) &&
-                    currentCollection!.Involvements!.Count(a => a.IsPresent) >= GetMaxNumberByCourseType(ActivityType.Seminary),
+                    currentCollection!.Involvements!.Count(a => a.IsPresent) >= maxNoOfClasses,
                 //the half of the students achieve attendance at any course
                 BadgeType.GoodTeacher => studentsAttendances.Count() > 0 && studentsAttendances.Count(a => a.Value != 0) >= _currentReport.CurrentReportInfo.NoOfStudents/2,
                 //this badge can be achieved when the half of the students achieve the more then half of attendance
                 BadgeType.BestTeacher => studentsAttendances.Count() > 0 && studentsAttendances.Count(a => a.Value != 0) >= _currentReport.CurrentReportInfo.NoOfStudents/2 &&
-                    studentsAttendances.Count(a=>a.Value >= GetMaxNumberByCourseType(currentCollection.ActivityType)/2) >= _currentReport.CurrentReportInfo.NoOfStudents / 2,
+                    studentsAttendances.Count(a=>a.Value >= maxNoOfClasses / 2) >= _currentReport.CurrentReportInfo.NoOfStudents / 2,
                 _ => false
             };
         }
@@ -174,7 +171,8 @@ namespace AttendanceManager.Application.Features.Reward.Commands.CreateReward
                 //get last attendance to any of the available activities
                 // get the collection that was completely held and check if the student have an attendance
                 BadgeType.LastAttendance => isCurrentActivityTypeComplete &&
-                    _collections!.Where(c => c.ActivityType.Equals(currentCollection.ActivityType)).Count(c => c.Involvements!.Any(a => a.UserID.Equals(_command!.AchievedUserId) && a.IsPresent)) == GetMaxNumberByCourseType(currentCollection.ActivityType),
+                    _collections!.FirstOrDefault(c => c.ActivityType.Equals(currentCollection.ActivityType) && c.Order == GetMaxNumberByCourseType(currentCollection.ActivityType))
+                    .Involvements.Any(i=>i.UserID.Equals(_command!.AchievedUserId) && i.IsPresent),
 
                 //check if the current user, for given activity type, recevied the half of them
                 //the student collects the half of the total attendances that was set by the teacher at lectures

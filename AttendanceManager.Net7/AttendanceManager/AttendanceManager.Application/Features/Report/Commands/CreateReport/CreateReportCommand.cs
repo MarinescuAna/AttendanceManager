@@ -45,7 +45,7 @@ namespace AttendanceManager.Application.Features.Report.Commands.CreateReport
                 BonusPointsImportance = request.BonusPointsImportance
             };
             // Save report first to can get the id
-            _unitOfWork.ReportRepository.AddAsync(newReport);
+            await _unitOfWork.ReportRepository.AddAsync(newReport);
             if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);

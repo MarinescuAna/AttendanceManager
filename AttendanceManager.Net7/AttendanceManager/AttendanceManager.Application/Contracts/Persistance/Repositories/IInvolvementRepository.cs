@@ -5,5 +5,6 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
     public interface IInvolvementRepository : IGenericRepository<Involvement>
     {
         IEnumerable<Involvement> GetInvolvementsByReportId(int id);
+        Task AddRangeAsync(List<Involvement> entity);
     }
 }

@@ -52,7 +52,7 @@ namespace AttendanceManager.Application.Features.Member.Commands.InsertCollabora
             }
 
             // add the new teacher as collaborator
-            _unitOfWork.MemberRepository.AddAsync(new Domain.Entities.Member
+            await _unitOfWork.MemberRepository.AddAsync(new Domain.Entities.Member
             {
                 MemberID = Guid.NewGuid(),
                 ReportID = _currentReport.CurrentReportInfo.ReportId,
@@ -60,7 +60,7 @@ namespace AttendanceManager.Application.Features.Member.Commands.InsertCollabora
             });
 
             //send notification
-            _unitOfWork.NotificationRepository.AddAsync(new()
+            await _unitOfWork.NotificationRepository.AddAsync(new()
             {
                 CreatedOn = DateTime.Now,
                 IsRead = false,

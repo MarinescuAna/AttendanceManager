@@ -37,7 +37,7 @@ namespace AttendanceManager.Application.Features.Specialization.Commands.CreateS
             };
 
             // Save the specialization or throw exception if something happen
-            _unitOfWork.SpecializationRepository.AddAsync(newSpecialization);
+            await _unitOfWork.SpecializationRepository.AddAsync(newSpecialization);
             if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);

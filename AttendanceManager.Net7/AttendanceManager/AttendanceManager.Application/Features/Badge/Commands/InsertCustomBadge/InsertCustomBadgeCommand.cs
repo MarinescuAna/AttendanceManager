@@ -53,7 +53,7 @@ namespace AttendanceManager.Application.Features.Badge.Commands.InsertCustomBadg
                 ReportID = _currentReport.CurrentReportInfo.ReportId
             };
 
-            _unitOfWork.BadgeRepository.AddAsync(newBadge);
+            await _unitOfWork.BadgeRepository.AddAsync(newBadge);
 
             if (!await _unitOfWork.CommitAsync())
             {

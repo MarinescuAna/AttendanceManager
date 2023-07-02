@@ -66,7 +66,7 @@ namespace AttendanceManager.Application.Features.Involvement.Commands.UpdateInvo
                 CurrentCollectionId = request.CollectionId,
                 AchievedUserRole = Domain.Enums.Role.Teacher,
                 AchievedUserId = _currentReport.CurrentReportInfo.CreatedBy,
-                BadgeID = Domain.Enums.BadgeType.FirstCodeUsed,
+                BadgeType = Domain.Enums.BadgeType.FirstCodeUsed,
                 CommitChanges = true
             });
 

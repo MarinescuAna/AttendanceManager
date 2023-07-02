@@ -17,7 +17,7 @@ namespace AttendanceManager.Persistance.Repositories
         public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> expression) =>
             await dbContext.Set<T>().FirstOrDefaultAsync(expression);
         public virtual IQueryable<T> ListAll() => dbContext.Set<T>().AsNoTracking();
-        public async void AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
             try
             {

@@ -37,7 +37,7 @@ namespace AttendanceManager.Application.Features.Course.Commands.CreateCourse
                 UserSpecializationID = userSpecialization.UserSpecializationID
             };
 
-            _unitOfWork.CourseRepository.AddAsync(newCourse);
+            await _unitOfWork.CourseRepository.AddAsync(newCourse);
 
             if (!await _unitOfWork.CommitAsync())
             {

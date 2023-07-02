@@ -6,7 +6,7 @@ namespace AttendanceManager.Application.Contracts.Persistance.Repositories
     {
         Task<T?> GetAsync(Expression<Func<T, bool>> expression);
         IQueryable<T> ListAll();
-        void AddAsync(T entity);
+        Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
     }

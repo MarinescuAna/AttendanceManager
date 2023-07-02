@@ -57,7 +57,7 @@ namespace AttendanceManager.Application.Features.User.Commands.CreateUser
             };
 
             //save the user into the db or throw exception if something happen
-            _unitOfWork.UserRepository.AddAsync(newUser);
+            await _unitOfWork.UserRepository.AddAsync(newUser);
             if (!await _unitOfWork.CommitAsync())
             {
                 throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
