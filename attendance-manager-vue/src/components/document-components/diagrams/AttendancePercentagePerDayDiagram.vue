@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <TitleWithInfoComponent
-      title="Attendance percentage per day for selected activity"
+      title="Attendance percentage per day for the selected activity"
       description="The values represents the persentage of users attendance per day computed as follow: <br/> <strong>percent = number_of_attedances_per_day/total_students*100</strong>"
     />
     <v-select

@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <TitleWithInfoComponent
-      title="Total attendance accumulated by each student for selected activity"
+      title="Total attendance accumulated by each student for the selected activity"
       description="The diagram consists into all the attendance accumulated by each students, grouped by the total attendance."
     />
     <v-select

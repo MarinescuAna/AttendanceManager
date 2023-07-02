@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <TitleWithInfoComponent
-      title="Students interest regarding the selected activity type"
+      title="Students' interest regarding the selected activity type"
       description="Percentage of each student's interest related to a course(this is related to the students that are members of the document): calculate a weighted average of the attendance and bonus points, where the attendance and bonus points are weighted by their relative importance(this means that we will add new fields at the created document, where the teacher should be forced to add the percentage of the importance of attendance and bonus points):
 <strong>Weighted_average=(% * attendance)+(% * bonus_points)</strong>. This average will be then divided by the total possible score of the course <strong>Percentage = (weighted_average/total_possible_score) * 100</strong>.
 "
