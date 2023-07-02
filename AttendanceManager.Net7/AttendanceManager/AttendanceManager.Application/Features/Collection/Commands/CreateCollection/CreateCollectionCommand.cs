@@ -55,7 +55,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 Order = _currentReport.LastCollectionOrder[courseType] + 1
             };
 
-            _unitOfWork.CollectionRepository.AddAsync(collection);
+            await _unitOfWork.CollectionRepository.AddAsync(collection);
 
             if (!await _unitOfWork.CommitAsync())
             {
@@ -68,24 +68,24 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
 
             // get all the students according to the report data
             var students = _currentReport.Members.Where(s => s.Value.Equals(Role.Student));
-
+            var newInvolvements = new List<Domain.Entities.Involvement>(); 
             // add each student as not present and with 0 bonus points
             foreach (var student in students)
             {
-                _unitOfWork.InvolvementRepository.AddAsync(new Domain.Entities.Involvement
+                newInvolvements.Add(new Domain.Entities.Involvement
                 {
                     UpdatedOn = DateTime.Now,
                     CollectionID = collection.CollectionID,
                     BonusPoints = 0,
                     IsPresent = false,
                     UserID = student.Key,
-                    UpdateBy = request.Username
+                    UpdateBy = request.Username!
                 });
             }
-
+            await _unitOfWork.InvolvementRepository.AddRangeAsync(newInvolvements);
             if (!await _unitOfWork.CommitAsync())
             {
-                throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
+               // throw new SomethingWentWrongException(ErrorMessages.SomethingWentWrongGenericMessage);
             }
 
             //send notifications to each user 
@@ -105,7 +105,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                     if (noAttendancesStudent < collection.Order)
                     {
                         isNotificationSent = true;
-                        _unitOfWork.NotificationRepository.AddAsync(new()
+                        await _unitOfWork.NotificationRepository.AddAsync(new()
                         {
                             Priority = Domain.Enums.NotificationPriority.Alert,
                             UserID = user.Key,
@@ -125,7 +125,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                     if (noAttendancesStudent + 1 < GetMaxNumberByCourseType(collection.ActivityType))
                     {
                         isNotificationSent = true;
-                        _unitOfWork.NotificationRepository.AddAsync(new()
+                        await _unitOfWork.NotificationRepository.AddAsync(new()
                         {
                             Priority = Domain.Enums.NotificationPriority.Alert,
                             UserID = user.Key,
@@ -140,7 +140,7 @@ namespace AttendanceManager.Application.Features.Collection.Commands.CreateColle
                 if(!isNotificationSent)
                 {
                     //notification: a new collection was added
-                    _unitOfWork.NotificationRepository.AddAsync(new()
+                    await _unitOfWork.NotificationRepository.AddAsync(new()
                     {
                         Priority = Domain.Enums.NotificationPriority.Warning,
                         UserID = user.Key,

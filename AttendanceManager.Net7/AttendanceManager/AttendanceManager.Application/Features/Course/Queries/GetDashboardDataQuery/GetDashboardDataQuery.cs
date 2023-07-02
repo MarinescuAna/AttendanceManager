@@ -23,22 +23,29 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
             var courses = await _unitOfWork.CourseRepository.GetCoursesForDashboardAsync(request.CurrentUserEmail);
             var result = new List<CourseVm>();
 
-            foreach (var course in courses.Where(c=>c.Reports.Count!=0))
+            foreach (var course in courses.Where(c => c.Reports.Count != 0))
             {
                 var reports = new List<ReportDto>();
                 foreach (var doc in course.Reports)
                 {
-                    var countedAttendances = CountAttendances(doc);
+                    var involvements = _unitOfWork.InvolvementRepository.GetInvolvementsByReportId(doc.ReportID).Where(i=>i.IsPresent).ToList();
+
+                    if (involvements.Count() == 0)
+                    {
+                        continue;
+                    }
+
                     var members = await _unitOfWork.MemberRepository.GetMembersByReportIdAndRoleAsync(doc.ReportID, null);
+                    var countInvolvements = CountAttendances(involvements);
 
                     reports.Add(new ReportDto()
                     {
                         CreationYear = doc.CreatedOn.Year,
-                        PercentageAttendances = GetPercentageAttendances(countedAttendances, doc, members),
+                        PercentageAttendances = GetPercentageAttendances(countInvolvements, doc, members),
                         ReportId = doc.ReportID,
                         ReportName = doc.Title,
-                        NoAttendancesAchieved = countedAttendances,
-                        NoPointsAchieved = CountPoints(doc),
+                        NoAttendancesAchieved = countInvolvements,
+                        NoPointsAchieved = CountPoints(involvements),
                         Badges = await GetBadgesAsync(doc, members)
                     });
                 }
@@ -49,6 +56,7 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
                     Reports = reports.ToArray(),
                 });
             }
+
             return result;
         }
         private async Task<BadgesDto[]> GetBadgesAsync(Domain.Entities.Report report, List<Domain.Entities.Member> members)
@@ -71,10 +79,10 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
         private float GetPercentageByType(Domain.Entities.Report report, Domain.Entities.Badge badge, List<Domain.Entities.Member> members) =>
             badge.Rewards.Count() == 0 ? 0 : (float)badge.Rewards.Count(r => r.ReportID == report.ReportID) / 
                 ((badge.UserRole.Equals(Role.Teacher) ? 1 : 0) + members.Count(u => u.User!.Role == badge.UserRole)) * 100;
-        private int[] CountPoints(Domain.Entities.Report report)
+        private int[] CountPoints(List<Domain.Entities.Involvement> involvements)
         {
             var result = new int[4];
-            var attendances = report.Collections!.SelectMany(s => s.Involvements!).Where(a => a.BonusPoints!=0);
+            var attendances = involvements.Where(a => a.BonusPoints!=0);
 
             result[0] = attendances.Sum(a => a.BonusPoints);
             result[1] = attendances.Where(c => c.Collection!.ActivityType.Equals(ActivityType.Lecture)).Sum(a => a.BonusPoints);
@@ -82,15 +90,14 @@ namespace AttendanceManager.Application.Features.Course.Queries.GetDashboardData
             result[3] = attendances.Where(c => c.Collection!.ActivityType.Equals(ActivityType.Seminary)).Sum(a => a.BonusPoints);
             return result;
         }
-        private int[] CountAttendances(Domain.Entities.Report report)
+        private int[] CountAttendances(List<Domain.Entities.Involvement> involvements)
         {
             var result = new int[4];
-            var attendances = report.Collections!.SelectMany(s => s.Involvements!).Where(a=>a.IsPresent);
-            
-            result[0] = attendances.Count();
-            result[1] = attendances.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Lecture));
-            result[2] = attendances.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Laboratory));
-            result[3] = attendances.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Seminary));
+           
+            result[0] = involvements.Count();
+            result[1] = involvements.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Lecture));
+            result[2] = involvements.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Laboratory));
+            result[3] = involvements.Count(a => a.Collection!.ActivityType.Equals(ActivityType.Seminary));
             return result;
         }
         private float[] GetPercentageAttendances(int[] countedAttendances, Domain.Entities.Report report, List<Domain.Entities.Member> members)

@@ -6,6 +6,7 @@ using System.Text.Json;
 using StreamReader stream = File.OpenText("configuration.json");
 var configurationString = stream.ReadToEnd();
 var config = JsonSerializer.Deserialize<Configuration>(configurationString) ?? throw new Exception("Can't read the configuration file!");
+stream.Close();
 stream.Dispose();
 
 using var client = new HttpClient();

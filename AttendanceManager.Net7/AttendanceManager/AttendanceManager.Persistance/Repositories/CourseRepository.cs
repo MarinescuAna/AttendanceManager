@@ -23,11 +23,6 @@ namespace AttendanceManager.Persistance.Repositories
            => await dbContext.Courses
                 .Include(s => s.UserSpecialization)
                 .Include(s => s.Reports)
-                    .ThenInclude(s=>s.Members)
-                        .ThenInclude(m=>m.User)
-                .Include(s => s.Reports)
-                    .ThenInclude(s => s.Collections)
-                        .ThenInclude(a => a.Involvements)
                 .AsNoTracking()
                 .Where(d=>d.UserSpecialization!.UserID.Equals(email))
                 .ToListAsync();
