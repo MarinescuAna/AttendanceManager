@@ -38,7 +38,7 @@ namespace AttendanceManager.Application.Features.Reward.Queries.GetAllRewardsByU
 
             //get all the badges by user role (if the current user is teacher, get the custom badges)
             var badges = _unitOfWork.BadgeRepository.ListAll().Where(b => b.UserRole == request.Role
-                        || (request.Role == Role.Teacher && b.ReportID == _currentReport.CurrentReportInfo.ReportId));
+                        && (b.ReportID==null || (b.ReportID != null && b.ReportID == _currentReport.CurrentReportInfo.ReportId)));
 
             //add inactive badges into the list
             foreach (var badge in badges)

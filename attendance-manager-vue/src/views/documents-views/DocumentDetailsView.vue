@@ -95,9 +95,9 @@ export default Vue.extend({
     tabs: function (): string[] {
       if (!this.isTeacher) {
         return [
-          "Involvements",
-          "Total involvements",
-          "Peers",
+          "Involvement",
+          "Total involvement",
+          "My peers",
           "Rewards",
           "About",
         ];
@@ -105,15 +105,15 @@ export default Vue.extend({
 
       if (this.isTeacher && this.isCreator) {
         return this.isMobile? [
-          "Involvements",
-          "Total involvements",
+          "Involvement",
+          "Total involvement",
           "Collaborators",
           "Rewards",
           "Settings",
           "About",
         ]:[
-          "Involvements",
-          "Total involvements",
+          "Involvement",
+          "Total involvement",
           "Collaborators",
           "Rewards",
           "Statistics",
@@ -123,14 +123,14 @@ export default Vue.extend({
       }
 
       return this.isMobile? [
-        "Involvements",
-        "Total involvements",
+        "Involvement",
+        "Total involvement",
         "Collaborators",
         "Rewards",
         "About",
       ]:[
-        "Involvements",
-        "Total involvements",
+        "Involvement",
+        "Total involvement",
         "Collaborators",
         "Rewards",
         "Statistics",

@@ -167,7 +167,7 @@ export default Vue.extend({
   },
   /** Load all the documents from the API */
   created: async function () {
-    // Fetch data with a timeout of 30 seconds
+    // Fetch data with a timeout of 1 minute
     const fetchDataWithTimeout = async () => {
       try {
         this.courses = await CourseService.getDashboardAsync();
@@ -188,12 +188,10 @@ export default Vue.extend({
         this.isLoading = false;
         Toastification.simpleError("Data fetching timeout");
       }
-    }, 30000);
+    }, 100000);
   },
   methods: {
-    onSelectionChanged: function (value): void {
-      console.log(this.currentTab);
-      
+    onSelectionChanged: function (value): void {      
       if (this.currentTab == 2) {
         if (value == 0) {
           this.selectedReports = this.courses.flatMap((r) => r.reports);

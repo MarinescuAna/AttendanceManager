@@ -30,6 +30,7 @@ namespace AttendanceManager.Application.Profiles
                 .ForMember(d => d.BadgeType, act => act.MapFrom(b => b.Badge!.BadgeType))
                 .ForMember(d => d.MaxNumber, act => act.MapFrom(b => b.Badge!.MaxNumber))
                 .ForMember(d => d.RewardId, act => act.MapFrom(r => r.RewardID))
+                .ForMember(d => d.IsCustom, act => act.MapFrom(r => r.Badge!.ReportID != null))
                 .ForMember(d => d.Description, act => act.MapFrom(r => r.Badge!.Description))
                 .ForMember(d => d.IsActive, act => act.MapFrom(_ => true));
 

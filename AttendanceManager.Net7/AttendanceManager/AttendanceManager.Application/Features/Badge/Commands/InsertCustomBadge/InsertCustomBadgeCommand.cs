@@ -45,7 +45,7 @@ namespace AttendanceManager.Application.Features.Badge.Commands.InsertCustomBadg
                 BadgeType = badgeType,
                 ActivityType = courseType,
                 Description = string.Format(badgeType == BadgeType.CustomAttendanceAchieved ?
-                    Constants.CustomAttendanceDescription : Constants.CustomBonusPointsDescription, request.MaxNumber, request.Type.ToString()),
+                Constants.CustomAttendanceDescription : Constants.CustomBonusPointsDescription, request.MaxNumber, request.Type.ToString().ToLower()),
                 MaxNumber = request.MaxNumber,
                 ImagePath = badgeType == BadgeType.CustomAttendanceAchieved ? Constants.CustomAttendanceImage : Constants.CustomBonusPointsImage,
                 Title = request.Title,
